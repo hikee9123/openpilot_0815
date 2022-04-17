@@ -74,6 +74,12 @@ CommunityPanel::CommunityPanel(QWidget* parent) : ListWidget(parent)
       "../assets/offroad/icon_shell.png",
     },  
 
+    {
+      "OpkrDmonitor",
+      "driver monitor enable",
+      "driver monitoring check enable disable.",
+      "../assets/offroad/icon_shell.png",
+    },  
   };
 
   for (auto &[param, title, desc, icon] : toggles) {

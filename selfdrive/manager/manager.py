@@ -60,6 +60,7 @@ def manager_init() -> None:
     ("OpkrSSHLegacy", "0"),
     ("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
     ("OpkratomLongitudinal", "0"), 
+    ("OpkrDmonitor", "1"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
@@ -144,6 +145,11 @@ def manager_thread() -> None:
   enableLogger = params.get_bool("UploadRaw")
   if not enableLogger:
     ignore += ["loggerd","logmessaged","deleter","tombstoned","uploader","statsd"]
+
+  dmonitor = params.get_bool("OpkrDmonitor")
+  if not dmonitor:
+    ignore += ["dmonitoringd","dmonitoringmodeld"]
+    
 
   if params.get("DongleId", encoding='utf8') in (None, UNREGISTERED_DONGLE_ID):
     ignore += ["manage_athenad", "uploader"]
