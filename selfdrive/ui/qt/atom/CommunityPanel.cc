@@ -76,14 +76,14 @@ CommunityPanel::CommunityPanel(QWidget* parent) : ListWidget(parent)
 
     {
       "OpkrDmonitor",
-      "driver monitor enable",
+      "Driver monitor enable",
       "driver monitoring check enable disable.",
       "../assets/offroad/icon_shell.png",
     }, 
 
     {
       "OpkrUpdated",
-      "auto program update",
+      "Program auto update",
       "program update 버전을 확인한다.",
       "../assets/offroad/icon_shell.png",
     },  
