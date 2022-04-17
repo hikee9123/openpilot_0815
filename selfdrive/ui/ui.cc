@@ -267,6 +267,8 @@ static void update_state(UIState *s) {
 void ui_update_params(UIState *s) {
   s->scene.is_metric = Params().getBool("IsMetric");
   s->scene.IsOpenpilotViewEnabled = Params().getBool("IsOpenpilotViewEnabled");
+  s->scene.scr.IsDrivermonitor = Params().getBool("OpkrDmonitor");
+  
 }
 
 void UIState::updateStatus() {
