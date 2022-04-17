@@ -61,6 +61,7 @@ def manager_init() -> None:
     ("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
     ("OpkratomLongitudinal", "0"), 
     ("OpkrDmonitor", "1"),
+    ("OpkrUpdated", "1"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
@@ -150,6 +151,10 @@ def manager_thread() -> None:
   if not dmonitor:
     ignore += ["dmonitoringd","dmonitoringmodeld"]
     
+  updated = params.get_bool("OpkrUpdated")
+  if not updated:
+    ignore += ["updated"]
+  
 
   if params.get("DongleId", encoding='utf8') in (None, UNREGISTERED_DONGLE_ID):
     ignore += ["manage_athenad", "uploader"]
