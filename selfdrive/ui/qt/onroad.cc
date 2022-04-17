@@ -205,7 +205,7 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("speed", QString::number(std::nearbyint(cur_speed)));
   setProperty("maxSpeed", maxspeed_str);
   setProperty("speedUnit", s.scene.is_metric ? "km/h" : "mph");
-  setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE && s.scene.scr.IsDrivermonitor );
+  setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE && !s.scene.scr.IsDrivermonitor );
   setProperty("status", s.status);
 
 
@@ -220,7 +220,9 @@ void OnroadHud::updateState(const UIState &s) {
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
     setProperty("engageable", cs.getEngageable() || cs.getEnabled());
-    setProperty("dmActive", sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode());
+
+    if( s.scene.scr.IsDrivermonitor )
+      setProperty("dmActive", sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode());
   }
 }
 
