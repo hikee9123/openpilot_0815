@@ -552,8 +552,8 @@ class Controls:
           self.current_alert_types.append(ET.ENABLE)
           if not self.CP.pcmCruise:
             self.v_cruise_kph = initialize_v_cruise(CS.vEgo, CS.buttonEvents, self.v_cruise_kph_last)
-      elif CS.engage_enable:
-        CS.engage_enable = False
+      #elif CS.engage_enable:
+      #  CS.engage_enable = False
 
     # Check if openpilot is engaged and actuators are enabled
     self.enabled = self.state in ENABLED_STATES
