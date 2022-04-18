@@ -84,9 +84,12 @@ class DesireHelper:
 
       # LaneChangeState.off
       if self.lane_change_state == LaneChangeState.off and one_blinker and not self.prev_one_blinker: # and not below_lane_change_speed:
-        self.lane_change_state = LaneChangeState.preLaneChange
-        self.lane_change_ll_prob = 1.0
-        self.lane_change_timer_auto = 0.0
+        if not below_lane_change_speed:
+          self.lane_change_state = LaneChangeState.preLaneChange
+          self.lane_change_ll_prob = 1.0
+          self.lane_change_timer_auto = 0.0
+        else:
+          self.lane_change_state = LaneChangeState.laneChangeDisEngage
 
       # LaneChangeState.preLaneChange
       elif self.lane_change_state == LaneChangeState.preLaneChange:
@@ -102,11 +105,8 @@ class DesireHelper:
                               (carstate.rightBlindspot and self.lane_change_direction == LaneChangeDirection.right))
 
         torque_applied = self.auto_lanechange( md, torque_applied )
-        if below_lane_change_speed:
-          if not one_blinker:
-            self.lane_change_state = LaneChangeState.off
-          elif torque_applied:
-            self.lane_change_state = LaneChangeState.laneChangeDisEngage
+        if not one_blinker or below_lane_change_speed:
+          self.lane_change_state = LaneChangeState.off
         elif torque_applied and not blindspot_detected:
           self.lane_change_state = LaneChangeState.laneChangeStarting
 
