@@ -122,7 +122,7 @@ void fill_lead(cereal::ModelDataV2::LeadDataV3::Builder lead, const ModelOutputL
 
 // added by opkr
 void fill_stop_line(cereal::ModelDataV2::StopLineData::Builder stop_line, const ModelOutputStopLines &stop_lines) {
-  const auto &best_data = stop_lines.get_best_prediction();
+  const auto &best_data = stop_lines.get_best_prediction(0);
   stop_line.setProb(sigmoid(stop_lines.prob));
 
   stop_line.setX(best_data.mean.position.x);
