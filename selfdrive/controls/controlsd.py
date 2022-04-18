@@ -100,7 +100,7 @@ class Controls:
     drivermonitor_packet = []
     self.drivermonitor = params.get_bool("OpkrDmonitor")
     if self.drivermonitor:
-      drivermonitor_packet += 'driverMonitoringState'
+      drivermonitor_packet = ['driverMonitoringState']
 
     self.sm = sm
     if self.sm is None:
