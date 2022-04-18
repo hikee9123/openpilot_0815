@@ -288,6 +288,7 @@ class Controls:
 
     # Handle lane change
     if self.sm['lateralPlan'].laneChangeState == LaneChangeState.laneChangeDisEngage:
+      CS.engage_enable = False
       self.events.add(EventName.laneChangedisengaged)
     elif self.sm['lateralPlan'].laneChangeState == LaneChangeState.preLaneChange:
       direction = self.sm['lateralPlan'].laneChangeDirection

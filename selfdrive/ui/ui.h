@@ -123,6 +123,11 @@ typedef struct UIScene {
 
 
   // atom
+  // stop line
+  float stop_line_probs;
+  line_vertices_data stop_line_vertices;
+
+
   cereal::LiveParametersData::Reader liveParameters;
   cereal::GpsLocationData::Reader gpsLocationExternal;
   cereal::DeviceState::Reader deviceState;
@@ -135,6 +140,7 @@ typedef struct UIScene {
   int  IsOpenpilotViewEnabled;
   struct _screen
   {
+     int  stop_line;
      int  nTime;
      int  map_is_running, map_command_on, map_command_off;
      int  map_on_overlay;
