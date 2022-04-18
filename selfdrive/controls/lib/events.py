@@ -868,7 +868,6 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   },
 
   EventName.laneChangedisengaged: {
-    #ET.USER_DISABLE: EngagementAlert(AudibleAlert.disengage),
     ET.SOFT_DISABLE: user_soft_disable_alert("Lane Change dis engage"),    
     ET.NO_ENTRY: NoEntryAlert("Lane Change dis engage",
                               visual_alert=VisualAlert.steerRequired),
