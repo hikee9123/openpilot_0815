@@ -83,7 +83,7 @@ class DesireHelper:
       self.lanechange_cancel( cruiseState, steeringTorqueAbs )
 
       # LaneChangeState.off
-      if self.lane_change_state == LaneChangeState.off and one_blinker and not self.prev_one_blinker and not below_lane_change_speed:
+      if self.lane_change_state == LaneChangeState.off and one_blinker and not self.prev_one_blinker: # and not below_lane_change_speed:
         self.lane_change_state = LaneChangeState.preLaneChange
         self.lane_change_ll_prob = 1.0
         self.lane_change_timer_auto = 0.0
