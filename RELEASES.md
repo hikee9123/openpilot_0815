@@ -2,7 +2,7 @@ Version 0.8.14 (2022-0X-XX)
 ========================
  * bigmodel!
  * comma body support
- * Hyundai Ioniq Plug-in Hybrid 2019 support thanks to sunnyhaibin!
+ * Hyundai Ioniq Plug-in Hybrid 2019 support thanks to sunnyhaibin!(Commits on Apr 16, 2022)
  * Hyundai Tucson Diesel 2019 support thanks to sunnyhaibin!
  * Toyota Alphard Hybrid 2021 support
  * Toyota Avalon Hybrid 2022 support
