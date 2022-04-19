@@ -1815,6 +1815,7 @@ struct EncodeData {
   timestampEof @1 :Int64;
   idx @2 :UInt32;
   segmentNum @3 :Int32;
+  flags @4 :UInt32;
 }
 
 struct Event {
