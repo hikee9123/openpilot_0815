@@ -30,7 +30,7 @@ from selfdrive.hardware import HARDWARE, TICI, EON
 from selfdrive.manager.process_config import managed_processes
 
 # atom
-from selfdrive.car.hyundai.interface import CarInterface
+#from selfdrive.car.hyundai.interface import CarInterface
 import common.loger as  trace1
 
 SOFT_DISABLE_TIME = 3  # seconds
@@ -552,8 +552,7 @@ class Controls:
           self.current_alert_types.append(ET.ENABLE)
           if not self.CP.pcmCruise:
             self.v_cruise_kph = initialize_v_cruise(CS.vEgo, CS.buttonEvents, self.v_cruise_kph_last)
-      #elif CS.engage_enable:
-      #  CS.engage_enable = False
+
 
     # Check if openpilot is engaged and actuators are enabled
     self.enabled = self.state in ENABLED_STATES
@@ -571,17 +570,12 @@ class Controls:
 
     
      # atom
-    SteerRatioMsg = 'auto'
     if self.OpkrLiveSteerRatio == 2:  # 수동(고정)
-      SteerRatioMsg = 'Manual'
       sr = max(self.CP.steerRatio, 5.0)
     elif self.OpkrLiveSteerRatio == 1:  # 반학습
-      SteerRatioMsg = 'half'
       steerRatio = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
 
-    # if (self.sm.frame % int(50. / DT_CTRL) == 0):
-    #   print('sr={:.3f} self.OpkrLiveSteerRatio={}  {}'.format(sr, self.OpkrLiveSteerRatio, SteerRatioMsg )
 
     self.VM.update_params(x, sr)
 

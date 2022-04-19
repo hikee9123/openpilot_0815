@@ -240,11 +240,13 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, self.params)
     self.steer_rate_limited = new_steer != apply_steer
 
+    if CS.engage_enable and not enabled:
+      CS.engage_enable = False
 
     # disable when temp fault is active, or below LKA minimum speed
     # lkas_active = enabled and not CS.out.steerFaultTemporary and CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
     path_plan = self.NC.update_lateralPlan()    
-    lkas_active = active and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
+    lkas_active = enabled and active and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
 
 
     if not lkas_active:
