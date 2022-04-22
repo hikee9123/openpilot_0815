@@ -685,7 +685,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   // 4. rpm
   if( true )
   {
-    const int rpm_x = state->fb_w / 2 - 150;
+    const int rpm_x = state->fb_w / 2 - 200;
     const int rpm_y = 0; 
     bb_draw_rpm( p, rpm_x, rpm_y );
   }
