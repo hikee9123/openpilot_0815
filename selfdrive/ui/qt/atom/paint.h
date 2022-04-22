@@ -86,7 +86,7 @@ private:
   QPixmap img_park_crackdown;
 
 
-  const int img_size_rpm = 400;
+  const int img_size_rpm = 300;
   QPixmap img_rpm1;
   QPixmap img_rpm2;
 
