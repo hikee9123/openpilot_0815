@@ -30,7 +30,8 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   img_compass= QPixmap("../assets/addon/Image/img_compass.png").scaled(img_size_compass, img_size_compass, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_direction= QPixmap("../assets/addon/Image/img_direction.png").scaled(img_size_compass, img_size_compass, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_tire_pressure= QPixmap("../assets/addon/Image/img_tire_pressure.png").scaled(90, 90, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
+  img_rpm1 = QPixmap("../assets/addon/Image/RPM11.png").scaled(img_size_rpm, img_size_rpm, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  img_rpm2 = QPixmap("../assets/addon/Image/RPM22.png").scaled(img_size_rpm/2, img_size_rpm/2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
   img_traf_turn= QPixmap("../assets/img_trafficSign_turn.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_speed = QPixmap("../assets/addon/navigation/img_speed.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -54,8 +55,7 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   img_narrow_road= QPixmap("../assets/addon/navigation/img_narrow_road.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_rail_road= QPixmap("../assets/addon/navigation/img_rail_road.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-  img_rpm1 = QPixmap("../assets/addon/navigation/RPM11.png").scaled(img_size_rpm, img_size_rpm, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-  img_rpm2 = QPixmap("../assets/addon/navigation/RPM22.png").scaled(img_size_rpm/2, img_size_rpm/2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
 
 
   connect(this, &OnPaint::valueChanged, [=] { update(); });
@@ -724,19 +724,27 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
     else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; // 갓길단속
     else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space;  // 적재불량단속  
     
-    else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// 단속카메라(신호위반카메라)  
+    //else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// 단속카메라(신호위반카메라)  
     else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; // 고정식  - 호야
     //else if( nTrafficSign == TS_CAMERA3 ) traffic_sign = &img_img_space; // 경찰차(이동식)  - 호야
     //else if( nTrafficSign == TS_CAMERA4 ) traffic_sign = &img_img_space; // 단속구간(고정형 이동식)
     //else if( nTrafficSign == TS_CAMERA5  ) traffic_sign = &img_img_space;  // 단속(카메라, 신호위반)    
     else if( speedLimit ) 
     {
-      if( nTrafficSign == TS_INTERVAL  )   // 구간 단속
+      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )   // 구간 단속
+      {
         traffic_sign = &img_section;
+      }
       else if( nTrafficSign == TS_CAMERA1  )
-        traffic_sign = &img_camera;
+      {
+        if( speedLimit == 30 ) traffic_sign = &img_school_zone;
+        else traffic_sign = &img_camera;
+      }
       else
+      {
         traffic_sign = &img_speed;
+      }
+        
     }
 
 
