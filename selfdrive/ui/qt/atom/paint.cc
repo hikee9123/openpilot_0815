@@ -650,9 +650,9 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
     p.save();
     p.setOpacity(0.8);
-    p.translate( compass_x+size, compass_y);
+    p.translate( compass_x+size, compass_y+size);
     p.rotate( fEngineRpm );
-    p.drawPixmap( -size , size, img_rpm2 );
+    p.drawPixmap( -size , -size, img_rpm2 );
     p.restore();
 
   
