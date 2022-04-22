@@ -636,7 +636,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 {
  // auto   gps_ext = scene->gpsLocationExternal;
  // float  bearingUblox = gps_ext.getBearingDeg();
- float fEngineRpm = fEngineRpm_1++; //scene->car_state.getEngineRpm();
+ float fEngineRpm = fEngineRpm_1 += 100; //scene->car_state.getEngineRpm();
 
   if( fEngineRpm_1 > 4000 )
     fEngineRpm_1 = 0;
@@ -650,7 +650,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
     p.save();
     p.setOpacity(0.8);
-    p.translate( compass_x+size, compass_y+size);
+    p.translate( compass_x+size, compass_y);
     p.rotate( fEngineRpm );
     p.drawPixmap( -size , size, img_rpm2 );
     p.restore();
