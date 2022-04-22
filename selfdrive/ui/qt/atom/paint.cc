@@ -724,7 +724,7 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
     else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; // 갓길단속
     else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space;  // 적재불량단속  
     
-    //else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_img_space;// 단속카메라(신호위반카메라)  
+    else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// 단속카메라(신호위반카메라)  
     else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; // 고정식  - 호야
     //else if( nTrafficSign == TS_CAMERA3 ) traffic_sign = &img_img_space; // 경찰차(이동식)  - 호야
     //else if( nTrafficSign == TS_CAMERA4 ) traffic_sign = &img_img_space; // 단속구간(고정형 이동식)
