@@ -25,6 +25,7 @@ class LatTunes(Enum):
   PID_M = 14
   PID_N = 15
   TORQUE = 16
+  LQR_GRANDEUR = 17
 
 
 ###### LONG ######
@@ -58,6 +59,21 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=.1):
     tune.torque.kf = 1.0 / MAX_LAT_ACCEL
     tune.torque.ki = 0.5 / MAX_LAT_ACCEL
     tune.torque.friction = FRICTION
+  elif name == LatTunes.LQR_GRANDEUR:  
+    tune.lateralTuning.init('lqr')
+    tune.lateralTuning.lqr.scale = 2000     #1700.0
+    tune.lateralTuning.lqr.ki = 0.01      #0.01
+    tune.lateralTuning.lqr.dcGain =  0.0027  #0.0027
+    # 호야  1500, 0.015, 0.0027
+    #  1700, 0.01, 0.0029
+    #  2000, 0.01, 0.003
+    # toyota  1500, 0.05,   0.002237852961363602
+
+    tune.lateralTuning.lqr.a = [0., 1., -0.22619643, 1.21822268]
+    tune.lateralTuning.lqr.b = [-1.92006585e-04, 3.95603032e-05]
+    tune.lateralTuning.lqr.c = [1., 0.]
+    tune.lateralTuning.lqr.k = [-110.73572306, 451.22718255]
+    tune.lateralTuning.lqr.l = [0.3233671, 0.3185757]    
   elif name == LatTunes.INDI_PRIUS:
     tune.init('indi')
     tune.indi.innerLoopGainBP = [0.]
