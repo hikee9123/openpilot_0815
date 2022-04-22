@@ -639,12 +639,12 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   fEngineRpm *= 0.045;
 
   if( fEngineRpm <= 0 ) return;
-  int   size =  img_size_rpm * 0.5;
+  int   size =  img_size_rpm;// * 0.5;
 
     p.save();
     p.setOpacity(0.8);
     p.translate( compass_x+size, compass_y+size);
-    p.rotate( -fEngineRpm );
+    p.rotate( fEngineRpm );
     p.drawPixmap( -size , -size, img_rpm2 );
     p.restore();
 
@@ -685,7 +685,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   // 4. rpm
   if( true )
   {
-    const int rpm_x = state->fb_w / 2 - 300;
+    const int rpm_x = state->fb_w / 2 - 200;
     const int rpm_y = 0; 
     bb_draw_rpm( p, rpm_x, rpm_y );
   }
