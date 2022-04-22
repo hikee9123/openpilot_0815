@@ -54,6 +54,8 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   img_narrow_road= QPixmap("../assets/addon/navigation/img_narrow_road.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_rail_road= QPixmap("../assets/addon/navigation/img_rail_road.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
+  img_rpm1 = QPixmap("../assets/addon/navigation/RPM11.png").scaled(img_size_rpm, img_size_rpm, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  img_rpm2 = QPixmap("../assets/addon/navigation/RPM22.png").scaled(img_size_rpm/2, img_size_rpm/2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 
   connect(this, &OnPaint::valueChanged, [=] { update(); });
@@ -628,6 +630,25 @@ void OnPaint::bb_draw_compass(QPainter &p, int compass_x, int compass_y )
 }
 
 
+void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
+{
+ // auto   gps_ext = scene->gpsLocationExternal;
+ // float  bearingUblox = gps_ext.getBearingDeg();
+ float fEngineRpm = scene->car_state.getEngineRpm();
+
+  int   size =  img_size_rpm * 0.5;
+
+    p.save();
+    p.setOpacity(0.8);
+    p.translate( compass_x+size, compass_y+size);
+    p.rotate( -fEngineRpm );
+    p.drawPixmap( -size , -size, img_rpm2 );
+    p.restore();
+
+  
+   p.drawPixmap(compass_x , compass_y, img_rpm1 );
+}
+
 void OnPaint::bb_ui_draw_UI(QPainter &p)
 {
   const int bb_dml_w = 180;
@@ -656,6 +677,14 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
     const int compass_x = state->fb_w / 2 - 100;
     const int compass_y = state->fb_h - 150;
     bb_draw_compass( p, compass_x, compass_y );
+  }
+
+  // 4. rpm
+  if( true )
+  {
+    const int rpm_x = state->fb_w / 2 - 100;
+    const int rpm_y = 150; 
+    bb_draw_rpm( p, rpm_x, rpm_y );
   }
 }
 //BB END: functions added for the display of various items

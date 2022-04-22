@@ -86,6 +86,9 @@ private:
   QPixmap img_park_crackdown;
 
 
+  const int img_size_rpm = 400;
+  QPixmap img_rpm1;
+  QPixmap img_rpm2;
 
 
 
@@ -118,7 +121,7 @@ private:
 
   void  bb_draw_tpms(QPainter &p, int viz_tpms_x, int viz_tpms_y );
   void  bb_draw_compass(QPainter &p, int compass_x, int compass_y );
-
+  void  bb_draw_rpm(QPainter &p, int compass_x, int compass_y );
   void  bb_ui_draw_UI(QPainter &p);
 
 signals:
