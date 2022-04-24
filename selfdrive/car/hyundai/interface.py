@@ -66,23 +66,12 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]
 
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
-      set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0.1)
-      #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0.06)
-      #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=3.0, FRICTION=0.08)
-      #ret.lateralTuning.init('lqr')
-      #ret.lateralTuning.lqr.scale = 2000     #1700.0
-      #ret.lateralTuning.lqr.ki = 0.01      #0.01
-      #ret.lateralTuning.lqr.dcGain =  0.0027  #0.0027
-      # 호야  1500, 0.015, 0.0027
-      #  1700, 0.01, 0.0029
-      #  2000, 0.01, 0.003
-      # toyota  1500, 0.05,   0.002237852961363602
-  
-      #ret.lateralTuning.lqr.a = [0., 1., -0.22619643, 1.21822268]
-      #ret.lateralTuning.lqr.b = [-1.92006585e-04, 3.95603032e-05]
-      #ret.lateralTuning.lqr.c = [1., 0.]
-      #ret.lateralTuning.lqr.k = [-110.73572306, 451.22718255]
-      #ret.lateralTuning.lqr.l = [0.3233671, 0.3185757]
+      #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0.1)
+      set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=3.0, FRICTION=0.0) # 0.06
+      #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=3.0, FRICTION=0.01)
+
+      # 디토.  3.0, 0.01
+
       
     elif candidate in (CAR.SANTA_FE, CAR.SANTA_FE_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022):
       ret.lateralTuning.pid.kf = 0.00005

@@ -11,7 +11,7 @@ from selfdrive.car.hyundai.navicontrol  import NaviControl
 
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LongCtrlState = car.CarControl.Actuators.LongControlState
-
+LaneChangeState = log.LateralPlan.LaneChangeState
 
 import common.loger as trace1
 
@@ -110,7 +110,7 @@ class CarController():
     return  int(round(float(apply_torque)))
 
 
-  def update_debug(self, CS, c ):
+  def update_debug(self, CS, c, apply_steer ):
     cut_in, d_rel1, d_rel2 = self.NC.get_cut_in_car()
     if abs(cut_in) > 3:
       self.cut_in_car_time += 1
@@ -126,11 +126,11 @@ class CarController():
 
     actuators = c.actuators
     vFuture = c.hudControl.vFuture * 3.6
-    str_log1 = 'MODE={:.0f} vF={:.1f} TG={:.1f} cut_in={:.1f}={:.1f}-{:.1f}'.format( CS.cruise_set_mode, vFuture, self.apply_steer_last, cut_in, d_rel1, d_rel2, )
+    str_log1 = 'MODE={:.0f} vF={:.1f}  '.format( CS.cruise_set_mode, vFuture )
     trace1.printf2( '{}'.format( str_log1 ) )
 
 
-    str_log1 = 'aRV={:.2f},  NV={:.0f} BT={:.0f} KPH={:.0f}'.format( CS.aReqValue,  self.NC.seq_command, self.debug_button, self.NC.set_speed_kph )
+    str_log1 = 'TG1={:.1f} TG2={:.1f}  aRV={:.2f}'.format( apply_steer, self.apply_steer_last, CS.aReqValue  )
     trace1.printf3( '{}'.format( str_log1 ) )
   
 
@@ -240,12 +240,15 @@ class CarController():
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, self.params)
     self.steer_rate_limited = new_steer != apply_steer
 
+
     if CS.engage_enable and not enabled:
       CS.engage_enable = False
 
     # disable when temp fault is active, or below LKA minimum speed
     # lkas_active = enabled and not CS.out.steerFaultTemporary and CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
-    path_plan = self.NC.update_lateralPlan()    
+    path_plan = self.NC.update_lateralPlan()
+    if path_plan.laneChangeState == LaneChangeState.laneChangeDisEngage:
+      active = False
     lkas_active = enabled and active and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
 
 
@@ -255,6 +258,7 @@ class CarController():
     else:
       apply_steer = self.smooth_steer(  apply_steer )
 
+    apply_steer = clip( apply_steer, -self.params.STEER_MAX, self.params.STEER_MAX )
     self.apply_steer_last = apply_steer
     sys_warning, sys_state = self.process_hud_alert( lkas_active, c, CS )
 
@@ -296,7 +300,7 @@ class CarController():
       
     # 20 Hz LFA MFA message
     if self.frame % 5 == 0:
-      self.update_debug( CS, c )
+      self.update_debug( CS, c, apply_steer )
       if self.car_fingerprint in FEATURES["send_hda_mfa"]:
         can_sends.append( create_hda_mfc(self.packer, CS, c ) )
       elif self.car_fingerprint in FEATURES["send_lfa_mfa"]:

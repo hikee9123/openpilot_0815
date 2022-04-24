@@ -28,15 +28,6 @@ class CarControllerParams:
     self.STEER_DRIVER_MULTIPLIER = 2
     self.STEER_DRIVER_FACTOR = 1
 
-    if CP.lateralTuning.which == 'torque':
-      self.STEER_DELTA_UP = 4       # 1.0s time to peak torque
-      self.STEER_DELTA_DOWN = 7     # always lower than 45 otherwise the Rav4 faults (Prius seems ok with 50)
-    else:
-      self.STEER_DELTA_UP = 3        # 10
-      self.STEER_DELTA_DOWN = 7      # 25
-
-    
-
 
 class CAR:
   # Hyundai

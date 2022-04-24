@@ -688,7 +688,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   }
 
   // 4. rpm
-  if( true )
+  if( false )
   {
     const int rpm_x = state->fb_w / 2 - img_size_rpm/2;
     const int rpm_y = 0; 
