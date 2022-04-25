@@ -59,7 +59,7 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.845
       ret.steerRatio = 16.5  #13.96   #12.5
       ret.steerRateCost = 0.35 #0.6   # 0.6, 0.35
-      ret.steerActuatorDelay = 0.25 #0.1   # 0.1, 0.25
+      ret.steerActuatorDelay = 0.05 #0.1   # 0.1, 0.05
       ret.minSteerSpeed = 0.5 * CV.KPH_TO_MS
 
       ret.lateralTuning.pid.kf = 0.000005
