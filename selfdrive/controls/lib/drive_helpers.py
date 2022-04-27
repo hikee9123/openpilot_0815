@@ -104,7 +104,7 @@ def get_lag_adjusted_curvature(CP, v_ego, psis, curvatures, curvature_rates):
 
   # TODO this needs more thought, use .2s extra for now to estimate other delays
   steerActuatorDelay = CP.steerActuatorDelay + .2
-  delay = interp(v_ego, [0,10], [ 0.5, steerActuatorDelay] )
+  delay = steerActuatorDelay  #interp(v_ego, [0,10], [ 0.5, steerActuatorDelay] )
   if v_ego < 3:
     #current_curvature = moveAvg.get_min(curvatures[0], 5)
     current_curvature = moveAvg.get_avg(curvatures[0], 5)
