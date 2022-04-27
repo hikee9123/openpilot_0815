@@ -190,8 +190,11 @@ class CarController():
     if pcm_cancel_cmd:
       can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL))
     elif CS.out.cruiseState.standstill:
-      if CS.out.gasPressed:
-        self.last_lead_distance = 0      
+      dRel1, dRel2 = self.NC.get_dRel()
+      if dRel1 <= 5:
+        self.last_lead_distance = 0
+      elif CS.out.gasPressed:
+        self.last_lead_distance = 0
       # run only first time when the car stopped
       elif self.last_lead_distance == 0:  
         # get the lead distance from the Radar
@@ -218,8 +221,6 @@ class CarController():
       else:
         self.debug_button = 0
         self.resume_cnt = 0
-
-
 
     return  can_sends
 

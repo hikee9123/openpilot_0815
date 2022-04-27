@@ -139,19 +139,38 @@ class NaviControl():
           cruise_set_speed_kph = 60
     return  cruise_set_speed_kph
 
-  def get_cut_in_car(self):
-      cut_in = 0
-      d_rel1 = 0 #leads_v3[0].x[0]
-      d_rel2 = 0 #leads_v3[1].x[0]
+  def get_dRel(self):
+      radarState = self.sm['radarState']
+      lead_0 = radarState.leadOne
+      lead_1 = radarState.leadTwo
 
       model_v2 = self.sm['modelV2']
       leads_v3 = model_v2.leadsV3
+      if lead_0.status:
+        dRel1 = self.lead_0.dRel
+      else:
+        dRel1 = leads_v3[0].x[0]
 
       if len(leads_v3) > 1:
-        d_rel1 = leads_v3[0].x[0] 
+        dRel2 = leads_v3[1].x[0]
+      else:
+        dRel2 = 0
+
+      return dRel1, dRel2
+
+
+
+  def get_cut_in_car(self):
+      cut_in = 0
+      d_rel1 = 0
+      d_rel2 = 0
+      model_v2 = self.sm['modelV2']
+      leads_v3 = model_v2.leadsV3
+      if len(leads_v3) > 1:
+        d_rel1 = leads_v3[0].x[0]
         d_rel2 = leads_v3[1].x[0]
         d_rel = min( d_rel1, d_rel2 )
-        if leads_v3[0].prob > 0.5 and leads_v3[1].prob > 0.5 and d_rel < 60:
+        if leads_v3[0].prob > 0.5 and leads_v3[1].prob > 0.5 and d_rel < 50:
           cut_in = d_rel1 - d_rel2  # > 3
 
       return cut_in, d_rel1, d_rel2
