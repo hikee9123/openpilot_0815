@@ -126,7 +126,7 @@ class CarController():
 
     actuators = c.actuators
     vFuture = c.hudControl.vFuture * 3.6
-    str_log1 = 'MODE={:.0f} vF={:.1f}  '.format( CS.cruise_set_mode, vFuture )
+    str_log1 = 'MODE={:.0f} vF={:.1f}  DIST={:.2f}'.format( CS.cruise_set_mode, vFuture, CS.lead_distance )
     trace1.printf2( '{}'.format( str_log1 ) )
 
 
@@ -190,10 +190,7 @@ class CarController():
     if pcm_cancel_cmd:
       can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL))
     elif CS.out.cruiseState.standstill:
-      dRel1, dRel2 = self.NC.get_dRel()
-      if dRel1 <= 5:
-        self.last_lead_distance = 0
-      elif CS.out.gasPressed:
+      if CS.out.gasPressed:
         self.last_lead_distance = 0
       # run only first time when the car stopped
       elif self.last_lead_distance == 0:  
