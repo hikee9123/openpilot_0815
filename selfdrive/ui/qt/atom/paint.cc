@@ -657,13 +657,15 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   int width = 300;
   int height = 300;
-  QLinearGradient g(width/2, height/2, width/8);
 
 
+  QRadialGradient radialGrad(QPointF(100, 100), 100);
+  radialGrad.setColorAt(0, Qt::red);
+  radialGrad.setColorAt(0.5, Qt::blue);
+  radialGrad.setColorAt(1, Qt::green);
 
-  g.setColorAt(0, QColor::fromRgbF(0, 0, 1, 0.05));
-  g.setColorAt(0.5, QColor::fromRgbF(0, 1, 0, 0.35));  
-  g.setColorAt(1, QColor::fromRgbF(1, 0, 0, 0.8));
+
+  //setBrush(QBrush(linear_gradient));
 
   p.setPen( QPen( QColor(255,255,0,100), 100) );
   p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 360 * 16);
