@@ -70,9 +70,6 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
 
 void OnPaint::updateState(const UIState &s)
 {
-
-  
-
   //enginRpm = s.scene.scr.enginrpm; 
 
   enginRpm += 10;
@@ -653,8 +650,8 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   if( fEngineRpm <= 0 ) return;
 
-  //int width = 300;
-  //int height = 300;
+  if( fEngineRpm > 180 )
+     fEngineRpm = 180;
 
 
   QRadialGradient radialGrad(QPointF(100, 100), 100);
@@ -665,7 +662,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   p.setBrush( QBrush(radialGrad) );
   p.setPen( QPen( QColor(255,255,0,100), 30) );
-  p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, fEngineRpm * 16);
+  p.drawArc(compass_x, compass_y, 300, 300, fEngineRpm * 16, 180 * 16);
   p.drawText(compass_x, compass_y, "30°");
 
 
