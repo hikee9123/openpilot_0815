@@ -653,8 +653,6 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   if( fEngineRpm <= 0 ) return;
 
-  compass_y = 100;
-
   //int width = 300;
   //int height = 300;
 
@@ -667,14 +665,14 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   //setBrush(QBrush(linear_gradient));
 
-  p.setPen( QPen( QColor(255,255,0,100), 10) );
+  p.setPen( QPen( QColor(255,255,0,100), 20) );
   p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 360 * 16);
   p.drawText(compass_x, compass_y, "30°");
 
 
-  compass_y = 50;
-  p.setPen( QPen( QColor(255,0,0,255), 50) );
-  p.drawArc(compass_x, compass_y, 100, 100, 0 * 16, 180 * 16);
+  compass_y = 10;
+  p.setPen( QPen( QColor(255,0,0,255), 30) );
+  p.drawArc(compass_x, compass_y, 200, 200, 0 * 16, 180 * 16);
   p.drawText(compass_x, compass_y, "180°");
 
 
