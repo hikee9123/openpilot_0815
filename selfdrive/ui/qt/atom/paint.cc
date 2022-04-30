@@ -642,6 +642,27 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   fEngineRpm *= 0.045;
 
   if( fEngineRpm <= 0 ) return;
+
+  p.setPen( QPen( QColor(255,255,0,100), 3) );
+  p.drawArc(compass_x, compass_y, 100, 100, 0 * 16, 30 * 16);
+  p.drawText(60, 100, '30°');
+
+  p.drawArc(150, 20, 100, 100, 0 * 16, 60 * 16);
+  p.drawText(190, 100, '60°');
+
+  p.drawArc(280, 20, 100, 100, 0 * 16, 90 * 16);
+  p.drawText(320, 100, '90°');
+
+  p.drawArc(20, 140, 100, 100, 0 * 16, 180 * 16);
+  p.drawText(60, 270, '180°');
+
+  p.drawArc(150, 140, 100, 100, 0 * 16, 270 * 16);
+  p.drawText(190, 270, '270°');
+
+  p.drawArc(280, 140, 100, 100, 0 * 16, 360 * 16);
+  p.drawText(320, 270, '360°');
+
+  /*
   int   size =  img_size_rpm * 0.5;
 
     p.drawPixmap(compass_x , compass_y, img_rpm1 );
@@ -652,7 +673,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
     p.rotate( fEngineRpm );
     p.drawPixmap( -size , -size, img_rpm2 );
     p.restore();
-
+*/
   
    
 }
@@ -688,7 +709,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   }
 
   // 4. rpm
-  if( false )
+  if( true )
   {
     const int rpm_x = state->fb_w / 2 - img_size_rpm/2;
     const int rpm_y = 0; 
