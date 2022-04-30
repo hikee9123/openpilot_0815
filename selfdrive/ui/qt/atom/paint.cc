@@ -655,7 +655,12 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   compass_y = 100;
 
-  QLinearGradient g( QPointF(compass_x, compass_y), 200 );
+  QLinearGradient g;
+
+  int width = 300;
+  int height = 300;
+
+  g = QRadialGradient(width/2, height/2, width/8);
   g.setColorAt(0, QColor::fromRgbF(0, 0, 1, 0.05));
   g.setColorAt(0.5, QColor::fromRgbF(0, 1, 0, 0.35));  
   g.setColorAt(1, QColor::fromRgbF(1, 0, 0, 0.8));
@@ -664,20 +669,13 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 360 * 16);
   p.drawText(compass_x, compass_y, "30°");
 
-  p.drawArc(150, 20, 100, 100, 0 * 16, 60 * 16);
-  p.drawText(190, 100, "60°");
 
-  p.drawArc(280, 20, 100, 100, 0 * 16, 90 * 16);
-  p.drawText(320, 100, "90°");
+  compass_y = 50;
+  p.setPen( QPen( QColor(255,0,0,255), 500) );
+  p.drawArc(compass_x, compass_y, 100, 100, 0 * 16, 180 * 16);
+  p.drawText(compass_x, compass_y, "180°");
 
-  p.drawArc(20, 140, 100, 100, 0 * 16, 180 * 16);
-  p.drawText(60, 270, "180°");
 
-  p.drawArc(150, 140, 100, 100, 0 * 16, 270 * 16);
-  p.drawText(190, 270, "270°");
-
-  p.drawArc(280, 140, 100, 100, 0 * 16, 360 * 16);
-  p.drawText(320, 270, "360°");
 
   /*
   int   size =  img_size_rpm * 0.5;
