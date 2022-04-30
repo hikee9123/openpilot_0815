@@ -653,17 +653,12 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   if( fEngineRpm > 180 )
      fEngineRpm = 180;
 
+  int  nR = 255 * (fEngineRpm/180);
+  int  nG = 255 * ( 1 - (fEngineRpm/180) );
 
-  QRadialGradient radialGrad(QPointF(100, 100), 100);
-  radialGrad.setColorAt(0, Qt::red);
-  radialGrad.setColorAt(0.5, Qt::blue);
-  radialGrad.setColorAt(1, Qt::green);
-
-
-  p.setBrush( QBrush(radialGrad) );
-  p.setPen( QPen( QColor(255,255,0,100), 30) );
+  p.setPen( QPen( QColor(nR,nG,0,100), 30) );
   p.drawArc(compass_x, compass_y, 300, 300, fEngineRpm * 16, 180 * 16);
-  p.drawText(compass_x, compass_y, "30°");
+  //p.drawText(compass_x, compass_y, "30°");
 
 
 
