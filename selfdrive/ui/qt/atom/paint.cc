@@ -70,11 +70,11 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
 
 void OnPaint::updateState(const UIState &s)
 {
-  //enginRpm = s.scene.scr.enginrpm; 
+  enginRpm = s.scene.scr.enginrpm; 
 
-  enginRpm += 10;
-  if( enginRpm > 4000 )
-     enginRpm = 0;
+  //enginRpm += 10;
+  //if( enginRpm > 4000 )
+  //   enginRpm = 0;
 
   setProperty("enginRpm", enginRpm );
 
@@ -532,7 +532,7 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
   
   if( true )
   {
-    float fEngineRpm = scene->car_state.getEngineRpm();
+    float fEngineRpm = enginRpm;// scene->car_state.getEngineRpm();
     int   electGearStep  = scene->car_state.getElectGearStep();
   
     uom_color = QColor(255, 255, 255, 200);
@@ -651,8 +651,13 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   if( fEngineRpm <= 0 ) return;
 
 
+  if( enginRpm < 2000 )
+      p.setPen( QPen( QColor(0,255,0,200), 30) );
+  else if( enginRpm < 3000 )
+      p.setPen( QPen( QColor(255,255,0,200), 30) );
+  else
+      p.setPen( QPen( QColor(255,0,0,200), 30) );
 
-  p.setPen( QPen( QColor(0,255,0,100), 30) );
   p.drawArc(compass_x, compass_y, 300, 300, -180 * 16, -180 - fEngineRpm * 16);
   //p.drawText(compass_x, compass_y, "30°");
 
