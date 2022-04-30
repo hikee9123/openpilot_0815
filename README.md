@@ -41,6 +41,30 @@ python selfdrive/debug/dump.py <category>
   - replace `<category>` with any one of these: `health carState carControl controlsState carParams sendcan can`
 
 
+
+
+개인 수정한 브랜치 본이 깃에 올리는 방법
+1. git remote remove origin   : 연결 해제
+2. git remote add origin  https://github.com/hikee9123/openpilot_0814.git   : 연결
+
+3. git add . (꼭 add 다음 한 칸 뛰어고 . 입니다)
+
+git update-index --chmod=+x  selfdrive/assets/addon/apk/apk.py;
+git update-index --chmod=+x  selfdrive/assets/addon/sh/gitcommit.sh;
+git update-index --chmod=+x  selfdrive/assets/addon/sh/panda_flashing.sh;
+git update-index --chmod=+x  selfdrive/assets/addon/sh/gitpull.sh;
+git update-index --chmod=+x  selfdrive/assets/addon/sh/gitpull_cancel.sh;
+git update-index --chmod=+x  selfdrive/assets/addon/sh/run_mixplorer.sh;
+
+
+git update-index --chmod=+x  installer/custom/install_gfortran.sh;
+git update-index --chmod=+x  selfdrive/mnager/custom_dep.py;
+
+4. git commit -m "openpilot v0.8.14"
+5. git push --set-upstream origin master-ci   : 최초 업로드시.
+6. git push
+
+
 Table of Contents
 =======================
 
