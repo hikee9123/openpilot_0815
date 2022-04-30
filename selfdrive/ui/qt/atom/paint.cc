@@ -71,6 +71,16 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
 void OnPaint::updateState(const UIState &s)
 {
 
+  
+
+  //enginRpm = s.scene.scr.enginrpm; 
+
+  enginRpm += 10;
+  if( enginRpm > 4000 )
+     enginRpm = 0;
+
+  setProperty("enginRpm", enginRpm );
+
   SubMaster &sm = *(s.sm);
   if (sm.frame % (UI_FREQ / 2) != 0) return;
 
@@ -104,7 +114,7 @@ void OnPaint::updateState(const UIState &s)
        update(); 
     //}
 
-   // setProperty("invalidate", invalidate );
+
 }
 
 
@@ -630,22 +640,24 @@ void OnPaint::bb_draw_compass(QPainter &p, int compass_x, int compass_y )
 }
 
 
-//float fEngineRpm_1 = 0;
 
 void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 {
  // auto   gps_ext = scene->gpsLocationExternal;
  // float  bearingUblox = gps_ext.getBearingDeg();
- float fEngineRpm = 10;// scene->car_state.getEngineRpm();
+ float fEngineRpm = enginRpm;//   enginRpm;// scene->scr.enginrpm;
+
 
 
   fEngineRpm *= 0.045;
 
   if( fEngineRpm <= 0 ) return;
 
+  compass_y = 100;
+
   p.setPen( QPen( QColor(255,255,0,100), 3) );
-  p.drawArc(compass_x, compass_y, 100, 100, 0 * 16, 30 * 16);
-  p.drawText(60, 100, "30°");
+  p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 30 * 16);
+  p.drawText(compass_x, compass_y, "30°");
 
   p.drawArc(150, 20, 100, 100, 0 * 16, 60 * 16);
   p.drawText(190, 100, "60°");

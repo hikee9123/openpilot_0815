@@ -283,6 +283,7 @@ static void update_state(UIState *s) {
 
     auto cruiseState = scene.car_state.getCruiseState();
     scene.scr.awake = cruiseState.getCruiseSwState();
+    scene.scr.enginrpm =  scene.car_state.getEngineRpm();
    } 
    
    if( sm.updated("liveNaviData"))

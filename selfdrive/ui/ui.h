@@ -152,7 +152,8 @@ typedef struct UIScene {
      int  awake;
      int  sidebar;
      int  IsDrivermonitor;
-     float accel_prob[2];     
+     float accel_prob[2];
+     int  enginrpm;
   } scr;
 
 

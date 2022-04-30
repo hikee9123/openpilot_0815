@@ -11,7 +11,7 @@
 class OnPaint : public QWidget 
 {
   Q_OBJECT
-  Q_PROPERTY(int invalidate MEMBER invalidate NOTIFY valueChanged);  
+  Q_PROPERTY(int enginRpm MEMBER enginRpm NOTIFY valueChanged);  
 
 
 
@@ -28,7 +28,7 @@ private:
   UIState  *state;
   UIScene  *scene;
 
-  int   invalidate = 0;
+  int   enginRpm = 0;
 
 
  
