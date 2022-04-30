@@ -655,8 +655,8 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   compass_y = 100;
 
-  int width = 300;
-  int height = 300;
+  //int width = 300;
+  //int height = 300;
 
 
   QRadialGradient radialGrad(QPointF(100, 100), 100);
