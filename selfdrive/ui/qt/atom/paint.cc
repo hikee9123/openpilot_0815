@@ -663,20 +663,16 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   radialGrad.setColorAt(1, Qt::green);
 
 
-  //setBrush(QBrush(linear_gradient));
-
-  p.setPen( QPen( QColor(255,255,0,100), 20) );
-  p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 360 * 16);
+  p.setBrush( QBrush(radialGrad) );
+  p.setPen( QPen( QColor(255,255,0,100), 30) );
+  p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, fEngineRpm * 16);
   p.drawText(compass_x, compass_y, "30°");
 
 
-  compass_y = 10;
-  p.setPen( QPen( QColor(255,0,0,255), 30) );
-  p.drawArc(compass_x, compass_y, 200, 200, 0 * 16, 180 * 16);
-  p.drawText(compass_x, compass_y, "180°");
 
 
 
+  p.setPen(Qt::NoPen);  
   /*
   int   size =  img_size_rpm * 0.5;
 
