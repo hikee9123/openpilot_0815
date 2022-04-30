@@ -1,4 +1,45 @@
-![](https://i.imgur.com/b0ZyIx5.jpg)
+Installation:
+
+git clone https://github.com/hikee9123/openpilot.git -b master
+
+------
+The best way to install this fork on comma.ai Openpilot repo is the following:
+- move to openpilot folder and add new remote, hikee9123 e.g.:
+```
+cd /data/openpilot
+git remote add hikee9123 https://github.com/hikee9123/openpilot.git
+git fetch --all
+```
+- To change branch to community:
+```
+git checkout master
+```
+- To change branch back to offical Openpilot release:
+```
+git checkout release2
+```
+
+- To update a branch:
+```
+git pull
+```
+- To reset a branch:
+```
+git reset hikee9123/master --hard
+```
+
+Debugging issues:
+------
+<b> To print debug info for Panda and Harness issue:</b>
+```
+python panda/tests/debug_console.py
+```
+<b> To print Opentpilot live data:</b>
+```
+python selfdrive/debug/dump.py <category>
+```
+  - replace `<category>` with any one of these: `health carState carControl controlsState carParams sendcan can`
+
 
 Table of Contents
 =======================
@@ -13,27 +54,6 @@ Table of Contents
 * [Licensing](#licensing)
 
 ---
-
-What is openpilot?
-------
-
-[openpilot](http://github.com/commaai/openpilot) is an open source driver assistance system. Currently, openpilot performs the functions of Adaptive Cruise Control (ACC), Automated Lane Centering (ALC), Forward Collision Warning (FCW) and Lane Departure Warning (LDW) for a growing variety of [supported car makes, models and model years](docs/CARS.md). In addition, while openpilot is engaged, a camera based Driver Monitoring (DM) feature alerts distracted and asleep drivers. See more about [the vehicle integration](docs/INTEGRATION.md) and [limitations](docs/LIMITATIONS.md).
-
-<table>
-  <tr>
-    <td><a href="https://youtu.be/NmBfgOanCyk" title="Video By Greer Viau"><img src="https://i.imgur.com/1w8c6d2.jpg"></a></td>
-    <td><a href="https://youtu.be/VHKyqZ7t8Gw" title="Video By Logan LeGrand"><img src="https://i.imgur.com/LnBucik.jpg"></a></td>
-    <td><a href="https://youtu.be/VxiR4iyBruo" title="Video By Charlie Kim"><img src="https://i.imgur.com/4Qoy48c.jpg"></a></td>
-    <td><a href="https://youtu.be/-IkImTe1NYE" title="Video By Aragon"><img src="https://i.imgur.com/04VNzPf.jpg"></a></td>
-  </tr>
-  <tr>
-    <td><a href="https://youtu.be/iIUICQkdwFQ" title="Video By Logan LeGrand"><img src="https://i.imgur.com/b1LHQTy.jpg"></a></td>
-    <td><a href="https://youtu.be/XOsa0FsVIsg" title="Video By PinoyDrives"><img src="https://i.imgur.com/6FG0Bd8.jpg"></a></td>
-    <td><a href="https://youtu.be/bCwcJ98R_Xw" title="Video By JS"><img src="https://i.imgur.com/zO18CbW.jpg"></a></td>
-    <td><a href="https://youtu.be/BQ0tF3MTyyc" title="Video By Tsai-Fi"><img src="https://i.imgur.com/eZzelq3.jpg"></a></td>
-  </tr>
-</table>
-
 
 Running in a car
 ------
