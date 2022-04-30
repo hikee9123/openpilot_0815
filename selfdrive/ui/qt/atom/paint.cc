@@ -653,7 +653,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
 
   p.setPen( QPen( QColor(0,255,0,100), 30) );
-  p.drawArc(compass_x, compass_y+300, 300, -300, 0 * 16, fEngineRpm * 16);
+  p.drawArc(compass_x, compass_y, 300, 300, -180 * 16, -180 - fEngineRpm * 16);
   //p.drawText(compass_x, compass_y, "30°");
 
 
