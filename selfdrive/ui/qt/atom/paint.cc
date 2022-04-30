@@ -655,12 +655,12 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   compass_y = 100;
 
-  QLinearGradient g;
-
   int width = 300;
   int height = 300;
+  QLinearGradient g(width/2, height/2, width/8);
 
-  g = QRadialGradient(width/2, height/2, width/8);
+
+
   g.setColorAt(0, QColor::fromRgbF(0, 0, 1, 0.05));
   g.setColorAt(0.5, QColor::fromRgbF(0, 1, 0, 0.35));  
   g.setColorAt(1, QColor::fromRgbF(1, 0, 0, 0.8));
