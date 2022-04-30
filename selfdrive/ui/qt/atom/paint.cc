@@ -655,8 +655,13 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
   compass_y = 100;
 
-  p.setPen( QPen( QColor(255,255,0,100), 3) );
-  p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 30 * 16);
+  QLinearGradient g( QPointF(compass_x, compass_y), 200 );
+  g.setColorAt(0, QColor::fromRgbF(0, 0, 1, 0.05));
+  g.setColorAt(0.5, QColor::fromRgbF(0, 1, 0, 0.35));  
+  g.setColorAt(1, QColor::fromRgbF(1, 0, 0, 0.8));
+
+  p.setPen( QPen( QColor(255,255,0,100), 100) );
+  p.drawArc(compass_x, compass_y, 300, 300, 0 * 16, 360 * 16);
   p.drawText(compass_x, compass_y, "30°");
 
   p.drawArc(150, 20, 100, 100, 0 * 16, 60 * 16);
