@@ -654,7 +654,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   if( enginRpm < 2000 )
       p.setPen( QPen( QColor(0,255,0,200), 30) );
   else if( enginRpm < 3000 )
-      p.setPen( QPen( QColor(255,255,0,200), 35 );
+      p.setPen( QPen( QColor(255,255,0,200), 35 ) );
   else
       p.setPen( QPen( QColor(255,0,0,200), 35) );
 
