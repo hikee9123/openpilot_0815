@@ -291,7 +291,7 @@ void OnroadHud::drawCurrentSpeed(QPainter &p, int x, int y)
     val_color = QColor(255, 255, 0, gasVal);
   }
 
-  configFont(p, "Open Sans", 250, "Bold");
+  configFont(p, "Open Sans", 200, "Bold");
   QFontMetrics fm(p.font());
   QRect init_rect = fm.boundingRect(speed);
   QRect real_rect = fm.boundingRect(init_rect, 0, speed);
