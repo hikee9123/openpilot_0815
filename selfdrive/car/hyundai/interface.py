@@ -57,10 +57,10 @@ class CarInterface(CarInterfaceBase):
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
-      ret.steerRatio = 16.5  #13.96   #12.5
-      ret.steerRateCost = 0.6 #0.6   # 0.6, 0.35
+      ret.steerRatio = 16.0  #13.96   #12.5
+      ret.steerRateCost = 0.8 #0.6   # 0.6, 0.35
       ret.steerActuatorDelay = 0.1 #0.1   # 0.1, 0.05
-      ret.minSteerSpeed = 0.5 * CV.KPH_TO_MS
+      ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
 
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
@@ -69,7 +69,7 @@ class CarInterface(CarInterfaceBase):
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
       #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0.1)
       #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0.0) # 0.06
-      set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=3.0, FRICTION=0.0)
+      set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=3.1, FRICTION=0.0)
 
       # 디토.  3.0, 0.01
 

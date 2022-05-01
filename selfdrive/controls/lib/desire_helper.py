@@ -88,7 +88,7 @@ class DesireHelper:
           self.lane_change_state = LaneChangeState.preLaneChange
           self.lane_change_ll_prob = 1.0
           self.lane_change_timer_auto = 0.0
-        else:
+        elif  v_ego > 0.5:
           self.lane_change_state = LaneChangeState.laneChangeDisEngage
 
       # LaneChangeState.preLaneChange

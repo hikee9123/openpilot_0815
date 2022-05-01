@@ -654,9 +654,9 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   if( enginRpm < 2000 )
       p.setPen( QPen( QColor(0,255,0,200), 30) );
   else if( enginRpm < 3000 )
-      p.setPen( QPen( QColor(255,255,0,200), 30) );
+      p.setPen( QPen( QColor(255,255,0,200), 35 );
   else
-      p.setPen( QPen( QColor(255,0,0,200), 30) );
+      p.setPen( QPen( QColor(255,0,0,200), 35) );
 
   p.drawArc(compass_x, compass_y, 300, 300, -180 * 16, -180 - fEngineRpm * 16);
   //p.drawText(compass_x, compass_y, "30°");
@@ -716,7 +716,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   if( true )
   {
     const int rpm_x = state->fb_w / 2 - img_size_rpm/2;
-    const int rpm_y = 0; 
+    const int rpm_y = 10; 
     bb_draw_rpm( p, rpm_x, rpm_y );
   }
 }
