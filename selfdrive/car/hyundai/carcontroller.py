@@ -96,7 +96,7 @@ class CarController():
 
 
   
-  def smooth_steer( self, apply_torque ):
+  def smooth_steer( self, apply_torque, CS ):
     if self.steer_timer_apply_torque >= 1:
       return int(round(float(apply_torque)))
 
@@ -249,14 +249,14 @@ class CarController():
     path_plan = self.NC.update_lateralPlan()
     if path_plan.laneChangeState == LaneChangeState.laneChangeDisEngage:
       active = False
-    lkas_active = enabled and active and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
+    lkas_active = enabled and active and not CS.out.steerFaultTemporary and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
 
 
     if not lkas_active:
       apply_steer = 0
       self.steer_timer_apply_torque = 0
     else:
-      apply_steer = self.smooth_steer(  apply_steer )
+      apply_steer = self.smooth_steer(  apply_steer, CS )
 
     apply_steer = clip( apply_steer, -self.params.STEER_MAX, self.params.STEER_MAX )
     self.apply_steer_last = apply_steer
