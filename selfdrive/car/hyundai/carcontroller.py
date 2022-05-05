@@ -43,7 +43,7 @@ class CarController():
     self.hud_timer_left = 0
     self.hud_timer_right = 0
     self.steer_timer_apply_torque = 1.0
-    self.DT_STEER = 0.01
+    self.DT_STEER = 0.005             # 0.01 1sec, 0.005  2sec
     self.scc_live = not CP.radarOffCan
 
   def process_hud_alert(self, enabled, c, CS ):
