@@ -375,7 +375,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "Steering Temporarily Unavailable",
       "",
       AlertStatus.userPrompt, AlertSize.small,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.prompt, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.prompt, 1.),
   },
 
   EventName.preDriverDistracted: {
@@ -483,7 +483,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "Take Control",
       "Turn Exceeds Steering Limit",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.steerRequired, AudibleAlert.promptRepeat, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.promptRepeat, 1.),
   },
 
   # Thrown when the fan is driven at >50% but is not rotating
@@ -864,7 +864,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.WARNING: Alert(
       "Forward vehicle cut-in detection while driving",
       "",
-      AlertStatus.normal, AlertSize.small,
+      AlertStatus.userPrompt, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, alert_rate=0.75),
   },
 
@@ -872,7 +872,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.WARNING: Alert(
       "Steer Lane Change disengaged",
       "",
-      AlertStatus.normal, AlertSize.small,
+      AlertStatus.userPrompt, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, alert_rate=0.75),
   },  
 }
