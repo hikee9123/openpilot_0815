@@ -865,7 +865,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "Forward vehicle cut-in detection while driving",
       "",
       AlertStatus.userPrompt, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, alert_rate=0.75),
+      Priority.LOW, VisualAlert.none, AudibleAlert.promptRepeat, .1, alert_rate=0.75),
   },
 
   EventName.laneChangedisengaged: {
