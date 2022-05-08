@@ -109,11 +109,11 @@ class CarController():
 
     return  int(round(float(apply_torque)))
 
-  def cutin_detect(self):
+  def cutin_detect(self, CS):
     cut_in, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    if abs(cut_in) >= 3:
+    if CS.lead_distance < 30 and abs(cut_in) >= 3:
       self.cut_in_car_time = 100
-      
+
     if self.cut_in_car_time > 1:
       self.cut_in_car_time -= 1      
       self.cut_in_car_alert = True
@@ -128,7 +128,7 @@ class CarController():
     trace1.printf2( '{}'.format( str_log1 ) )
 
 
-    str_log1 = 'TG1={:.1f} TG2={:.1f}  aRV={:.2f}'.format( apply_steer, self.apply_steer_last, CS.aReqValue  )
+    str_log1 = 'TG={:.1f}   aRV={:.2f}'.format( apply_steer,  CS.aReqValue  )
     trace1.printf3( '{}'.format( str_log1 ) )
   
 
@@ -260,7 +260,7 @@ class CarController():
     self.apply_steer_last = apply_steer
     sys_warning, sys_state = self.process_hud_alert( lkas_active, c, CS )
 
-    self.cutin_detect()
+    self.cutin_detect( CS )
 
     if self.frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
