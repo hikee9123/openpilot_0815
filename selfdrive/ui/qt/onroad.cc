@@ -27,10 +27,10 @@ OnroadWindow::OnroadWindow(QWidget *parent) : QWidget(parent) {
   split->addWidget(nvg);
 
   m_pPaint = new OnPaint(this);
-  split_wrapper->addWidget(m_pPaint);
+  stacked_layout->addWidget(m_pPaint);
 
   m_pDashCam = new OnDashCam(this);
-  split_wrapper->addWidget(m_pDashCam); 
+  stacked_layout->addWidget(m_pDashCam); 
 
   stacked_layout->addWidget(split_wrapper);
 
