@@ -99,8 +99,8 @@ private:
   QHBoxLayout* split;
 
   // atom
-  OnPaint *m_pPaint;
-  OnDashCam *m_pDashCam;
+  OnPaint *m_pPaint = nullptr;
+  OnDashCam *m_pDashCam = nullptr;
 
 private slots:
   void offroadTransition(bool offroad);
