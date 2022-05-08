@@ -109,21 +109,19 @@ class CarController():
 
     return  int(round(float(apply_torque)))
 
-
-  def update_debug(self, CS, c, apply_steer ):
+  def cutin_detect(self):
     cut_in, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    if abs(cut_in) > 3:
-      self.cut_in_car_time += 1
-    else:
-      self.cut_in_car_time = 0
+    if abs(cut_in) >= 3:
+      self.cut_in_car_time = 100
       
-
     if self.cut_in_car_time > 1:
+      self.cut_in_car_time -= 1      
       self.cut_in_car_alert = True
     else:
       self.cut_in_car_alert = False
 
 
+  def update_debug(self, CS, c, apply_steer ):
     actuators = c.actuators
     vFuture = c.hudControl.vFuture * 3.6
     str_log1 = 'MODE={:.0f} vF={:.1f}  DIST={:.2f}'.format( CS.cruise_set_mode, vFuture, CS.lead_distance )
@@ -256,13 +254,13 @@ class CarController():
       apply_steer = 0
       self.steer_timer_apply_torque = 0
     else:
-      apply_steer = self.smooth_steer(  apply_steer, CS )
+      apply_steer = self.smooth_steer( apply_steer, CS )
 
     apply_steer = clip( apply_steer, -self.params.STEER_MAX, self.params.STEER_MAX )
     self.apply_steer_last = apply_steer
     sys_warning, sys_state = self.process_hud_alert( lkas_active, c, CS )
 
-
+    self.cutin_detect()
 
     if self.frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
