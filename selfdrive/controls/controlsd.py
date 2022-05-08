@@ -588,11 +588,9 @@ class Controls:
     CC = car.CarControl.new_message()
     CC.enabled = self.enabled
     # Check which actuators can be enabled
-    #CC.latActive = self.active and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
-    #                 CS.vEgo > self.CP.minSteerSpeed and not CS.standstill
-    CC.latActive = self.active and not CS.steerFaultPermanent and \
+    CC.latActive = self.active and not CS.steerFaultTemporary and not CS.steerFaultPermanent and \
                      CS.vEgo > self.CP.minSteerSpeed and not CS.standstill
-    CC.longActive = self.active and not self.events.any(ET.OVERRIDE)
+    CC.longActive = self.active and not self.events.any(ET.OVERRIDE) and self.CP.openpilotLongitudinalControl
 
     actuators = CC.actuators
     actuators.longControlState = self.LoC.long_control_state
@@ -611,15 +609,15 @@ class Controls:
       # accel PID loop
       pid_accel_limits = self.CI.get_pid_accel_limits(self.CP, CS.vEgo, self.v_cruise_kph * CV.KPH_TO_MS)
       t_since_plan = (self.sm.frame - self.sm.rcv_frame['longitudinalPlan']) * DT_CTRL
-      actuators.accel = self.LoC.update(CC.longActive, CS, self.CP, long_plan, pid_accel_limits, t_since_plan)
+      actuators.accel = self.LoC.update(CC.longActive, CS, long_plan, pid_accel_limits, t_since_plan)
 
       # Steering PID loop and lateral MPC
       desired_curvature, desired_curvature_rate = get_lag_adjusted_curvature(self.CP, CS.vEgo,
                                                                              lat_plan.psis,
                                                                              lat_plan.curvatures,
                                                                              lat_plan.curvatureRates)
-      actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(CC.latActive, CS, self.CP, self.VM,
-                                                                             params, self.last_actuators, desired_curvature,
+      actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(CC.latActive, CS, self.VM, params,
+                                                                             self.last_actuators, desired_curvature,
                                                                              desired_curvature_rate, self.sm['liveLocationKalman'])
     else:
       lac_log = log.ControlsState.LateralDebugState.new_message()
@@ -706,7 +704,7 @@ class Controls:
     # atom
     speeds = self.sm['longitudinalPlan'].speeds
     if len(speeds) > 1:
-      v_future = speeds[0]
+      v_future = speeds[-1]
     else:
       v_future = 0
     CC.hudControl.vFuture = v_future

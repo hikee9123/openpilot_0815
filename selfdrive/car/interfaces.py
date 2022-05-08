@@ -164,17 +164,18 @@ class CarInterfaceBase(ABC):
     self.steering_unpressed = 0 if cs_out.steeringPressed else self.steering_unpressed + 1
     if cs_out.steerFaultTemporary:
       # if the user overrode recently, show a less harsh alert
-      #if self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL):
-      self.silent_steer_warning = True
-      events.add(EventName.steerTempUnavailableSilent)
-      #else:
-      #  events.add(EventName.steerTempUnavailable)
+      if self.silent_steer_warning or cs_out.standstill or self.steering_unpressed < int(1.5 / DT_CTRL):
+        self.silent_steer_warning = True
+        events.add(EventName.steerTempUnavailableSilent)
+      else:
+        events.add(EventName.steerTempUnavailable)
     else:
       self.silent_steer_warning = False
     if cs_out.steerFaultPermanent:
       events.add(EventName.steerUnavailable)
 
     # we engage when pcm is active (rising edge)
+    # enabling can optionally be blocked by the car interface
     if pcm_enable:
       if cs_out.cruiseState.enabled and not self.CS.out.cruiseState.enabled:
         events.add(EventName.pcmEnable)
