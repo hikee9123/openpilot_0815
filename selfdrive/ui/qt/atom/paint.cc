@@ -94,6 +94,9 @@ void OnPaint::updateState(const UIState &s)
      m_param.batteryTemp = deviceState.getBatteryTempCDEPRECATED();
      m_param.cpuPerc = deviceState.getCpuUsagePercent()[0];
 
+     if( m_param.cpuPerc > 100)
+        m_param.cpuPerc = 100;
+
      auto  maxCpuTemp = deviceState.getCpuTempC();
      m_param.cpuTemp = maxCpuTemp[0];      
    }
@@ -325,7 +328,7 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
 
     // temp is alway in C * 1000
     val_str.sprintf("%.1f", m_param.batteryTemp );
-    uom_str.sprintf("%.1f", fan_speed * 0.001);        
+    uom_str.sprintf("%.0f", fan_speed * 0.001);        
     bb_h +=bb_ui_draw_measure(p,  val_str, uom_str, "BAT TEMP",
         bb_rx, bb_ry, bb_uom_dx,
         val_color, lab_color, uom_color,
@@ -551,7 +554,6 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
     }
     
     uom_str.sprintf("%d", electGearStep );
-
     bb_h +=bb_ui_draw_measure(p,  val_str, uom_str, "ENGINE",
       bb_rx, bb_ry, bb_uom_dx,
       val_color, lab_color, uom_color,

@@ -179,7 +179,8 @@ struct CarState {
   stockAeb @30 :Bool;
   stockFcw @31 :Bool;
   espDisabled @32 :Bool;
-
+  accFaulted @42 :Bool;
+  
   # cruise state
   cruiseState @10 :CruiseState;
 
@@ -206,10 +207,13 @@ struct CarState {
   leftBlindspot @33 :Bool; # Is there something blocking the left lane change
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
 
+  fuelGauge @41 :Float32; # battery or fuel tank level from 0.0 to 1.0
+  charging @43 :Bool;
+
   # atom
-  tpms @41 :WheelSpeeds;
-  engineRpm @42 :Float32;
-  electGearStep @43 :Int16;
+  tpms @44 :WheelSpeeds;
+  engineRpm @45 :Float32;
+  electGearStep @46 :Int16;
 
   struct WheelSpeeds {
     # optional wheel speeds

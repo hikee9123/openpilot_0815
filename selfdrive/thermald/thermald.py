@@ -233,7 +233,7 @@ def thermald_thread(end_event, hw_queue):
           fan_controller = UnoFanController()
         else:
           fan_controller = EonFanController()
-    elif (count % int(10. / DT_TRML)) == 0:
+    elif (count % int(5. / DT_TRML)) == 0:
       # atom
       is_openpilot_view_enabled = params.get_bool("IsOpenpilotViewEnabled") # IsRHD
       if is_openpilot_view_enabled:
