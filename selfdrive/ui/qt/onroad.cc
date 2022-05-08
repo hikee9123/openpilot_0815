@@ -236,17 +236,17 @@ void NvgWindow::drawHud(QPainter &p) {
   p.fillRect(0, 0, width(), header_h, bg);
 
   // max speed
-  QRect rc(bdr_s * 2, bdr_s * 1.5, 184, 202);
+  QRect rc(bdr_s * 1, bdr_s * 1.0, 184, 202);
   p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
   p.setBrush(QColor(0, 0, 0, 100));
   p.drawRoundedRect(rc, 20, 20);
   p.setPen(Qt::NoPen);
 
-  configFont(p, "Open Sans", 48, "Regular");
-  drawText(p, rc.center().x(), 118, "MAX", is_cruise_set ? 200 : 100);
+  configFont(p, "Open Sans", 45, "Regular");
+  drawText(p, rc.center().x(), 85, "MAX", is_cruise_set ? 200 : 100);
   if (is_cruise_set) {
     configFont(p, "Open Sans", 88, "Bold");
-    drawText(p, rc.center().x(), 212, maxSpeed, 255);
+    drawText(p, rc.center().x(), 205, maxSpeed, 255);
   } else {
     configFont(p, "Open Sans", 80, "SemiBold");
     drawText(p, rc.center().x(), 212, maxSpeed, 100);
@@ -262,13 +262,13 @@ void NvgWindow::drawHud(QPainter &p) {
   */
   // engage-ability icon
   if (engageable) {
-    drawIcon(p, rect().right() - radius / 2 - bdr_s * 2, radius / 2 + int(bdr_s * 1.5),
+    drawIcon(p, rect().right() - radius / 2 - bdr_s, radius / 2 + int(bdr_s),
              engage_img, bg_colors[status], 1.0);
   }
 
   // dm icon
   if (!hideDM) {
-    drawIcon(p, radius / 2 + (bdr_s * 2), rect().bottom() - footer_h / 2,
+    drawIcon(p, radius / 2 + (bdr_s), rect().bottom() - footer_h / 1.5,
              dm_img, QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
   p.restore();
