@@ -247,6 +247,11 @@ class CarController():
     path_plan = self.NC.update_lateralPlan()
     if path_plan.laneChangeState == LaneChangeState.laneChangeDisEngage:
       active = False
+      self.cut_in_car_time = 0
+      self.cut_in_car_alert = False
+    else:
+      self.cutin_detect( CS )
+
     lkas_active = enabled and active and not CS.out.steerFaultTemporary and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
 
 
@@ -260,7 +265,7 @@ class CarController():
     self.apply_steer_last = apply_steer
     sys_warning, sys_state = self.process_hud_alert( lkas_active, c, CS )
 
-    self.cutin_detect( CS )
+
 
     if self.frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
