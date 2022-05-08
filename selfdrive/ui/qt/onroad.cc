@@ -26,15 +26,15 @@ OnroadWindow::OnroadWindow(QWidget *parent) : QWidget(parent) {
   split->setSpacing(0);
   split->addWidget(nvg);
 
-  stacked_layout->addWidget(split_wrapper);
-
   m_pPaint = new OnPaint(this);
-  m_pPaint->setAttribute(Qt::WA_OpaquePaintEvent);
-  stacked_layout->addWidget(m_pPaint);
+  split_wrapper->addWidget(m_pPaint);
 
   m_pDashCam = new OnDashCam(this);
-  m_pDashCam->setAttribute(Qt::WA_OpaquePaintEvent);
-  stacked_layout->addWidget(m_pDashCam); 
+  split_wrapper->addWidget(m_pDashCam); 
+
+  stacked_layout->addWidget(split_wrapper);
+
+
 
 
 
