@@ -111,7 +111,7 @@ class CarController():
 
   def cutin_detect(self, CS):
     cut_in, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    if CS.lead_distance < 30 and abs(cut_in) >= 3:
+    if d_rel1 < 30 and abs(cut_in) >= 3:
       self.cut_in_car_time = 100
 
     if self.cut_in_car_time > 1:
