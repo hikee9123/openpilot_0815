@@ -164,6 +164,7 @@ class NaviControl():
       cut_in = 0
       d_rel1 = 0
       d_rel2 = 0
+      d_rel  = 150
       model_v2 = self.sm['modelV2']
       leads_v3 = model_v2.leadsV3
       if len(leads_v3) > 1:
@@ -173,7 +174,7 @@ class NaviControl():
         if leads_v3[0].prob > 0.5 and leads_v3[1].prob > 0.5:
           cut_in = d_rel1 - d_rel2  # > 3
 
-      return cut_in, d_rel1, d_rel2
+      return cut_in, d_rel, d_rel1, d_rel2
 
 
 

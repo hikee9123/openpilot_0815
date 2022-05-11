@@ -110,8 +110,8 @@ class CarController():
     return  int(round(float(apply_torque)))
 
   def cutin_detect(self, CS):
-    cut_in, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    if d_rel1 < 30 and abs(cut_in) >= 3:
+    cut_in, drel, d_rel1, d_rel2 = self.NC.get_cut_in_car()
+    if drel < 40 and abs(cut_in) >= 3:
       self.cut_in_car_time = 100
 
     if self.cut_in_car_time > 1:
