@@ -37,10 +37,11 @@ Panda::Panda(std::string serial, uint32_t bus_offset) : bus_offset(bus_offset) {
   // init libusb
   ssize_t num_devices;
   libusb_device **dev_list = NULL;
+  int OpkrWhitePanda = Params().getBool("OpkrWhitePanda");
   int err = init_usb_ctx(&ctx);
   if (err != 0) { goto fail; }
 
-  int OpkrWhitePanda = Params().getBool("OpkrWhitePanda");
+
   // connect by serial
   num_devices = libusb_get_device_list(ctx, &dev_list);
   if (num_devices < 0) { goto fail; }
