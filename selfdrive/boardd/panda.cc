@@ -12,6 +12,8 @@
 #include "selfdrive/common/swaglog.h"
 #include "selfdrive/common/util.h"
 
+#include "selfdrive/common/params.h"
+
 static int init_usb_ctx(libusb_context **context) {
   assert(context != nullptr);
 
@@ -76,11 +78,22 @@ Panda::Panda(std::string serial, uint32_t bus_offset) : bus_offset(bus_offset) {
 
   hw_type = get_hw_type();
 
-  assert((hw_type != cereal::PandaState::PandaType::WHITE_PANDA) &&
-         (hw_type != cereal::PandaState::PandaType::GREY_PANDA));
+  int OpkrWhitePanda = Params().getBool("OpkrWhitePanda");
 
-  has_rtc = (hw_type == cereal::PandaState::PandaType::UNO) ||
-            (hw_type == cereal::PandaState::PandaType::DOS);
+  if( OpkrWhitePanda )
+  {
+    has_rtc = (hw_type == cereal::PandaState::PandaType::UNO) ||
+              (hw_type == cereal::PandaState::PandaType::DOS);
+  }
+  else
+  {
+    assert((hw_type != cereal::PandaState::PandaType::WHITE_PANDA) &&
+          (hw_type != cereal::PandaState::PandaType::GREY_PANDA));
+
+    has_rtc = (hw_type == cereal::PandaState::PandaType::UNO) ||
+              (hw_type == cereal::PandaState::PandaType::DOS);
+  }
+
 
   return;
 

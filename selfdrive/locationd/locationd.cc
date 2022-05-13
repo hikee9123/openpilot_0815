@@ -499,6 +499,7 @@ int Localizer::locationd_thread() {
   uint64_t cnt = 0;
   bool filterInitialized = false;
 
+
   while (!do_exit) {
     sm.update();
     if (filterInitialized){

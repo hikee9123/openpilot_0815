@@ -87,6 +87,13 @@ CommunityPanel::CommunityPanel(QWidget* parent) : ListWidget(parent)
       "program update 버전을 확인한다.",
       "../assets/offroad/icon_shell.png",
     },  
+
+    {
+      "OpkrWhitePanda",
+      "White Panda 지원",
+      "White Panda을 지원 합니다.(GPS기능을 사용할수 없습니다)",
+      "../assets/offroad/icon_shell.png",
+    },   
   };
 
   for (auto &[param, title, desc, icon] : toggles) {

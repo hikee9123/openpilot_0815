@@ -201,6 +201,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrPowerShutdown", PERSISTENT},
     {"OpkrDmonitor", PERSISTENT},
     {"OpkrUpdated", PERSISTENT},
+    {"OpkrWhitePanda", PERSISTENT},
 };
 
 } // namespace

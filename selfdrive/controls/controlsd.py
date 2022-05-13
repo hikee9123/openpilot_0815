@@ -203,6 +203,7 @@ class Controls:
     self.prof = Profiler(False)  # off by default
 
     # atom
+    self.OpkrWhitePanda = params.get_bool("OpkrWhitePanda")
     self.openpilot_mode = 10
     LiveSteerRatio = params.get("OpkrLiveSteerRatio")
     if LiveSteerRatio is not None:
@@ -390,7 +391,7 @@ class Controls:
     # TODO: fix simulator
     if not SIMULATION:
       if not NOSENSOR:
-        if not self.sm['liveLocationKalman'].gpsOK and (self.distance_traveled > 1000):
+        if not self.OpkrWhitePanda and not self.sm['liveLocationKalman'].gpsOK and (self.distance_traveled > 1000):
           # Not show in first 1 km to allow for driving out of garage. This event shows after 5 minutes
           self.events.add(EventName.noGps)
 
