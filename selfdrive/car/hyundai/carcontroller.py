@@ -98,7 +98,7 @@ class CarController():
   
   def smooth_steer( self, apply_torque, CS ):
 
-    if abs(CS.steeringAngleDeg) > self.CP.maxSteeringAngleDeg:
+    if abs(CS.out.steeringAngleDeg) > self.CP.maxSteeringAngleDeg:
       self.steer_timer_apply_torque -= self.DT_STEER
     else:
       if self.steer_timer_apply_torque >= 1:
