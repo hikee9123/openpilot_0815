@@ -65,6 +65,7 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   scene->scr.brightness_off = get_param("OpkrUIBrightnessOff");
   scene->scr.autoScreenOff = get_param("OpkrAutoScreenOff");
   scene->scr.brightness = get_param("OpkrUIBrightness");
+  scene->scr.OpkrWhitePanda = get_param("OpkrWhitePanda");
   scene->scr.nTime = scene->scr.autoScreenOff * 60 * UI_FREQ;
 }
 
@@ -104,6 +105,7 @@ void OnPaint::updateState(const UIState &s)
     m_param.angleSteers = s.scene.car_state.getSteeringAngleDeg();
     m_param.angleSteersDes = s.scene.controls_state.getSteeringAngleDesiredDegDEPRECATED();
 
+    m_param.OpkrWhitePanda = s.scene.scr.OpkrWhitePanda;
     m_param.car_state = s.scene.car_state;
     auto radar_state = sm["radarState"].getRadarState();  // radar
     m_param.lead_radar = radar_state.getLeadOne();
@@ -295,7 +297,8 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
   }
 
   //add GPU temperature
-  if( 0 ) 
+  
+  if( m_param.OpkrWhitePanda  ) 
   {
     QColor val_color = QColor(255, 255, 255, 200);
     auto  maxGpuTemp = scene->deviceState.getGpuTempC();
@@ -339,7 +342,7 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
 
 
   //add grey panda GPS accuracy
-  if (true) {
+  if ( !m_param.OpkrWhitePanda ) {
 
     QColor val_color = QColor(255, 255, 255, 200);
     //show red/orange if gps accuracy is low
