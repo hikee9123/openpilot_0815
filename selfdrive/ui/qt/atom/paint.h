@@ -36,6 +36,7 @@ private:
   {
     int   bbh_left;
     int   bbh_right;
+    int   OpkrWhitePanda;
     float altitudeUblox;
     float gpsAccuracyUblox;
     float bearingUblox;

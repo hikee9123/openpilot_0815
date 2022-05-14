@@ -62,6 +62,7 @@ def manager_init() -> None:
     ("OpkratomLongitudinal", "0"), 
     ("OpkrDmonitor", "1"),
     ("OpkrUpdated", "1"),
+    ("OpkrWhitePanda", "0"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

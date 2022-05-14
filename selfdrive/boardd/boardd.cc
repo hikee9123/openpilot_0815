@@ -62,6 +62,8 @@ std::atomic<bool> pigeon_active(false);
 
 ExitHandler do_exit;
 
+bool OpkrWhitePanda = Params().getBool("OpkrWhitePanda");
+
 static std::string get_time_str(const struct tm &time) {
   char s[30] = {'\0'};
   std::strftime(s, std::size(s), "%Y-%m-%d %H:%M:%S", &time);
@@ -495,6 +497,8 @@ void peripheral_control_thread(Panda *panda) {
 
   FirstOrderFilter integ_lines_filter(0, 30.0, 0.05);
 
+  Params p = Params();
+
   while (!do_exit && panda->connected) {
     cnt++;
     sm.update(1000); // TODO: what happens if EINTR is sent while in sm.update?
@@ -516,6 +520,8 @@ void peripheral_control_thread(Panda *panda) {
 
     // Other pandas don't have fan/IR to control
     if (panda->hw_type != cereal::PandaState::PandaType::UNO && panda->hw_type != cereal::PandaState::PandaType::DOS) continue;
+
+    
     if (sm.updated("deviceState")) {
       // Fan speed
       uint16_t fan_speed = sm["deviceState"].getDeviceState().getFanSpeedPercentDesired();
@@ -568,6 +574,8 @@ static void pigeon_publish_raw(PubMaster &pm, const std::string &dat) {
 }
 
 void pigeon_thread(Panda *panda) {
+  if( OpkrWhitePanda )  return;
+
   util::set_thread_name("boardd_pigeon");
 
   PubMaster pm({"ubloxRaw"});
@@ -650,7 +658,12 @@ void boardd_main_thread(std::vector<std::string> serials) {
 
     threads.emplace_back(panda_state_thread, &pm, pandas, getenv("STARTED") != nullptr);
     threads.emplace_back(peripheral_control_thread, peripheral_panda);
-    threads.emplace_back(pigeon_thread, peripheral_panda);
+
+    if( !OpkrWhitePanda ) 
+    {
+      threads.emplace_back(pigeon_thread, peripheral_panda);
+    }
+    
 
     threads.emplace_back(can_send_thread, pandas, getenv("FAKESEND") != nullptr);
     threads.emplace_back(can_recv_thread, pandas);

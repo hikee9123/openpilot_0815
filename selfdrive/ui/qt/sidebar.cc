@@ -84,6 +84,10 @@ void Sidebar::updateState(const UIState &s) {
   ItemStatus pandaStatus = {"VEHICLE\nONLINE", good_color};
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
     pandaStatus = {"NO\nPANDA", danger_color};
+  } else if (s.scene.pandaType == cereal::PandaState::PandaType::WHITE_PANDA) {
+    pandaStatus = {"WHITE\nPANDA", warning_color};
+  } else if (s.scene.pandaType == cereal::PandaState::PandaType::GREY_PANDA) {
+    pandaStatus = {"GREY\nPANDA", warning_color};
   } else if (s.scene.started && !sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK()) {
     pandaStatus = {"GPS\nSEARCH", warning_color};
   }

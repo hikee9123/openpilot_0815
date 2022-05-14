@@ -246,6 +246,8 @@ class CarController():
     if not self.steer_rate_limited:
       if CS.out.vEgo < 5:
         self.steer_rate_limited = True
+      elif self.steer_timer_apply_torque < 1:
+        self.steer_rate_limited = True
 
 
     if CS.engage_enable and not enabled:
