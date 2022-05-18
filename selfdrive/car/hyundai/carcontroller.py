@@ -97,9 +97,11 @@ class CarController():
 
   
   def smooth_steer( self, apply_torque, CS ):
-
     if abs(CS.out.steeringAngleDeg) > self.CP.maxSteeringAngleDeg:
-      self.steer_timer_apply_torque -= self.DT_STEER
+      if CS.out.steeringPressed:
+        self.steer_timer_apply_torque -= 0.002 #self.DT_STEER   # 0.01 1sec, 0.005  2sec   0.002  5sec
+      else:
+        self.steer_timer_apply_torque -= 0.001  # 10 sec
     else:
       if self.steer_timer_apply_torque >= 1:
           return int(round(float(apply_torque)))
@@ -275,7 +277,6 @@ class CarController():
     apply_steer = clip( apply_steer, -self.params.STEER_MAX, self.params.STEER_MAX )
     self.apply_steer_last = apply_steer
     sys_warning, sys_state = self.process_hud_alert( lkas_active, c, CS )
-
 
 
     if self.frame == 0: # initialize counts from last received count signals
