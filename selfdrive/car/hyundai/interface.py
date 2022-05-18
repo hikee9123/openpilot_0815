@@ -307,10 +307,9 @@ class CarInterface(CarInterfaceBase):
 
     # these cars require a special panda safety mode due to missing counters and checksums in the messages
     if candidate in LEGACY_SAFETY_MODE_CAR:
-      ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiLegacy)]
-
-      #ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.noOutput),
-      #                     get_safety_config(car.CarParams.SafetyModel.allOutput, 1)]
+      #ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiLegacy)]
+      ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.noOutput),
+                           get_safety_config(car.CarParams.SafetyModel.hyundaiLegacy)]
 
     # set appropriate safety param for gas signal
     if candidate in HYBRID_CAR:
