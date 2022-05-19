@@ -84,7 +84,7 @@ class LatControlATOM(LatControl):
 
     if CS.vEgo < MIN_STEER_SPEED or not active:
       output_torque = 0.0
-      lqr_desired_angle 0.
+      lqr_desired_angle = 0.
       atom_log.active = False
       if not active:
         self.reset()
