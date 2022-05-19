@@ -3,7 +3,7 @@ import numpy as np
 
 from cereal import log
 from common.realtime import DT_CTRL
-from common.numpy_fast import interp
+from common.numpy_fast import clip, interp
 
 
 from selfdrive.controls.lib.latcontrol import LatControl, MIN_STEER_SPEED
@@ -17,10 +17,11 @@ from selfdrive.controls.lib.latcontrol_lqr import LatControlLQR
 
 class LatCtrlToqATOM(LatControlTorque):
   def __init__(self, CP, CI, TORQUE):
-    #super().__init__(CP, CI)
     self.sat_count_rate = 1.0 * DT_CTRL
     self.sat_limit = CP.steerLimitTimer
-    self.sat_count = 0. # we define the steer torque scale as [-1.0...1.0] 
+    self.sat_count = 0. 
+    
+    # we define the steer torque scale as [-1.0...1.0] 
     self.steer_max = 1.0
 
     self.pid = PIDController(TORQUE.kp, TORQUE.ki,
@@ -34,10 +35,11 @@ class LatCtrlToqATOM(LatControlTorque):
 
 class LatCtrlLqrATOM(LatControlLQR):
   def __init__(self, CP, CI, LQR):
-    #super().__init__(CP, CI)
     self.sat_count_rate = 1.0 * DT_CTRL 
     self.sat_limit = CP.steerLimitTimer 
-    self.sat_count = 0. # we define the steer torque scale as [-1.0...1.0]
+    self.sat_count = 0. 
+    
+    # we define the steer torque scale as [-1.0...1.0]
     self.steer_max = 1.0
 
 
@@ -92,20 +94,24 @@ class LatControlATOM(LatControl):
       lqr_output_torque, lqr_desired_angle, lqr_log  = self.LaLqr.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
       toq_output_torque, toq_desired_angle, toq_log  = self.LaToq.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
 
-      #output_torque = lqr_output_torque
-      lqr_delta = lqr_output_torque - self.output_torque
-      toq_delta = toq_output_torque - self.output_torque
-
-      # 1. 전과 비교하여 변화량이 적은 부분 선택.
-      abs_lqr = abs( lqr_delta ) 
-      abs_toq = abs( toq_delta ) 
-      if abs_lqr > abs_toq:
-        selected = 1.0
+      if CS.vEgo < 10:  # 36 kph
         output_torque = toq_output_torque
       else:
-        selected = -1.0
-        output_torque = lqr_output_torque
+        #output_torque = lqr_output_torque
+        lqr_delta = lqr_output_torque - self.output_torque
+        toq_delta = toq_output_torque - self.output_torque
 
+        # 1. 전과 비교하여 변화량이 적은 부분 선택.
+        abs_lqr = abs( lqr_delta ) 
+        abs_toq = abs( toq_delta ) 
+        if abs_lqr > abs_toq:
+          selected = 1.0
+          output_torque = toq_output_torque
+        else:
+          selected = -1.0
+          output_torque = lqr_output_torque
+
+      output_torque = clip( output_torque, -self.steer_max, self.steer_max )
 
       # 2. log
       atom_log.active = True    
@@ -119,12 +125,9 @@ class LatControlATOM(LatControl):
       atom_log.i1 = toq_log.i
       atom_log.d1 = toq_log.d
       atom_log.f1 = toq_log.f
-
       atom_log.selected = selected
-   
-
+    
     self.output_torque = output_torque
     desired_angle = lqr_desired_angle
-
 
     return output_torque, desired_angle, atom_log
