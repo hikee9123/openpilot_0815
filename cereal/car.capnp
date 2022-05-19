@@ -461,7 +461,10 @@ struct CarParams {
     indi @27 :LateralINDITuning;
     lqr @40 :LateralLQRTuning;
     torque @67 :LateralTorqueTuning;
+    atom @69 :LateralATOMTuning;
   }
+
+  
 
   steerLimitAlert @28 :Bool;
   steerLimitTimer @47 :Float32;  # time before steerLimitAlert is issued
@@ -492,6 +495,11 @@ struct CarParams {
   wheelSpeedFactor @63 :Float32; # Multiplier on wheels speeds to computer actual speeds
 
   atompilotLongitudinalControl @68  :Bool;
+
+  struct LateralATOMTuning {
+    lqr @0 :LateralLQRTuning;
+    torque @1 :LateralTorqueTuning;
+  }
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;

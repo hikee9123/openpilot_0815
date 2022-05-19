@@ -26,6 +26,7 @@ class LatTunes(Enum):
   PID_N = 15
   TORQUE = 16
   LQR_GRANDEUR = 17
+  ATOM = 18
 
 
 ###### LONG ######
@@ -52,7 +53,24 @@ def set_long_tune(tune, name):
 
 ###### LAT ######
 def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
-  if name == LatTunes.TORQUE:
+  if name == LatTunes.ATOM:
+    tune.init('atom')
+    tune.torque.useSteeringAngle = True  #  False
+    tune.torque.kp = 1.0 / MAX_LAT_ACCEL        # 2.0 / 2.5 = 0.8
+    tune.torque.kf = 1.0 / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
+    tune.torque.ki = 0.1 / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
+    tune.torque.friction = FRICTION
+
+
+    tune.lqr.scale = 1900     #1700.0
+    tune.lqr.ki = 0.01      #0.01
+    tune.lqr.dcGain =  0.0027  #0.0027
+    tune.lqr.a = [0., 1., -0.22619643, 1.21822268]
+    tune.lqr.b = [-1.92006585e-04, 3.95603032e-05]
+    tune.lqr.c = [1., 0.]
+    tune.lqr.k = [-110.73572306, 451.22718255]
+    tune.lqr.l = [0.3233671, 0.3185757]      
+  elif name == LatTunes.TORQUE:
     tune.init('torque')
     tune.torque.useSteeringAngle = True  #  False
     tune.torque.kp = 1.0 / MAX_LAT_ACCEL        # 2.0 / 2.5 = 0.8
