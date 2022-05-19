@@ -208,9 +208,7 @@ class LatControlATOM(LatControl):
       atom_log.output = output_torque
       atom_log.lqrOutput = lqr_log.lqrOutput
       atom_log.saturated = lqr_log.saturated
-      atom_log.steeringAngleDesiredDeg
-      atom_log.error
-      atom_log.errorRate
+
       atom_log.p1 = toq_log.p
       atom_log.i1 = toq_log.i
       atom_log.d1 = toq_log.d
