@@ -5,9 +5,10 @@ Version 0.8.14 (2022-0X-XX)
    * Joint Model
  * New driver monitoring model
  * New lateral controller
-   * Smoother control
-   * Simplified tuning
-   * Initially used on TSS2 Corolla and TSS-P Rav4
+   * Much smoother control, consistent across the speed range
+   * Effective feedforward that uses road roll
+   * Simplified tuning, all car-specific parameters can be derived from data
+   * Initially used on TSS2 Corolla and TSS-P RAV4
  * comma body support
  * Audi RS3 support thanks to jyoung8607!
  * Hyundai Ioniq Plug-in Hybrid 2019 support thanks to sunnyhaibin!
