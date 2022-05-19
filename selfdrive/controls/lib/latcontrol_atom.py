@@ -20,6 +20,7 @@ class LatControlATOM(LatControl):
     self.LaLqr = LatControlLQR( CP,  CI )
     self.LaToq = LatControlTorque( CP, CI )
 
+    self.output_steer = 0
     self.reset()
 
   def reset(self):
@@ -35,13 +36,18 @@ class LatControlATOM(LatControl):
 
     #output_steer = lqr_output_steer
 
-    abs_lqr = abs( lqr_output_steer ) 
-    abs_toq = abs( toq_output_steer ) 
+    lqr_delta = lqr_output_steer - self.output_steer
+    toq_delta = toq_output_steer - self.output_steer
+
+    # 1. 전과 비교하여 변화량이 적은 부분 선택.
+    abs_lqr = abs( lqr_delta ) 
+    abs_toq = abs( toq_delta ) 
     if abs_lqr > abs_toq:
       output_steer = toq_output_steer
     else:
       output_steer = lqr_output_steer
 
+    self.output_steer = output_steer
     desired_angle = lqr_desired_angle
     atom_log.steeringAngleDeg = lqr_log.steeringAngleDeg
     atom_log.i = lqr_log.i
