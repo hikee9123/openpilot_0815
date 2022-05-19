@@ -109,7 +109,7 @@ class LatControlATOM(LatControl):
         else: 
           selected = -1.0  # lqr
           
-      output_torque = interp(selected, [-1, 1], lqr_output_torque, toq_output_torque])
+      output_torque = interp( selected, [-1, 1], [lqr_output_torque, toq_output_torque] )
       output_torque = clip( output_torque, -self.steer_max, self.steer_max )
 
       # 2. log
