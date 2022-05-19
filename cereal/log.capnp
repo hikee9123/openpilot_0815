@@ -670,6 +670,13 @@ struct ControlsState @0x97ff69c53601abf1 {
     lqrOutput @4 :Float32;
     saturated @5 :Bool;
     steeringAngleDesiredDeg @6 :Float32;
+    error @7 :Float32;
+    errorRate @8 :Float32;
+    p1 @8 :Float32;
+    i1 @10 :Float32;
+    d1 @11 :Float32;
+    f1 @12 :Float32;
+    selected @13 :Float32;
   } 
 
   struct LateralLQRState {

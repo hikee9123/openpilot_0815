@@ -20,7 +20,7 @@ class LatControlATOM(LatControl):
     self.LaLqr = LatControlLQR( CP,  CI )
     self.LaToq = LatControlTorque( CP, CI )
 
-    self.output_steer = 0
+    self.output_torque = 0
     self.reset()
 
   def reset(self):
@@ -31,27 +31,50 @@ class LatControlATOM(LatControl):
   def update(self, active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk):
     atom_log = log.ControlsState.LateralATOMState.new_message()
 
-    lqr_output_steer, lqr_desired_angle, lqr_log  = self.LaLqr.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
-    toq_output_steer, toq_desired_angle, toq_log  = self.LaToq.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
-
-    #output_steer = lqr_output_steer
-
-    lqr_delta = lqr_output_steer - self.output_steer
-    toq_delta = toq_output_steer - self.output_steer
-
-    # 1. 전과 비교하여 변화량이 적은 부분 선택.
-    abs_lqr = abs( lqr_delta ) 
-    abs_toq = abs( toq_delta ) 
-    if abs_lqr > abs_toq:
-      output_steer = toq_output_steer
+    if CS.vEgo < MIN_STEER_SPEED or not active:
+      output_torque = 0.0
+      atom_log.active = False
+      if not active:
+        self.reset()
     else:
-      output_steer = lqr_output_steer
+      lqr_output_torque, lqr_desired_angle, lqr_log  = self.LaLqr.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
+      toq_output_torque, toq_desired_angle, toq_log  = self.LaToq.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
 
-    self.output_steer = output_steer
+      #output_torque = lqr_output_torque
+      lqr_delta = lqr_output_torque - self.output_torque
+      toq_delta = toq_output_torque - self.output_torque
+
+      # 1. 전과 비교하여 변화량이 적은 부분 선택.
+      abs_lqr = abs( lqr_delta ) 
+      abs_toq = abs( toq_delta ) 
+      if abs_lqr > abs_toq:
+        selected = 1.0
+        output_torque = toq_output_torque
+      else:
+        selected = -1.0
+        output_torque = lqr_output_torque
+
+
+      # 2. log
+      atom_log.active = True    
+      atom_log.steeringAngleDeg = lqr_log.steeringAngleDeg
+      atom_log.i = lqr_log.i
+      atom_log.output = output_torque
+      atom_log.lqrOutput = lqr_log.lqrOutput
+      atom_log.saturated = lqr_log.saturated
+      atom_log.steeringAngleDesiredDeg
+      atom_log.error
+      atom_log.errorRate
+      atom_log.p1 = toq_log.p
+      atom_log.i1 = toq_log.i
+      atom_log.d1 = toq_log.d
+      atom_log.f1 = toq_log.f
+
+      atom_log.selected = selected
+   
+
+    self.output_torque = output_torque
     desired_angle = lqr_desired_angle
-    atom_log.steeringAngleDeg = lqr_log.steeringAngleDeg
-    atom_log.i = lqr_log.i
-    atom_log.output = output_steer
-    atom_log.lqrOutput = lqr_log.lqrOutput
-    atom_log.saturated = lqr_log.saturated
-    return output_steer, desired_angle, atom_log
+
+
+    return output_torque, desired_angle, atom_log
