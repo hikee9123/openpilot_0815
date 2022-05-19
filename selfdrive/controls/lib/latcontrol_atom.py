@@ -17,7 +17,7 @@ from selfdrive.controls.lib.latcontrol_lqr import LatControlLQR
 
 class LatCtrlToqATOM(LatControlTorque):
   def __init__(self, CP, CI, TORQUE):
-    super().__init__(CP, CI)
+    #super().__init__(CP, CI)
     self.pid = PIDController(TORQUE.kp, TORQUE.ki,
                              k_f=TORQUE.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
     self.get_steer_feedforward = CI.get_steer_feedforward_function()
@@ -29,7 +29,7 @@ class LatCtrlToqATOM(LatControlTorque):
 
 class LatCtrlLqrATOM(LatControlLQR):
   def __init__(self, CP, CI, LQR):
-    super().__init__(CP, CI)
+    #super().__init__(CP, CI)
     self.scale = LQR.scale
     self.ki = LQR.ki
 
