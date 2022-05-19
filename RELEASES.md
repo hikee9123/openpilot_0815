@@ -2,6 +2,7 @@ Version 0.8.14 (2022-0X-XX)
 ========================
  * New driving model
    * bigmodel
+   * Joint Model
  * New driver monitoring model
  * New lateral controller
    * Smoother control

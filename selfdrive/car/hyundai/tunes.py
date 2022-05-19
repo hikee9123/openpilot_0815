@@ -61,7 +61,7 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
     tune.torque.friction = FRICTION
   elif name == LatTunes.LQR_GRANDEUR:  
     tune.init('lqr')
-    tune.lqr.scale = 2000     #1700.0
+    tune.lqr.scale = 1900     #1700.0
     tune.lqr.ki = 0.01      #0.01
     tune.lqr.dcGain =  0.0027  #0.0027
     # 호야  1500, 0.015, 0.0027

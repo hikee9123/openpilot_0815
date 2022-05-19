@@ -279,6 +279,8 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
   if( true ) 
   {
 
+    if( m_param.cpuTemp > 200 )  m_param.cpuTemp = 0;
+
     QColor val_color = QColor(255, 255, 255, 200);
 
      val_color = get_color(  (int)m_param.cpuTemp, 92, 80 );
@@ -305,6 +307,7 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
     float  memTemp = scene->deviceState.getMemoryTempC();
     float gpuTemp = maxGpuTemp[0];
     
+    if( gpuTemp > 200 )  gpuTemp = 0;
     val_color = get_color(  (int)gpuTemp, 92, 80 );
     lab_color = get_color(  (int)memTemp, 92, 80 );
 
@@ -324,6 +327,8 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
   if( true )
   {
     QColor val_color = QColor(255, 255, 255, 200);
+
+    if( m_param.batteryTemp > 200 )  m_param.batteryTemp = 0;
 
     val_color = get_color( (int) m_param.batteryTemp, 50, 40 );
 
