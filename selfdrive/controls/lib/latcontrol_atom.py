@@ -11,9 +11,41 @@ from selfdrive.controls.lib.latcontrol import LatControl, MIN_STEER_SPEED
 from selfdrive.controls.lib.pid import PIDController
 from selfdrive.controls.lib.vehicle_model import ACCELERATION_DUE_TO_GRAVITY
 
+from selfdrive.controls.lib.latcontrol_torque import LatControlTorque
+from selfdrive.controls.lib.latcontrol_lqr import LatControlLQR
 
 LOW_SPEED_FACTOR = 200
 JERK_THRESHOLD = 0.2
+
+
+class LatCtrlToqATOM(LatControlTorque):
+  def __init__(self, CP, CI, TORQUE):
+    self.CP = CP
+    self.pid = PIDController(TORQUE.kp, TORQUE.ki,
+                             k_f=TORQUE.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
+    self.get_steer_feedforward = CI.get_steer_feedforward_function()
+    self.use_steering_angle = TORQUE.useSteeringAngle
+    self.friction = TORQUE.friction
+    self.kf = TORQUE.kf
+
+class LatCtrlLqrATOM(LatControlLQR):
+  def __init__(self, CP, CI, LQR):
+    self.scale = LQR.scale
+    self.ki = LQR.ki
+
+    self.A = np.array(LQR.a).reshape((2, 2))
+    self.B = np.array(LQR.b).reshape((2, 1))
+    self.C = np.array(LQR.c).reshape((1, 2))
+    self.K = np.array(LQR.k).reshape((1, 2))
+    self.L = np.array(LQR.l).reshape((2, 1))
+    self.dc_gain = LQR.dcGain
+
+    self.x_hat = np.array([[0], [0]])
+    self.i_unwind_rate = 0.3 * DT_CTRL
+    self.i_rate = 1.0 * DT_CTRL
+
+    self.reset()
+
 
 
 class LatControlToqATOM(LatControl):
