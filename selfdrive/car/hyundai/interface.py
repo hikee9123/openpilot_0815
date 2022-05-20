@@ -54,7 +54,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
 
-    ret.maxSteeringAngleDeg = 70
+    ret.maxSteeringAngleDeg = 180
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
@@ -64,6 +64,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerActuatorDelay = 0.1 #0.1   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
+      ret.maxSteeringAngleDeg = 70
 
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
