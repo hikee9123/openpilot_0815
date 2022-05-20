@@ -1,14 +1,14 @@
-Version 0.8.14 (2022-0X-XX)
+Version 0.8.14 (2022-05-30)
 ========================
  * New driving model
    * bigmodel
-   * Joint Model
  * New driver monitoring model
- * New lateral controller
+ * New lateral controller based on physical wheel torque model
    * Much smoother control, consistent across the speed range
    * Effective feedforward that uses road roll
    * Simplified tuning, all car-specific parameters can be derived from data
    * Initially used on TSS2 Corolla and TSS-P RAV4
+ * Added toggle to disable disengaging on the accelerator pedal
  * comma body support
  * Audi RS3 support thanks to jyoung8607!
  * Hyundai Ioniq Plug-in Hybrid 2019 support thanks to sunnyhaibin!
@@ -175,7 +175,7 @@ Version 0.8.3 (2021-04-01)
  * New model
    * Trained on new diverse dataset from 2000+ users from 30+ countries
    * Trained with improved segnet from the comma-pencil community project
-   * 🥬 Dramatically improved end-to-end lateral performance 🥬
+   * �� Dramatically improved end-to-end lateral performance ��
  * Toggle added to disable the use of lanelines
  * NEOS update: update packages and support for new UI
  * New offroad UI based on Qt

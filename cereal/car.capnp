@@ -461,6 +461,7 @@ struct CarParams {
     indi @27 :LateralINDITuning;
     lqr @40 :LateralLQRTuning;
     torque @67 :LateralTorqueTuning;
+    atom @69 :LateralATOMTuning;
   }
 
   steerLimitAlert @28 :Bool;
@@ -501,6 +502,11 @@ struct CarParams {
   struct LateralParams {
     torqueBP @0 :List(Int32);
     torqueV @1 :List(Int32);
+  }
+
+  struct LateralATOMTuning {
+    lqr @0 :LateralLQRTuning;
+    torque @1 :LateralTorqueTuning;
   }
 
   struct LateralPIDTuning {
