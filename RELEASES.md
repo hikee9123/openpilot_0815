@@ -8,6 +8,7 @@ Version 0.8.14 (2022-05-30)
    * Effective feedforward that uses road roll
    * Simplified tuning, all car-specific parameters can be derived from data
    * Initially used on TSS2 Corolla and TSS-P RAV4
+ * New lateral controller based on torque model + lqr model
  * Added toggle to disable disengaging on the accelerator pedal
  * comma body support
  * Audi RS3 support thanks to jyoung8607!
