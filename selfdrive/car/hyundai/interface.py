@@ -54,7 +54,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
 
-    ret.maxSteeringAngleDeg = 60
+    ret.maxSteeringAngleDeg = 70
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
