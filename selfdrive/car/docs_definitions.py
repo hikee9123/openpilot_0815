@@ -103,3 +103,34 @@ class CarInfo:
       item += footnote_tag.format(self.all_footnotes[footnote])
 
     return item
+
+
+class Harness(Enum):
+  nidec = "Honda Nidec"
+  bosch = "Honda Bosch"
+  toyota = "Toyota"
+  subaru = "Subaru"
+  fca = "FCA"
+  vw = "VW"
+  j533 = "J533"
+  hyundai_a = "Hyundai A"
+  hyundai_b = "Hyundai B"
+  hyundai_c = "Hyundai C"
+  hyundai_d = "Hyundai D"
+  hyundai_e = "Hyundai E"
+  hyundai_f = "Hyundai F"
+  hyundai_g = "Hyundai G"
+  hyundai_h = "Hyundai H"
+  hyundai_i = "Hyundai I"
+  hyundai_j = "Hyundai J"
+  hyundai_k = "Hyundai K"
+  hyundai_l = "Hyundai L"
+  hyundai_m = "Hyundai M"
+  hyundai_n = "Hyundai N"
+  hyundai_o = "Hyundai O"
+  custom = "Developer"
+  obd_ii = "OBD-II"
+  nissan_a = "Nissan A"
+  nissan_b = "Nissan B"
+  mazda = "Mazda"
+  none = "None"
