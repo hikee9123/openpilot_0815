@@ -2,7 +2,6 @@ Version 0.8.14 (2022-0X-XX)
 ========================
  * New driving model
    * bigmodel
-   * joint model
  * New driver monitoring model
  * New lateral controller based on physical wheel torque model
    * Much smoother control, consistent across the speed range
