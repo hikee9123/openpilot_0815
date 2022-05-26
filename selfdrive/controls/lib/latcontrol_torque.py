@@ -23,7 +23,8 @@ JERK_THRESHOLD = 0.2
 
 def set_torque_tune(tune, MAX_LAT_ACCEL=2.5, FRICTION=.1):
   tune.init('torque')
-  tune.torque.useSteeringAngle = True tune.torque.kp = 1.0 / MAX_LAT_ACCEL
+  tune.torque.useSteeringAngle = True
+  tune.torque.kp = 1.0 / MAX_LAT_ACCEL
   tune.torque.kf = 1.0 / MAX_LAT_ACCEL
   tune.torque.ki = 0.1 / MAX_LAT_ACCEL
   tune.torque.friction = FRICTION
