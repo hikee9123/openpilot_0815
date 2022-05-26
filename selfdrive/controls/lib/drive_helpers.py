@@ -23,7 +23,7 @@ MAX_LATERAL_JERK = 5.0
 
 
 MAX_LATERAL_JERK_SPEEDS = [0, 30*CV.KPH_TO_MS ]
-MAX_LATERAL_JERKS = [10, 5]
+MAX_LATERAL_JERKS = [8, 5]
 
 
 moveAvg = mvAvg.MoveAvg()
@@ -116,7 +116,7 @@ def get_lag_adjusted_curvature(CP, v_ego, psis, curvatures, curvature_rates):
   psi = interp(delay, T_IDXS[:CONTROL_N], psis)
   desired_curvature_rate = curvature_rates[0]
 
-  v_ego = max(v_ego, 1)
+  v_ego = max(v_ego, 0.1)
   # MPC can plan to turn the wheel and turn back before t_delay. This means
   # in high delay cases some corrections never even get commanded. So just use
   # psi to calculate a simple linearization of desired curvature
@@ -124,8 +124,8 @@ def get_lag_adjusted_curvature(CP, v_ego, psis, curvatures, curvature_rates):
   desired_curvature = current_curvature + 2 * curvature_diff_from_psi
 
   
-  LATERAL_JERK = interp(v_ego, MAX_LATERAL_JERK_SPEEDS, MAX_LATERAL_JERKS)
-  #LATERAL_JERK = MAX_LATERAL_JERK
+  #LATERAL_JERK = interp(v_ego, MAX_LATERAL_JERK_SPEEDS, MAX_LATERAL_JERKS)
+  LATERAL_JERK = MAX_LATERAL_JERK
   max_curvature_rate = LATERAL_JERK / (v_ego**2)
   safe_desired_curvature_rate = clip(desired_curvature_rate,
                                           -max_curvature_rate,
