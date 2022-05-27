@@ -54,23 +54,24 @@ class CarInterface(CarInterfaceBase):
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
 
-    ret.maxSteeringAngleDeg = 60
+    ret.maxSteeringAngleDeg = 180
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
       ret.steerRatio = 16.0  #13.96   #12.5
       ret.steerRateCost = 1 #0.6   # 0.6, 0.35
-      ret.steerActuatorDelay = 0.1 #0.1   # 0.1, 0.05
+      ret.steerActuatorDelay = 0.05   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
+      ret.maxSteeringAngleDeg = 80
 
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]
 
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
-      set_lat_tune(ret.lateralTuning, LatTunes.ATOM, MAX_LAT_ACCEL=2.3, FRICTION=0.01)
+      set_lat_tune(ret.lateralTuning, LatTunes.ATOM, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0)
 
 
@@ -150,8 +151,8 @@ class CarInterface(CarInterfaceBase):
     elif candidate in (CAR.KONA, CAR.KONA_EV, CAR.KONA_HEV):
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = {CAR.KONA_EV: 1685., CAR.KONA_HEV: 1425.}.get(candidate, 1275.) + STD_CARGO_KG
-      ret.wheelbase = 2.7
-      ret.steerRatio = 13.73 * 1.15  # Spec
+      ret.wheelbase = 2.6
+      ret.steerRatio = 13.42  # Spec
       tire_stiffness_factor = 0.385
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]

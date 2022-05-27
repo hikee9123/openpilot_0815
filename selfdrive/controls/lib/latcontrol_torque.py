@@ -21,6 +21,15 @@ from selfdrive.controls.lib.vehicle_model import ACCELERATION_DUE_TO_GRAVITY
 LOW_SPEED_FACTOR = 200
 JERK_THRESHOLD = 0.2
 
+def set_torque_tune(tune, MAX_LAT_ACCEL=2.5, FRICTION=.1):
+  tune.init('torque')
+  tune.torque.useSteeringAngle = True
+  tune.torque.kp = 1.0 / MAX_LAT_ACCEL
+  tune.torque.kf = 1.0 / MAX_LAT_ACCEL
+  tune.torque.ki = 0.1 / MAX_LAT_ACCEL
+  tune.torque.friction = FRICTION
+
+
 
 class LatControlTorque(LatControl):
   def __init__(self, CP, CI):
@@ -43,8 +52,6 @@ class LatControlTorque(LatControl):
     if CS.vEgo < MIN_STEER_SPEED or not active:
       output_torque = 0.0
       pid_log.active = False
-      if not active:
-        self.pid.reset()
     else:
       if self.use_steering_angle:
         actual_curvature = -VM.calc_curvature(math.radians(CS.steeringAngleDeg - params.angleOffsetDeg), CS.vEgo, params.roll)
@@ -63,10 +70,11 @@ class LatControlTorque(LatControl):
       # convert friction into lateral accel units for feedforward
       friction_compensation = interp(desired_lateral_jerk, [-JERK_THRESHOLD, JERK_THRESHOLD], [-self.friction, self.friction])
       ff += friction_compensation / self.kf
+      freeze_integrator = CS.steeringRateLimited or CS.steeringPressed or CS.vEgo < 5
       output_torque = self.pid.update(error,
-                                      override=CS.steeringPressed, feedforward=ff,
+                                      feedforward=ff,
                                       speed=CS.vEgo,
-                                      freeze_integrator=CS.steeringRateLimited)
+                                      freeze_integrator=freeze_integrator)
 
       pid_log.active = True
       pid_log.p = self.pid.p

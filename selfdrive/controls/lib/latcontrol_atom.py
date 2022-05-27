@@ -94,7 +94,7 @@ class LatControlATOM(LatControl):
       lqr_output_torque, lqr_desired_angle, lqr_log  = self.LaLqr.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
       toq_output_torque, toq_desired_angle, toq_log  = self.LaToq.update( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
 
-      if CS.vEgo < 10:  # 36 kph
+      if CS.vEgo < 12.5:  # 45 kph
         selected = 1.0  # toq
       else:
         #output_torque = lqr_output_torque
