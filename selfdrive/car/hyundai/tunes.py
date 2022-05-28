@@ -85,9 +85,9 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
   if name == LatTunes.MULTI:
     tune.init('multi')
 
-    tune.atom.methods = [get_method( MethodModel.lqr, 5), 
+    tune.atom.methods = [get_method( MethodModel.lqr, 3), 
                          get_method( MethodModel.torque, 10), 
-                         get_method( MethodModel.pid, 20) ]
+                         get_method( MethodModel.pid, 15) ]
 
     # 1. lqr
     tune.atom.lqr.scale = 1800     #1700.0
