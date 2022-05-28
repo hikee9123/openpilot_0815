@@ -494,6 +494,8 @@ struct CarParams {
 
   atompilotLongitudinalControl @68  :Bool;
 
+  atomHybridSpeed @70  :Bool;
+
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
     safetyParam @1 :Int16;
@@ -507,6 +509,7 @@ struct CarParams {
   struct LateralATOMTuning {
     lqr @0 :LateralLQRTuning;
     torque @1 :LateralTorqueTuning;
+    pid @2 :LateralPIDTuning;
   }
 
   struct LateralPIDTuning {
