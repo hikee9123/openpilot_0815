@@ -33,7 +33,7 @@ class LatTunes(Enum):
 MethodModel = car.CarParams.MethodModel
 
 def get_method( method_model, method_param ):
-  ret = car.CarParams.Method.new_message()
+  ret = car.CarParams.MethodConfig.new_message()
   ret.methodModel = method_model
   ret.methodParam = method_param
   return ret
@@ -85,7 +85,7 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
   if name == LatTunes.MULTI:
     tune.init('multi')
 
-    tune.atom.methods = [get_method( MethodModel.lqr, 5), 
+    tune.atom.methodConfigs = [get_method( MethodModel.lqr, 5), 
                          get_method( MethodModel.torque, 10), 
                          get_method( MethodModel.pid, 20) ]
 

@@ -496,7 +496,7 @@ struct CarParams {
 
   atomHybridSpeed @70  :Float32;
 
-  struct Method {
+  struct MethodConfig {
     methodModel @0 :MethodModel;
     methodParam @1 :Float32;
   }  
@@ -512,7 +512,7 @@ struct CarParams {
   }
 
   struct LateralATOMTuning {
-    methods @0 :List(Method)
+    methodConfigs @0 :List(MethodConfig)
     lqr @1 :LateralLQRTuning;
     torque @2 :LateralTorqueTuning;
     pid @3 :LateralPIDTuning;
