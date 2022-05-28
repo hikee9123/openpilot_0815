@@ -494,7 +494,12 @@ struct CarParams {
 
   atompilotLongitudinalControl @68  :Bool;
 
-  atomHybridSpeed @70  :Bool;
+  atomHybridSpeed @70  :Float32;
+
+  struct Method {
+    methodModel @0 :MethodModel;
+    methodParam @1 :Float32;
+  }  
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
@@ -507,9 +512,10 @@ struct CarParams {
   }
 
   struct LateralATOMTuning {
-    lqr @0 :LateralLQRTuning;
-    torque @1 :LateralTorqueTuning;
-    pid @2 :LateralPIDTuning;
+    methods @0 :List(Method)
+    lqr @1 :LateralLQRTuning;
+    torque @2 :LateralTorqueTuning;
+    pid @3 :LateralPIDTuning;
   }
 
   struct LateralPIDTuning {
@@ -566,6 +572,13 @@ struct CarParams {
 
     k @6 :List(Float32);  # LQR gain
     l @7 :List(Float32);  # Kalman gain
+  }
+
+
+  enum MethodModel {
+    lqr @0;
+    torque @1;
+    pid @2;
   }
 
   enum SafetyModel {
