@@ -9,19 +9,12 @@ from selfdrive.car.car_helpers import interfaces
 from selfdrive.car.fingerprints import _FINGERPRINTS as FINGERPRINTS
 
 
+from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
+
+
 MethodModel = car.CarParams.MethodModel
 
 class TestCarInterfaces(unittest.TestCase):
-
-
-  def method_func(self, BP ):
-    lat_fun = None
-    if BP.methodModel == MethodModel.lqr:
-      lat_fun  = self.LaLqr.update
-    elif BP.methodModel == MethodModel.torque:
-      lat_fun  = self.LaToq.update
-    if BP.methodModel == MethodModel.pid:
-      lat_fun  = self.LaPid.update
 
   @parameterized.expand([(car,) for car in all_known_cars()])
   def test_car_interfaces(self, car_name):
@@ -57,14 +50,7 @@ class TestCarInterfaces(unittest.TestCase):
         self.assertTrue(len(car_params.lateralTuning.indi.outerLoopGainV))
       elif tuning == 'multi':
         self.assertTrue(len(car_params.lateralTuning.multi.pid.kpV))
-
-        self.lat_funs = []
-        self.lat_params = []
-        methods = car_params.lateralTuning.multi.methodConfigs
-        for BP in methods:
-          self.lat_funs += self.method_func( BP )
-          self.lat_params += BP.methodParam
-
+        self.LaC = LatControlMULTI( car_params, car_interface)
 
 
     # Run car interface
