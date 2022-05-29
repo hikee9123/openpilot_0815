@@ -134,7 +134,7 @@ class LatControlATOM(LatControl):
         out_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
         output_torques.append( out_torque )
         if output_torque == None:
-          output_torque = tourque
+          output_torque = out_torque
 
 
       if CS.vEgo > self.CP.atomHybridSpeed: # 12.5:  # 45 kph
