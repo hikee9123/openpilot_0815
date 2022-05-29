@@ -150,26 +150,16 @@ class LatControlMULTI(LatControl):
       output_torque = clip( output_torque, -self.steer_max, self.steer_max )
 
       self.output_torque = output_torque
-      if len(desired_angles) > 0:
-        desired_angle = desired_angles[0]
-      else:
-        desired_angle = 0
+    
+      angle_steers_des = math.degrees(VM.get_steer_from_curvature(-desired_curvature, CS.vEgo, params.roll))
+      angle_steers_des += params.angleOffsetDeg
 
       # 2. log
       atom_log.active = True    
-      atom_log.steeringAngleDeg = desired_angle
+      atom_log.steeringAngleDeg = angle_steers_des
       atom_log.output = output_torque
+   
 
-      #atom_log.i = lqr_log.i
-      #atom_log.saturated = lqr_log.saturated      
-      #atom_log.lqrOutput = lqr_log.lqrOutput
-      #atom_log.p1 = toq_log.p
-      #atom_log.i1 = toq_log.i
-      #atom_log.d1 = toq_log.d
-      #atom_log.f1 = toq_log.f
-      #atom_log.selected = selected
-    
- 
     
 
-    return output_torque, desired_angle, atom_log
+    return output_torque, angle_steers_des, atom_log
