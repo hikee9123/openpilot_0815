@@ -40,7 +40,7 @@ class TestCarInterfaces(unittest.TestCase):
     self.assertGreater(car_params.mass, 1)
     self.assertGreater(car_params.steerRateCost, 1e-3)
 
-    print( 'class TestCarInterfaces(unittest.TestCase):' )
+    print( 'class TestCarInterfaces {}'.format( car_name ) )
     if car_params.steerControlType != car.CarParams.SteerControlType.angle:
       tuning = car_params.lateralTuning.which()
       if tuning == 'pid':
