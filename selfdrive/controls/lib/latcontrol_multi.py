@@ -104,7 +104,7 @@ class LatControlMULTI(LatControl):
     for BP in methodConfigs:
       print( 'LatControlMULTI= {}'.format( BP ) )
       #self.lat_funs += self.methodfunc( BP )
-      self.lat_params += BP.methodParam
+      self.lat_params.append( BP.methodParam )
 
 
   def methodfunc(self, BP ):
