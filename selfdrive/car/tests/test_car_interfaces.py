@@ -50,7 +50,7 @@ class TestCarInterfaces(unittest.TestCase):
       elif tuning == 'indi':
         self.assertTrue(len(car_params.lateralTuning.indi.outerLoopGainV))
       elif tuning == 'atom':
-        self.assertTrue(car_params.lateralTuning.torque.kf > 0)
+        self.assertTrue(car_params.lateralTuning.atom.torque.kf > 0)
         self.LaC = LatControlATOM( car_params, car_interface)        
       elif tuning == 'multi':
         self.assertTrue(len(car_params.lateralTuning.multi.pid.kpV))
