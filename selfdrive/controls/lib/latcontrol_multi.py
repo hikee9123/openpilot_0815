@@ -140,8 +140,8 @@ class LatControlMULTI(LatControl):
       desired_angles = []      
       for funcs in self.lat_funs:
         output_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
-        output_torques += output_torque
-        desired_angles += desired_angle
+        output_torques.append( output_torque )
+        desired_angles.append( desired_angle )
 
 
       steer_ang = abs(CS.steeringAngleDeg)
