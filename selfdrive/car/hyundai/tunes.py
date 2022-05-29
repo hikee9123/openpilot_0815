@@ -64,7 +64,8 @@ def set_long_tune(tune, name):
 def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
   if name == LatTunes.HYBRID:
     tune.init('atom')
-    tune.atom.methodConfigs = None
+    tune.atom.methodConfigs = [get_method_config( MethodModel.torque, 5), 
+                          get_method_config( MethodModel.lqr, 50) ]
 
     # 1. torque
     tune.atom.torque.useSteeringAngle = True  #  False
