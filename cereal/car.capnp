@@ -573,9 +573,6 @@ struct CarParams {
     l @7 :List(Float32);  # Kalman gain
   }
 
-
-
-
   enum SafetyModel {
     silent @0;
     hondaNidec @1;
@@ -607,7 +604,7 @@ struct CarParams {
     body @27;
   }
 
-    enum MethodModel {
+  enum MethodModel {
     lqr @0;
     torque @1;
     pid @2;
