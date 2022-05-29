@@ -160,7 +160,7 @@ class Controls:
       self.LaC = LatControlLQR(self.CP, self.CI)
     elif self.CP.lateralTuning.which() == 'torque':
       self.LaC = LatControlTorque(self.CP, self.CI)
-    elif self.CP.lateralTuning.which() == 'hybrid':
+    elif self.CP.lateralTuning.which() == 'atom':
       self.LaC = LatControlATOM(self.CP, self.CI)
     elif self.CP.lateralTuning.which() == "multi":
       self.LaC = LatControlMULTI(self.CP, self.CI)
@@ -822,7 +822,7 @@ class Controls:
       controlsState.lateralControlState.indiState = lac_log
     elif lat_tuning == 'torque':
       controlsState.lateralControlState.torqueState = lac_log
-    elif lat_tuning == 'hybrid':
+    elif lat_tuning == 'atom':
       controlsState.lateralControlState.atomState = lac_log
     elif lat_tuning == 'multi':
       controlsState.lateralControlState.atomState = lac_log      
