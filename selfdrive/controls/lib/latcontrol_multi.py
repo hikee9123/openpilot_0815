@@ -86,9 +86,9 @@ class LatControlMULTI(LatControl):
     super().__init__(CP, CI)
 
     self.CP = CP
-    self.lqr = CP.lateralTuning.atom.lqr
-    self.torque = CP.lateralTuning.atom.torque
-    self.pid1 = CP.lateralTuning.atom.pid
+    self.lqr = CP.lateralTuning.multi.lqr
+    self.torque = CP.lateralTuning.multi.torque
+    self.pid1 = CP.lateralTuning.multi.pid
 
     self.LaLqr = LatCtrlLqrMULTI( CP, CI, self.lqr )
     self.LaToq = LatCtrlToqMULTI( CP, CI, self.torque )
@@ -100,7 +100,7 @@ class LatControlMULTI(LatControl):
 
     self.lat_funs = []
     self.lat_params = []
-    methods = CP.lateralTuning.atom.methodConfigs
+    methods = CP.lateralTuning.multi.methodConfigs
     for BP in methods:
       self.lat_funs += self.method_func( BP )
       self.lat_params += BP.methodParam
