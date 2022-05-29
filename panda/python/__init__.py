@@ -332,8 +332,8 @@ class Panda:
 
   def recover(self, timeout: Optional[int] = None, reset: bool = True) -> bool:
     if reset:
-    self.reset(enter_bootstub=True)
-    self.reset(enter_bootloader=True)
+      self.reset(enter_bootstub=True)
+      self.reset(enter_bootloader=True)
 
     t_start = time.time()
     while len(PandaDFU.list()) == 0:
