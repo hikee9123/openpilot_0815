@@ -10,7 +10,7 @@ from selfdrive.car.fingerprints import _FINGERPRINTS as FINGERPRINTS
 
 
 from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
-
+from selfdrive.controls.lib.latcontrol_atom import LatControlATOM
 
 MethodModel = car.CarParams.MethodModel
 
@@ -49,6 +49,9 @@ class TestCarInterfaces(unittest.TestCase):
         self.assertTrue(car_params.lateralTuning.torque.kf > 0)
       elif tuning == 'indi':
         self.assertTrue(len(car_params.lateralTuning.indi.outerLoopGainV))
+      elif tuning == 'atom':
+        self.assertTrue(len(car_params.lateralTuning.atom.pid.kpV))
+        self.LaC = LatControlATOM( car_params, car_interface)        
       elif tuning == 'multi':
         self.assertTrue(len(car_params.lateralTuning.multi.pid.kpV))
         self.LaC = LatControlMULTI( car_params, car_interface)
