@@ -494,7 +494,7 @@ struct CarParams {
 
   atompilotLongitudinalControl @68  :Bool;
   atomHybridSpeed @70  :Float32;
-  methodConfigs @71 :List(MethodConfig)
+  methodConfigs @71 :List(MethodConfig);
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
