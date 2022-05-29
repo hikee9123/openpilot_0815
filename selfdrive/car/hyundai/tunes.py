@@ -90,9 +90,9 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
                          get_method_config( MethodModel.pid, 20) ]
 
     # 1. lqr
-    tune.multi.lqr.scale = 1800     #1700.0
+    tune.multi.lqr.scale = 2000     #1700.0
     tune.multi.lqr.ki = 0.01      #0.01
-    tune.multi.lqr.dcGain =  0.0027  #0.0027
+    tune.multi.lqr.dcGain =  0.0030  #0.0027
 
     tune.multi.lqr.a = [0., 1., -0.22619643, 1.21822268]
     tune.multi.lqr.b = [-1.92006585e-04, 3.95603032e-05]
