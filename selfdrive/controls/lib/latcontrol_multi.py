@@ -102,7 +102,7 @@ class LatControlMULTI(LatControl):
     self.lat_params = []
     methodConfigs = CP.lateralTuning.multi.methodConfigs
     for BP in methodConfigs:
-      print( '{}'.format( BP ) )
+      print( 'LatControlMULTI= {}'.format( BP ) )
       self.lat_funs += self.methodfunc( BP )
       self.lat_params += BP.methodParam
 
