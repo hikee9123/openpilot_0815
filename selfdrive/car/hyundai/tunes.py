@@ -30,7 +30,7 @@ class LatTunes(Enum):
   PID_N = 15
   TORQUE = 16
   LQR_GRANDEUR = 17
-  HYBRID = 18
+  ATOM = 18
   MULTI = 19
 
 
@@ -62,7 +62,7 @@ def set_long_tune(tune, name):
 
 ###### LAT ######
 def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
-  if name == LatTunes.HYBRID:
+  if name == LatTunes.ATOM:
     tune.init('atom')
     tune.atom.methodConfigs = [get_method_config( MethodModel.torque, 5), 
                           get_method_config( MethodModel.lqr, 50) ]
