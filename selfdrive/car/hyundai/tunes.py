@@ -2,6 +2,10 @@
 from enum import Enum
 from cereal import car
 
+from selfdrive.car import  get_method_config
+
+MethodModel = car.CarParams.MethodModel
+
 class LongTunes(Enum):
   PEDAL = 0
   TSS2 = 1
@@ -60,6 +64,7 @@ def set_long_tune(tune, name):
 def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
   if name == LatTunes.HYBRID:
     tune.init('hybrid')
+    tune.atom.methodConfigs = None
 
     # 1. torque
     tune.atom.torque.useSteeringAngle = True  #  False
@@ -79,7 +84,9 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
     tune.atom.lqr.l = [0.3233671, 0.3185757]
   if name == LatTunes.MULTI:
     tune.init('multi')
-
+    tune.atom.methodConfigs = [get_method_config( MethodModel.lqr, 5), 
+                         get_method_config( MethodModel.torque, 10), 
+                         get_method_config( MethodModel.pid, 20) ]
 
     # 1. lqr
     tune.atom.lqr.scale = 1800     #1700.0
