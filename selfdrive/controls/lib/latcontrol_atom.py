@@ -98,7 +98,6 @@ class LatControlATOM(LatControl):
       if CS.vEgo < self.CP.atomHybridSpeed: # 12.5:  # 45 kph
         selected = 1.0  # toq
       else:
-        #output_torque = lqr_output_torque
         lqr_delta = lqr_output_torque - self.output_torque
         toq_delta = toq_output_torque - self.output_torque
 

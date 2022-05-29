@@ -130,6 +130,7 @@ class LatControlMULTI(LatControl):
 
 
     if CS.vEgo < MIN_STEER_SPEED or not active:
+      self.output_torque = 0
       output_torque = 0.0
       desired_angle = 0.
       atom_log.active = False
@@ -148,6 +149,7 @@ class LatControlMULTI(LatControl):
       output_torque = interp( steer_ang, self.lat_params, output_torques )
       output_torque = clip( output_torque, -self.steer_max, self.steer_max )
 
+      self.output_torque = output_torque
       if len(desired_angles) > 0:
         desired_angle = desired_angles[0]
       else:
@@ -167,7 +169,7 @@ class LatControlMULTI(LatControl):
       #atom_log.f1 = toq_log.f
       #atom_log.selected = selected
     
-    self.output_torque = output_torque
+ 
     
 
     return output_torque, desired_angle, atom_log
