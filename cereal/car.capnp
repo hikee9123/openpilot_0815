@@ -495,7 +495,7 @@ struct CarParams {
 
   atompilotLongitudinalControl @70  :Bool;
   atomHybridSpeed @71  :Float32;
-
+  opkrAutoResume @72 :Bool;
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
