@@ -402,7 +402,9 @@ class Controls:
           # Not show in first 1 km to allow for driving out of garage. This event shows after 5 minutes
           self.events.add(EventName.noGps)
 
-      if not self.sm.all_alive(self.camera_packets):
+      if CS.vEgo < 0.1:
+        pass
+      elif not self.sm.all_alive(self.camera_packets):
         self.events.add(EventName.cameraMalfunction)
       elif not self.sm.all_freq_ok(self.camera_packets):
         self.events.add(EventName.cameraFrameRate)
