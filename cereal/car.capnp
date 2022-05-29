@@ -496,15 +496,16 @@ struct CarParams {
 
   atomHybridSpeed @70  :Float32;
 
-  struct MethodConfig {
-    methodModel @0 :MethodModel;
-    methodParam @1 :Float32;
-  }  
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
     safetyParam @1 :Int16;
   }
+
+  struct MethodConfig {
+    methodModel @0 :MethodModel;
+    methodParam @1 :Float32;
+  }  
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
