@@ -493,9 +493,8 @@ struct CarParams {
   wheelSpeedFactor @63 :Float32; # Multiplier on wheels speeds to computer actual speeds
 
   atompilotLongitudinalControl @68  :Bool;
-
   atomHybridSpeed @70  :Float32;
-
+  methodConfigs @71 :List(MethodConfig)
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
@@ -513,10 +512,9 @@ struct CarParams {
   }
 
   struct LateralATOMTuning {
-    methodConfigs @0 :List(MethodConfig)
-    lqr @1 :LateralLQRTuning;
-    torque @2 :LateralTorqueTuning;
-    pid @3 :LateralPIDTuning;
+    lqr @0 :LateralLQRTuning;
+    torque @1 :LateralTorqueTuning;
+    pid @2 :LateralPIDTuning;
   }
 
   struct LateralPIDTuning {
@@ -576,11 +574,7 @@ struct CarParams {
   }
 
 
-  enum MethodModel {
-    lqr @0;
-    torque @1;
-    pid @2;
-  }
+
 
   enum SafetyModel {
     silent @0;
@@ -611,6 +605,12 @@ struct CarParams {
     stellantis @25;
     faw @26;
     body @27;
+  }
+
+    enum MethodModel {
+    lqr @0;
+    torque @1;
+    pid @2;
   }
 
   enum SteerControlType {

@@ -6,12 +6,13 @@ from common.conversions import Conversions as CV
 from selfdrive.car.hyundai.tunes import LatTunes, LongTunes, set_long_tune, set_lat_tune
 from selfdrive.car.hyundai.values import CAR, DBC, EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
 from selfdrive.car.hyundai.radar_interface import RADAR_START_ADDR
-from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
+from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config, get_method_config
 from selfdrive.car.interfaces import CarInterfaceBase
 from selfdrive.car.disable_ecu import disable_ecu
 
 ButtonType = car.CarState.ButtonEvent.Type
 EventName = car.CarEvent.EventName
+MethodModel = car.CarParams.MethodModel
 
 class CarInterface(CarInterfaceBase):
   @staticmethod
@@ -75,6 +76,9 @@ class CarInterface(CarInterfaceBase):
       set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0)
 
+      ret.methodConfigs = [get_method_config( MethodModel.lqr, 5), 
+                         get_method_config( MethodModel.torque, 10), 
+                         get_method_config( MethodModel.pid, 15) ]
 
       
     elif candidate in (CAR.SANTA_FE, CAR.SANTA_FE_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022):

@@ -30,13 +30,9 @@ class LatTunes(Enum):
   MULTI = 19
 
 
-MethodModel = car.CarParams.MethodModel
 
-def get_method( method_model, method_param ):
-  ret = car.CarParams.MethodConfig.new_message()
-  ret.methodModel = method_model
-  ret.methodParam = method_param
-  return ret
+
+
 
 ###### LONG ######
 def set_long_tune(tune, name):
@@ -64,7 +60,6 @@ def set_long_tune(tune, name):
 def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
   if name == LatTunes.HYBRID:
     tune.init('hybrid')
-    tune.atom.methods = None
 
     # 1. torque
     tune.atom.torque.useSteeringAngle = True  #  False
@@ -85,9 +80,6 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
   if name == LatTunes.MULTI:
     tune.init('multi')
 
-    tune.atom.methodConfigs = [get_method( MethodModel.lqr, 5), 
-                         get_method( MethodModel.torque, 10), 
-                         get_method( MethodModel.pid, 15) ]
 
     # 1. lqr
     tune.atom.lqr.scale = 1800     #1700.0
