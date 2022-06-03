@@ -13,6 +13,7 @@ from selfdrive.car.disable_ecu import disable_ecu
 ButtonType = car.CarState.ButtonEvent.Type
 EventName = car.CarEvent.EventName
 
+
 class CarInterface(CarInterfaceBase):
   @staticmethod
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
@@ -35,6 +36,9 @@ class CarInterface(CarInterfaceBase):
     
     ret.pcmCruise = not ret.openpilotLongitudinalControl
 
+    ret.opkrAutoResume = Params().get_bool("OpkrAutoResume")    
+   
+
     # These cars have been put into dashcam only due to both a lack of users and test coverage.
     # These cars likely still work fine. Once a user confirms each car works and a test route is
     # added to selfdrive/car/tests/routes.py, we can remove it from this list.
@@ -55,6 +59,7 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
 
     ret.maxSteeringAngleDeg = 180
+    ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
@@ -64,16 +69,18 @@ class CarInterface(CarInterfaceBase):
       ret.steerActuatorDelay = 0.05   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
-      ret.maxSteeringAngleDeg = 80
+      ret.maxSteeringAngleDeg = 85
 
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]
 
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
-      set_lat_tune(ret.lateralTuning, LatTunes.ATOM, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0)
+      #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
+      #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
+      set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=2.5, FRICTION=0)
 
+  
 
       
     elif candidate in (CAR.SANTA_FE, CAR.SANTA_FE_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022):

@@ -24,6 +24,7 @@ from selfdrive.controls.lib.latcontrol_lqr import LatControlLQR
 from selfdrive.controls.lib.latcontrol_angle import LatControlAngle
 from selfdrive.controls.lib.latcontrol_torque import LatControlTorque
 from selfdrive.controls.lib.latcontrol_atom import LatControlATOM
+from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
 from selfdrive.controls.lib.events import Events, ET
 from selfdrive.controls.lib.alertmanager import AlertManager, set_offroad_alert
 from selfdrive.controls.lib.vehicle_model import VehicleModel
@@ -161,6 +162,9 @@ class Controls:
       self.LaC = LatControlTorque(self.CP, self.CI)
     elif self.CP.lateralTuning.which() == 'atom':
       self.LaC = LatControlATOM(self.CP, self.CI)
+    elif self.CP.lateralTuning.which() == "multi":
+      self.LaC = LatControlMULTI(self.CP, self.CI)
+      
 
     self.initialized = False
     self.state = State.disabled
@@ -398,7 +402,9 @@ class Controls:
           # Not show in first 1 km to allow for driving out of garage. This event shows after 5 minutes
           self.events.add(EventName.noGps)
 
-      if not self.sm.all_alive(self.camera_packets):
+      if CS.vEgo < 0.1:
+        pass
+      elif not self.sm.all_alive(self.camera_packets):
         self.events.add(EventName.cameraMalfunction)
       elif not self.sm.all_freq_ok(self.camera_packets):
         self.events.add(EventName.cameraFrameRate)
@@ -820,6 +826,8 @@ class Controls:
       controlsState.lateralControlState.torqueState = lac_log
     elif lat_tuning == 'atom':
       controlsState.lateralControlState.atomState = lac_log
+    elif lat_tuning == 'multi':
+      controlsState.lateralControlState.atomState = lac_log      
 
     self.pm.send('controlsState', dat)
 

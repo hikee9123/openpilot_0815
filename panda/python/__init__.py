@@ -8,6 +8,7 @@ import time
 import traceback
 import sys
 from functools import wraps
+from typing import Optional
 from .dfu import PandaDFU, MCU_TYPE_F2, MCU_TYPE_F4, MCU_TYPE_H7  # pylint: disable=import-error
 from .flash_release import flash_release  # noqa pylint: disable=import-error
 from .update import ensure_st_up_to_date  # noqa pylint: disable=import-error
@@ -120,7 +121,7 @@ class ALTERNATIVE_EXPERIENCE:
   DISABLE_STOCK_AEB = 2
   RAISE_LONGITUDINAL_LIMITS_TO_ISO_MAX = 8
 
-class Panda(object):
+class Panda:
 
   # matches cereal.car.CarParams.SafetyModel
   SAFETY_SILENT = 0
@@ -148,6 +149,7 @@ class Panda(object):
   SAFETY_STELLANTIS = 25
   SAFETY_FAW = 26
   SAFETY_BODY = 27
+  SAFETY_HYUNDAI_HDA2 = 28
 
   SERIAL_DEBUG = 0
   SERIAL_ESP = 1
@@ -170,7 +172,7 @@ class Panda(object):
   HW_TYPE_RED_PANDA = b'\x07'
 
   CAN_PACKET_VERSION = 2
-  HEALTH_PACKET_VERSION = 5
+  HEALTH_PACKET_VERSION = 7
   HEALTH_STRUCT = struct.Struct("<IIIIIIIIBBBBBBBHBBBHIf")
 
   F2_DEVICES = (HW_TYPE_PEDAL, )
@@ -180,6 +182,10 @@ class Panda(object):
   CLOCK_SOURCE_MODE_DISABLED = 0
   CLOCK_SOURCE_MODE_FREE_RUNNING = 1
 
+  # first byte is for EPS scaling factor
+  FLAG_TOYOTA_ALT_BRAKE = (1 << 8)
+  FLAG_TOYOTA_STOCK_LONGITUDINAL = (2 << 8)
+
   FLAG_HONDA_ALT_BRAKE = 1
   FLAG_HONDA_BOSCH_LONG = 2
   FLAG_HONDA_NIDEC_ALT = 4
@@ -187,10 +193,11 @@ class Panda(object):
   FLAG_HYUNDAI_EV_GAS = 1
   FLAG_HYUNDAI_HYBRID_GAS = 2
   FLAG_HYUNDAI_LONG = 4
+
   FLAG_TESLA_POWERTRAIN = 1
   FLAG_TESLA_LONG_CONTROL = 2
 
-  def __init__(self, serial=None, claim=True):
+  def __init__(self, serial: Optional[str] = None, claim: bool = True):
     self._serial = serial
     self._handle = None
     self.connect(claim)
@@ -210,7 +217,7 @@ class Panda(object):
     while 1:
       try:
         for device in context.getDeviceList(skip_on_error=True):
-          if device.getVendorID() == 0xbbaa and device.getProductID() in [0xddcc, 0xddee]:
+          if device.getVendorID() == 0xbbaa and device.getProductID() in (0xddcc, 0xddee):
             try:
               this_serial = device.getSerialNumber()
             except Exception:
@@ -220,7 +227,7 @@ class Panda(object):
               print("opening device", self._serial, hex(device.getProductID()))
               self.bootstub = device.getProductID() == 0xddee
               self._handle = device.open()
-              if sys.platform not in ["win32", "cygwin", "msys", "darwin"]:
+              if sys.platform not in ("win32", "cygwin", "msys", "darwin"):
                 self._handle.setAutoDetachKernelDriver(True)
               if claim:
                 self._handle.claimInterface(0)
@@ -323,9 +330,11 @@ class Panda(object):
     if reconnect:
       self.reconnect()
 
-  def recover(self, timeout=None):
-    self.reset(enter_bootstub=True)
-    self.reset(enter_bootloader=True)
+  def recover(self, timeout: Optional[int] = None, reset: bool = True) -> bool:
+    if reset:
+      self.reset(enter_bootstub=True)
+      self.reset(enter_bootloader=True)
+
     t_start = time.time()
     while len(PandaDFU.list()) == 0:
       print("waiting for DFU...")
@@ -347,7 +356,7 @@ class Panda(object):
     ret = []
     try:
       for device in context.getDeviceList(skip_on_error=True):
-        if device.getVendorID() == 0xbbaa and device.getProductID() in [0xddcc, 0xddee]:
+        if device.getVendorID() == 0xbbaa and device.getProductID() in (0xddcc, 0xddee):
           try:
             ret.append(device.getSerialNumber())
           except Exception:
@@ -402,7 +411,7 @@ class Panda(object):
     return self._handle.controlRead(Panda.REQUEST_IN, 0xd6, 0, 0, 0x40).decode('utf8')
 
   @staticmethod
-  def get_signature_from_firmware(fn):
+  def get_signature_from_firmware(fn) -> bytes:
     f = open(fn, 'rb')
     f.seek(-128, 2)  # Seek from end of file
     return f.read(128)
@@ -458,11 +467,11 @@ class Panda(object):
   def has_obd(self):
     return (self.is_uno() or self.is_dos() or self.is_black() or self.is_red())
 
-  def has_canfd(self):
+  def has_canfd(self) -> bool:
     return self.get_type() in Panda.H7_DEVICES
 
-  def is_internal(self):
-    return self.get_type() in [Panda.HW_TYPE_UNO, Panda.HW_TYPE_DOS]
+  def is_internal(self) -> bool:
+    return self.get_type() in (Panda.HW_TYPE_UNO, Panda.HW_TYPE_DOS)
 
   def get_serial(self):
     dat = self._handle.controlRead(Panda.REQUEST_IN, 0xd0, 0, 0, 0x20)
@@ -504,7 +513,7 @@ class Panda(object):
     # TODO: check panda type
     if bus is None:
       self._handle.controlWrite(Panda.REQUEST_OUT, 0xdb, 0, 0, b'')
-    elif bus in [Panda.GMLAN_CAN2, Panda.GMLAN_CAN3]:
+    elif bus in (Panda.GMLAN_CAN2, Panda.GMLAN_CAN3):
       self._handle.controlWrite(Panda.REQUEST_OUT, 0xdb, 1, bus, b'')
 
   def set_obd(self, obd):

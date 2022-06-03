@@ -8,6 +8,12 @@ from selfdrive.car.fingerprints import all_known_cars
 from selfdrive.car.car_helpers import interfaces
 from selfdrive.car.fingerprints import _FINGERPRINTS as FINGERPRINTS
 
+
+from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
+from selfdrive.controls.lib.latcontrol_atom import LatControlATOM
+
+MethodModel = car.CarParams.MethodModel
+
 class TestCarInterfaces(unittest.TestCase):
 
   @parameterized.expand([(car,) for car in all_known_cars()])
@@ -34,6 +40,7 @@ class TestCarInterfaces(unittest.TestCase):
     self.assertGreater(car_params.mass, 1)
     self.assertGreater(car_params.steerRateCost, 1e-3)
 
+    print( 'test car name = {}'.format( car_name ) )
     if car_params.steerControlType != car.CarParams.SteerControlType.angle:
       tuning = car_params.lateralTuning.which()
       if tuning == 'pid':
@@ -42,6 +49,13 @@ class TestCarInterfaces(unittest.TestCase):
         self.assertTrue(car_params.lateralTuning.torque.kf > 0)
       elif tuning == 'indi':
         self.assertTrue(len(car_params.lateralTuning.indi.outerLoopGainV))
+      elif tuning == 'atom':
+        self.assertTrue(car_params.lateralTuning.atom.torque.kf > 0)
+        self.LaC = LatControlATOM( car_params, car_interface)        
+      elif tuning == 'multi':
+        self.assertTrue(len(car_params.lateralTuning.multi.pid.kpV))
+        self.LaC = LatControlMULTI( car_params, car_interface)
+
 
     # Run car interface
     CC = car.CarControl.new_message()

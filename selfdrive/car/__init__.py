@@ -131,3 +131,10 @@ def get_safety_config(safety_model, safety_param = None):
   if safety_param is not None:
     ret.safetyParam = safety_param
   return ret
+
+
+def get_method_config( method_model, method_param ):
+  ret = car.CarParams.MethodConfig.new_message()
+  ret.methodModel = method_model
+  ret.methodParam = method_param
+  return ret

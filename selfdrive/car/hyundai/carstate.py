@@ -364,7 +364,7 @@ class CarState(CarStateBase):
   @staticmethod
   def get_can_parser(CP):
     signals = [
-      # sig_name, sig_address
+      # signal_name, signal_address
       ("WHL_SPD_FL", "WHL_SPD11"),
       ("WHL_SPD_FR", "WHL_SPD11"),
       ("WHL_SPD_RL", "WHL_SPD11"),

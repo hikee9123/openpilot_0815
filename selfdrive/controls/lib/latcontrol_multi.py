@@ -14,9 +14,9 @@ from selfdrive.controls.lib.latcontrol_lqr import LatControlLQR
 from selfdrive.controls.lib.latcontrol_pid import LatControlPID
 
 
-MethodModel = car.CarParams.MethodModel
 
-class LatCtrlToqATOM(LatControlTorque):
+
+class LatCtrlToqMULTI(LatControlTorque):
   def __init__(self, CP, CI, TORQUE):
     self.sat_count_rate = 1.0 * DT_CTRL
     self.sat_limit = CP.steerLimitTimer
@@ -34,7 +34,7 @@ class LatCtrlToqATOM(LatControlTorque):
 
 
 
-class LatCtrlLqrATOM(LatControlLQR):
+class LatCtrlLqrMULTI(LatControlLQR):
   def __init__(self, CP, CI, LQR):
     self.sat_count_rate = 1.0 * DT_CTRL 
     self.sat_limit = CP.steerLimitTimer 
@@ -77,17 +77,21 @@ class LatCtrlPIDMULTI(LatControlPID):
     self.get_steer_feedforward = CI.get_steer_feedforward_function()
 
 
-class LatControlATOM(LatControl):
+
+
+MethodModel = car.CarParams.MethodModel
+
+class LatControlMULTI(LatControl):
   def __init__(self, CP, CI):
     super().__init__(CP, CI)
 
     self.CP = CP
-    self.lqr = CP.lateralTuning.atom.lqr
-    self.torque = CP.lateralTuning.atom.torque
-    self.pid1 = CP.lateralTuning.atom.pid
+    self.lqr = CP.lateralTuning.multi.lqr
+    self.torque = CP.lateralTuning.multi.torque
+    self.pid1 = CP.lateralTuning.multi.pid
 
-    self.LaLqr = LatCtrlLqrATOM( CP, CI, self.lqr )
-    self.LaToq = LatCtrlToqATOM( CP, CI, self.torque )
+    self.LaLqr = LatCtrlLqrMULTI( CP, CI, self.lqr )
+    self.LaToq = LatCtrlToqMULTI( CP, CI, self.torque )
     self.LaPid = LatCtrlPIDMULTI( CP, CI, self.pid1 )
 
     self.output_torque = 0
@@ -96,8 +100,9 @@ class LatControlATOM(LatControl):
 
     self.lat_funs = []
     self.lat_params = []
-    methodConfigs = CP.lateralTuning.atom.methodConfigs
+    methodConfigs = CP.lateralTuning.multi.methodConfigs
     for BP in methodConfigs:
+      #print( '  LatControlMULTI= {}'.format( BP ) )
       self.lat_funs.append( self.methodFunc( BP ) )
       self.lat_params.append( BP.methodParam )
 
@@ -110,61 +115,51 @@ class LatControlATOM(LatControl):
       lat_fun  = self.LaToq.update
     if BP.methodModel == MethodModel.pid:
       lat_fun  = self.LaPid.update
-    return lat_fun    
+
+    return lat_fun
 
   def reset(self):
     super().reset()
     self.LaLqr.reset()
     self.LaToq.reset()
+    self.LaPid.reset()
+
 
   def update(self, active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk):
     atom_log = log.ControlsState.LateralATOMState.new_message()
 
 
-    output_torque = None
     if CS.vEgo < MIN_STEER_SPEED or not active:
+      self.output_torque = 0
       output_torque = 0.0
-      angle_steers_des = 0.
+      desired_angle = 0.
       atom_log.active = False
       if not active:
         self.reset()
     else:
       output_torques = []
+      desired_angles = []      
       for funcs in self.lat_funs:
-        out_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
-        output_torques.append( out_torque )
-        if output_torque == None:
-          output_torque = out_torque
+        output_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
+        output_torques.append( output_torque )
+        desired_angles.append( desired_angle )
 
 
-      if CS.vEgo > self.CP.atomHybridSpeed: # 12.5:  # 45 kph
-        # 1. 전과 비교하여 변화량이 적은 부분 선택.
-        min_data = None
-        for tourque in output_torques:
-          delta = abs(tourque - self.output_torque)
-          if min_data == None:
-            min_data = delta
-            output_torque = tourque
-          elif min_data > delta:
-            min_data = delta
-            output_torque = tourque
-
-      if output_torque == None:
-        output_torque = 0.0    
-
-      #output_torque = interp( selected, [0, 1], output_torques )
+      steer_ang = abs(CS.steeringAngleDeg)
+      output_torque = interp( steer_ang, self.lat_params, output_torques )
       output_torque = clip( output_torque, -self.steer_max, self.steer_max )
 
+      self.output_torque = output_torque
+    
       angle_steers_des = math.degrees(VM.get_steer_from_curvature(-desired_curvature, CS.vEgo, params.roll))
       angle_steers_des += params.angleOffsetDeg
 
       # 2. log
       atom_log.active = True    
       atom_log.steeringAngleDeg = angle_steers_des
-      atom_log.output = output_torque      
+      atom_log.output = output_torque
+   
 
     
-    self.output_torque = output_torque
-
 
     return output_torque, angle_steers_des, atom_log
