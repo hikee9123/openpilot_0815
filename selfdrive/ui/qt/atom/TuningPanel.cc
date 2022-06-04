@@ -16,7 +16,7 @@
 #include "selfdrive/ui/ui.h"
 
 
-#include "selfdrive/ui/qt/atom/Tuning/opkr.h"
+#include "Tuning/opkr.h"
 
 #include "TuningPanel.h"
 
