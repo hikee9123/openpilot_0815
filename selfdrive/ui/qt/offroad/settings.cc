@@ -28,7 +28,7 @@
 
 #include "atom/DeveloperPanel.h"
 #include "atom/CommunityPanel.h"
-#include "atom/TuningPanel.h"
+//#include "atom/TuningPanel.h"
 
 
 TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
@@ -397,7 +397,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Software", new SoftwarePanel(this)},
     {"Developer", new DeveloperPanel(this)},
     {"Community", new CommunityPanel(this)},
-    {"Tuning", new TuningPanel(this)},
+   // {"Tuning", new TuningPanel(this)},
   };
 
 #ifdef ENABLE_MAPS
