@@ -233,17 +233,15 @@ def thermald_thread(end_event, hw_queue):
           fan_controller = UnoFanController()
         else:
           fan_controller = EonFanController()
-    elif (sec_since_boot() - sm.rcv_time['pandaStates']/1e9) > DISCONNECT_TIMEOUT:
-      if onroad_conditions["ignition"]:
-        onroad_conditions["ignition"] = False
-        cloudlog.error("panda timed out onroad")          
-    elif (count % int(5. / DT_TRML)) == 0:
+    elif (count % int(1. / DT_TRML)) == 0:
       # atom
       is_openpilot_view_enabled = params.get_bool("IsOpenpilotViewEnabled") # IsRHD
       if is_openpilot_view_enabled:
         onroad_conditions["ignition"] = True
-      elif onroad_conditions["ignition"] == True:
-        onroad_conditions["ignition"] = False
+      elif (sec_since_boot() - sm.rcv_time['pandaStates']/1e9) > DISCONNECT_TIMEOUT:
+        if onroad_conditions["ignition"]:
+          onroad_conditions["ignition"] = False
+          cloudlog.error("panda timed out onroad")           
 
     try:
       last_hw_state = hw_queue.get_nowait()
