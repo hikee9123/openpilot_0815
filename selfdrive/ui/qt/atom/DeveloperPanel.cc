@@ -10,6 +10,7 @@
 #include "selfdrive/ui/qt/widgets/toggle.h"
 #include "selfdrive/ui/qt/widgets/offroad_alerts.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
+#include "selfdrive/ui/qt/widgets/steerWidget.h"
 
 #include "selfdrive/common/params.h"
 #include "selfdrive/common/util.h"
@@ -105,6 +106,8 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   layout()->addWidget(new BrightnessOffControl());
   
   layout()->addWidget(new CAutoFocus());
+  layout()->addWidget(new CSteerWidget());
+  
 
   layout()->addWidget(horizontal_line());
 

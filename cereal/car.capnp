@@ -496,6 +496,16 @@ struct CarParams {
   atompilotLongitudinalControl @70  :Bool;
   atomHybridSpeed @71  :Float32;
   opkrAutoResume @72 :Bool;
+  smoothSteer @73 :SmoothSteerData;
+
+  struct SmoothSteerData
+  {
+    method @0: Int8;
+    maxSteeringAngle @1 :Float32;
+    maxDriverAngleWait @2 :Float32;
+    maxSteerAngleWait @3 :Float32;
+    driverAngleWait @4 :Float32;
+  }
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;

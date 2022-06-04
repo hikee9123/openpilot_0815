@@ -23,10 +23,12 @@ class CarInterface(CarInterfaceBase):
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], disable_radar=False):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
 
+
     ret.carName = "hyundai"
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundai, 0)]
     ret.radarOffCan = False  # RADAR_START_ADDR not in fingerprint[1] or DBC[ret.carFingerprint]["radar"] is None
     # ret.communityFeature = True
+
 
     if (candidate in LEGACY_SAFETY_MODE_CAR):
       ret.atompilotLongitudinalControl = Params().get_bool("OpkratomLongitudinal")
@@ -37,7 +39,13 @@ class CarInterface(CarInterfaceBase):
     ret.pcmCruise = not ret.openpilotLongitudinalControl
 
     ret.opkrAutoResume = Params().get_bool("OpkrAutoResume")    
-   
+
+    ret.maxSteeringAngleDeg = float( Params().get("OpkrMaxAngleLimit", encoding="utf8") )
+    ret.smoothSteer.method = int( Params().get("OpkrSteerMethod", encoding="utf8") )   # 1
+    ret.smoothSteer.maxSteeringAngle = float( Params().get("OpkrMaxSteeringAngle", encoding="utf8") )   # 90
+    ret.smoothSteer.maxDriverAngleWait = float( Params().get("OpkrMaxDriverAngleWait", encoding="utf8") )  # 0.002
+    ret.smoothSteer.maxSteerAngleWait = float( Params().get("OpkrMaxSteerAngleWait", encoding="utf8") )   # 0.001  # 10 sec
+    ret.smoothSteer.driverAngleWait = float( Params().get("OpkrDriverAngleWait", encoding="utf8") )  #0.001 
 
     # These cars have been put into dashcam only due to both a lack of users and test coverage.
     # These cars likely still work fine. Once a user confirms each car works and a test route is
@@ -58,7 +66,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
 
-    ret.maxSteeringAngleDeg = 180
+
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
 
     if candidate in (CAR.GRANDEUR_HEV_19):
@@ -69,7 +77,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerActuatorDelay = 0.05   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
-      ret.maxSteeringAngleDeg = 85
+
 
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]

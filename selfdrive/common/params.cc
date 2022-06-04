@@ -202,6 +202,14 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrDmonitor", PERSISTENT},
     {"OpkrUpdated", PERSISTENT},
     {"OpkrWhitePanda", PERSISTENT},
+
+
+    {"OpkrMaxAngleLimit", PERSISTENT},
+    {"OpkrSteerMethod", PERSISTENT},
+    {"OpkrMaxSteeringAngle", PERSISTENT},
+    {"OpkrMaxDriverAngleWait", PERSISTENT},
+    {"OpkrMaxSteerAngleWait", PERSISTENT},
+    {"OpkrDriverAngleWait", PERSISTENT},    
 };
 
 } // namespace

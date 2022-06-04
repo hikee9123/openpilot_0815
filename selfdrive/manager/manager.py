@@ -63,6 +63,13 @@ def manager_init() -> None:
     ("OpkrDmonitor", "1"),
     ("OpkrUpdated", "1"),
     ("OpkrWhitePanda", "0"),
+
+    {"OpkrMaxAngleLimit", "85"},
+    ("OpkrSteerMethod", "0"),
+    ("OpkrMaxSteeringAngle", "90"),
+    ("OpkrMaxDriverAngleWait", "0.002"),
+    ("OpkrMaxSteerAngleWait", "0.001"),
+    ("OpkrDriverAngleWait", "0.001"),    
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
