@@ -268,6 +268,7 @@ public:
   }
 };
 
+/*
 class DebugUiOneToggle : public ToggleControl {
   Q_OBJECT
 
@@ -318,7 +319,7 @@ public:
     });
   }
 };
-
+*/
 class LongLogToggle : public ToggleControl {
   Q_OBJECT
 
