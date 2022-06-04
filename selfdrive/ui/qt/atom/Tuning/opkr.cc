@@ -1,4 +1,4 @@
-#include "selfdrive/ui/qt/widgets/opkr.h"
+
 
 #include <algorithm>
 #include <iterator>
@@ -18,6 +18,8 @@
 #include "selfdrive/ui/qt/widgets/input.h"
 
 #include "selfdrive/ui/ui.h"
+
+#include "opkr.h"
 
 SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Repo/Branch", "", "Change to another open pilot code. You can change it by entering ID/repository/branch.") {
   QObject::connect(this, &ButtonControl::clicked, [=]() {
