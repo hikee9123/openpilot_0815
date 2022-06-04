@@ -185,6 +185,7 @@ GitHash::GitHash() : AbstractControl("Commit (Local/Remote)", "", "") {
   hlayout->addWidget(&remote_hash);
 }
 
+/*
 OpenpilotView::OpenpilotView() : AbstractControl("Driving Camera", "Preview the open pilot driving screen.", "") {
 
   // setup widget
@@ -256,7 +257,7 @@ void OpenpilotView::refresh() {
     btnc.setEnabled(true);
   }
 }
-
+*/
 CarSelectCombo::CarSelectCombo() : AbstractControl("", "", "") 
 {
   combobox.setStyleSheet(R"(
@@ -636,7 +637,7 @@ void ForceShutdown::refresh() {
   }
 }
 
-
+/*
 VolumeControl::VolumeControl() : AbstractControl("EON Volume Control(%)", "Adjust the volume of EON. Android Default/Manual Settings", "../assets/offroad/icon_shell.png") {
 
   effect.setSource(QUrl::fromLocalFile("/data/openpilot/selfdrive/assets/addon/sound/ding.wav"));
@@ -922,7 +923,7 @@ void AutoScreenOff::refresh()
     label.setText(QString::fromStdString(params.get("OpkrAutoScreenOff")) + "min(s)");
   }
 }
-
+*/
 ChargingMin::ChargingMin() : AbstractControl("BAT MinCharging Value", "Sets the minimum battery charge value.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -1812,6 +1813,7 @@ void SteerAngleCorrection::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
+/*
 SpeedLimitOffset::SpeedLimitOffset() : AbstractControl("SpeedLimit Offset", "During safetycam deceleration, it decelerates by compensating for the difference between GPS speed and real speed.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -1902,7 +1904,7 @@ void SpeedLimitOffset::refresh() {
   }
   label.setText(QString::fromStdString(params.get("OpkrSpeedLimitOffset")));
 }
-
+*/
 RESChoice::RESChoice() : AbstractControl("AutoRES Option", "Sets the auto RES option. 1. Adjust the temporary cruise speed, 2. Adjust the set speed itself according to the presence or absence of a preceding car. 3. Adjust the cruise speed if there is a preceding car, and adjust the set speed if there is no preceding car. Please note that the automatic RES may not work well depending on the conditions.", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -6490,6 +6492,7 @@ void SpeedLaneWidth::refresh() {
   btn.setText("EDIT");
 }
 
+/*
 OPKRTopTextView::OPKRTopTextView() : AbstractControl("Top Text View", "Date/Time/OSM Street Name", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -6573,7 +6576,7 @@ void OPKRTopTextView::refresh() {
     QUIState::ui_state.scene.top_text_view = 7;
   }
 }
-
+*/
 OPKREdgeOffset::OPKREdgeOffset() : AbstractControl("", "+ value to move car to left, - value to move car to right on each lane.", "") {
 
   labell1.setAlignment(Qt::AlignVCenter|Qt::AlignLeft);

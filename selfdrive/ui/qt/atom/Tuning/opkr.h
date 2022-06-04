@@ -125,7 +125,7 @@ public:
     });
   }
 };
-
+/*
 class BlindSpotDetectToggle : public ToggleControl {
   Q_OBJECT
 
@@ -142,7 +142,7 @@ public:
     });
   }
 };
-
+*/
 class UFCModeEnabledToggle : public ToggleControl {
   Q_OBJECT
 
@@ -215,6 +215,7 @@ public:
   }
 };
 
+/*
 class DrivingRecordToggle : public ToggleControl {
   Q_OBJECT
 
@@ -231,7 +232,7 @@ public:
     });
   }
 };
-
+*/
 class TurnSteeringDisableToggle : public ToggleControl {
   Q_OBJECT
 
@@ -416,6 +417,7 @@ public:
   }
 };
 
+/*
 class LiveTunePanelToggle : public ToggleControl {
   Q_OBJECT
 
@@ -434,7 +436,7 @@ public:
     });
   }
 };
-
+*/
 class GitPullOnBootToggle : public ToggleControl {
   Q_OBJECT
 
@@ -459,6 +461,7 @@ public:
   }
 };
 
+/*
 class ShowErrorToggle : public ToggleControl {
   Q_OBJECT
 
@@ -475,7 +478,7 @@ public:
     });
   }
 };
-
+*/
 class StockNaviSpeedToggle : public ToggleControl {
   Q_OBJECT
 
@@ -765,6 +768,7 @@ public:
 };
 
 // openpilot preview
+/*
 class OpenpilotView : public AbstractControl {
   Q_OBJECT
 
@@ -778,7 +782,7 @@ private:
   
   void refresh();
 };
-
+*/
 class CarSelectCombo : public AbstractControl 
 {
   Q_OBJECT
@@ -852,7 +856,7 @@ private:
   
   void refresh();
 };
-
+/*
 class AutoScreenOff : public AbstractControl {
   Q_OBJECT
 
@@ -867,6 +871,7 @@ private:
   
   void refresh();
 };
+
 
 class VolumeControl : public AbstractControl {
   Q_OBJECT
@@ -914,7 +919,7 @@ private:
   
   void refresh();
 };
-
+*/
 
 class ChargingMin : public AbstractControl {
   Q_OBJECT
@@ -1037,7 +1042,7 @@ private:
 };
 
 
-
+/*
 class SpeedLimitOffset : public AbstractControl {
   Q_OBJECT
 
@@ -1053,7 +1058,7 @@ private:
   
   void refresh();
 };
-
+*/
 // 튜닝 설정
 class CameraOffset : public AbstractControl {
   Q_OBJECT
@@ -2200,6 +2205,7 @@ private:
   void refresh();
 };
 
+/*
 class OPKRTopTextView : public AbstractControl {
   Q_OBJECT
 
@@ -2214,7 +2220,7 @@ private:
   
   void refresh();
 };
-
+*/
 class OPKREdgeOffset : public AbstractControl {
   Q_OBJECT
 
