@@ -29,7 +29,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
 
   layout->setContentsMargins(50, 0, 50, 0);
   layout->setSpacing(30);
-
+/*
   // OPKR
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new CameraOffset());
@@ -114,6 +114,5 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new StoppingDist());
   layout->addWidget(new E2ELongToggle());
   layout->addWidget(new StockDecelonCamToggle());
-  //layout->addWidget(new RadarDisableToggle());
-  //layout->addWidget(new UseRadarTrackToggle());
+*/
 }

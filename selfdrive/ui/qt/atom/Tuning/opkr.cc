@@ -21,6 +21,7 @@
 
 #include "opkr.h"
 
+
 SwitchOpenpilot::SwitchOpenpilot() : ButtonControl("Change Repo/Branch", "", "Change to another open pilot code. You can change it by entering ID/repository/branch.") {
   QObject::connect(this, &ButtonControl::clicked, [=]() {
     if (text() == "CHANGE") {
