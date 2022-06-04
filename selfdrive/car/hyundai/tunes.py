@@ -61,7 +61,7 @@ def set_long_tune(tune, name):
 
 
 ###### LAT ######
-def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0):
+def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01):
   if name == LatTunes.HYBRID:
     tune.init('atom')
     tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 5), 
