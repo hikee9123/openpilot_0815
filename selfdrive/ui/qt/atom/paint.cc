@@ -947,6 +947,8 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
 
   text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
+
+  //if( tunName == 0 )
   text4.sprintf("friction = %f", torque.getFriction() );  p.drawText( bb_x, nYPos+=50, text4 );
   text4.sprintf("kp = %f", torque.getKp() );              p.drawText( bb_x, nYPos+=50, text4 );
   text4.sprintf("ki = %f", torque.getKi() );              p.drawText( bb_x, nYPos+=50, text4 );   

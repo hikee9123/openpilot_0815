@@ -7,7 +7,7 @@ from cereal import car
 from selfdrive.car.fingerprints import all_known_cars
 from selfdrive.car.car_helpers import interfaces
 from selfdrive.car.fingerprints import _FINGERPRINTS as FINGERPRINTS
-
+import cereal.messaging as messaging
 
 from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
 from selfdrive.controls.lib.latcontrol_atom import LatControlATOM
@@ -56,6 +56,10 @@ class TestCarInterfaces(unittest.TestCase):
         self.assertTrue(len(car_params.lateralTuning.multi.pid.kpV))
         self.LaC = LatControlMULTI( car_params, car_interface)
 
+
+    cp_send = messaging.new_message('carParams')
+    cp_send.carParams = car_params
+    self.pm.send('carParams', cp_send)
 
     # Run car interface
     CC = car.CarControl.new_message()
