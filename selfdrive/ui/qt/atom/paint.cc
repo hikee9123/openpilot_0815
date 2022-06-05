@@ -941,9 +941,12 @@ void OnPaint::ui_tunning_data( QPainter &p )
   auto lateralTuning = scene->car_params.getLateralTuning();
   auto torque  = lateralTuning.getTorque();
 
-  QString tuning = lateralTuning.getWhich();
-  text4 = "tuning = " + tuning;
- p.drawText( bb_x, bb_y+140, text4 );
+  text4.sprintf("kp = %f", torque.getKp() );
+  p.drawText( bb_x, bb_y+140, text4 );
+
+//  QString tuning = lateralTuning.getWhich();
+//  text4 = "tuning = " + tuning;
+// p.drawText( bb_x, bb_y+140, text4 );
   
 }
 
