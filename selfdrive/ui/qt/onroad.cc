@@ -442,6 +442,8 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::ModelDataV2::LeadDataV
 }
 
 void NvgWindow::paintGL() {
+  UIState *s = uiState();
+  const cereal::ModelDataV2::Reader &model = (*s->sm)["modelV2"].getModelV2();
   CameraViewWidget::paintGL();
 
   QPainter painter(this);
@@ -454,7 +456,7 @@ void NvgWindow::paintGL() {
     drawLaneLines(painter, s);
 
     if (s->scene.longitudinal_control || 1) {
-      auto leads = (*s->sm)["modelV2"].getModelV2().getLeadsV3();
+      const auto leads = model.getLeadsV3();
       if (leads[0].getProb() > .5) {
         drawLead(painter, leads[0], s->scene.lead_vertices[0]);
       }

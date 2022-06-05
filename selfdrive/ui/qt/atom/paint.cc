@@ -161,6 +161,8 @@ void OnPaint::paintEvent(QPaintEvent *event)
 
 //  printf( "OnPaint::paintEvent" );
 
+
+
   bb_ui_draw_UI( p );
   ui_main_navi( p );
 }
@@ -909,6 +911,13 @@ void OnPaint::ui_draw_debug1( QPainter &p )
 
  // text3.sprintf("BF:%.1f   RL:%.1f°", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
+
+
+  int nCmd = scene->update_Event.getCommand();
+  QString text4;
+
+  text4.sprintf("Cmd = %d", nCmd);
+  p.drawText( QRect(bb_x, 100, bb_w, 42), text4, textOpt );
 }
 
 
@@ -918,4 +927,7 @@ void OnPaint::ui_main_navi( QPainter &p )
   ui_draw_navi( p );
 
   ui_draw_debug1( p );
+
+
+
 }

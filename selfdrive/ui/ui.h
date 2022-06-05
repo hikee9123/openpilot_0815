@@ -136,6 +136,8 @@ typedef struct UIScene {
   cereal::CarState::Reader car_state;
   cereal::LateralPlan::Reader lateralPlan;
   cereal::CarParams::Reader  car_params;
+  cereal::UpdateEventData::Reader  update_Event;
+  
 
   int  IsOpenpilotViewEnabled;
   struct _screen
