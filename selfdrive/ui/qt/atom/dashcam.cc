@@ -11,7 +11,7 @@
 #include <QVBoxLayout>
 
 
-#include "selfdrive/common/timing.h"
+#include "common/timing.h"
 #include "selfdrive/ui/qt/util.h"
 
 

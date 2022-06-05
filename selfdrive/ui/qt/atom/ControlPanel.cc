@@ -12,8 +12,8 @@
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/qt/widgets/scrollview.h"
 
-#include "selfdrive/common/params.h"
-#include "selfdrive/common/util.h"
+#include "common/params.h"
+#include "common/util.h"
 #include "selfdrive/ui/ui.h"
 
 #include "ControlPanel.h"

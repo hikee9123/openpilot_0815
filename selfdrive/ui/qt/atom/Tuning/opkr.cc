@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QDateTime>
 
-#include "selfdrive/common/params.h"
+#include "common/params.h"
 #include "selfdrive/ui/qt/api.h"
 #include "selfdrive/ui/qt/widgets/input.h"
 
