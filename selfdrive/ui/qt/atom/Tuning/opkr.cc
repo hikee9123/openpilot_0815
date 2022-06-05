@@ -262,6 +262,7 @@ void OpenpilotView::refresh() {
   }
 }
 */
+
 CarSelectCombo::CarSelectCombo() : AbstractControl("", "", "") 
 {
   combobox.setStyleSheet(R"(

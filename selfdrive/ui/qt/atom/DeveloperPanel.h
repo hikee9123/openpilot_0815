@@ -188,9 +188,12 @@ public:
    IsOpenpilotViewEnabledToggle();
 
 };
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  Combo box
+/*
 class CarSelectCombo : public AbstractControl 
 {
   Q_OBJECT
@@ -223,3 +226,4 @@ private:
   void refresh();
 };
 
+*/

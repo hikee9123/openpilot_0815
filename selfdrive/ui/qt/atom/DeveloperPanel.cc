@@ -222,9 +222,9 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   layout()->addWidget(horizontal_line());
 
 
-  CarSelectCombo *pCarSelectmenu = new CarSelectCombo();
-  layout()->addWidget( pCarSelectmenu );
-  layout()->addWidget( new CarSelectBtn(pCarSelectmenu) );
+  //CarSelectCombo *pCarSelectmenu = new CarSelectCombo();
+  //layout()->addWidget( pCarSelectmenu );
+  //layout()->addWidget( new CarSelectBtn(pCarSelectmenu) );
   
 }
 
@@ -742,6 +742,8 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
   hlayout->addWidget(&remote_hash);
 }
 
+
+/*
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  QComboBox
@@ -811,6 +813,7 @@ CarSelectCombo::CarSelectCombo() : AbstractControl("Car", "자동차 모델을 �
 
   refresh();
 }
+
 
 void CarSelectCombo::refresh() 
 {
@@ -889,3 +892,4 @@ void CarSelectBtn::refresh()
   btnminus.setText("－");
   btnplus.setText("＋");
 }
+*/
