@@ -10,7 +10,7 @@
 #include "selfdrive/logcatd/traffic_sign.h"
 
 
-int OnPaint::get_param( const std::string &key )ne
+int OnPaint::get_param( const std::string &key )
 {
     auto str = QString::fromStdString(Params().get( key ));
     int value = str.toInt();
