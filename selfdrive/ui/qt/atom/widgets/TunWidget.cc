@@ -100,17 +100,13 @@ void CTunWidget::FramePID(QWidget *parent)
 
   QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);
 
-  MenuControl *pMenu1 = new MenuControl( 
-    "OpkrMaxSteeringAngle",
-    "Driver to Steer Angle",
-    "mprove the edge between the driver and the openpilot.",
-    "../assets/offroad/icon_shell.png"    
-    );
-  pMenu1->SetControl( 10, 180, 5 );
-  menu_layout->addWidget( pMenu1 );
-
+  menu_layout->addWidget(new PidKp());
+  menu_layout->addWidget(new PidKi());
+  menu_layout->addWidget(new PidKd());
+  menu_layout->addWidget(new PidKf());
   
-   MenuControl *pMenu2 = new MenuControl( 
+  /*
+  MenuControl *pMenu2 = new MenuControl( 
     "OpkrMaxDriverAngleWait",
     "Driver to Steer",
     "Controls smooth torque by the driver  From OpkrMaxSteeringAngle. def:0.002(5sec)",
@@ -119,62 +115,51 @@ void CTunWidget::FramePID(QWidget *parent)
   pMenu2->SetControl( 0, 1, 0.001 );
   pMenu2->SetString( 0, "Not");
   menu_layout->addWidget( pMenu2 ); 
-
-
-   MenuControl *pMenu3 = new MenuControl( 
-    "OpkrMaxSteerAngleWait" ,
-    "Steer angle",
-    "Controls torque by steering angle From OpkrMaxSteeringAngle. def:0.001(10sec)",
-    "../assets/offroad/icon_shell.png"    
-    );
-  pMenu3->SetControl( 0, 1, 0.001 );
-  pMenu3->SetString( 0, "Not");
-  menu_layout->addWidget( pMenu3 ); 
-
-   MenuControl *pMenu4 = new MenuControl( 
-    "OpkrDriverAngleWait" ,
-    "Normal driver to Steer",
-    "Controls torque limitation due to normal driver handle intervention. def:0.001(10sec)",
-    "../assets/offroad/icon_shell.png"
-    );
-  pMenu4->SetControl( 0, 1, 0.001 );
-  pMenu4->SetString( 0, "Not");
-  menu_layout->addWidget( pMenu4 ); 
+*/
 
 }
 
 void CTunWidget::FrameINDI(QWidget *parent) 
 {
  // 1. layer#2 menu
-  QFrame  *pFrame = CreateFrame(1); 
+ // QFrame  *pFrame = CreateFrame(1); 
 
-  QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
-  MenuControl *pMenu1 = new MenuControl( 
-    "OpkrMaxAngleLimit",
-    "Max Steering Angle",
-    "Set the maximum steering angle of the handle where the openpilot is possible. Please note that some vehicles may experience errors if the angle is set above 90 degrees."
-    //"../assets/offroad/icon_chevron_right.png"    
-    );
-  pMenu1->SetControl( 80, 360, 10 );
-  pMenu1->SetString( 80, "NoLimit");
-  menu_layout->addWidget( pMenu1 );
+  //QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+  //menu_layout->addWidget(new InnerLoopGain());
+  //menu_layout->addWidget(new OuterLoopGain());
+  //menu_layout->addWidget(new TimeConstant());
+  //menu_layout->addWidget(new ActuatorEffectiveness());
 }
 
 
 void  CTunWidget::FrameLQR(QWidget *parent)
 {
-  QFrame  *pFrame = CreateFrame(2); 
+ // QFrame  *pFrame = CreateFrame(2); 
+  //QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+
+  //menu_layout->addWidget(new Scale());
+  //menu_layout->addWidget(new LqrKi());
+  //menu_layout->addWidget(new DcGain());   
 }
 
 
 void  CTunWidget::FrameTOROUE(QWidget *parent)
 {
-  QFrame  *pFrame = CreateFrame(3); 
+//  QFrame  *pFrame = CreateFrame(3); 
+ // QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+
+  //menu_layout->addWidget(new TorqueMaxLatAccel());
+  //menu_layout->addWidget(new TorqueKp());
+  //menu_layout->addWidget(new TorqueKf());
+  //menu_layout->addWidget(new TorqueKi());
+  //menu_layout->addWidget(new TorqueFriction());
+  //menu_layout->addWidget(new TorqueUseAngle());
 }
 
 void  CTunWidget::FrameHYBRID(QWidget *parent)
 {
-  QFrame  *pFrame = CreateFrame(4); 
+ // QFrame  *pFrame = CreateFrame(4); 
+ // QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
 
 }
 
