@@ -11,6 +11,8 @@
 #include "selfdrive/ui/qt/widgets/offroad_alerts.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
 
+#include "selfdrive/ui/qt/widgets/steerWidget.h"
+
 #include "common/params.h"
 #include "common/util.h"
 #include "selfdrive/ui/ui.h"
@@ -31,8 +33,10 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   layout->setSpacing(30);
 
   // OPKR
-  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
+  layout->addWidget(new CSteerWidget());  
+
 /*  
+  layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new CameraOffset());
   layout->addWidget(new PathOffset());
   layout->addWidget(new LiveSteerRatioToggle());
