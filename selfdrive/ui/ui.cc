@@ -190,8 +190,9 @@ static void update_state(UIState *s) {
     scene.pandaType = cereal::PandaState::PandaType::UNKNOWN;
   }
   if (sm.updated("carParams")) {
-    scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
-    scene.longitudinal_control |= sm["carParams"].getCarParams().getAtompilotLongitudinalControl();
+    scene.car_params = sm["carParams"].getCarParams()
+    scene.longitudinal_control = scene.car_params.getOpenpilotLongitudinalControl();
+    scene.longitudinal_control |= scene.car_params.getAtompilotLongitudinalControl();
   }
  // if (!scene.started && sm.updated("sensorEvents")) {
 
