@@ -83,9 +83,9 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
       method_label->setEnabled(offroad);
 
       if ( offroad )
-          method_label->setStyleSheet(R"(color:white; background:green)")
+          method_label->setStyleSheet(R"(color:white; background:green)");
       else
-          method_label->setStyleSheet(R"(color:white; background:gray)")
+          method_label->setStyleSheet(R"(color:white; background:gray)");
 
     //}
   });
