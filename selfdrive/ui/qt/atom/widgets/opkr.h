@@ -1039,6 +1039,8 @@ public:
     });
   }
 };
+
+
 /*
 class TorqueFriction : public AbstractControl {
   Q_OBJECT

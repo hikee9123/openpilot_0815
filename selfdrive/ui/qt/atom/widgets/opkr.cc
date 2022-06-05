@@ -4326,7 +4326,7 @@ void TorqueKp::refresh() {
 
 
   float valuef1 = Kp / max_lat_accel;
-  QString valuefs = QString::number(Kp) + "/" + QString::number(max_lat_accel) + "= " + QString::number(valuef1);
+  QString valuefs = QString::number(valuef1)   + "= " +  QString::number(Kp) + "/" + QString::number(max_lat_accel);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
@@ -4401,7 +4401,7 @@ void TorqueKf::refresh() {
 
 
   float valuef1 = Kf/max_lat_accel;
-  QString valuefs = QString::number(Kf) + "/" + QString::number(max_lat_accel) + "= " + QString::number(valuef1);
+  QString valuefs = QString::number(valuef1)   + "= " + QString::number(Kf) + "/" + QString::number(max_lat_accel);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
@@ -4475,7 +4475,7 @@ void TorqueKi::refresh() {
 
 
   float valuef1 = Ki/max_lat_accel;
-  QString valuefs = QString::number(Ki) + "/" + QString::number(max_lat_accel) + "= " + QString::number(valuef1);
+  QString valuefs = QString::number(valuef1)   + "= " +  QString::number(Ki) + "/" + QString::number(max_lat_accel);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
