@@ -26,6 +26,11 @@ class LatControlLQR(LatControl):
 
     self.reset()
 
+  def live_tune(self, CP):
+    self.scale = CP.lateralTuning.lqr.scale
+    self.ki = CP.lateralTuning.lqr.ki
+    self.dc_gain = CP.lateralTuning.lqr.dcGain    
+
   def reset(self):
     super().reset()
     self.i_lqr = 0.0

@@ -32,7 +32,11 @@ class LatCtrlToqATOM(LatControlTorque):
     self.friction = TORQUE.friction
     self.kf = TORQUE.kf
 
-
+  def live_tune_TORQUE(self, TORQUE):
+    self.pid = PIDController(TORQUE.kp, TORQUE.ki,
+                             k_f=TORQUE.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
+    self.friction = TORQUE.friction
+    self.kf = TORQUE.kf                             
 
 class LatCtrlLqrATOM(LatControlLQR):
   def __init__(self, CP, CI, LQR):
@@ -60,6 +64,10 @@ class LatCtrlLqrATOM(LatControlLQR):
 
     self.reset()
 
+def live_tune_LQR(self, LQR):    
+    self.scale = LQR.scale
+    self.ki = LQR.ki
+    self.dc_gain = LQR.dcGain    
 
 class LatCtrlPIDMULTI(LatControlPID):
   def __init__(self, CP, CI, PID):
@@ -76,12 +84,18 @@ class LatCtrlPIDMULTI(LatControlPID):
 
     self.get_steer_feedforward = CI.get_steer_feedforward_function()
 
+  def live_tune_PID(self, PID):
+     self.pid = PIDController((PID.kpBP, PID.kpV),
+                             (PID.kiBP, PID.kiV),
+                             k_f=PID.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)   
+
 
 class LatControlATOM(LatControl):
   def __init__(self, CP, CI):
     super().__init__(CP, CI)
 
     self.CP = CP
+    self.CI = CI
     self.lqr = CP.lateralTuning.atom.lqr
     self.torque = CP.lateralTuning.atom.torque
     self.pid1 = CP.lateralTuning.atom.pid
@@ -100,6 +114,15 @@ class LatControlATOM(LatControl):
     for BP in methodConfigs:
       self.lat_funs.append( self.methodFunc( BP ) )
       self.lat_params.append( BP.methodParam )
+
+  def live_tune(self, CP):
+    self.lqr = CP.lateralTuning.atom.lqr
+    self.torque = CP.lateralTuning.atom.torque
+    self.pid1 = CP.lateralTuning.atom.pid
+
+    self.LaLqr.live_tune_LQR( self.lqr )
+    self.LaToq.live_tune_TORQUE(  self.torque )
+    self.LaPid.live_tune_PID( self.pid1 )
 
 
   def methodFunc(self, BP ):
