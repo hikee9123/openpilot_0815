@@ -4291,8 +4291,8 @@ TorqueKp::TorqueKp() : AbstractControl("Kp", "Adjust Kp def:1.0") {
 
     float value = str.toDouble();
     value += -0.1;
-    if (value < 1) {
-      value = 1;
+    if (value < 0.5) {
+      value = 0.5;
     }
     QString values = QString::number(value);
     params.put("TorqueKp", values.toStdString());
@@ -4365,8 +4365,8 @@ TorqueKf::TorqueKf() : AbstractControl("Kf", "Adjust Kf  def:1.0", "../assets/of
     float value = str.toDouble();
 
     value -= 0.1;
-    if (value < 1) {
-      value = 1;
+    if (value < 0.5) {
+      value = 0.5;
     }
 
     QString values = QString::number(value);
@@ -4438,9 +4438,9 @@ TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1", "../assets/of
     auto str = QString::fromStdString(params.get("TorqueKi"));
     float value = str.toDouble();
 
-    value -= 0.1;
-    if (value < 1) {
-      value = 1;
+    value -= 0.01;
+    if (value < 0.01) {
+      value = 0.01;
     }
     QString values = QString::number(value);
     params.put("TorqueKi", values.toStdString());
@@ -4454,7 +4454,7 @@ TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1", "../assets/of
     float value = str.toDouble();
     float max_lat_accel = str1.toDouble();
 
-    value += 0.1;
+    value += 0.01;
     if (value > max_lat_accel) {
       value = max_lat_accel;
     }
