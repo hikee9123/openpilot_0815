@@ -33,6 +33,9 @@ class AbstractControl : public QFrame {
   Q_OBJECT
 
 public:
+  AbstractControl(const QString &title, const QString &desc = "", const QString &icon = "", QWidget *parent = nullptr);
+
+public:
   void setDescription(const QString &desc) {
     if (description) description->setText(desc);
   }
@@ -45,7 +48,6 @@ signals:
   void showDescription();
 
 protected:
-  AbstractControl(const QString &title, const QString &desc = "", const QString &icon = "", QWidget *parent = nullptr);
   void hideEvent(QHideEvent *e) override;
 
   QHBoxLayout *hlayout;

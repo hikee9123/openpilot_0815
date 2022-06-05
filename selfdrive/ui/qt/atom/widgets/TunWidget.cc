@@ -224,10 +224,10 @@ void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
       box_layout = CreateBoxLayout(LID_HYBRID);
 
 
-  box_layout->addWidget(new AbstractControl("[2.LQR]","","../assets/offroad/icon_shell.png"));
+  box_layout->addWidget(new AbstractControl("[2.LQR]","lqr","../assets/offroad/icon_shell.png"));
   FrameLQR( box_layout );
 
-  box_layout->addWidget(new AbstractControl("[3.TORQUE]","","../assets/offroad/icon_shell.png"));
+  box_layout->addWidget(new AbstractControl("[3.TORQUE]","torque","../assets/offroad/icon_shell.png"));
   FrameTOROUE(  box_layout );
 }
 
