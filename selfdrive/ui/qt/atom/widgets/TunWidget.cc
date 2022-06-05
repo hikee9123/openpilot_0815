@@ -94,7 +94,7 @@ CTunWidget::~CTunWidget()
 
 void CTunWidget::FramePID(QWidget *parent) 
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(0);
+  QVBoxLayout *box_layout = CreateBoxLayout(LID_PID);
 
   box_layout->addWidget(new PidKp());
   box_layout->addWidget(new PidKi());
@@ -118,7 +118,7 @@ void CTunWidget::FramePID(QWidget *parent)
 void CTunWidget::FrameINDI(QWidget *parent) 
 {
  // 1. layer#2 menu
-  QVBoxLayout *box_layout = CreateBoxLayout(1);
+  QVBoxLayout *box_layout = CreateBoxLayout(LID_INDI);
 
   box_layout->addWidget(new InnerLoopGain());
   box_layout->addWidget(new OuterLoopGain());
@@ -129,7 +129,7 @@ void CTunWidget::FrameINDI(QWidget *parent)
 
 void  CTunWidget::FrameLQR(QWidget *parent)
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(2);
+  QVBoxLayout *box_layout = CreateBoxLayout(LID_LQR);
 
   box_layout->addWidget(new Scale());
   box_layout->addWidget(new LqrKi());
@@ -139,7 +139,7 @@ void  CTunWidget::FrameLQR(QWidget *parent)
 
 void  CTunWidget::FrameTOROUE(QWidget *parent)
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(3);
+  QVBoxLayout *box_layout = CreateBoxLayout(LID_TOROUE);
 
 
   box_layout->addWidget(new TorqueMaxLatAccel());
@@ -152,9 +152,7 @@ void  CTunWidget::FrameTOROUE(QWidget *parent)
 
 void  CTunWidget::FrameHYBRID(QWidget *parent)
 {
- // QFrame  *pFrame = CreateFrame(4); 
- // QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
-  QVBoxLayout *box_layout = CreateBoxLayout(4);
+  QVBoxLayout *box_layout = CreateBoxLayout(LID_HYBRID);
 
   box_layout->addWidget(new LabelControl("[LQR]"));
   box_layout->addWidget(new Scale());
@@ -195,7 +193,7 @@ QVBoxLayout *CTunWidget::CreateBoxLayout( int nID )
 
 void  CTunWidget::FrameHide( int nID )
 {
-  for( int i = 0; i<10; i++ )
+  for( int i = 0; i<LID_ALL; i++ )
   {
     if( nID >= 0 && i != nID ) continue; 
     if( m_pChildFrame[i] )
@@ -206,7 +204,7 @@ void  CTunWidget::FrameHide( int nID )
 
 void  CTunWidget::FrameShow( int nID )
 {
-  for( int i = 0; i<10; i++ )
+  for( int i = 0; i<LID_ALL; i++ )
   {
     if( i != nID ) continue;
     if( m_pChildFrame[i] )

@@ -22,6 +22,15 @@ public:
   explicit CTunWidget(QWidget *parent = 0);
   ~CTunWidget();
 
+  enum LayoutID {
+    LID_PID = 0,
+    LID_INDI,
+    LID_LQR,
+    LID_TOROUE,
+    LID_HYBRID,
+    LID_ALL,
+  };
+
 private:
   void showEvent(QShowEvent *event) override;
   void hideEvent(QHideEvent *event) override;
@@ -58,7 +67,10 @@ private:
   int    m_nMethod;
   int    m_bShow;
 
-   QFrame *m_pChildFrame[10];
+
+
+
+   QFrame *m_pChildFrame[LID_ALL];
 
 
 };
