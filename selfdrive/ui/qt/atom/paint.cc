@@ -935,11 +935,11 @@ void OnPaint::ui_tunning_data( QPainter &p )
   //p.drawText( bb_x, bb_y+120, text4 );
 
 
-  cereal::CarParams::lateralTuning::Reader  lateralTuning;
-  cereal::CarParams::LateralTorqueTuning::Reader  torque;
+ // cereal::CarParams::lateralTuning::Reader  lateralTuning;
+ // cereal::CarParams::LateralTorqueTuning::Reader  torque;
 
-  lateralTuning = scene->car_params.getLateralTuning();
-  torque  = lateralTuning.getTorque();
+  auto lateralTuning = scene->car_params.getLateralTuning();
+  auto torque  = lateralTuning.getTorque();
 
   QString tuning = lateralTuning.which();
   text4 = "tuning = " + tuning;
