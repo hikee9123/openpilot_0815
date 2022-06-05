@@ -196,7 +196,7 @@ static void update_state(UIState *s) {
     scene.longitudinal_control = scene.car_params.getOpenpilotLongitudinalControl();
     scene.longitudinal_control |= scene.car_params.getAtompilotLongitudinalControl();
 
-    printf("carParams  %d\n", scene.longitudinal_control );  
+    //printf("carParams  %d\n", scene.longitudinal_control );  
   }
 
 
@@ -311,8 +311,8 @@ static void update_state(UIState *s) {
 
     scene.update_data = sm["updateEvents"].getUpdateEvents();
 
-    int nCmd = scene.update_data.getCommand();
-    printf("updateEvents cmd = %d", nCmd );
+    //int nCmd = scene.update_data.getCommand();
+    //printf("updateEvents cmd = %d", nCmd );
   }
 
 }

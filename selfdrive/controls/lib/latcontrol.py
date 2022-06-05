@@ -19,6 +19,9 @@ class LatControl(ABC):
   def update(self, active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk):
     pass
 
+  def live_tune(self, CP):
+    pass
+
   def reset(self):
     self.sat_count = 0.
 

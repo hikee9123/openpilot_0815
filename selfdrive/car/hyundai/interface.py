@@ -21,7 +21,7 @@ class CarInterface(CarInterfaceBase):
 
 
   @staticmethod
-  def get_tun_params( tune ):
+  def get_tunning_params( tune ):
     method = update_lat_tune_patam( tune.lateralTuning )
     if method == TunType.LAT_DEFAULT:
       set_lat_tune(tune.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=tune.maxLateralAccel, FRICTION=0.01)
@@ -95,7 +95,7 @@ class CarInterface(CarInterfaceBase):
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
       #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      CarInterface.get_tun_params( ret )
+      CarInterface.get_tunning_params( ret )
       #method = update_lat_tune_patam( ret.lateralTuning )
       #if method == TunType.LAT_DEFAULT:
       #  set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)

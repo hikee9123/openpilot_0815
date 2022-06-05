@@ -59,7 +59,7 @@ class CarInterfaceBase(ABC):
     pass
 
   @staticmethod
-  def get_tun_params( tune ):
+  def get_tunning_params( tune ):
     pass  
 
   @staticmethod

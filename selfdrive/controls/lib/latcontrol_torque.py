@@ -42,6 +42,10 @@ class LatControlTorque(LatControl):
     self.friction = CP.lateralTuning.torque.friction
     self.kf = CP.lateralTuning.torque.kf
 
+  def live_tune(self, CP):
+    pass
+
+
   def reset(self):
     super().reset()
     self.pid.reset()

@@ -849,7 +849,7 @@ class Controls:
       self.pm.send('carEvents', ce_send)
     self.events_prev = self.events.names.copy()
 
-    # carParams - logged every 50 seconds (> 1 per segment)
+    # updateEvents  carParams update
     updateEvents = self.sm['updateEvents']
     update_command = False
     if updateEvents.version == 1:
@@ -858,10 +858,10 @@ class Controls:
         self.update_command = updateEvents.command
         update_command = True
         print( updateEvents )        
-        self.CI.get_tun_params( self.CP )        
+        self.CI.get_tunning_params( self.CP )
+        self.LaC.live_tune( self.CP )
 
-        
- 
+     # carParams - logged every 50 seconds (> 1 per segment)
     if update_command or (self.sm.frame % int(50. / DT_CTRL) == 0):
       cp_send = messaging.new_message('carParams')
       cp_send.carParams = self.CP
