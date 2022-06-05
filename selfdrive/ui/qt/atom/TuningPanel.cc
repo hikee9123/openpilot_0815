@@ -19,7 +19,7 @@
 #include "selfdrive/ui/ui.h"
 
 
-#include "Tuning/opkr.h"
+#include "widgets/opkr.h"
 
 #include "TuningPanel.h"
 
@@ -37,10 +37,9 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
 
   // OPKR
   main_layout->addWidget(new CSteerWidget());  
-  main_layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   main_layout->addWidget(new CTunWidget());  
   //main_layout->addWidget(new CTunWidget());  
-  main_layout->addWidget(horizontal_line());
+  //main_layout->addWidget(horizontal_line());
 /*  
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new CameraOffset());

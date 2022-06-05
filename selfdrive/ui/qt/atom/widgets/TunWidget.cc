@@ -5,13 +5,14 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
+#include "TunWidget.h"
 
-
+#include "opkr.h"
 
 CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent) 
 {
   m_bShow = 0;
+  memset( m_pChildFrame, NULL, sizeof(m_pChildFrame) );
 
   auto str = QString::fromStdString( params.get("OpkrLateralControlMethod") );
   int value = str.toInt();
@@ -74,8 +75,11 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   main_layout->addLayout(hlayout);
 
 
-  FrameSmooth( parent );
-  FrameNormal( parent );
+  FramePID( parent );
+  FrameINDI( parent );
+  FrameLQR( parent );
+  FrameTOROUE( parent );
+  FrameHYBRID( parent );
 
 
   main_layout->addStretch();
@@ -88,28 +92,13 @@ CTunWidget::~CTunWidget()
 }
 
 
-void CTunWidget::FrameSmooth(QWidget *parent) 
+void CTunWidget::FramePID(QWidget *parent) 
 {
  // 1. layer#1 menu
-  m_pChildFrame1 = new QFrame(); 
-  m_pChildFrame1->setContentsMargins(40, 10, 40, 50);
-  m_pChildFrame1->setStyleSheet(R"(
-    * {
-      padding: 0;
-      border-radius: 50px;
-      font-size: 35px;
-      font-weight: 500;
-      color: #E4E4E4;
-      background-color: black;
-    } 
-  )");
-  
-  main_layout->addWidget(m_pChildFrame1);
+  QFrame  *pFrame = CreateFrame(0); 
 
 
-  QVBoxLayout *menu_layout = new QVBoxLayout(m_pChildFrame1);
- // menu_layout->setContentsMargins(32, 5, 32, 32);
-
+  QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);
 
   MenuControl *pMenu1 = new MenuControl( 
     "OpkrMaxSteeringAngle",
@@ -154,12 +143,48 @@ void CTunWidget::FrameSmooth(QWidget *parent)
 
 }
 
-void CTunWidget::FrameNormal(QWidget *parent) 
+void CTunWidget::FrameINDI(QWidget *parent) 
 {
  // 1. layer#2 menu
-  m_pChildFrame2 = new QFrame(); 
-  m_pChildFrame2->setContentsMargins(40, 10, 40, 50);
-  m_pChildFrame2->setStyleSheet(R"(
+  QFrame  *pFrame = CreateFrame(1); 
+
+  QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+  MenuControl *pMenu1 = new MenuControl( 
+    "OpkrMaxAngleLimit",
+    "Max Steering Angle",
+    "Set the maximum steering angle of the handle where the openpilot is possible. Please note that some vehicles may experience errors if the angle is set above 90 degrees."
+    //"../assets/offroad/icon_chevron_right.png"    
+    );
+  pMenu1->SetControl( 80, 360, 10 );
+  pMenu1->SetString( 80, "NoLimit");
+  menu_layout->addWidget( pMenu1 );
+}
+
+
+void  CTunWidget::FrameLQR(QWidget *parent)
+{
+  QFrame  *pFrame = CreateFrame(2); 
+}
+
+
+void  CTunWidget::FrameTOROUE(QWidget *parent)
+{
+  QFrame  *pFrame = CreateFrame(3); 
+}
+
+void  CTunWidget::FrameHYBRID(QWidget *parent)
+{
+  QFrame  *pFrame = CreateFrame(4); 
+
+}
+
+
+QFrame *CTunWidget::CreateFrame( int nID )
+{
+  QFrame  *pFrame = new QFrame(); 
+  m_pChildFrame[nID] = pFrame;
+  pFrame->setContentsMargins(40, 10, 40, 50);
+  pFrame->setStyleSheet(R"(
     * {
       padding: 0;
       border-radius: 50px;
@@ -170,17 +195,30 @@ void CTunWidget::FrameNormal(QWidget *parent)
     } 
   )");
   
-  main_layout->addWidget(m_pChildFrame2);
-  QVBoxLayout *menu_layout = new QVBoxLayout(m_pChildFrame2);  
-  MenuControl *pMenu1 = new MenuControl( 
-    "OpkrMaxAngleLimit",
-    "Max Steering Angle",
-    "Set the maximum steering angle of the handle where the openpilot is possible. Please note that some vehicles may experience errors if the angle is set above 90 degrees."
-    //"../assets/offroad/icon_chevron_right.png"    
-    );
-  pMenu1->SetControl( 80, 360, 10 );
-  pMenu1->SetString( 80, "NoLimit");
-  menu_layout->addWidget( pMenu1 );
+  main_layout->addWidget(pFrame);
+
+  return  pFrame;
+}
+
+void  CTunWidget::FrameHide( int nID )
+{
+  for( int i = 0; i<10; i++ )
+  {
+    if( nID >= 0 && i != nID ) continue; 
+    if( m_pChildFrame[i] )
+      m_pChildFrame[i]->hide();
+  }
+}
+
+
+void  CTunWidget::FrameShow( int nID )
+{
+  for( int i = 0; i<10; i++ )
+  {
+    if( i != nID ) continue;
+    if( m_pChildFrame[i] )
+      m_pChildFrame[i]->show();
+  }
 }
 
 
@@ -216,27 +254,14 @@ void CTunWidget::refresh()
 
   if(  m_bShow == 0 )
   {
-    // pmyWidget->setVisible(false);
-    m_pChildFrame1->hide();
-    m_pChildFrame2->hide();
+    FrameHide();
     icon_label->setPixmap(pix_plus);
   }
   else
   {
-     if( m_nMethod == 0 )
-     {
-       m_pChildFrame2->show();
-        m_pChildFrame1->hide();
-     }
-     else
-     {
-       m_pChildFrame1->show();
-       m_pChildFrame2->hide();
-     }
-
-    
+    FrameHide();
+    FrameShow( m_nMethod );
     icon_label->setPixmap(pix_minus);
-    //pmyWidget->setVisible(true);
   }
 
 }

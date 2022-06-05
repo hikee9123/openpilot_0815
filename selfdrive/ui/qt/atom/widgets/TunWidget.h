@@ -31,8 +31,15 @@ public slots:
 
 
 private:
-  void  FrameSmooth(QWidget *parent);
-  void  FrameNormal(QWidget *parent);
+  void  FramePID(QWidget *parent);
+  void  FrameINDI(QWidget *parent);
+  void  FrameLQR(QWidget *parent);
+  void  FrameTOROUE(QWidget *parent);
+  void  FrameHYBRID(QWidget *parent);
+
+  void  FrameHide( int nID = -1 );
+  void  FrameShow( int nID );
+  QFrame *CreateFrame( int nID );
 
  private:
   Params params; 
@@ -51,7 +58,8 @@ private:
   int    m_nMethod;
   int    m_bShow;
 
-   QFrame *m_pChildFrame1;
-   QFrame *m_pChildFrame2;
+   QFrame *m_pChildFrame[10];
+
+
 };
 
