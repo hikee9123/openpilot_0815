@@ -36,7 +36,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
 
   // OPKR
   layout->addWidget(new CSteerWidget());  
- // layout->addWidget(new CTunWidget());  
+  layout->addWidget(new CTunWidget());  
   
 
 /*  
