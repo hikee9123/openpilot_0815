@@ -51,6 +51,9 @@ private:
   void  FrameShow( int nID );
   QVBoxLayout *CreateBoxLayout( int nID );
 
+  void  ConfirmButton(QVBoxLayout *parent);
+
+  
  private:
   Params params; 
   QLabel *icon_label;

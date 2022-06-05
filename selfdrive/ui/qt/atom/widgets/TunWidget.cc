@@ -86,6 +86,17 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   FrameHYBRID();
 
 
+  main_layout->addStretch();
+  refresh();
+}
+
+CTunWidget::~CTunWidget()
+{
+
+}
+
+void CTunWidget::ConfirmButton(QVBoxLayout *parent) 
+{
   QPushButton* confirm_btn = new QPushButton("confirm");
   // confirm_btn->setFixedHeight(120);
   confirm_btn->setStyleSheet(R"(
@@ -100,19 +111,13 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
       text-align: left;
     }
   )");  
-  main_layout->addWidget(confirm_btn);
-  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() {
+  parent->addWidget(confirm_btn);
+
+  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
+  {
     m_bShow = 0;
     refresh();
-  });  
-
-  main_layout->addStretch();
-  refresh();
-}
-
-CTunWidget::~CTunWidget()
-{
-
+  });
 }
 
 
@@ -163,6 +168,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
   box_layout->addWidget( pMenu2 ); 
 */
 
+  ConfirmButton( box_layout );
 }
 
 void CTunWidget::FrameINDI(QVBoxLayout *parent) 
@@ -207,6 +213,8 @@ void  CTunWidget::FrameLQR(QVBoxLayout *parent)
     );
   pGain->SetControl( 0.0010, 0.0050, 0.0001 );
   box_layout->addWidget( pGain ); 
+
+  ConfirmButton( box_layout );
 }
 
 
@@ -238,6 +246,8 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
   box_layout->addWidget(new TorqueKf());
   box_layout->addWidget(new TorqueKi());
   box_layout->addWidget(new TorqueUseAngle());
+
+  ConfirmButton( box_layout );
 }
 
 void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
