@@ -81,7 +81,6 @@ def manager_init() -> None:
     params.delete("DisableRadar")
 
   # set unset params
-
   for k, v in default_params:
     try:      
       if params.get(k) is None:
