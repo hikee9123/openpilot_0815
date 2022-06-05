@@ -69,7 +69,17 @@ def manager_init() -> None:
     ("OpkrMaxSteeringAngle", "85"),
     ("OpkrMaxDriverAngleWait", "0.002"),
     ("OpkrMaxSteerAngleWait", "0.001"),
-    ("OpkrDriverAngleWait", "0.001"),    
+    ("OpkrDriverAngleWait", "0.001"),
+    
+    # Tunning
+    ("OpkrLateralControlMethod", "3"),
+    # Torque
+    ("TorqueMaxLatAccel", "3"),
+    ("TorqueKp", "1.0"),
+    ("TorqueKf", "1.0"),
+    ("TorqueKi", "0.1"),
+    ("TorqueFriction","0"),    
+    ("TorqueUseAngle", "1"),
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))

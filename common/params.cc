@@ -212,7 +212,14 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrDriverAngleWait", PERSISTENT},
     
     {"OpkrLateralControlMethod", PERSISTENT},
-    
+   // Torque
+    {"TorqueMaxLatAccel", PERSISTENT},
+    {"TorqueFriction", PERSISTENT},
+    {"TorqueKp", PERSISTENT},
+    {"TorqueKf", PERSISTENT},
+    {"TorqueKi", PERSISTENT},
+    {"TorqueKi", PERSISTENT},
+    {"TorqueUseAngle", PERSISTENT},
 };
 
 } // namespace

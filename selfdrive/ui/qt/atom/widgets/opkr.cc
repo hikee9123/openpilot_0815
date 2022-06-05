@@ -4256,6 +4256,7 @@ void DcGain::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
+// Torque
 TorqueKp::TorqueKp() : AbstractControl("Kp", "Adjust Kp def:1.0") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -4466,8 +4467,8 @@ TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1", "../assets/of
 }
 
 void TorqueKi::refresh() {
-  auto strs = QString::fromStdString(params.get("TorqueKi"));
-  auto strs1 = QString::fromStdString(params.get("TorqueMaxLatAccel"));
+  auto strs = QString::fromStdString( params.get("TorqueKi") );
+  auto strs1 = QString::fromStdString( params.get("TorqueMaxLatAccel") );
 
   float max_lat_accel = strs1.toDouble();
   float Ki = strs.toDouble();
