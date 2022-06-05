@@ -152,8 +152,7 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
   MenuControl *pMaxLat = new MenuControl( 
     "TorqueMaxLatAccel",
     "MaxLatAccel",
-    "Adjust MaxLatAccel def:3",
-    "../assets/offroad/icon_shell.png"    
+    "Adjust MaxLatAccel def:3"
     );
   pMaxLat->SetControl( 1, 5, 0.1 );
   box_layout->addWidget( pMaxLat ); 
@@ -165,9 +164,8 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
 
    MenuControl *pTorqFriction = new MenuControl( 
     "TorqueFriction",
-    "MaxLatAccel",
-    "Adjust MaxLatAccel def:3",
-    "../assets/offroad/icon_shell.png"    
+    "Friction",
+    "Adjust Friction def:0.01"
     );
    pTorqFriction->SetControl( 0, 0.1, 0.001 ); 
    box_layout->addWidget( pTorqFriction );
