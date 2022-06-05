@@ -10,7 +10,7 @@
 #include "selfdrive/logcatd/traffic_sign.h"
 
 
-int OnPaint::get_param( const std::string &key )
+int OnPaint::get_param( const std::string &key )ne
 {
     auto str = QString::fromStdString(Params().get( key ));
     int value = str.toInt();
@@ -913,7 +913,7 @@ void OnPaint::ui_draw_debug1( QPainter &p )
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
 
 
-  int nCmd = scene->update_Event.getCommand();
+  int nCmd = scene->update_data.getCommand();
   QString text4;
 
   text4.sprintf("Cmd = %d", nCmd);

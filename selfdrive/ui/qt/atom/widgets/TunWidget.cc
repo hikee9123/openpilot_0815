@@ -106,11 +106,11 @@ void CTunWidget::closeSettings()
 //  }
     m_nCommand++;
     MessageBuilder msg;
-    auto update_events = msg.initEvent().initUpdateEvents();
+    auto update_data = msg.initEvent().initUpdateEvents();
 
-    update_events.setVersion(1);
-    update_events.setType( m_nMethod );    
-    update_events.setCommand( m_nCommand );
+    update_data.setVersion(1);
+    update_data.setType( m_nMethod );    
+    update_data.setCommand( m_nCommand );
 
     pm->send("updateEvents", msg);
 

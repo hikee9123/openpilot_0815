@@ -305,9 +305,9 @@ static void update_state(UIState *s) {
 
   if ( sm.updated("updateEvents")) {
 
-    update_Event = sm["updateEvents"].getUpdateEvents();
+    update_data = sm["updateEvents"].getUpdateEvents();
 
-    int nCmd = update_Event.getCommand();
+    int nCmd = update_data.getCommand();
     printf("cmd = %d", nCmd );
   }
 
