@@ -11,7 +11,7 @@
 #include "selfdrive/ui/qt/widgets/offroad_alerts.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
 
-#include "selfdrive/ui/qt/widgets/steerWidget.h"
+#include "selfdrive/ui/qt/atom/widgets/steerWidget.h"
 
 #include "common/params.h"
 #include "common/util.h"
