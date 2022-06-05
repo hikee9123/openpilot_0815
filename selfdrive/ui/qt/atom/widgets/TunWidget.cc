@@ -15,6 +15,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   m_nCommand = 0;
   memset( m_pChildFrame, 0, sizeof(m_pChildFrame) );
 
+  pm = new PubMaster({"updateEvents"});
 
   QString str_param = "OpkrLateralControlMethod";
 
@@ -103,16 +104,18 @@ void CTunWidget::closeSettings()
 //  if (uiState()->scene.started) {
 //    homeWindow->showSidebar(false);
 //  }
+    m_nCommand++;
 
-    PubMaster pm({"updateEvents"});
+    //PubMaster pm({"updateEvents"});
 
     MessageBuilder msg;
-    auto update_events = msg.initEvent().initUpdateEvents();
+    auto update_events = msg.initEvent().initUpdateEvents(1);
     update_events.setVersion(1);
     update_events.setCommand( m_nCommand );
     update_events.setType( m_nMethod );
 
-    pm.send("updateEvents", msg);
+
+    pm->send("updateEvents", msg);
 
     m_bShow = 0;
     refresh();
@@ -137,7 +140,7 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
   //  refresh();
   //});
 
-  QObject::connect(confirm_btn, &QPushButton::clicked, parent, &CTunWidget::closeSettings);
+  QObject::connect(confirm_btn, &QPushButton::clicked, this, &CTunWidget::closeSettings);
 }
 
 
