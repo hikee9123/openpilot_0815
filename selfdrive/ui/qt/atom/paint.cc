@@ -930,8 +930,8 @@ void OnPaint::ui_tunning_data( QPainter &p )
   p.drawText( bb_x, bb_y+100, text4 );
 
 
-  QString  carName = scene->car_params.getCarName();
-  text4.sprintf("car Name = %s", carName ;
+
+  text4.sprintf("car Name = %s", scene->car_params.getCarName() ;
   p.drawText( QRect(bb_x, bb_y+120, bb_w, 42), text4, textOpt );
 
   QString tuning = scene->car_params.lateralTuning.getWhich();
@@ -950,3 +950,4 @@ void OnPaint::ui_main_navi( QPainter &p )
   ui_tunning_data( p );
 
 }
+
