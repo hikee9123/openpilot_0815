@@ -30,8 +30,8 @@
 TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
-  layout->setContentsMargins(50, 0, 50, 0);
-  layout->setSpacing(30);
+ // layout->setContentsMargins(50, 0, 50, 0);
+//  layout->setSpacing(30);
 
   // OPKR
   layout->addWidget(new CSteerWidget());  

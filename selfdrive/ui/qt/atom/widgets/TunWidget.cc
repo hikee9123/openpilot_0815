@@ -15,7 +15,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
 
   auto str = QString::fromStdString( params.get("OpkrLateralControlMethod") );
   int value = str.toInt();
-  m_nSelect = value; 
+  m_nMethod = value; 
 
   main_layout = new QVBoxLayout(this);
   main_layout->setMargin(0);
@@ -62,11 +62,11 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   method_label->setFixedSize( 500, 100);
   hlayout->addWidget(method_label);
   connect(method_label, &QPushButton::clicked, [=]() {
-    m_nSelect += 1;
-    if( m_nSelect > 5 )
-      m_nSelect = 0;
+    m_nMethod += 1;
+    if( m_nMethod > 5 )
+      m_nMethod = 0;
 
-    QString values = QString::number(m_nSelect);
+    QString values = QString::number(m_nMethod);
     params.put("OpkrSteerMethod", values.toStdString());      
     refresh();
   });
@@ -199,7 +199,7 @@ void CTunWidget::refresh()
 {
   QString str;
 
-  switch( m_nSelect )
+  switch( m_nMethod )
   {
     case 0 : str = "0.PID"; break;
     case 1 : str = "1.INDI"; break;
@@ -223,7 +223,7 @@ void CTunWidget::refresh()
   }
   else
   {
-     if( m_nSelect == 0 )
+     if( m_nMethod == 0 )
      {
        m_pChildFrame2->show();
         m_pChildFrame1->hide();
