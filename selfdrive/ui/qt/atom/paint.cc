@@ -914,9 +914,12 @@ void OnPaint::ui_draw_debug1( QPainter &p )
 
 
   int nCmd = scene->update_data.getCommand();
+  int nType = scene->update_data.getType();
+  int nVersion = scene->update_data.getVersion();
+
   QString text4;
 
-  text4.sprintf("Cmd = %d", nCmd);
+  text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
   p.drawText( QRect(bb_x, 100, bb_w, 42), text4, textOpt );
 
 }

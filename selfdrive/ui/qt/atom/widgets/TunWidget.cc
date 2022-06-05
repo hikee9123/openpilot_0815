@@ -104,18 +104,18 @@ void CTunWidget::closeSettings()
 //  if (uiState()->scene.started) {
 //    homeWindow->showSidebar(false);
 //  }
-    m_nCommand++;
-    MessageBuilder msg;
-    auto update_data = msg.initEvent().initUpdateEvents();
+//    m_nCommand++;
+//    MessageBuilder msg;
+//    auto update_data = msg.initEvent().initUpdateEvents();
 
-    update_data.setVersion(1);
-    update_data.setType( m_nMethod );    
-    update_data.setCommand( m_nCommand );
+//    update_data.setVersion(1);
+//    update_data.setType( m_nMethod );    
+//    update_data.setCommand( m_nCommand );
 
-    pm->send("updateEvents", msg);
+ //   pm->send("updateEvents", msg);
 
-    m_bShow = 0;
-    refresh();
+  //  m_bShow = 0;
+ //   refresh();
 }
 
 
