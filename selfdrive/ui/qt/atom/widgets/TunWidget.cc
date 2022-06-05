@@ -98,10 +98,34 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
   if( parent == nullptr )
       box_layout = CreateBoxLayout(LID_PID);
 
-  box_layout->addWidget(new PidKp());
-  box_layout->addWidget(new PidKi());
-  box_layout->addWidget(new PidKd());
-  box_layout->addWidget(new PidKf());
+  MenuControl *pKp = new MenuControl( 
+    "PidKp",
+    "Kp",
+    "Adjust Kp def:0.25"
+    );
+  pKp->SetControl( 0.1, 1, 0.001 );
+  box_layout->addWidget( pKp );          
+
+  MenuControl *pKi = new MenuControl( 
+    "PidKi",
+    "Ki",
+    "Adjust Ki def:0.05"
+    );
+  pKi->SetControl( 0.0, 0.1, 0.001 );
+  box_layout->addWidget( pKi );
+
+  MenuControl *pKf = new MenuControl( 
+    "PidKf",
+    "Kf",
+    "Adjust Kf def:0.00005"
+    );
+  pKf->SetControl( 0.0, 0.1, 0.00001 );
+  box_layout->addWidget( pKf );
+
+  //box_layout->addWidget(new PidKp());
+  //box_layout->addWidget(new PidKi());
+  //box_layout->addWidget(new PidKd());
+  //box_layout->addWidget(new PidKf());
   
   /*
   MenuControl *pMenu2 = new MenuControl( 
@@ -136,9 +160,33 @@ void  CTunWidget::FrameLQR(QVBoxLayout *parent)
   if( parent == nullptr )  
      box_layout = CreateBoxLayout(LID_LQR);
 
-  box_layout->addWidget(new Scale());
-  box_layout->addWidget(new LqrKi());
-  box_layout->addWidget(new DcGain());   
+  MenuControl *pScale = new MenuControl( 
+    "LqrScale",
+    "Scale",
+    "Adjust Scale def:2000"
+    );
+  pScale->SetControl( 1000, 5000, 50 );
+  box_layout->addWidget( pScale );      
+
+  MenuControl *pKi = new MenuControl( 
+    "LqrKi",
+    "Ki",
+    "LqrKi Scale def:0.01"
+    );
+  pKi->SetControl( 0.0, 1, 0.001 );
+  box_layout->addWidget( pKi ); 
+
+  MenuControl *pGain = new MenuControl( 
+    "LqrDcGain",
+    "DcGain",
+    "DcGain Scale def:0.0030"
+    );
+  pGain->SetControl( 0.0010, 0.0050, 0.0001 );
+  box_layout->addWidget( pGain );   
+
+  //box_layout->addWidget(new Scale());
+  //box_layout->addWidget(new LqrKi());
+ // box_layout->addWidget(new DcGain());   
 }
 
 

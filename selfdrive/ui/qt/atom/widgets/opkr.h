@@ -817,6 +817,7 @@ private:
   void refresh();
 };
 
+/*
 class PidKp : public AbstractControl {
   Q_OBJECT
 
@@ -876,7 +877,7 @@ private:
   
   void refresh();
 };
-
+*/
 
 class OuterLoopGain : public AbstractControl {
   Q_OBJECT
@@ -938,6 +939,7 @@ private:
   void refresh();
 };
 
+/*
 class Scale : public AbstractControl {
   Q_OBJECT
 
@@ -982,7 +984,7 @@ private:
   
   void refresh();
 };
-
+*/
 class TorqueKp : public AbstractControl {
   Q_OBJECT
 

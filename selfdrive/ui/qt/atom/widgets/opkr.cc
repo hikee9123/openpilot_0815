@@ -3567,6 +3567,7 @@ void LateralControl::refresh()
   label.setText( str );
 }
 
+/*
 PidKp::PidKp() : AbstractControl("Kp", "Adjust Kp", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -3818,6 +3819,7 @@ void PidKf::refresh() {
   QString valuefs = QString::number(valuef, 'f', 5);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
+*/
 
 OuterLoopGain::OuterLoopGain() : AbstractControl("OuterLoopGain", "Adjust OuterLoopGain", "../assets/offroad/icon_shell.png") {
 
@@ -4070,7 +4072,7 @@ void ActuatorEffectiveness::refresh() {
   QString valuefs = QString::number(valuef);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
-
+/*
 Scale::Scale() : AbstractControl("Scale", "Adjust Scale", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -4255,7 +4257,7 @@ void DcGain::refresh() {
   QString valuefs = QString::number(valuef);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
-
+*/
 // Torque
 TorqueKp::TorqueKp() : AbstractControl("Kp", "Adjust Kp def:1.0") {
 
