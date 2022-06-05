@@ -927,7 +927,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
   text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
   //p.drawText( QRect(bb_x, bb_y+100, bb_w, 42), text4, textOpt );
-  p.drawText( bb_x, bb_y+100, text4, textOpt );
+  p.drawText( bb_x, bb_y+100, text4 );
 
   text4 = "car Name = " + scene->car_params.getCarName();
   p.drawText( QRect(bb_x, bb_y+120, bb_w, 42), text4, textOpt );
