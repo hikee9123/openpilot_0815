@@ -328,7 +328,7 @@ CarSelectCombo::CarSelectCombo() : AbstractControl("", "", "")
         int selected_car = combobox.currentIndex();
         bool go_indi = std::find(std::begin(indi_cars), std::end(indi_cars), selected_car) != std::end(indi_cars);
         if (go_indi) {
-          params.put("LateralControlMethod", "1");
+          params.put("OpkrLateralControlMethod", "1");
         }
       }
     }
@@ -3525,7 +3525,7 @@ LateralControl::LateralControl() : AbstractControl("LatControl(Reboot)", "Set th
   hlayout->addWidget(&btnminus);
   hlayout->addWidget(&btnplus);
 
-  auto str = QString::fromStdString(params.get("LateralControlMethod"));
+  auto str = QString::fromStdString(params.get("OpkrLateralControlMethod"));
   latcontrol = str.toInt();  
 
   QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
@@ -3534,7 +3534,7 @@ LateralControl::LateralControl() : AbstractControl("LatControl(Reboot)", "Set th
         latcontrol = 4;
 
     QString latcontrols = QString::number(latcontrol);
-    params.put("LateralControlMethod", latcontrols.toStdString());
+    params.put("OpkrLateralControlMethod", latcontrols.toStdString());
     refresh();
   });
 
@@ -3545,7 +3545,7 @@ LateralControl::LateralControl() : AbstractControl("LatControl(Reboot)", "Set th
       latcontrol = 0;
     
     QString latcontrols = QString::number(latcontrol);
-    params.put("LateralControlMethod", latcontrols.toStdString());
+    params.put("OpkrLateralControlMethod", latcontrols.toStdString());
     refresh();
   });
   refresh();

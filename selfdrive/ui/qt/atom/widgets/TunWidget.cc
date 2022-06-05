@@ -13,7 +13,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
 {
   m_bShow = 0;
 
-  auto str = QString::fromStdString( params.get("OpkrSteerMethod") );
+  auto str = QString::fromStdString( params.get("OpkrLateralControlMethod") );
   int value = str.toInt();
   m_nSelect = value; 
 
@@ -63,7 +63,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   hlayout->addWidget(method_label);
   connect(method_label, &QPushButton::clicked, [=]() {
     m_nSelect += 1;
-    if( m_nSelect > 1 )
+    if( m_nSelect > 5 )
       m_nSelect = 0;
 
     QString values = QString::number(m_nSelect);
@@ -201,9 +201,13 @@ void CTunWidget::refresh()
 
   switch( m_nSelect )
   {
-    case 0 : str = "0.Normal"; break;
-    case 1 : str = "1.Smooth"; break;
-    default: str = "2.Empty";  break;
+    case 0 : str = "0.PID"; break;
+    case 1 : str = "1.INDI"; break;
+    case 2 : str = "2.LQR";  break;
+    case 3 : str = "3.TORQUE";  break;
+    case 4 : str = "4.HYBRID";  break;
+    case 5 : str = "5.MULTI";  break;
+    default: str = "None"; break;
   }
 
 
