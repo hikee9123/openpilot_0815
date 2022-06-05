@@ -141,8 +141,17 @@ void  CTunWidget::FrameTOROUE(QWidget *parent)
 {
   QVBoxLayout *box_layout = CreateBoxLayout(LID_TOROUE);
 
+  
+  MenuControl *pMaxLat = new MenuControl( 
+    "TorqueMaxLatAccel",
+    "MaxLatAccel",
+    "Adjust MaxLatAccel def:3",
+    "../assets/offroad/icon_shell.png"    
+    );
+  pMaxLat->SetControl( 1, 5, 0.1 );
+  box_layout->addWidget( pMaxLat ); 
 
-  box_layout->addWidget(new TorqueMaxLatAccel());
+
   box_layout->addWidget(new TorqueKp());
   box_layout->addWidget(new TorqueKf());
   box_layout->addWidget(new TorqueKi());

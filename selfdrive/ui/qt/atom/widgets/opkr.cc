@@ -4460,6 +4460,7 @@ void TorqueKi::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
+/*
 TorqueFriction::TorqueFriction() : AbstractControl("Friction", "Adjust Friction", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -4515,6 +4516,7 @@ TorqueFriction::TorqueFriction() : AbstractControl("Friction", "Adjust Friction"
   refresh();
 }
 
+
 void TorqueFriction::refresh() {
   auto strs = QString::fromStdString(params.get("TorqueFriction"));
   int valuei = strs.toInt();
@@ -4522,6 +4524,7 @@ void TorqueFriction::refresh() {
   QString valuefs = QString::number(valuef);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
+
 
 TorqueMaxLatAccel::TorqueMaxLatAccel() : AbstractControl("MaxLatAccel", "Adjust MaxLatAccel", "../assets/offroad/icon_shell.png") {
 
@@ -4585,6 +4588,7 @@ void TorqueMaxLatAccel::refresh() {
   QString valuefs = QString::number(valuef);
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
+*/
 
 CruiseGapTR::CruiseGapTR() : AbstractControl("CruiseGap", "Adjust the inter-vehicle distance (TR) according to the cruise gap. TR refers to the time in seconds of collision with the car in front, and the larger it becomes, the farther it is from the car in front.", "") {
   QString dtr = QString::fromStdString(params.get("DynamicTRGap"));

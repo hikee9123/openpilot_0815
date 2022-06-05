@@ -1028,23 +1028,25 @@ private:
   void refresh();
 };
 
+
+
 class TorqueFriction : public AbstractControl {
   Q_OBJECT
 
 public:
-  TorqueFriction();
-
-private:
-  QPushButton btnplus;
-  QPushButton btnminus;
-  QLabel label;
-  Params params;
-  
-  void refresh();
+  TorqueFriction()
+  {
+   MenuControl *pTorqFriction = new MenuControl( 
+    "TorqueFriction",
+    "MaxLatAccel",
+    "Adjust MaxLatAccel def:3",
+    "../assets/offroad/icon_shell.png"    
+    );
+   pTorqFriction->SetControl( 0, 0.1, 0.001 );
+  }
 };
 
-
-
+/*
 class TorqueMaxLatAccel : public AbstractControl {
   Q_OBJECT
 
@@ -1059,7 +1061,7 @@ private:
   
   void refresh();
 };
-
+*/
 
 class CruiseGapTR : public AbstractControl {
   Q_OBJECT
