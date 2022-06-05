@@ -1911,7 +1911,7 @@ struct Event {
 
     # atom NAVI Info
     liveNaviData @90 :LiveNaviData;
-    updateEvents @91 :List(UpdateEventData);
+    updateEvents @91 :UpdateEventData;
 
 
     # *********** debug ***********

@@ -109,10 +109,12 @@ void CTunWidget::closeSettings()
     //PubMaster pm({"updateEvents"});
 
     MessageBuilder msg;
-    auto update_events = msg.initEvent().initUpdateEvents(1);
+    auto update_events = msg.initEvent().initUpdateEvents();
+    //update_events.setSource(cereal::UpdateEventData::SensorSource::ANDROID);
     update_events.setVersion(1);
+    update_events.setType( m_nMethod );    
     update_events.setCommand( m_nCommand );
-    update_events.setType( m_nMethod );
+
 
 
     pm->send("updateEvents", msg);
