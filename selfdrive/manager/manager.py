@@ -73,23 +73,26 @@ def manager_init() -> None:
     
     # Tunning
     ("OpkrLateralControlMethod", "3"),
+
+    # 0.PID
+    ("PidKp", "0.25"),
+    ("PidKi", "0.05"),
+    ("PidKf", "0.00005"),
+
+    # 1.INDI
+
+    # 2.LQR
+    ("LqrScale", "2000"),
+    ("LqrKi", "0.01"),
+    ("LqrDcGain","0.0030"),    
+
     # 3.Torque
     ("TorqueMaxLatAccel", "3"),
     ("TorqueKp", "1.0"),
     ("TorqueKf", "1.0"),
     ("TorqueKi", "0.1"),
     ("TorqueFriction","0"),    
-    ("TorqueUseAngle", "1"),
-
-    # 2.LQR
-    ("LqrScale", "2000"),
-    ("LqrKi", "0.01"),
-    ("LqrDcGain","0.0030"),
-
-    # 0.PID
-    ("PidKp", "0.25"),
-    ("PidKi", "0.05"),
-    ("PidKf", "0.00005"),
+    ("TorqueUseAngle", "1"),    
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
