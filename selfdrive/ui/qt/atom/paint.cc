@@ -940,7 +940,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
   auto lateralTuning = scene->car_params.getLateralTuning();
   auto torque  = lateralTuning.getTorque();
-  auto tunName;// = lateralTuning.getInit();
+  auto tunName = lateralTuning.which();
   
   int  nYPos = bb_y;
 
