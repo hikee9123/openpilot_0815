@@ -29,7 +29,7 @@
 
 TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) 
 {
-  QWidget *w = new QWidget(this);  
+  //QWidget *w = new QWidget(this);  
   QVBoxLayout *main_layout = new QVBoxLayout(parent);
   //QVBoxLayout *layout = new QVBoxLayout(this);
 
