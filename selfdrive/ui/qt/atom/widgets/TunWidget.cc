@@ -100,7 +100,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
       text-align: left;
     }
   )");  
-  btn_layout->addWidget(confirm_btn);
+  main_layout->addWidget(confirm_btn);
   QObject::connect(confirm_btn, &QPushButton::clicked, [=]() {
     m_bShow = 0;
     refresh();
