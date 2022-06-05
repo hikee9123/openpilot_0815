@@ -29,9 +29,10 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
 
   layout->setContentsMargins(50, 0, 50, 0);
   layout->setSpacing(30);
-/*
+
   // OPKR
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
+/*  
   layout->addWidget(new CameraOffset());
   layout->addWidget(new PathOffset());
   layout->addWidget(new LiveSteerRatioToggle());
