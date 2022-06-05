@@ -450,7 +450,6 @@ void NvgWindow::paintGL() {
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::NoPen);
 
-  UIState *s = uiState();
   if (s->worldObjectsVisible()) {
 
     drawLaneLines(painter, s);

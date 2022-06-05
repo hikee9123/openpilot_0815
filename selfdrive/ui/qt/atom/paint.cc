@@ -912,13 +912,13 @@ void OnPaint::ui_draw_debug1( QPainter &p )
  // text3.sprintf("BF:%.1f   RL:%.1f°", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
 
-/*
+
   int nCmd = scene->update_data.getCommand();
   QString text4;
 
   text4.sprintf("Cmd = %d", nCmd);
   p.drawText( QRect(bb_x, 100, bb_w, 42), text4, textOpt );
-*/
+
 }
 
 
