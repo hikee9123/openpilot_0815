@@ -39,6 +39,8 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
   main_layout->addWidget(new CTunWidget());    
   main_layout->addWidget(new CSteerWidget());  
 
+
+
   //main_layout->addWidget(new CTunWidget());  
   //main_layout->addWidget(horizontal_line());
 /*  

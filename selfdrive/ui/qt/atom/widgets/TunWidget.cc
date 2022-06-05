@@ -78,6 +78,12 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
     refresh();
   });
 
+  QObject::connect(uiState(), &UIState::offroadTransition, [=](bool offroad) {
+    for (auto btn : findChildren<ButtonControl *>()) {
+      btn->setEnabled(offroad);
+    }
+  });
+
   main_layout->addLayout(hlayout);
 
 

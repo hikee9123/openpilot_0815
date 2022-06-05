@@ -311,8 +311,8 @@ static void update_state(UIState *s) {
 
     scene.update_data = sm["updateEvents"].getUpdateEvents();
 
-   // int nCmd = scene.update_data.getCommand();
-   // printf("cmd = %d", nCmd );
+    int nCmd = scene.update_data.getCommand();
+    printf("updateEvents cmd = %d", nCmd );
   }
 
 }
