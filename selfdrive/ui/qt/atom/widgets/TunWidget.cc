@@ -105,17 +105,12 @@ void CTunWidget::closeSettings()
 //    homeWindow->showSidebar(false);
 //  }
     m_nCommand++;
-
-    //PubMaster pm({"updateEvents"});
-
     MessageBuilder msg;
     auto update_events = msg.initEvent().initUpdateEvents();
-    //update_events.setSource(cereal::UpdateEventData::SensorSource::ANDROID);
+
     update_events.setVersion(1);
     update_events.setType( m_nMethod );    
     update_events.setCommand( m_nCommand );
-
-
 
     pm->send("updateEvents", msg);
 
@@ -134,15 +129,32 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
     color: #E4E4E4;
     background-color: #444444;
   )");
+
+  
+
   parent->addWidget(confirm_btn, 0, Qt::AlignRight );
 
- // QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
- // {
-    //m_bShow = 0;
-  //  refresh();
-  //});
+  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
+  {
+      m_nCommand++;
 
-  QObject::connect(confirm_btn, &QPushButton::clicked, this, &CTunWidget::closeSettings);
+      MessageBuilder msg;
+      auto update_events = msg.initEvent().initUpdateEvents();
+      update_events.setVersion(1);
+      update_events.setType( m_nMethod );    
+      update_events.setCommand( m_nCommand );
+
+      pm->send("updateEvents", msg);
+
+      m_bShow = 0;
+
+      QString  strBtn;
+      strBtn.sprintf("confirm(%d)", m_nCommand);
+      confirm_btn->setText( strBtn );      
+      refresh();
+  });
+
+ // QObject::connect(confirm_btn, &QPushButton::clicked, this, &CTunWidget::closeSettings);
 }
 
 
