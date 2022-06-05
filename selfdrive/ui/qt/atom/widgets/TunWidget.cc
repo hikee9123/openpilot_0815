@@ -155,7 +155,16 @@ void  CTunWidget::FrameTOROUE(QWidget *parent)
   box_layout->addWidget(new TorqueKp());
   box_layout->addWidget(new TorqueKf());
   box_layout->addWidget(new TorqueKi());
-  box_layout->addWidget(new TorqueFriction());
+
+   MenuControl *pTorqFriction = new MenuControl( 
+    "TorqueFriction",
+    "MaxLatAccel",
+    "Adjust MaxLatAccel def:3",
+    "../assets/offroad/icon_shell.png"    
+    );
+   pTorqFriction->SetControl( 0, 0.1, 0.001 ); 
+   box_layout->addWidget( pTorqFriction );
+ // box_layout->addWidget(new TorqueFriction());
  // box_layout->addWidget(new TorqueUseAngle());
 }
 

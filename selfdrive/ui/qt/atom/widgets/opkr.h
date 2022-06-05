@@ -1029,7 +1029,7 @@ private:
 };
 
 
-
+/*
 class TorqueFriction : public AbstractControl {
   Q_OBJECT
 
@@ -1046,7 +1046,7 @@ public:
   }
 };
 
-/*
+
 class TorqueMaxLatAccel : public AbstractControl {
   Q_OBJECT
 
