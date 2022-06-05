@@ -191,8 +191,12 @@ static void update_state(UIState *s) {
   }
   if (sm.updated("carParams")) {
     scene.car_params = sm["carParams"].getCarParams();
+
+
     scene.longitudinal_control = scene.car_params.getOpenpilotLongitudinalControl();
     scene.longitudinal_control |= scene.car_params.getAtompilotLongitudinalControl();
+
+    print("carParams  %d\n", scene.longitudinal_control );  
   }
 
 
