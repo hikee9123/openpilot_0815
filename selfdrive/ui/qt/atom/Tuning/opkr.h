@@ -42,7 +42,7 @@ private:
   void getBranchID(const QString &branchid);
 };
 
-
+/*
 class GitHash : public AbstractControl {
   Q_OBJECT
 
@@ -56,7 +56,7 @@ private:
 };
 
 // openpilot preview
-/*
+
 class OpenpilotView : public AbstractControl {
   Q_OBJECT
 

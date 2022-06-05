@@ -167,7 +167,7 @@ void SwitchOpenpilot::getBranchID(const QString &branchid) {
   });
   request->sendRequest("https://github.com/" + githubid + "/" + githubrepo + "/tree/" + branchid);
 }
-
+/*
 GitHash::GitHash() : AbstractControl("Commit (Local/Remote)", "", "") {
 
   QString lhash = QString::fromStdString(params.get("GitCommit").substr(0, 10));
@@ -189,7 +189,7 @@ GitHash::GitHash() : AbstractControl("Commit (Local/Remote)", "", "") {
 }
 
 
-/*
+
 OpenpilotView::OpenpilotView() : AbstractControl("Driving Camera", "Preview the open pilot driving screen.", "") {
 
   // setup widget
