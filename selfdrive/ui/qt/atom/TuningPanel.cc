@@ -31,11 +31,12 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   QVBoxLayout *layout = new QVBoxLayout(this);
 
  // layout->setContentsMargins(50, 0, 50, 0);
-//  layout->setSpacing(30);
+  layout->setContentsMargins(20, 20, 20, 20);
+  layout->setMargin(0);
 
   // OPKR
   layout->addWidget(new CSteerWidget());  
-  layout->addWidget(new CTunWidget());  
+ // layout->addWidget(new CTunWidget());  
   
 
 /*  
@@ -123,4 +124,5 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
   layout->addWidget(new E2ELongToggle());
   layout->addWidget(new StockDecelonCamToggle());
 */
+
 }
