@@ -39,7 +39,7 @@ private:
 
   void  FrameHide( int nID = -1 );
   void  FrameShow( int nID );
-  QFrame *CreateFrame( int nID );
+  QVBoxLayout *CreateBoxLayout( int nID );
 
  private:
   Params params; 

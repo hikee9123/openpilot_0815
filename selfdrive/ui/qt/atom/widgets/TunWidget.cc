@@ -12,7 +12,7 @@
 CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent) 
 {
   m_bShow = 0;
-  memset( m_pChildFrame, NULL, sizeof(m_pChildFrame) );
+  memset( m_pChildFrame, 0, sizeof(m_pChildFrame) );
 
   auto str = QString::fromStdString( params.get("OpkrLateralControlMethod") );
   int value = str.toInt();
@@ -94,16 +94,12 @@ CTunWidget::~CTunWidget()
 
 void CTunWidget::FramePID(QWidget *parent) 
 {
- // 1. layer#1 menu
-  QFrame  *pFrame = CreateFrame(0); 
+  QVBoxLayout *box_layout = CreateBoxLayout(0);
 
-
-  QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);
-
-  menu_layout->addWidget(new PidKp());
-  menu_layout->addWidget(new PidKi());
-  menu_layout->addWidget(new PidKd());
-  menu_layout->addWidget(new PidKf());
+  box_layout->addWidget(new PidKp());
+  box_layout->addWidget(new PidKi());
+  box_layout->addWidget(new PidKd());
+  box_layout->addWidget(new PidKf());
   
   /*
   MenuControl *pMenu2 = new MenuControl( 
@@ -114,7 +110,7 @@ void CTunWidget::FramePID(QWidget *parent)
     );
   pMenu2->SetControl( 0, 1, 0.001 );
   pMenu2->SetString( 0, "Not");
-  menu_layout->addWidget( pMenu2 ); 
+  box_layout->addWidget( pMenu2 ); 
 */
 
 }
@@ -164,7 +160,7 @@ void  CTunWidget::FrameHYBRID(QWidget *parent)
 }
 
 
-QFrame *CTunWidget::CreateFrame( int nID )
+QVBoxLayout *CTunWidget::CreateBoxLayout( int nID )
 {
   QFrame  *pFrame = new QFrame(); 
   m_pChildFrame[nID] = pFrame;
@@ -182,7 +178,9 @@ QFrame *CTunWidget::CreateFrame( int nID )
   
   main_layout->addWidget(pFrame);
 
-  return  pFrame;
+  QVBoxLayout *layout = new QVBoxLayout(pFrame);
+
+  return  layout;
 }
 
 void  CTunWidget::FrameHide( int nID )
