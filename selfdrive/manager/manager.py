@@ -58,7 +58,7 @@ def manager_init() -> None:
     ("OpkrPowerShutdown", "0"),
     ("OpkrRunNaviOnBoot", "0"),
     ("OpkrSSHLegacy", "0"),
-    ("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
+    #("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
     ("OpkratomLongitudinal", "0"), 
     ("OpkrDmonitor", "1"),
     ("OpkrUpdated", "1"),

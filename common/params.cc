@@ -195,7 +195,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrRunNaviOnBoot", PERSISTENT},
     {"OpkrMapEnable", PERSISTENT},
     {"OpkrParameters", PERSISTENT},
-    {"OpkrCarModel", PERSISTENT},
+    //{"OpkrCarModel", PERSISTENT},
     {"OpkratomLongitudinal", PERSISTENT},
     
     {"OpkrPowerShutdown", PERSISTENT},

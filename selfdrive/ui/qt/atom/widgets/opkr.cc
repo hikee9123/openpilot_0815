@@ -4330,7 +4330,7 @@ void TorqueKp::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
-TorqueKf::TorqueKf() : AbstractControl("Kf", "Adjust Kf  def:1.0", "../assets/offroad/icon_shell.png") {
+TorqueKf::TorqueKf() : AbstractControl("Kf", "Adjust Kf  def:1.0") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -4405,7 +4405,7 @@ void TorqueKf::refresh() {
   label.setText(QString::fromStdString(valuefs.toStdString()));
 }
 
-TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1", "../assets/offroad/icon_shell.png") {
+TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
