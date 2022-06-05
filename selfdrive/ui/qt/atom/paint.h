@@ -124,6 +124,7 @@ private:
   void  bb_draw_compass(QPainter &p, int compass_x, int compass_y );
   void  bb_draw_rpm(QPainter &p, int compass_x, int compass_y );
   void  bb_ui_draw_UI(QPainter &p);
+  void  ui_tunning_data( QPainter &p );
 
 signals:
   void valueChanged();  

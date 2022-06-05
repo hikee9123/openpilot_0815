@@ -911,7 +911,13 @@ void OnPaint::ui_draw_debug1( QPainter &p )
 
  // text3.sprintf("BF:%.1f   RL:%.1f°", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
+}
 
+void OnPaint::ui_tunning_data( QPainter &p ) 
+{
+  int bb_x = 300;
+  int bb_y = 500;
+  int bb_w = width();
 
   int nCmd = scene->update_data.getCommand();
   int nType = scene->update_data.getType();
@@ -920,10 +926,16 @@ void OnPaint::ui_draw_debug1( QPainter &p )
   QString text4;
 
   text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
-  p.drawText( QRect(bb_x, 100, bb_w, 42), text4, textOpt );
+  //p.drawText( QRect(bb_x, bb_y+100, bb_w, 42), text4, textOpt );
+  p.drawText( bb_x, bb_y+100, text4, textOpt );
 
+  text4 = "car Name = " + scene->car_params.getCarName();
+  p.drawText( QRect(bb_x, bb_y+120, bb_w, 42), text4, textOpt );
+
+  text4 = "tuning = " + scene->car_params.lateralTuning.getWhich()
+  p.drawText( QRect(bb_x, bb_y+140, bb_w, 42), text4, textOpt );
+  
 }
-
 
 
 void OnPaint::ui_main_navi( QPainter &p ) 
@@ -932,6 +944,6 @@ void OnPaint::ui_main_navi( QPainter &p )
 
   ui_draw_debug1( p );
 
-
+  ui_tunning_data( p );
 
 }
