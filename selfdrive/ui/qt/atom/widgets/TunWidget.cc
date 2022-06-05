@@ -171,8 +171,8 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
     );
    pTorqFriction->SetControl( 0, 0.1, 0.001 ); 
    box_layout->addWidget( pTorqFriction );
- // box_layout->addWidget(new TorqueFriction());
- // box_layout->addWidget(new TorqueUseAngle());
+
+   box_layout->addWidget(new TorqueUseAngle());
 }
 
 void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
