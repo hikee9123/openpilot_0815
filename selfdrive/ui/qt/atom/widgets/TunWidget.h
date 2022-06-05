@@ -35,6 +35,7 @@ public:
 private:
   void showEvent(QShowEvent *event) override;
   void hideEvent(QHideEvent *event) override;
+  void closeSettings();
 
 public slots:  
   void refresh();
@@ -70,6 +71,7 @@ private:
   QPushButton  *method_label;
   int    m_nMethod;
   int    m_bShow;
+  int    m_nCommand;
 
 
 

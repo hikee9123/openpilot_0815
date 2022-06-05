@@ -182,6 +182,13 @@ struct GPSNMEAData {
   nmea @2 :Text;
 }
 
+
+struct UpdateEventData {
+  version @0 :Int32;
+  type @1 :Int32;
+  command @2 :Int32;
+}
+
 # android sensor_event_t
 struct SensorEventData {
   version @0 :Int32;
@@ -1904,7 +1911,7 @@ struct Event {
 
     # atom NAVI Info
     liveNaviData @90 :LiveNaviData;
-
+    updateEvents @91 :List(UpdateEventData);
 
 
     # *********** debug ***********
@@ -1913,6 +1920,9 @@ struct Event {
     driverEncodeData @87 :EncodeData;
     wideRoadEncodeData @88 :EncodeData;
     qRoadEncodeData @89 :EncodeData;
+
+
+    
 
     # *********** legacy + deprecated ***********
     model @9 :Legacy.ModelData; # TODO: rename modelV2 and mark this as deprecated

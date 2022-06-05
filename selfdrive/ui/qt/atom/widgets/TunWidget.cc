@@ -12,6 +12,7 @@
 CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent) 
 {
   m_bShow = 0;
+  m_nCommand = 0;
   memset( m_pChildFrame, 0, sizeof(m_pChildFrame) );
 
 
@@ -95,6 +96,29 @@ CTunWidget::~CTunWidget()
 
 }
 
+void CTunWidget::closeSettings() 
+{
+//  main_layout->setCurrentWidget(homeWindow);
+
+//  if (uiState()->scene.started) {
+//    homeWindow->showSidebar(false);
+//  }
+
+    PubMaster pm({"updateEvents"});
+
+    MessageBuilder msg;
+    auto update_events = msg.initEvent().initUpdateEvents();
+    update_events.setVersion(1);
+    update_events.setCommand( m_nCommand );
+    update_events.setType( m_nMethod );
+
+    pm.send("updateEvents", msg);
+
+    m_bShow = 0;
+    refresh();
+}
+
+
 void CTunWidget::ConfirmButton(QVBoxLayout *parent) 
 {
   QPushButton* confirm_btn = new QPushButton("confirm");
@@ -107,13 +131,13 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
   )");
   parent->addWidget(confirm_btn, 0, Qt::AlignRight );
 
-  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
-  {
+ // QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
+ // {
     //m_bShow = 0;
-    refresh();
-  });
+  //  refresh();
+  //});
 
-  //QObject::connect(confirm_btn, &QPushButton::clicked, this, &InputDialog::cancel);
+  QObject::connect(confirm_btn, &QPushButton::clicked, parent, &CTunWidget::closeSettings);
 }
 
 
