@@ -137,7 +137,8 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
   QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
   {
       m_nCommand++;
-
+      if( m_nCommand > 99 ) m_nCommand = 0;
+      
       MessageBuilder msg;
       auto update_events = msg.initEvent().initUpdateEvents();
       update_events.setVersion(1);
