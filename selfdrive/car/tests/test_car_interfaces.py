@@ -75,9 +75,9 @@ class TestCarInterfaces(unittest.TestCase):
         self.LaC = LatControlMULTI( car_params, car_interface)
 
 
-    car_interface.get_tunning_params( self.CP )
+    car_interface.get_tunning_params( car_params )
     if self.LaC is not None:
-      self.LaC.live_tune( self.CP )
+      self.LaC.live_tune( car_params )
 
     cp_send = messaging.new_message('carParams')
     cp_send.carParams = car_params

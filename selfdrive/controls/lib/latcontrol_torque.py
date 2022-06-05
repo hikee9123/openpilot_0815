@@ -43,7 +43,8 @@ class LatControlTorque(LatControl):
     self.kf = CP.lateralTuning.torque.kf
 
   def live_tune(self, CP):
-    pass
+    self.pid = PIDController(CP.lateralTuning.torque.kp, CP.lateralTuning.torque.ki,
+                             k_f=CP.lateralTuning.torque.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
 
 
   def reset(self):
