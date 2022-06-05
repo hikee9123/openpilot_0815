@@ -27,16 +27,19 @@
 
 
 
-TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
-  QVBoxLayout *layout = new QVBoxLayout(this);
+TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) 
+{
+  QWidget *w = new QWidget(parent);  
+  QVBoxLayout *main_layout = new QVBoxLayout(w);
+  //QVBoxLayout *layout = new QVBoxLayout(this);
 
  // layout->setContentsMargins(50, 0, 50, 0);
-  layout->setContentsMargins(20, 20, 20, 20);
-  layout->setMargin(0);
+  main_layout->setContentsMargins(20, 20, 20, 20);
+  main_layout->setMargin(0);
 
   // OPKR
-  layout->addWidget(new CSteerWidget());  
-  layout->addWidget(new CTunWidget());  
+  main_layout->addWidget(new CSteerWidget());  
+  main_layout->addWidget(new CTunWidget());  
   
 
 /*  
