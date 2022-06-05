@@ -81,6 +81,12 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   QObject::connect(uiState(), &UIState::offroadTransition, [=](bool offroad) {
     //for (auto btn : findChildren<ButtonControl *>()) {
       method_label->setEnabled(offroad);
+
+      if ( offroad )
+          method_label->setStyleSheet('color:white ;background:green')
+      else
+          method_label->setStyleSheet('color:white ;background:gray')
+
     //}
   });
 
