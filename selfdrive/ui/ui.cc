@@ -194,7 +194,7 @@ static void update_state(UIState *s) {
     scene.longitudinal_control = scene.car_params.getOpenpilotLongitudinalControl();
     scene.longitudinal_control |= scene.car_params.getAtompilotLongitudinalControl();
   }
- // if (!scene.started && sm.updated("sensorEvents")) {
+
 
   float  gradient[2];
   gradient[0] = scene.scr.accel_prob[0];
@@ -303,7 +303,12 @@ static void update_state(UIState *s) {
     scene.lateralPlan = sm["lateralPlan"].getLateralPlan();
    } 
 
+  if ( sm.updated("updateEvents")) {
 
+    auto updateEvent = sm["updateEvents"].getUpdateEvents()
+
+    int nCmd = updateEvent.getCommand();
+  }
 
 }
 
@@ -351,7 +356,7 @@ UIState::UIState(QObject *parent) : QObject(parent) {
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState", "roadCameraState",
     "pandaStates", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
     "wideRoadCameraState",
-    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters",
+    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters","updateEvents",
   });
 
   Params params;

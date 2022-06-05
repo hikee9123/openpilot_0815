@@ -147,8 +147,6 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
 
       pm->send("updateEvents", msg);
 
-      m_bShow = 0;
-
       QString  strBtn;
       strBtn.sprintf("confirm(%d)", m_nCommand);
       confirm_btn->setText( strBtn );      
