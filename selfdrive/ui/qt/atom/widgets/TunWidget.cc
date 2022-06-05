@@ -67,7 +67,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   hlayout->addWidget(method_label);
   connect(method_label, &QPushButton::clicked, [=]() {
     m_nMethod += 1;
-    if( m_nMethod >= LID_ALL )
+    if( m_nMethod >= LAT_ALL )
       m_nMethod = 0;
 
     QString values = QString::number(m_nMethod);
@@ -86,6 +86,26 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   FrameHYBRID();
 
 
+  QPushButton* confirm_btn = new QPushButton("confirm");
+  // confirm_btn->setFixedHeight(120);
+  confirm_btn->setStyleSheet(R"(
+    QPushButton {
+      height: 120px;
+      border-radius: 15px;
+      background-color: gray;
+    }
+    * {
+      font-size: 50px; 
+      font-weight: 400; 
+      text-align: left;
+    }
+  )");  
+  btn_layout->addWidget(confirm_btn);
+  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() {
+    m_bShow = 0;
+    refresh();
+  });  
+
   main_layout->addStretch();
   refresh();
 }
@@ -100,7 +120,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )
-      box_layout = CreateBoxLayout(LID_PID);
+      box_layout = CreateBoxLayout(LAT_PID);
 
   MenuControl *pKp = new MenuControl( 
     "PidKp",
@@ -149,7 +169,7 @@ void CTunWidget::FrameINDI(QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )
-    box_layout = CreateBoxLayout(LID_INDI);
+    box_layout = CreateBoxLayout(LAT_INDI);
 
   box_layout->addWidget(new InnerLoopGain());
   box_layout->addWidget(new OuterLoopGain());
@@ -162,7 +182,7 @@ void  CTunWidget::FrameLQR(QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )  
-     box_layout = CreateBoxLayout(LID_LQR);
+     box_layout = CreateBoxLayout(LAT_LQR);
 
   MenuControl *pScale = new MenuControl( 
     "LqrScale",
@@ -194,7 +214,7 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )    
-     box_layout = CreateBoxLayout(LID_TOROUE);
+     box_layout = CreateBoxLayout(LAT_TOROUE);
 
   
   MenuControl *pMaxLat = new MenuControl( 
@@ -224,7 +244,7 @@ void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )     
-      box_layout = CreateBoxLayout(LID_HYBRID);
+      box_layout = CreateBoxLayout(LAT_HYBRID);
 
 
   box_layout->addWidget(new AbstractControl("[2.LQR]","lqr","../assets/offroad/icon_shell.png"));
@@ -260,7 +280,7 @@ QVBoxLayout *CTunWidget::CreateBoxLayout( int nID )
 
 void  CTunWidget::FrameHide( int nID )
 {
-  for( int i = 0; i<LID_ALL; i++ )
+  for( int i = 0; i<LAT_ALL; i++ )
   {
     if( nID >= 0 && i != nID ) continue; 
     if( m_pChildFrame[i] )
@@ -271,7 +291,7 @@ void  CTunWidget::FrameHide( int nID )
 
 void  CTunWidget::FrameShow( int nID )
 {
-  for( int i = 0; i<LID_ALL; i++ )
+  for( int i = 0; i<LAT_ALL; i++ )
   {
     if( i != nID ) continue;
     if( m_pChildFrame[i] )
@@ -297,13 +317,13 @@ void CTunWidget::refresh()
 
   switch( m_nMethod )
   {
-    case LID_PID : str = "0.PID"; break;
-    case LID_INDI : str = "1.INDI"; break;
-    case LID_LQR : str = "2.LQR";  break;
-    case LID_TOROUE : str = "3.TORQUE";  break;
-    case LID_HYBRID : str = "4.HYBRID";  break;
-    case LID_MULTI : str = "5.MULTI";  break;
-    case LID_DEFAULT : str = "6.DEFAULT";  break;
+    case LAT_PID : str = "0.PID"; break;
+    case LAT_INDI : str = "1.INDI"; break;
+    case LAT_LQR : str = "2.LQR";  break;
+    case LAT_TOROUE : str = "3.TORQUE";  break;
+    case LAT_HYBRID : str = "4.HYBRID";  break;
+    case LAT_MULTI : str = "5.MULTI";  break;
+    case LAT_DEFAULT : str = "6.DEFAULT";  break;
     default: str = "DEFAULT"; break;
   }
 

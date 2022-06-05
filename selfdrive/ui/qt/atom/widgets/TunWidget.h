@@ -13,7 +13,6 @@
 #include "selfdrive/ui/ui.h"
 
 
-
 class CTunWidget : public QFrame 
 {
   Q_OBJECT
@@ -22,15 +21,15 @@ public:
   explicit CTunWidget(QWidget *parent = 0);
   ~CTunWidget();
 
-  enum LayoutID {
-    LID_PID = 0,
-    LID_INDI,
-    LID_LQR,
-    LID_TOROUE,
-    LID_HYBRID,
-    LID_MULTI,
-    LID_DEFAULT,
-    LID_ALL,
+  enum TunType {
+    LAT_PID = 0,
+    LAT_INDI,
+    LAT_LQR,
+    LAT_TOROUE,
+    LAT_HYBRID,
+    LAT_MULTI,
+    LAT_DEFAULT,
+    LAT_ALL,
   };
 
 private:
@@ -72,7 +71,7 @@ private:
 
 
 
-   QFrame *m_pChildFrame[LID_ALL];
+   QFrame *m_pChildFrame[LAT_ALL];
 
 
 };
