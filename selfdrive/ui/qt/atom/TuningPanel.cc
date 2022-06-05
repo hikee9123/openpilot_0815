@@ -29,8 +29,8 @@
 
 TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) 
 {
-  QWidget *w = new QWidget(parent);  
-  QVBoxLayout *main_layout = new QVBoxLayout(w);
+  QWidget *w = new QWidget(this);  
+  QVBoxLayout *main_layout = new QVBoxLayout(parent);
   //QVBoxLayout *layout = new QVBoxLayout(this);
 
  // layout->setContentsMargins(50, 0, 50, 0);
