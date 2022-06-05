@@ -12,6 +12,7 @@
 #include "selfdrive/ui/qt/widgets/controls.h"
 
 #include "selfdrive/ui/qt/atom/widgets/steerWidget.h"
+#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
 
 #include "common/params.h"
 #include "common/util.h"
@@ -34,6 +35,8 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) {
 
   // OPKR
   layout->addWidget(new CSteerWidget());  
+  layout->addWidget(new CTunWidget());  
+  
 
 /*  
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));

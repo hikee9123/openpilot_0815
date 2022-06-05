@@ -82,7 +82,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   refresh();
 }
 
-CTunWidget::~CSteerWidget()
+CTunWidget::~CTunWidget()
 {
 
 }
