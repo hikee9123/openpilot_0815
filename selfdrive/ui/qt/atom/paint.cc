@@ -930,18 +930,18 @@ void OnPaint::ui_tunning_data( QPainter &p )
   p.drawText( bb_x, bb_y+100, text4 );
 
 
-  QString carName =  QString( scene->car_params.getCarName() );
-  text4.sprintf("car Name = %s", carName ) ;
-  p.drawText( bb_x, bb_y+120, text4 );
+  //QString carName =  QString( scene->car_params.getCarName() );
+  //text4.sprintf("car Name = %s", carName ) ;
+  //p.drawText( bb_x, bb_y+120, text4 );
 
 
-  cereal::CarParams::lateralTuning::Reader lateralTuning;
-  //cereal::CarParams::LateralTorqueTuning::Reader  torque;
+  cereal::CarParams::lateralTuning  lateralTuning;
+  cereal::CarParams::LateralTorqueTuning  torque;
 
   lateralTuning = scene->car_params.getLateralTuning();
-  //torque 
+  torque  = lateralTuning.getTorque();
 
-  QString tuning = lateralTuning->getWhich();
+  QString tuning = lateralTuning.which();
   text4 = "tuning = " + tuning;
  p.drawText( bb_x, bb_y+140, text4 );
   
