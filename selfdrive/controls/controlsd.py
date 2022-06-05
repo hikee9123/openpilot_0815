@@ -213,6 +213,7 @@ class Controls:
     self.prof = Profiler(False)  # off by default
 
     # atom
+    self.update_command = None
     self.OpkrWhitePanda = params.get_bool("OpkrWhitePanda")
     self.openpilot_mode = 10
     LiveSteerRatio = params.get("OpkrLiveSteerRatio")
@@ -849,10 +850,24 @@ class Controls:
     self.events_prev = self.events.names.copy()
 
     # carParams - logged every 50 seconds (> 1 per segment)
-    if (self.sm.frame % int(50. / DT_CTRL) == 0):
+    updateEvents = self.sm['updateEvents']
+    update_command = False
+    if updateEvents.version == 1:
+      #updateEvents.type
+      if updateEvents.command != self.update_command:
+        self.update_command = updateEvents.command
+        update_command = True
+        print( updateEvents )        
+        self.CI.get_tun_params( self.CP )        
+
+        
+ 
+    if update_command or (self.sm.frame % int(50. / DT_CTRL) == 0):
       cp_send = messaging.new_message('carParams')
       cp_send.carParams = self.CP
       self.pm.send('carParams', cp_send)
+      if update_command:
+        print( cp_send )
 
     # carControl
     cc_send = messaging.new_message('carControl')

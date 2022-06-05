@@ -19,6 +19,13 @@ class CarInterface(CarInterfaceBase):
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
     return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
 
+
+  @staticmethod
+  def get_tun_params( tune ):
+    method = update_lat_tune_patam( tune.lateralTuning )
+    if method == TunType.LAT_DEFAULT:
+      set_lat_tune(tune.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=tune.maxLateralAccel, FRICTION=0.01)
+
   @staticmethod
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], disable_radar=False):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
@@ -88,9 +95,10 @@ class CarInterface(CarInterfaceBase):
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
       #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      method = update_lat_tune_patam( ret.lateralTuning )
-      if method == TunType.LAT_DEFAULT:
-        set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)
+      CarInterface.get_tun_params( ret )
+      #method = update_lat_tune_patam( ret.lateralTuning )
+      #if method == TunType.LAT_DEFAULT:
+      #  set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)
 
     elif candidate in (CAR.SANTA_FE, CAR.SANTA_FE_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022):
       ret.lateralTuning.pid.kf = 0.00005
