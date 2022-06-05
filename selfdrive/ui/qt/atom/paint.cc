@@ -916,7 +916,7 @@ void OnPaint::ui_draw_debug1( QPainter &p )
 void OnPaint::ui_tunning_data( QPainter &p ) 
 {
   int bb_x = 300;
-  int bb_y = 500;
+  int bb_y = 300;
  // int bb_w = width();
 
   int nCmd = scene->update_data.getCommand();
@@ -940,12 +940,15 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
   auto lateralTuning = scene->car_params.getLateralTuning();
   auto torque  = lateralTuning.getTorque();
+  auto tunName = lateralTuning.getInit();
+  
+  int  nYPos = bb_y;
 
-  text4.sprintf("friction = %f", torque.getFriction() );
-  text4.sprintf("kf = %f", torque.getKf() );
-  text4.sprintf("ki = %f", torque.getKi() );
-  text4.sprintf("kp = %f", torque.getKp() );
-  p.drawText( bb_x, bb_y+140, text4 );
+  text4.sprintf("friction = %f", torque.getFriction() );  p.drawText( bb_x, nYPos+=20), text4 );
+  text4.sprintf("friction = %f", torque.getFriction() );  p.drawText( bb_x, nYPos+=20), text4 );
+  text4.sprintf("kf = %f", torque.getKf() );              p.drawText( bb_x, nYPos+=20), text4 );
+  text4.sprintf("ki = %f", torque.getKi() );              p.drawText( bb_x, nYPos+=20), text4 ); 
+  text4.sprintf("kp = %f", torque.getKp() );              p.drawText( bb_x, nYPos+=20), text4 );
 
 //  QString tuning = lateralTuning.getWhich();
 //  text4 = "tuning = " + tuning;
