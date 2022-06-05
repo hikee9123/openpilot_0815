@@ -40,7 +40,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
   // OPKR
   main_layout->addWidget(new CSteerWidget());  
   main_layout->addWidget(new CTunWidget());  
-  
+  main_layout->addWidget(new CTunWidget());  
 
 /*  
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
