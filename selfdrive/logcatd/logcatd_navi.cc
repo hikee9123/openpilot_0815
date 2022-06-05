@@ -6,8 +6,8 @@
 #include <log/logprint.h>
 
 #include "cereal/messaging/messaging.h"
-#include "selfdrive/common/util.h"
-#include "selfdrive/common/params.h"
+#include "common/util.h"
+#include "common/params.h"
 
 #include "selfdrive/logcatd/traffic_sign.h"
 

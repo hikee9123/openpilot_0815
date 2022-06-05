@@ -81,10 +81,17 @@ def manager_init() -> None:
     params.delete("DisableRadar")
 
   # set unset params
-  for k, v in default_params:
-    if params.get(k) is None:
-      params.put(k, v)
 
+  for k, v in default_params:
+    try:      
+      if params.get(k) is None:
+        params.put(k, v)
+    except:  # Not on a branch, fallback
+      print("default_params:{}  {}".format( k, v) )
+      pass
+    finally:  # try end 
+      pass 
+    
   # is this dashcam?
   if os.getenv("PASSIVE") is not None:
     params.put_bool("Passive", bool(int(os.getenv("PASSIVE", "0"))))
