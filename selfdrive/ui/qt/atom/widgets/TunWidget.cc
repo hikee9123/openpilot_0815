@@ -64,7 +64,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   hlayout->addWidget(method_label);
   connect(method_label, &QPushButton::clicked, [=]() {
     m_nMethod += 1;
-    if( m_nMethod > LID_ALL )
+    if( m_nMethod >= LID_ALL )
       m_nMethod = 0;
 
     QString values = QString::number(m_nMethod);
