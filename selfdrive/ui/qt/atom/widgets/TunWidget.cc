@@ -75,11 +75,11 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   main_layout->addLayout(hlayout);
 
 
-  FramePID( parent );
-  FrameINDI( parent );
-  FrameLQR( parent );
-  FrameTOROUE( parent );
-  FrameHYBRID( parent );
+  FramePID(  );
+  FrameINDI(  );
+  FrameLQR(  );
+  FrameTOROUE(  );
+  FrameHYBRID(  );
 
 
   main_layout->addStretch();
@@ -92,9 +92,11 @@ CTunWidget::~CTunWidget()
 }
 
 
-void CTunWidget::FramePID(QWidget *parent) 
+void CTunWidget::FramePID(QVBoxLayout *parent) 
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(LID_PID);
+  QVBoxLayout *box_layout = parent;
+  if( parent == nullptr )
+      box_layout = CreateBoxLayout(LID_PID);
 
   box_layout->addWidget(new PidKp());
   box_layout->addWidget(new PidKi());
@@ -115,10 +117,11 @@ void CTunWidget::FramePID(QWidget *parent)
 
 }
 
-void CTunWidget::FrameINDI(QWidget *parent) 
+void CTunWidget::FrameINDI(QVBoxLayout *parent) 
 {
- // 1. layer#2 menu
-  QVBoxLayout *box_layout = CreateBoxLayout(LID_INDI);
+  QVBoxLayout *box_layout = parent;
+  if( parent == nullptr )
+    box_layout = CreateBoxLayout(LID_INDI);
 
   box_layout->addWidget(new InnerLoopGain());
   box_layout->addWidget(new OuterLoopGain());
@@ -127,9 +130,11 @@ void CTunWidget::FrameINDI(QWidget *parent)
 }
 
 
-void  CTunWidget::FrameLQR(QWidget *parent)
+void  CTunWidget::FrameLQR(QVBoxLayout *parent)
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(LID_LQR);
+  QVBoxLayout *box_layout = parent;
+  if( parent == nullptr )  
+     box_layout = CreateBoxLayout(LID_LQR);
 
   box_layout->addWidget(new Scale());
   box_layout->addWidget(new LqrKi());
@@ -137,9 +142,11 @@ void  CTunWidget::FrameLQR(QWidget *parent)
 }
 
 
-void  CTunWidget::FrameTOROUE(QWidget *parent)
+void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(LID_TOROUE);
+  QVBoxLayout *box_layout = parent;
+  if( parent == nullptr )    
+     box_layout = CreateBoxLayout(LID_TOROUE);
 
   
   MenuControl *pMaxLat = new MenuControl( 
@@ -168,9 +175,11 @@ void  CTunWidget::FrameTOROUE(QWidget *parent)
  // box_layout->addWidget(new TorqueUseAngle());
 }
 
-void  CTunWidget::FrameHYBRID(QWidget *parent)
+void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
 {
-  QVBoxLayout *box_layout = CreateBoxLayout(LID_HYBRID);
+  QVBoxLayout *box_layout = parent;
+  if( parent == nullptr )     
+      box_layout = CreateBoxLayout(LID_HYBRID);
 
   box_layout->addWidget(new LabelControl("[2.LQR]"));
   box_layout->addWidget(new Scale());

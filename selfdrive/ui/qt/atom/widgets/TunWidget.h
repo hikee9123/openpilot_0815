@@ -40,11 +40,11 @@ public slots:
 
 
 private:
-  void  FramePID(QWidget *parent);
-  void  FrameINDI(QWidget *parent);
-  void  FrameLQR(QWidget *parent);
-  void  FrameTOROUE(QWidget *parent);
-  void  FrameHYBRID(QWidget *parent);
+  void  FramePID(QVBoxLayout *parent=nullptr);
+  void  FrameINDI(QVBoxLayout *parent=nullptr);
+  void  FrameLQR(QVBoxLayout *parent=nullptr);
+  void  FrameTOROUE(QVBoxLayout *parent=nullptr);
+  void  FrameHYBRID(QVBoxLayout *parent=nullptr);
 
   void  FrameHide( int nID = -1 );
   void  FrameShow( int nID );
