@@ -28,6 +28,8 @@ public:
     LID_LQR,
     LID_TOROUE,
     LID_HYBRID,
+    LID_MULTI,
+    LID_DEFAULT,
     LID_ALL,
   };
 

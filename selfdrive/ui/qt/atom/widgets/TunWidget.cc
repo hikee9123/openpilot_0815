@@ -64,7 +64,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   hlayout->addWidget(method_label);
   connect(method_label, &QPushButton::clicked, [=]() {
     m_nMethod += 1;
-    if( m_nMethod > 5 )
+    if( m_nMethod > LID_ALL )
       m_nMethod = 0;
 
     QString values = QString::number(m_nMethod);
@@ -75,11 +75,11 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   main_layout->addLayout(hlayout);
 
 
-  FramePID(  );
-  FrameINDI(  );
-  FrameLQR(  );
-  FrameTOROUE(  );
-  FrameHYBRID(  );
+  FramePID();
+  FrameINDI();
+  FrameLQR();
+  FrameTOROUE();
+  FrameHYBRID();
 
 
   main_layout->addStretch();
@@ -293,13 +293,14 @@ void CTunWidget::refresh()
 
   switch( m_nMethod )
   {
-    case 0 : str = "0.PID"; break;
-    case 1 : str = "1.INDI"; break;
-    case 2 : str = "2.LQR";  break;
-    case 3 : str = "3.TORQUE";  break;
-    case 4 : str = "4.HYBRID";  break;
-    case 5 : str = "5.MULTI";  break;
-    default: str = "None"; break;
+    case LID_PID : str = "0.PID"; break;
+    case LID_INDI : str = "1.INDI"; break;
+    case LID_LQR : str = "2.LQR";  break;
+    case LID_TOROUE : str = "3.TORQUE";  break;
+    case LID_HYBRID : str = "4.HYBRID";  break;
+    case LID_MULTI : str = "5.MULTI";  break;
+    case LID_DEFAULT : str = "6.DEFAULT";  break;
+    default: str = "DEFAULT"; break;
   }
 
 
