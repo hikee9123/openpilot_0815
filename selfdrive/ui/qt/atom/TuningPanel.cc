@@ -30,12 +30,12 @@
 TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) 
 {
   //QWidget *w = new QWidget(this);  
-  QVBoxLayout *main_layout = new QVBoxLayout(parent);
+  QVBoxLayout *main_layout = new QVBoxLayout(this);
   //QVBoxLayout *layout = new QVBoxLayout(this);
 
  // layout->setContentsMargins(50, 0, 50, 0);
-  main_layout->setContentsMargins(20, 20, 20, 20);
-  main_layout->setMargin(0);
+ // main_layout->setContentsMargins(20, 20, 20, 20);
+ // main_layout->setMargin(0);
 
   // OPKR
   main_layout->addWidget(new CSteerWidget());  
