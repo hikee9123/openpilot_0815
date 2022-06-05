@@ -154,12 +154,12 @@ void  CTunWidget::FrameHYBRID(QWidget *parent)
 {
   QVBoxLayout *box_layout = CreateBoxLayout(LID_HYBRID);
 
-  box_layout->addWidget(new LabelControl("[LQR]"));
+  box_layout->addWidget(new LabelControl("[2.LQR]"));
   box_layout->addWidget(new Scale());
   box_layout->addWidget(new LqrKi());
   box_layout->addWidget(new DcGain());  
 
-  box_layout->addWidget(new LabelControl("[TORQUE]"));
+  box_layout->addWidget(new LabelControl("[3.TORQUE]"));
   box_layout->addWidget(new TorqueMaxLatAccel());
   box_layout->addWidget(new TorqueKp());
   box_layout->addWidget(new TorqueKf());
