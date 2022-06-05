@@ -124,6 +124,7 @@ def update_lat_tune_patam(tune):
       tune.torque.ki = Ki / MAX_LAT_ACCEL        # 0.1 / 2.5 = 0.04
       tune.torque.friction = FRICTION
   else:
+      print( 'OpkrLateralControlMethod = tune.init(lqr)')
       tune.init('lqr')
       tune.lqr.scale = 1900     #1700.0
       tune.lqr.ki = 0.01      #0.01
