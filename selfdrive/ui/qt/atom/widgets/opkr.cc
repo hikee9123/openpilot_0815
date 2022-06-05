@@ -4360,32 +4360,32 @@ TorqueKf::TorqueKf() : AbstractControl("Kf", "Adjust Kf  def:1.0") {
   hlayout->addWidget(&btnplus);
 
   QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("TorqueKf"));
+    auto strKf = QString::fromStdString(params.get("TorqueKf"));
 
-    float value = str.toDouble();
+    float Kf = strKf.toDouble();
 
-    value -= 0.1;
-    if (value < 0.5) {
-      value = 0.5;
+    Kf -= 0.1;
+    if (Kf < 0.5) {
+      Kf = 0.5;
     }
 
-    QString values = QString::number(value);
+    QString values = QString::number(Kf);
     params.put("TorqueKf", values.toStdString());
     refresh();
   });
   
  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("TorqueKf"));
-    auto str1 = QString::fromStdString(params.get("TorqueMaxLatAccel"));
+    auto strKf = QString::fromStdString(params.get("TorqueKf"));
+    auto strMax = QString::fromStdString(params.get("TorqueMaxLatAccel"));
 
-    float value = str.toDouble();
-    float max_lat_accel = str1.toDouble();
+    float Kf = strKf.toDouble();
+    float max_lat_accel = strMax.toDouble();
 
-    value += 0.1;
-    if (value > max_lat_accel) {
-      value = max_lat_accel;
+    Kf += 0.1;
+    if (Kf > max_lat_accel) {
+      Kf = max_lat_accel;
     }
-    QString values = QString::number(value);
+    QString values = QString::number(Kf);
     params.put("TorqueKf", values.toStdString());
     refresh();
   });
@@ -4397,7 +4397,7 @@ void TorqueKf::refresh() {
   auto strMax = QString::fromStdString(params.get("TorqueMaxLatAccel"));
 
   float max_lat_accel = strMax.toDouble();
-  int Kf = strKf.toDouble();
+  float Kf = strKf.toDouble();
 
 
   float valuef1 = Kf/max_lat_accel;
@@ -4435,31 +4435,31 @@ TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1") {
   hlayout->addWidget(&btnplus);
 
   QObject::connect(&btnminus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("TorqueKi"));
-    float value = str.toDouble();
+    auto strKi = QString::fromStdString(params.get("TorqueKi"));
+    float Ki = strKi.toDouble();
 
-    value -= 0.01;
-    if (value < 0.01) {
-      value = 0.01;
+    Ki -= 0.01;
+    if (Ki < 0.01) {
+      Ki = 0.01;
     }
-    QString values = QString::number(value);
+    QString values = QString::number(Ki);
     params.put("TorqueKi", values.toStdString());
     refresh();
   });
   
  QObject::connect(&btnplus, &QPushButton::clicked, [=]() {
-    auto str = QString::fromStdString(params.get("TorqueKi"));
-    auto str1 = QString::fromStdString(params.get("TorqueMaxLatAccel"));
+    auto strKi = QString::fromStdString(params.get("TorqueKi"));
+    auto strMax = QString::fromStdString(params.get("TorqueMaxLatAccel"));
 
-    float value = str.toDouble();
-    float max_lat_accel = str1.toDouble();
+    float Ki = strKi.toDouble();
+    float max_lat_accel = strMax.toDouble();
 
-    value += 0.01;
-    if (value > max_lat_accel) {
-      value = max_lat_accel;
+    Ki += 0.01;
+    if (Ki > max_lat_accel) {
+      Ki = max_lat_accel;
     }
 
-    QString values = QString::number(value);
+    QString values = QString::number(Ki);
     params.put("TorqueKi", values.toStdString());
     refresh();
   });
@@ -4467,11 +4467,11 @@ TorqueKi::TorqueKi() : AbstractControl("Ki", "Adjust Ki  def:0.1") {
 }
 
 void TorqueKi::refresh() {
-  auto strs = QString::fromStdString( params.get("TorqueKi") );
-  auto strs1 = QString::fromStdString( params.get("TorqueMaxLatAccel") );
+  auto strKI = QString::fromStdString( params.get("TorqueKi") );
+  auto strmax = QString::fromStdString( params.get("TorqueMaxLatAccel") );
 
-  float max_lat_accel = strs1.toDouble();
-  float Ki = strs.toDouble();
+  float max_lat_accel = strmax.toDouble();
+  float Ki = strKI.toDouble();
 
 
   float valuef1 = Ki/max_lat_accel;
