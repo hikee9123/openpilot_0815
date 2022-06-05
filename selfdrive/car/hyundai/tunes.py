@@ -75,6 +75,7 @@ def update_lat_tune_patam(tune):
   params = Params()
 
   method = params.get("OpkrLateralControlMethod", encoding="utf8")
+  print( 'OpkrLateralControlMethod = {}'.format( method ))
   if method == TunType.LAT_PID:
       Kp = float( params.get("PidKp", encoding="utf8") )
       Ki = float( params.get("PidKi", encoding="utf8") )
