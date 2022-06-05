@@ -13,7 +13,10 @@ CSteerWidget::CSteerWidget(QWidget *parent) : QFrame(parent)
 {
   m_bShow = 0;
 
-  auto str = QString::fromStdString( params.get("OpkrSteerMethod") );
+  QString  str_param = "OpkrSteerMethod";
+
+
+  auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
   int value = str.toInt();
   m_nSelect = value; 
 
@@ -67,7 +70,7 @@ CSteerWidget::CSteerWidget(QWidget *parent) : QFrame(parent)
       m_nSelect = 0;
 
     QString values = QString::number(m_nSelect);
-    params.put("OpkrSteerMethod", values.toStdString());      
+    params.put( str_param.toStdString(), values.toStdString());    
     refresh();
   });
 

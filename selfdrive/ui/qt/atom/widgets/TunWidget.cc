@@ -14,7 +14,10 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   m_bShow = 0;
   memset( m_pChildFrame, 0, sizeof(m_pChildFrame) );
 
-  auto str = QString::fromStdString( params.get("OpkrLateralControlMethod") );
+
+  QString str_param = "OpkrLateralControlMethod";
+
+  auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
   int value = str.toInt();
   m_nMethod = value; 
 
@@ -68,7 +71,8 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
       m_nMethod = 0;
 
     QString values = QString::number(m_nMethod);
-    params.put("OpkrSteerMethod", values.toStdString());      
+    //params.put("OpkrLateralControlMethod", values.toStdString());
+    params.put( str_param.toStdString(), values.toStdString());        
     refresh();
   });
 
