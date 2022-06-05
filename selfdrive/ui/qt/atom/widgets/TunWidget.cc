@@ -118,45 +118,55 @@ void CTunWidget::FramePID(QWidget *parent)
 void CTunWidget::FrameINDI(QWidget *parent) 
 {
  // 1. layer#2 menu
- // QFrame  *pFrame = CreateFrame(1); 
+  QVBoxLayout *box_layout = CreateBoxLayout(1);
 
-  //QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
-  //menu_layout->addWidget(new InnerLoopGain());
-  //menu_layout->addWidget(new OuterLoopGain());
-  //menu_layout->addWidget(new TimeConstant());
-  //menu_layout->addWidget(new ActuatorEffectiveness());
+  box_layout->addWidget(new InnerLoopGain());
+  box_layout->addWidget(new OuterLoopGain());
+  box_layout->addWidget(new TimeConstant());
+  box_layout->addWidget(new ActuatorEffectiveness());
 }
 
 
 void  CTunWidget::FrameLQR(QWidget *parent)
 {
- // QFrame  *pFrame = CreateFrame(2); 
-  //QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+  QVBoxLayout *box_layout = CreateBoxLayout(2);
 
-  //menu_layout->addWidget(new Scale());
-  //menu_layout->addWidget(new LqrKi());
-  //menu_layout->addWidget(new DcGain());   
+  box_layout->addWidget(new Scale());
+  box_layout->addWidget(new LqrKi());
+  box_layout->addWidget(new DcGain());   
 }
 
 
 void  CTunWidget::FrameTOROUE(QWidget *parent)
 {
-//  QFrame  *pFrame = CreateFrame(3); 
- // QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+  QVBoxLayout *box_layout = CreateBoxLayout(3);
 
-  //menu_layout->addWidget(new TorqueMaxLatAccel());
-  //menu_layout->addWidget(new TorqueKp());
-  //menu_layout->addWidget(new TorqueKf());
-  //menu_layout->addWidget(new TorqueKi());
-  //menu_layout->addWidget(new TorqueFriction());
-  //menu_layout->addWidget(new TorqueUseAngle());
+
+  box_layout->addWidget(new TorqueMaxLatAccel());
+  box_layout->addWidget(new TorqueKp());
+  box_layout->addWidget(new TorqueKf());
+  box_layout->addWidget(new TorqueKi());
+  box_layout->addWidget(new TorqueFriction());
+ // box_layout->addWidget(new TorqueUseAngle());
 }
 
 void  CTunWidget::FrameHYBRID(QWidget *parent)
 {
  // QFrame  *pFrame = CreateFrame(4); 
  // QVBoxLayout *menu_layout = new QVBoxLayout(pFrame);  
+  QVBoxLayout *box_layout = CreateBoxLayout(4);
 
+  box_layout->addWidget(new LabelControl("[LQR]"));
+  box_layout->addWidget(new Scale());
+  box_layout->addWidget(new LqrKi());
+  box_layout->addWidget(new DcGain());  
+
+  box_layout->addWidget(new LabelControl("[TORQUE]"));
+  box_layout->addWidget(new TorqueMaxLatAccel());
+  box_layout->addWidget(new TorqueKp());
+  box_layout->addWidget(new TorqueKf());
+  box_layout->addWidget(new TorqueKi());
+  box_layout->addWidget(new TorqueFriction());
 }
 
 
