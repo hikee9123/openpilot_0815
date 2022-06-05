@@ -201,11 +201,6 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
   pMaxLat->SetControl( 1, 5, 0.1 );
   box_layout->addWidget( pMaxLat ); 
 
-
-  box_layout->addWidget(new TorqueKp());
-  box_layout->addWidget(new TorqueKf());
-  box_layout->addWidget(new TorqueKi());
-
    MenuControl *pTorqFriction = new MenuControl( 
     "TorqueFriction",
     "Friction",
@@ -214,7 +209,11 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
    pTorqFriction->SetControl( 0, 0.1, 0.001 ); 
    box_layout->addWidget( pTorqFriction );
 
-   box_layout->addWidget(new TorqueUseAngle());
+  box_layout->addWidget(horizontal_line());
+  box_layout->addWidget(new TorqueKp());
+  box_layout->addWidget(new TorqueKf());
+  box_layout->addWidget(new TorqueKi());
+  box_layout->addWidget(new TorqueUseAngle());
 }
 
 void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
