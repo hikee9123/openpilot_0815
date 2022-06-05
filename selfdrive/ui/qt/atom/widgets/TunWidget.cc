@@ -98,19 +98,13 @@ CTunWidget::~CTunWidget()
 void CTunWidget::ConfirmButton(QVBoxLayout *parent) 
 {
   QPushButton* confirm_btn = new QPushButton("confirm");
-  // confirm_btn->setFixedHeight(120);
+  confirm_btn->setFixedSize(386, 125);
   confirm_btn->setStyleSheet(R"(
-    QPushButton {
-      height: 120px;
-      border-radius: 15px;
-      background-color: gray;
-    }
-    * {
-      font-size: 50px; 
-      font-weight: 400; 
-      text-align: left;
-    }
-  )");  
+    font-size: 48px;
+    border-radius: 10px;
+    color: #E4E4E4;
+    background-color: #444444;
+  )");
   parent->addWidget(confirm_btn);
 
   QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
@@ -118,6 +112,8 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
     m_bShow = 0;
     refresh();
   });
+
+  //QObject::connect(cancel_btn, &QPushButton::clicked, this, &InputDialog::cancel);
 }
 
 
