@@ -111,8 +111,9 @@ class Controls:
       ignore = ['driverCameraState', 'managerState'] if SIMULATION else None
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState','liveNaviData'] + self.camera_packets + joystick_packet + drivermonitor_packet,
-                                     ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan'])
+                                     'managerState', 'liveParameters', 'radarState','liveNaviData',
+                                     'updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
+                                     ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan', 'updateEvents'])
 
     # set alternative experiences from parameters
     self.disengage_on_accelerator = params.get_bool("DisengageOnAccelerator")

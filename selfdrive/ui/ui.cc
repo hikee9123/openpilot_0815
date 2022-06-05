@@ -196,7 +196,7 @@ static void update_state(UIState *s) {
     scene.longitudinal_control = scene.car_params.getOpenpilotLongitudinalControl();
     scene.longitudinal_control |= scene.car_params.getAtompilotLongitudinalControl();
 
-    print("carParams  %d\n", scene.longitudinal_control );  
+    printf("carParams  %d\n", scene.longitudinal_control );  
   }
 
 
