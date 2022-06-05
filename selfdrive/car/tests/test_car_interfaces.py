@@ -9,6 +9,7 @@ from selfdrive.car.car_helpers import interfaces
 from selfdrive.car.fingerprints import _FINGERPRINTS as FINGERPRINTS
 import cereal.messaging as messaging
 
+from selfdrive.car.hyundai.values import CAR
 from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
 from selfdrive.controls.lib.latcontrol_atom import LatControlATOM
 
@@ -16,7 +17,8 @@ MethodModel = car.CarParams.MethodModel
 
 class TestCarInterfaces(unittest.TestCase):
 
-  @parameterized.expand([(car,) for car in all_known_cars()])
+  #@parameterized.expand([(car,) for car in all_known_cars()])
+  @parameterized.expand([(CAR.GRANDEUR_HEV_19,) ])
   def test_car_interfaces(self, car_name):
     if car_name in FINGERPRINTS:
       fingerprint = FINGERPRINTS[car_name][0]
@@ -29,6 +31,9 @@ class TestCarInterfaces(unittest.TestCase):
       1: fingerprint,
       2: fingerprint,
     }
+
+    self.pm = messaging.PubMaster(['sendcan', 'controlsState', 'carState',
+                                    'carControl', 'carEvents', 'carParams'])
 
     car_fw = []
 
