@@ -74,7 +74,7 @@ def set_long_tune(tune, name):
 def update_lat_tune_patam(tune):
   params = Params()
 
-  method = params.get("OpkrLateralControlMethod", encoding="utf8")
+  method = int( params.get("OpkrLateralControlMethod", encoding="utf8") )
   print( 'OpkrLateralControlMethod = {}'.format( method ))
   if method == TunType.LAT_PID:
       print( 'OpkrLateralControlMethod = PID')
