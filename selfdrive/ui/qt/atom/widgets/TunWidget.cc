@@ -105,15 +105,15 @@ void CTunWidget::ConfirmButton(QVBoxLayout *parent)
     color: #E4E4E4;
     background-color: #444444;
   )");
-  parent->addWidget(confirm_btn);
+  parent->addWidget(confirm_btn, 0, Qt::AlignRight );
 
   QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
   {
-    m_bShow = 0;
+    //m_bShow = 0;
     refresh();
   });
 
-  //QObject::connect(cancel_btn, &QPushButton::clicked, this, &InputDialog::cancel);
+  //QObject::connect(confirm_btn, &QPushButton::clicked, this, &InputDialog::cancel);
 }
 
 
