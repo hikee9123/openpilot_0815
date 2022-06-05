@@ -56,7 +56,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   });
 
   // label
-  method_label = new QPushButton("method"); // .setAlignment(Qt::AlignVCenter|Qt::AlignHCenter);
+  method_label = new QPushButton("0.PID"); // .setAlignment(Qt::AlignVCenter|Qt::AlignHCenter);
   method_label->setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -67,7 +67,7 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   )");
   method_label->setFixedSize( 500, 100);
   hlayout->addWidget(method_label);
-  connect(method_label, &QPushButton::clicked, [=]() {
+  QObject::connect(method_label, &QPushButton::clicked, [=]() {
     m_nMethod += 1;
     if( m_nMethod >= LAT_ALL )
       m_nMethod = 0;
@@ -79,9 +79,9 @@ CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent)
   });
 
   QObject::connect(uiState(), &UIState::offroadTransition, [=](bool offroad) {
-    for (auto btn : findChildren<ButtonControl *>()) {
-      btn->setEnabled(offroad);
-    }
+    //for (auto btn : findChildren<ButtonControl *>()) {
+      method_label->setEnabled(offroad);
+    //}
   });
 
   main_layout->addLayout(hlayout);
