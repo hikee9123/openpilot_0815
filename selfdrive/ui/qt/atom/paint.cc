@@ -917,7 +917,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 {
   int bb_x = 300;
   int bb_y = 500;
-  int bb_w = width();
+ // int bb_w = width();
 
   int nCmd = scene->update_data.getCommand();
   int nType = scene->update_data.getType();
@@ -941,6 +941,9 @@ void OnPaint::ui_tunning_data( QPainter &p )
   auto lateralTuning = scene->car_params.getLateralTuning();
   auto torque  = lateralTuning.getTorque();
 
+  text4.sprintf("friction = %f", torque.getFriction() );
+  text4.sprintf("kf = %f", torque.getKf() );
+  text4.sprintf("ki = %f", torque.getKi() );
   text4.sprintf("kp = %f", torque.getKp() );
   p.drawText( bb_x, bb_y+140, text4 );
 
