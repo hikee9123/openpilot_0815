@@ -31,17 +31,16 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
 {
   //QWidget *w = new QWidget(this);  
   QVBoxLayout *main_layout = new QVBoxLayout(this);
-  //QVBoxLayout *layout = new QVBoxLayout(this);
+  main_layout->setContentsMargins(50, 0, 50, 0);
+  main_layout->setSpacing(30);
 
- // layout->setContentsMargins(50, 0, 50, 0);
- // main_layout->setContentsMargins(20, 20, 20, 20);
- // main_layout->setMargin(0);
 
   // OPKR
   main_layout->addWidget(new CSteerWidget());  
+  main_layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   main_layout->addWidget(new CTunWidget());  
-  main_layout->addWidget(new CTunWidget());  
-
+  //main_layout->addWidget(new CTunWidget());  
+  main_layout->addWidget(horizontal_line());
 /*  
   layout->addWidget(new LabelControl("〓〓〓〓〓〓〓〓【 TUNING 】〓〓〓〓〓〓〓〓", ""));
   layout->addWidget(new CameraOffset());
