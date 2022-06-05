@@ -171,7 +171,7 @@ void  CTunWidget::FrameLQR(QVBoxLayout *parent)
   MenuControl *pKi = new MenuControl( 
     "LqrKi",
     "Ki",
-    "LqrKi Scale def:0.01"
+    "Adjust Ki def:0.01"
     );
   pKi->SetControl( 0.0, 1, 0.001 );
   box_layout->addWidget( pKi ); 
@@ -179,14 +179,10 @@ void  CTunWidget::FrameLQR(QVBoxLayout *parent)
   MenuControl *pGain = new MenuControl( 
     "LqrDcGain",
     "DcGain",
-    "DcGain Scale def:0.0030"
+    "Adjust DcGain def:0.0030"
     );
   pGain->SetControl( 0.0010, 0.0050, 0.0001 );
-  box_layout->addWidget( pGain );   
-
-  //box_layout->addWidget(new Scale());
-  //box_layout->addWidget(new LqrKi());
- // box_layout->addWidget(new DcGain());   
+  box_layout->addWidget( pGain ); 
 }
 
 

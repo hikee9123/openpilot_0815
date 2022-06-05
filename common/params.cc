@@ -220,6 +220,17 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"TorqueKi", PERSISTENT},
     {"TorqueKi", PERSISTENT},
     {"TorqueUseAngle", PERSISTENT},
+
+    // LQR
+    {"LqrScale", PERSISTENT},
+    {"LqrKi", PERSISTENT},
+    {"LqrDcGain", PERSISTENT},
+
+    // PID
+    {"PidKp", PERSISTENT},
+    {"PidKi", PERSISTENT},
+    {"PidKf", PERSISTENT},
+
 };
 
 } // namespace
