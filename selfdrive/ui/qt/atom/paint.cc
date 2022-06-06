@@ -3,6 +3,10 @@
 #include <cmath>
 
 #include <QDebug>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QConicalGradient>
+#include <QPen>
 
 #include "common/timing.h"
 #include "selfdrive/ui/qt/util.h"
@@ -709,7 +713,7 @@ int barWidth = 20;
 
 p.setRenderHint(QPainter::Antialiasing, true);
 QConicalGradient gradient;
-gradient.setCenter(drawingRect.center());
+gradient.setCenter( compass_x, compass_y );
 gradient.setAngle(90);
 gradient.setColorAt(0, QColor(178, 255, 246));
 gradient.setColorAt(1, QColor(5, 44, 50));
