@@ -71,7 +71,7 @@ def set_long_tune(tune, name):
   else:
     raise NotImplementedError('This longitudinal tune does not exist')
 
-def update_lat_tune_patam(tune):
+def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
   params = Params()
 
   OpkrLateralControlMethod = int( params.get("OpkrLateralControlMethod", encoding="utf8") )
@@ -108,7 +108,7 @@ def update_lat_tune_patam(tune):
       tune.lqr.k = [-110.73572306, 451.22718255]
       tune.lqr.l = [0.3233671, 0.3185757]
   elif method ==  TunType.LAT_TOROUE:
-      MAX_LAT_ACCEL = float( params.get("TorqueMaxLatAccel", encoding="utf8") )
+      #MAX_LAT_ACCEL = float( params.get("TorqueMaxLatAccel", encoding="utf8") )
       FRICTION      = float( params.get("TorqueFriction", encoding="utf8") )
       Kp            = float( params.get("TorqueKp", encoding="utf8") )
       Ki            = float( params.get("TorqueKi", encoding="utf8") )

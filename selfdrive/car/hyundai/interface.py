@@ -22,7 +22,9 @@ class CarInterface(CarInterfaceBase):
 
   @staticmethod
   def get_tunning_params( tune ):
-    method = update_lat_tune_patam( tune.lateralTuning )
+    max_lat_accel = float( Params().get("TorqueMaxLatAccel", encoding="utf8") )
+    tune.maxLateralAccel = max_lat_accel
+    method = update_lat_tune_patam( tune.lateralTuning, MAX_LAT_ACCEL=tune.maxLateralAccel )
     if method == TunType.LAT_DEFAULT:
       set_lat_tune(tune.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=tune.maxLateralAccel, FRICTION=0.01)
 

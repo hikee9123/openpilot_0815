@@ -959,17 +959,17 @@ void OnPaint::ui_tunning_data( QPainter &p )
   int bb_y = 300;
  // int bb_w = width();
 
-  int nCmd = scene->update_data.getCommand();
-  int nType = scene->update_data.getType();
-  int nVersion = scene->update_data.getVersion();
+  //int nCmd = scene->update_data.getCommand();
+  //int nType = scene->update_data.getType();
+  //int nVersion = scene->update_data.getVersion();
 
   QString text4;
 
 
   int  nYPos = bb_y;
-  text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
+  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
   //p.drawText( QRect(bb_x, bb_y+100, bb_w, 42), text4, textOpt );
-  p.drawText( bb_x, nYPos+=50, text4 );
+ // p.drawText( bb_x, nYPos+=50, text4 );
 
 
   //QString carName =  QString( scene->car_params.getCarName() );
@@ -983,17 +983,19 @@ void OnPaint::ui_tunning_data( QPainter &p )
   auto lateralTuning = scene->car_params.getLateralTuning();
   auto tunName = lateralTuning.which();
   // 0.PID, 1:INDI, 2:LQR, 3:Torque, 4:hybrid, 5:multi
+ 
+  configFont( p, "Open Sans",  80, "Regular");
 
-
+   tunName = 3;
   text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
   if( tunName == 3 )
   {
-    auto torque  = lateralTuning.getTorque();    
-    text4 = "Torque";                                       p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("friction = %f", torque.getFriction() );  p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("kp = %f", torque.getKp() );              p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("ki = %f", torque.getKi() );              p.drawText( bb_x, nYPos+=50, text4 );   
-    text4.sprintf("kf = %f", torque.getKf() );              p.drawText( bb_x, nYPos+=50, text4 ); 
+    auto torque  = lateralTuning.getTorque();
+    auto max_lat_acc = scene->car_params.getMaxLateralAccel();    
+
+    text4 = "Torque";                                         p.drawText( bb_x, nYPos+=50, text4 );
+    text4.sprintf("MAX_LAT_ACCEL = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=50, text4 );
+    text4.sprintf("friction = %.3f", torque.getFriction() );  p.drawText( bb_x, nYPos+=50, text4 );
   }
   else if( tunName == 2 )
   {
