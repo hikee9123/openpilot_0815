@@ -297,7 +297,7 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
     "Kp",
     "Adjust Kp def:1.0"
     );
-   PKp->SetControl( 0.1, 3, 0.001 ); 
+   PKp->SetControl( 0.1, 3, 0.1 ); 
    box_layout->addWidget( PKp );
 
    MenuControl *PKf = new MenuControl( 
@@ -305,7 +305,7 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
     "Kf",
     "Adjust Kf  def:1.0"
     );
-   PKf->SetControl( 0.1, 3, 0.001 ); 
+   PKf->SetControl( 0.1, 3, 0.1 ); 
    box_layout->addWidget( PKf );   
 
    MenuControl *PKi = new MenuControl( 
@@ -313,7 +313,7 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
     "Ki",
     "Adjust Ki  def:0.1"
     );
-   PKi->SetControl( 0.0, 1, 0.001 ); 
+   PKi->SetControl( 0.0, 1, 0.01 ); 
    box_layout->addWidget( PKi );  
 
   //box_layout->addWidget(new TorqueKp());
