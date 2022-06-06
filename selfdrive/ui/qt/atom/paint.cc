@@ -698,7 +698,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   else
       p.setPen( QPen( QColor(255,0,0,200), 35) );
 
-  int nStartDegree = -160;
+  int nStartDegree = -140;
   p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
 
 
