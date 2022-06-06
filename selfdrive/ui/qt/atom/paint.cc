@@ -656,7 +656,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
  // float  bearingUblox = gps_ext.getBearingDeg();
  float fEngineRpm = enginRpm;//   enginRpm;// scene->scr.enginrpm;
 
-
+  fEngineRpm = 2000;
 
   fEngineRpm *= 0.045;
 
@@ -670,11 +670,8 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   else
       p.setPen( QPen( QColor(255,0,0,200), 35) );
 
-  p.drawArc(compass_x, compass_y, 500, 200, -180 * 16, -180 - fEngineRpm * 16);
-  //p.drawText(compass_x, compass_y, "30°");
-
-
-
+  int nStartDegree = -200;
+  p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
 
 
   p.setPen(Qt::NoPen);  
@@ -942,13 +939,14 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
   auto lateralTuning = scene->car_params.getLateralTuning();
   auto tunName = lateralTuning.which();
-  
+  // 0.PID, 1:INDI, 2:LQR, 3:Torque, 4:hybrid, 5:multi
 
 
   text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
   if( tunName == 3 )
   {
     auto torque  = lateralTuning.getTorque();    
+    text4 = "Torque";                                       p.drawText( bb_x, nYPos+=50, text4 );
     text4.sprintf("friction = %f", torque.getFriction() );  p.drawText( bb_x, nYPos+=50, text4 );
     text4.sprintf("kp = %f", torque.getKp() );              p.drawText( bb_x, nYPos+=50, text4 );
     text4.sprintf("ki = %f", torque.getKi() );              p.drawText( bb_x, nYPos+=50, text4 );   
@@ -956,10 +954,11 @@ void OnPaint::ui_tunning_data( QPainter &p )
   }
   else if( tunName == 2 )
   {
-    auto lqr  = lateralTuning.getLqr();    
-    text4.sprintf("scale = %f", lqr.getScale() );              p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("ki = %f", lqr.getKi() );              p.drawText( bb_x, nYPos+=50, text4 );   
-    text4.sprintf("DcGain = %f", lqr.getDcGain() );              p.drawText( bb_x, nYPos+=50, text4 );   
+    auto lqr  = lateralTuning.getLqr();
+    text4 = "lqr";                                          p.drawText( bb_x, nYPos+=50, text4 );
+    text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=50, text4 );
+    text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=50, text4 );   
+    text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=50, text4 );   
   }
 
 //  QString tuning = lateralTuning.getWhich();
