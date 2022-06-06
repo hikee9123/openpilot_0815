@@ -998,9 +998,10 @@ void OnPaint::ui_tunning_data( QPainter &p )
     auto max_lat_acc = car_params.getMaxLateralAccel();    
 
     text4 = "Torque";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
+
     configFont( p, "Open Sans",  80, "Regular");    
-    text4.sprintf("MAX_LAT_ACCEL = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=nGap, text4 );
-    text4.sprintf("friction = %.3f", torque.getFriction() );  p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("LA = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("FC = %.3f", torque.getFriction() );  p.drawText( bb_x, nYPos+=nGap, text4 );
   }
   else if( tunName == 2 )
   {
