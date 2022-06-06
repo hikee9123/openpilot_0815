@@ -291,7 +291,7 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
 
   box_layout->addWidget(horizontal_line());
 
-  box_layout->setSpacing(10);
+  box_layout->setSpacing(5);
   MenuControl *PKp = new MenuControl( 
     "TorqueKp",
     "Kp",
