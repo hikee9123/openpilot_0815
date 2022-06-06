@@ -154,6 +154,34 @@ float OnPaint::interp( float xv, float xp[], float fp[], int N)
 	return  dResult;
 }
 
+
+void OnPaint::mousePressEvent(QMouseEvent* e) 
+{
+
+  /*
+  int e_x = e->x();
+  int e_y = e->y();
+  //int e_button= e->button();
+
+   UIState *s = uiState();
+  const int bb_dmr_w = 180;   
+  const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
+ //  printf("OnDashCam::mousePressEvent %d,%d  \n", e_x, e_y);
+
+  Rect btn_rec = btn_dashcam_rec;
+  btn_rec.x = bb_dmr_x;
+
+  if( btn_rec.ptInRect( e_x, e_y ) ) 
+  {
+    printf( "  captureState = %d \n", captureState );
+    screen_toggle_record_state();
+    update(); 
+    return;
+  }
+*/
+  QWidget::mousePressEvent(e);
+}
+
 void OnPaint::paintEvent(QPaintEvent *event) 
 {
   QPainter p(this);
@@ -670,7 +698,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   else
       p.setPen( QPen( QColor(255,0,0,200), 35) );
 
-  int nStartDegree = -100;
+  int nStartDegree = -160;
   p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
 
 
