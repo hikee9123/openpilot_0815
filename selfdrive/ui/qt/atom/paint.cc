@@ -707,17 +707,18 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
  // p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
 
 
-
+//QRectF rect = QRectF(compass_x, compass_y, 500, 200);
 
 
 //int barWidth = 20;
 
 p.setRenderHint(QPainter::Antialiasing, true);
 QConicalGradient gradient;
-gradient.setCenter( compass_x, compass_y );
+gradient.setCenter( compass_x+200, compass_y+100 );
 gradient.setAngle(90);
-gradient.setColorAt(0, QColor(178, 255, 246));
-gradient.setColorAt(1, QColor(5, 44, 50));
+gradient.setColorAt(0, QColor(0, 255, 246));
+gradient.setColorAt(1, QColor(255, 255, 0));
+gradient.setColorAt(2, QColor(255, 44, 0));
 
 int  m_width = 20;
 QPen pen(QBrush(gradient), m_width);
