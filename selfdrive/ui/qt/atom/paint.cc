@@ -992,7 +992,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
 
   //text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
-  if( tunName == 3 || 1 )
+  if( tunName == 3 )
   {
     auto torque  = lateralTuning.getTorque();
     auto max_lat_acc = car_params.getMaxLateralAccel();    
