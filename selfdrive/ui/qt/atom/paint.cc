@@ -980,18 +980,19 @@ void OnPaint::ui_tunning_data( QPainter &p )
  // cereal::CarParams::lateralTuning::Reader  lateralTuning;
  // cereal::CarParams::LateralTorqueTuning::Reader  torque;
 
-  auto lateralTuning = scene->car_params.getLateralTuning();
-  auto tunName = lateralTuning.which();
+  auto car_params =  scene->car_params;
+  auto lateralTuning = car_params.getLateralTuning();
+  auto tunName =  lateralTuning.which();
   // 0.PID, 1:INDI, 2:LQR, 3:Torque, 4:hybrid, 5:multi
  
   configFont( p, "Open Sans",  80, "Regular");
 
-   tunName = 3;
+
   text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
-  if( tunName == 3 )
+  if( tunName == 3 || 1 )
   {
     auto torque  = lateralTuning.getTorque();
-    auto max_lat_acc = scene->car_params.getMaxLateralAccel();    
+    auto max_lat_acc = car_params.getMaxLateralAccel();    
 
     text4 = "Torque";                                         p.drawText( bb_x, nYPos+=50, text4 );
     text4.sprintf("MAX_LAT_ACCEL = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=50, text4 );
