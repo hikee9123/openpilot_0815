@@ -955,6 +955,8 @@ void OnPaint::ui_draw_debug1( QPainter &p )
 
 void OnPaint::ui_tunning_data( QPainter &p ) 
 {
+  p.save();
+
   int bb_x = 250;
   int bb_y = 300;
  // int bb_w = width();
@@ -967,6 +969,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
 
   int  nYPos = bb_y;
+  int  nGap = 80;
   //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
   //p.drawText( QRect(bb_x, bb_y+100, bb_w, 42), text4, textOpt );
  // p.drawText( bb_x, nYPos+=50, text4 );
@@ -985,7 +988,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
   auto tunName =  lateralTuning.which();
   // 0.PID, 1:INDI, 2:LQR, 3:Torque, 4:hybrid, 5:multi
  
-  configFont( p, "Open Sans",  80, "Regular");
+
 
 
   text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
@@ -994,23 +997,24 @@ void OnPaint::ui_tunning_data( QPainter &p )
     auto torque  = lateralTuning.getTorque();
     auto max_lat_acc = car_params.getMaxLateralAccel();    
 
-    text4 = "Torque";                                         p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("MAX_LAT_ACCEL = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("friction = %.3f", torque.getFriction() );  p.drawText( bb_x, nYPos+=50, text4 );
+    text4 = "Torque";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
+    configFont( p, "Open Sans",  80, "Regular");    
+    text4.sprintf("MAX_LAT_ACCEL = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("friction = %.3f", torque.getFriction() );  p.drawText( bb_x, nYPos+=nGap, text4 );
   }
   else if( tunName == 2 )
   {
     auto lqr  = lateralTuning.getLqr();
-    text4 = "lqr";                                          p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=50, text4 );
-    text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=50, text4 );   
-    text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=50, text4 );   
+    text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=nGap, text4 );   
+    text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=nGap, text4 );   
   }
 
 //  QString tuning = lateralTuning.getWhich();
 //  text4 = "tuning = " + tuning;
 // p.drawText( bb_x, bb_y+140, text4 );
-  
+  p.restore();  
 }
 
 
