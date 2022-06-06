@@ -695,13 +695,14 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
   if( fEngineRpm <= 0 ) return;
 
 
+/*
   if( enginRpm < 2000 )
       p.setPen( QPen( QColor(0,255,0,200), 30) );
   else if( enginRpm < 3000 )
       p.setPen( QPen( QColor(255,255,0,200), 35 ) );
   else
       p.setPen( QPen( QColor(255,0,0,200), 35) );
-
+*/
   int nStartDegree = -140;
  // p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
 
@@ -709,7 +710,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 
 
 
-int barWidth = 20;
+//int barWidth = 20;
 
 p.setRenderHint(QPainter::Antialiasing, true);
 QConicalGradient gradient;
@@ -718,6 +719,7 @@ gradient.setAngle(90);
 gradient.setColorAt(0, QColor(178, 255, 246));
 gradient.setColorAt(1, QColor(5, 44, 50));
 
+int  m_width = 20;
 QPen pen(QBrush(gradient), m_width);
 pen.setCapStyle(Qt::RoundCap);
 p.setPen( pen );
