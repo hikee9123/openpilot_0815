@@ -991,7 +991,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
 
 
-  text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
+  //text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
   if( tunName == 3 || 1 )
   {
     auto torque  = lateralTuning.getTorque();
@@ -1000,8 +1000,8 @@ void OnPaint::ui_tunning_data( QPainter &p )
     text4 = "Torque";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
 
     configFont( p, "Open Sans",  80, "Regular");    
-    text4.sprintf("LA = %.2f", max_lat_acc );      p.drawText( bb_x, nYPos+=nGap, text4 );
-    text4.sprintf("FC = %.3f", torque.getFriction() );  p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("LA = %.2f", max_lat_acc );                 p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("FC = %.5f", torque.getFriction() );        p.drawText( bb_x, nYPos+=nGap, text4 );
   }
   else if( tunName == 2 )
   {
