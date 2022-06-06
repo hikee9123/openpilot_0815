@@ -699,24 +699,31 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
       p.setPen( QPen( QColor(255,0,0,200), 35) );
 
   int nStartDegree = -140;
-  p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
+ // p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
 
 
-  p.setPen(Qt::NoPen);  
-  /*
-  int   size =  img_size_rpm * 0.5;
 
-    p.drawPixmap(compass_x , compass_y, img_rpm1 );
 
-    p.save();
-    p.setOpacity(0.8);
-    p.translate( compass_x+size, compass_y+size);
-    p.rotate( fEngineRpm );
-    p.drawPixmap( -size , -size, img_rpm2 );
-    p.restore();
-*/
+
+int barWidth = 20;
+
+p.setRenderHint(QPainter::Antialiasing, true);
+QConicalGradient gradient;
+gradient.setCenter(drawingRect.center());
+gradient.setAngle(90);
+gradient.setColorAt(0, QColor(178, 255, 246));
+gradient.setColorAt(1, QColor(5, 44, 50));
+
+QPen pen(QBrush(gradient), m_width);
+pen.setCapStyle(Qt::RoundCap);
+p.setPen( pen );
+//p.setPen(QPen(Qt::black, barWidth, Qt::SolidLine,Qt::RoundCap));
+
+p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
+//p.drawArc(barWidth/2, barWidth/2, this->width() - barWidth, this->height() - barWidth,
+//                90*16, progressInDegrees*-16);}
   
-   
+  p.setPen(Qt::NoPen);  
 }
 
 void OnPaint::bb_ui_draw_UI(QPainter &p)
