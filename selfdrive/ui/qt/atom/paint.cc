@@ -688,7 +688,7 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
  // float  bearingUblox = gps_ext.getBearingDeg();
  float fEngineRpm = enginRpm;//   enginRpm;// scene->scr.enginrpm;
 
-  fEngineRpm = 3000;
+  //fEngineRpm = 3000;
 
   fEngineRpm *= 0.045;
 
