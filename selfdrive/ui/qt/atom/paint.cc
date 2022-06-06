@@ -715,10 +715,10 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
 p.setRenderHint(QPainter::Antialiasing, true);
 QConicalGradient gradient;
 gradient.setCenter( compass_x+200, compass_y+100 );
-gradient.setAngle(90);
+gradient.setAngle(-90);
 gradient.setColorAt(0, QColor(0, 100, 255));
-gradient.setColorAt(1, QColor(255, 255, 0));
-gradient.setColorAt(2, QColor(255, 44, 0));
+//gradient.setColorAt(1, QColor(255, 255, 0));
+gradient.setColorAt(1, QColor(255, 44, 0));
 
 int  m_width = 20;
 QPen pen(QBrush(gradient), m_width);
