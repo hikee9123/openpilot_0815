@@ -153,6 +153,12 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
     update_line_data(s, lane_lines[i], 0.025 * scene.lane_line_probs[i], 0, &scene.lane_line_vertices[i], max_idx);
   }
 
+   // update blindspot line
+  for (int i = 0; i < std::size(scene.lane_blindspot_vertices); i++) {
+
+    update_blindspot_data(s, i, lane_lines[i+1], 2.8, 0, &scene.lane_blindspot_vertices[i], max_idx);
+  }   
+
   // update road edges
   const auto road_edges = model.getRoadEdges();
   const auto road_edge_stds = model.getRoadEdgeStds();
@@ -172,10 +178,7 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
 
 
 
-   // update blindspot line
-  for (int i = 0; i < std::size(scene.lane_blindspot_vertices); i++) {
-    update_blindspot_data(s, i, lane_lines[i+1], 1.0, 0, &scene.lane_blindspot_vertices[i], max_idx);
-  }   
+
 
 
 
