@@ -93,11 +93,11 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
   if( lr == 0 )
   {
     y_off1 = y_off;
-    y_off2 = -0.01;
+    y_off2 = 0;
   }
   else
   {
-      y_off1 = 0.01;
+      y_off1 = 0;
       y_off2 = y_off;  
   }
      
