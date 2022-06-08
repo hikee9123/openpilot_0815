@@ -396,6 +396,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
 
 
+ scene.scr.leftblindspot = 1;
   // paint blindspot line
   painter.setBrush( QColor::fromRgbF(1.0, 0, 0, 0.5) );
   if( scene.scr.leftblindspot )
@@ -462,7 +463,7 @@ void NvgWindow::paintGL() {
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::NoPen);
 
-  if (s->worldObjectsVisible()) {
+ // if (s->worldObjectsVisible()) {
 
     drawLaneLines(painter, s);
 
@@ -475,7 +476,7 @@ void NvgWindow::paintGL() {
         drawLead(painter, leads[1], s->scene.lead_vertices[1]);
       }
     }
-  }
+ // }
 
   drawHud(painter);
 
