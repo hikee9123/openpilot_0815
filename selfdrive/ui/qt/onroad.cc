@@ -463,7 +463,7 @@ void NvgWindow::paintGL() {
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::NoPen);
 
- // if (s->worldObjectsVisible()) {
+  if (s->worldObjectsVisible() ) {
 
     drawLaneLines(painter, s);
 
@@ -476,7 +476,7 @@ void NvgWindow::paintGL() {
         drawLead(painter, leads[1], s->scene.lead_vertices[1]);
       }
     }
- // }
+  }
 
   drawHud(painter);
 

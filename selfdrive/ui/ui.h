@@ -180,7 +180,8 @@ public:
   UIState(QObject* parent = 0);
   void updateStatus();
   inline bool worldObjectsVisible() const {
-    return sm->rcv_frame("liveCalibration") > scene.started_frame;
+    return 1;
+    //return sm->rcv_frame("liveCalibration") > scene.started_frame;
   };
   inline bool engaged() const {
     return scene.started && (*sm)["controlsState"].getControlsState().getEnabled();
