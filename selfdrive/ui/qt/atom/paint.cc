@@ -14,19 +14,14 @@
 #include "selfdrive/logcatd/traffic_sign.h"
 
 
-int OnPaint::get_param( const std::string &key )
-{
-    auto str = QString::fromStdString(Params().get( key ));
-    int value = str.toInt();
-
-    return value;
-}
 
 // OnroadHud
 OnPaint::OnPaint(QWidget *parent) : QWidget(parent) 
 {
   m_param.bbh_left = 0;
   m_param.bbh_right = 0;
+
+  m_nOldSec = 0;
 
   state = uiState();
   scene = &(state->scene);
@@ -72,6 +67,30 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   scene->scr.OpkrWhitePanda = get_param("OpkrWhitePanda");
   scene->scr.nTime = scene->scr.autoScreenOff * 60 * UI_FREQ;
 }
+
+
+int OnPaint::get_time()
+{
+  int iRet;
+  struct timeval tv;
+  int seconds = 0;
+
+  iRet = gettimeofday(&tv, NULL);
+  if (iRet == 0)
+  {
+    seconds = (int)tv.tv_sec;
+  }
+  return seconds;
+}
+
+int OnPaint::get_param( const std::string &key )
+{
+    auto str = QString::fromStdString(Params().get( key ));
+    int value = str.toInt();
+
+    return value;
+}
+
 
 void OnPaint::updateState(const UIState &s)
 {
@@ -948,50 +967,51 @@ void OnPaint::ui_draw_debug1( QPainter &p )
   p.drawText( QRect(bb_x, bb_y, bb_w, 42), text2, textOpt );
   p.drawText( QRect(bb_x, bb_y+45, bb_w, 42), text3, textOpt );
 
-
  // text3.sprintf("BF:%.1f   RL:%.1f°", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
 }
 
 void OnPaint::ui_tunning_data( QPainter &p ) 
 {
-  p.save();
-
+  int nCmd = scene->update_data.getCommand();
   int bb_x = 250;
   int bb_y = 300;
- // int bb_w = width();
 
-  //int nCmd = scene->update_data.getCommand();
+  uint64_t nSec = get_time();
+  uint64_t nDelta = nSec - m_nOldSec;
+
+  if( m_nOldSec <= 0 )
+  {
+    m_nOldSec = nSec;
+    nDelta = 0;
+  }
+  else  if( m_nOldCmmand != nCmd ) 
+  {
+    m_nOldSec = nSec; 
+    m_nOldCmmand = nCmd;
+  }
+
   //int nType = scene->update_data.getType();
-  //int nVersion = scene->update_data.getVersion();
-
+  //int nVersion = scene->update_data.getVersion();  
   QString text4;
 
+  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
+  //p.drawText( bb_x, bb_y+=50, text4 );  
+
+  if( nDelta > 5*60 ) return; // 5 분.
+
+
+
+  p.save();
 
   int  nYPos = bb_y;
   int  nGap = 80;
-  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
-  //p.drawText( QRect(bb_x, bb_y+100, bb_w, 42), text4, textOpt );
- // p.drawText( bb_x, nYPos+=50, text4 );
-
-
-  //QString carName =  QString( scene->car_params.getCarName() );
-  //text4.sprintf("car Name = %s", carName ) ;
-  //p.drawText( bb_x, bb_y+120, text4 );
-
-
- // cereal::CarParams::lateralTuning::Reader  lateralTuning;
- // cereal::CarParams::LateralTorqueTuning::Reader  torque;
 
   auto car_params =  scene->car_params;
   auto lateralTuning = car_params.getLateralTuning();
   auto tunName =  lateralTuning.which();
   // 0.PID, 1:INDI, 2:LQR, 3:Torque, 4:hybrid, 5:multi
  
-
-
-
-  //text4.sprintf("tunName = %d", tunName );                p.drawText( bb_x, nYPos+=50, text4 );
   if( tunName == 3 )
   {
     auto torque  = lateralTuning.getTorque();
@@ -1007,6 +1027,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
   {
     auto lqr  = lateralTuning.getLqr();
     text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
+    configFont( p, "Open Sans",  80, "Regular");
     text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
     text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=nGap, text4 );   
     text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=nGap, text4 );   
@@ -1017,22 +1038,21 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
     auto torque  = hybrid.getTorque();
     auto max_lat_acc = car_params.getMaxLateralAccel();  
-    text4 = "Torque";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4 = "hybrid";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
+    configFont( p, "Open Sans",  80, "Regular");        
     text4.sprintf("LA = %.2f", max_lat_acc );                 p.drawText( bb_x, nYPos+=nGap, text4 );
     text4.sprintf("FC = %.5f", torque.getFriction() );        p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
     auto lqr = hybrid.getLqr();
-    text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
+    //text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
     text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
     text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=nGap, text4 );   
     text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=nGap, text4 );   
 
   }
 
-//  QString tuning = lateralTuning.getWhich();
-//  text4 = "tuning = " + tuning;
-// p.drawText( bb_x, bb_y+140, text4 );
+
   p.restore();  
 }
 

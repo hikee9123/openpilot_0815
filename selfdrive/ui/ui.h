@@ -113,6 +113,7 @@ typedef struct UIScene {
   line_vertices_data track_vertices;
   line_vertices_data lane_line_vertices[4];
   line_vertices_data road_edge_vertices[2];
+  line_vertices_data lane_blindspot_vertices[2];
 
   // lead
   QPointF lead_vertices[2];
@@ -157,6 +158,9 @@ typedef struct UIScene {
      int  OpkrWhitePanda;
      float accel_prob[2];
      int  enginrpm;
+
+     bool rightblindspot;
+     bool leftblindspot;     
   } scr;
 
 
