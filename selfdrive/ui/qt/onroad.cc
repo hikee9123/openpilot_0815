@@ -363,8 +363,8 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
 
 
   // paint blindspot line
-  painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.5) );
-  if( scene.scr.leftblindspot || 1 )
+  painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.3) );
+  if( scene.scr.leftblindspot  )
   {
      painter.drawPolygon(scene.lane_blindspot_vertices[0].v, scene.lane_line_vertices[0].cnt);
   }
