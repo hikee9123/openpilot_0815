@@ -367,9 +367,9 @@ void NvgWindow::ui_draw_line(QPainter &painter, const line_vertices_data &vd)
 
   QPainterPath path = QPainterPath();
   const QPointF *v = &vd.v[0];
-  path.moveTo( v[0].x, v[0].y );
+  path.moveTo( v[0].x(), v[0].y() );
   for (int i = 1; i < vd.cnt; i++) {
-    path.lineTo( v[i].x, v[i].y);
+    path.lineTo( v[i].x(), v[i].y());
   }
   painter.drawPath( path );
 
