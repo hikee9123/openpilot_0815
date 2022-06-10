@@ -385,7 +385,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
      if( right_cnt > 1 )
         painter.drawPolygon(scene.lane_blindspot_vertices[1].v, right_cnt);
   }
-*/
+
 
   // lanelines
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
@@ -421,7 +421,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   }
   painter.setBrush(bg);
   painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
-
+*/
 
 
 
