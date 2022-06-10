@@ -84,36 +84,6 @@ static void update_line_data(const UIState *s, const cereal::ModelDataV2::XYZTDa
   }
 }
 
-/*
-static void update_blindspot_data2(const UIState *s, int lr, const cereal::ModelDataV2::XYZTData::Reader &line,
-                             float y_off,  float z_off, line_vertices_data *pvd, int max_idx ) {
-
-  float  y_off1, y_off2;
-
-  if( lr == 0 )  // left
-  {
-    y_off1 = y_off;
-    y_off2 = 0;
-  }
-  else  // left
-  {
-      y_off1 = 0;
-      y_off2 = y_off;  
-  }
-
-  const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
-  vertex_data *v = &pvd->v[0];
-  for (int i = 0; i <= max_idx; i++) {
-    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, v);
-  }
-  for (int i = max_idx; i >= 0; i--) {
-    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, v);
-  }
-
-  pvd->cnt = v - pvd->v;
-  assert(pvd->cnt <= std::size(pvd->v));
-}
-*/
 
 
 static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelDataV2::XYZTData::Reader &line,
@@ -130,7 +100,21 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
       y_off1 = 0;
       y_off2 = y_off;  
   }
-     
+
+
+  const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
+  QPointF *v = &pvd->v[0]; // *v = &pvd->v[0];
+  for (int i = 0; i <= max_idx; i++) {
+    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, v);
+  }
+  for (int i = max_idx; i >= 0; i--) {
+    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, v);
+  }
+
+  pvd->cnt = v - pvd->v;
+  assert(pvd->cnt <= std::size(pvd->v));
+
+/*
   const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
   bool l, r;
   QPointF left, right;
@@ -162,7 +146,7 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
     pvd->v[left_idx] = left_points[left_idx];
     pvd->v[right_idx] = right_points[left_idx];
   }
-
+*/
 }
 
 
