@@ -90,39 +90,49 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
                              float y_off,  float z_off, line_vertices_data *pvd, int max_idx ) {
   float  y_off1, y_off2;
 
-  if( lr == 0 )
+  if( lr == 0 )  // left
   {
     y_off1 = y_off;
     y_off2 = 0;
   }
-  else
+  else  // left
   {
       y_off1 = 0;
       y_off2 = y_off;  
   }
      
   const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
-
+  bool l, r;
+  QPointF left, right;
   std::vector<QPointF> left_points, right_points;
+
   for (int i = 0; i <= max_idx; i++) {
-    QPointF left, right;
-    bool l = calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, &left);
-    bool r = calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, &right);
+    l = calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, &left);
+    r = calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, &right);
     if (l && r) {
+      // For wider lines the drawn polygon will "invert" when going over a hill and cause artifacts
+      if ( left_points.size() && left.y() > left_points.back().y()) {
+        continue;
+      }
       left_points.push_back(left);
       right_points.push_back(right);
     }
   }
 
-  pvd->cnt = 2 * left_points.size();
-  assert(left_points.size() == right_points.size());
+  int  left_Size = left_points.size();
+  int  right_Size = right_points.size();
+
+  pvd->cnt = 2 * left_Size;
+  assert(left_Size == right_Size);
   assert(pvd->cnt <= std::size(pvd->v));
 
-  for (int left_idx = 0; left_idx < left_points.size(); left_idx++){
-    int right_idx = 2 * left_points.size() - left_idx - 1;
+
+  for (int left_idx = 0; left_idx < left_Size; left_idx++){
+    int right_idx = 2 * left_Size - left_idx - 1;
     pvd->v[left_idx] = left_points[left_idx];
     pvd->v[right_idx] = right_points[left_idx];
   }
+
 }
 
 
@@ -155,8 +165,8 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
 
    // update blindspot line
   for (int i = 0; i < std::size(scene.lane_blindspot_vertices); i++) {
-
-    update_blindspot_data(s, i, lane_lines[i+1], 2.8, 0, &scene.lane_blindspot_vertices[i], max_idx);
+    if( lane_line_probs[i+1] < 0.2 ) continue;
+    update_blindspot_data(s, i, lane_lines[i+1], 2.0, 0, &scene.lane_blindspot_vertices[i], max_idx);
   }   
 
   // update road edges

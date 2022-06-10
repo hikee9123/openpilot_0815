@@ -108,7 +108,6 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
       tune.lqr.k = [-110.73572306, 451.22718255]
       tune.lqr.l = [0.3233671, 0.3185757]
   elif method ==  TunType.LAT_TOROUE:
-      #MAX_LAT_ACCEL = float( params.get("TorqueMaxLatAccel", encoding="utf8") )
       FRICTION      = float( params.get("TorqueFriction", encoding="utf8") )
       Kp            = float( params.get("TorqueKp", encoding="utf8") )
       Ki            = float( params.get("TorqueKi", encoding="utf8") )
@@ -121,6 +120,39 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
       tune.torque.kf = Kf / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
       tune.torque.ki = Ki / MAX_LAT_ACCEL        # 0.1 / 2.5 = 0.04
       tune.torque.friction = FRICTION
+  elif method ==  TunType.HYBRID:
+      tune.init('atom')
+      tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 5), 
+                                  get_method_config( MethodModel.lqr, 50) ]
+
+      # 1. torque 
+      FRICTION      = float( params.get("TorqueFriction", encoding="utf8") )
+      torq_Kp       = float( params.get("TorqueKp", encoding="utf8") )
+      torq_Ki       = float( params.get("TorqueKi", encoding="utf8") )
+      torq_Kf       = float( params.get("TorqueKf", encoding="utf8") )
+      UseAngle      = float( params.get("TorqueUseAngle", encoding="utf8") )
+
+
+      tune.atom.torque.useSteeringAngle = UseAngle  #  False
+      tune.atom.torque.kp = torq_Kp / MAX_LAT_ACCEL        # 2.0 / 2.5 = 0.8
+      tune.atom.torque.kf = torq_Ki / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
+      tune.atom.torque.ki = torq_Kf / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
+      tune.atom.torque.friction = FRICTION
+
+      # 2. lqr
+      lqr_scale = float( params.get("LqrScale", encoding="utf8") )
+      lqr_Ki = float( params.get("LqrKi", encoding="utf8") )
+      lqr_dcGain = float( params.get("LqrDcGain", encoding="utf8") )         
+
+      tune.atom.lqr.scale = lqr_scale     #1700.0
+      tune.atom.lqr.ki = lqr_Ki      #0.01
+      tune.atom.lqr.dcGain =  lqr_dcGain  #0.0027
+      tune.atom.lqr.a = [0., 1., -0.22619643, 1.21822268]
+      tune.atom.lqr.b = [-1.92006585e-04, 3.95603032e-05]
+      tune.atom.lqr.c = [1., 0.]
+      tune.atom.lqr.k = [-110.73572306, 451.22718255]
+      tune.atom.lqr.l = [0.3233671, 0.3185757]
+
   else:
       print( 'OpkrLateralControlMethod = tune.init(lqr)')
       tune.init('lqr')
