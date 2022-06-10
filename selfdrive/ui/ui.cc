@@ -84,6 +84,7 @@ static void update_line_data(const UIState *s, const cereal::ModelDataV2::XYZTDa
   }
 }
 
+/*
 static void update_blindspot_data2(const UIState *s, int lr, const cereal::ModelDataV2::XYZTData::Reader &line,
                              float y_off,  float z_off, line_vertices_data *pvd, int max_idx ) {
 
@@ -112,6 +113,8 @@ static void update_blindspot_data2(const UIState *s, int lr, const cereal::Model
   pvd->cnt = v - pvd->v;
   assert(pvd->cnt <= std::size(pvd->v));
 }
+*/
+
 
 static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelDataV2::XYZTData::Reader &line,
                              float y_off,  float z_off, line_vertices_data *pvd, int max_idx ) {
@@ -193,7 +196,7 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
   // update blindspot line
   for (int i = 0; i < std::size(scene.lane_blindspot_vertices); i++) {
     if( lane_line_probs[i+1] < 0.2 ) continue;
-    update_blindspot_data2(s, i, lane_lines[i+1], 2.0, 0, &scene.lane_blindspot_vertices[i], max_idx);
+    update_blindspot_data(s, i, lane_lines[i+1], 2.0, 0, &scene.lane_blindspot_vertices[i], max_idx);
   }   
 
   // update road edges
