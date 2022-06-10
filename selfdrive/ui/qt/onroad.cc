@@ -404,14 +404,14 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
 
   // printf("drawLaneLines = %d, %d \n", left_cnt, right_cnt );
 
-  if( scene.scr.leftblindspot || 1 )
+  if( scene.scr.leftblindspot  )
   {
    //  if( left_cnt > 1 )
        ui_draw_line(  painter, scene.lane_blindspot_vertices[0] );
         //painter.drawPolygon(scene.lane_blindspot_vertices[0].v, left_cnt);
   }
 
-  if( scene.scr.rightblindspot || 1 )
+  if( scene.scr.rightblindspot  )
   {
    //  if( right_cnt > 1 )
         ui_draw_line( painter, scene.lane_blindspot_vertices[1] );
