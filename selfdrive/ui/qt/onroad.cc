@@ -374,6 +374,8 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   
  // painter.drawText( 200, 500, text4 );
 
+   printf("drawLaneLines = %d, %d \n", left_cnt, right_cnt );
+
   if( scene.scr.leftblindspot || 1 )
   {
      if( left_cnt > 1 )
