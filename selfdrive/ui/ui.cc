@@ -118,7 +118,7 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
       right_points.push_back(right);
     }
   }
-
+  
   int  left_Size = left_points.size();
   int  right_Size = right_points.size();
 
