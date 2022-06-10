@@ -369,7 +369,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   int  right_cnt = scene.lane_line_vertices[1].cnt;
 
    QString text4;
-   configFont( p, "Open Sans",  280, "Regular");    
+   //configFont( p, "Open Sans",  280, "Regular");    
   text4.sprintf("left_cnt = %d", left_cnt );                 
   
   painter.drawText( 200, 500, text4 );
