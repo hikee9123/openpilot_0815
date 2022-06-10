@@ -372,7 +372,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   int  right_cnt = scene.lane_line_vertices[1].cnt;
 
 
-   printf("drawLaneLines = %d, %d \n", left_cnt, right_cnt );
+  // printf("drawLaneLines = %d, %d \n", left_cnt, right_cnt );
 
   if( scene.scr.leftblindspot || 1 )
   {
@@ -386,7 +386,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
         painter.drawPolygon(scene.lane_blindspot_vertices[1].v, right_cnt);
   }
 
-/*
+
   // lanelines
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, std::clamp<float>(scene.lane_line_probs[i], 0.0, 0.7)));
@@ -424,7 +424,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   }
   painter.setBrush(bg);
   painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
-*/
+
 
 
   // stop line
