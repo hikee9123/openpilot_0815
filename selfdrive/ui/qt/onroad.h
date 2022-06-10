@@ -66,6 +66,9 @@ private:
   float m_gasVal;
 
 
+private:
+  void ui_draw_line(QPainter &painter, const line_vertices_data &vd);
+
 protected:
   void paintGL() override;
   void initializeGL() override;
