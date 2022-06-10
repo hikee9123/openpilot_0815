@@ -358,24 +358,19 @@ void NvgWindow::updateFrameMat(int w, int h) {
 
 void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
 
-  return;
-  
+
+
   painter.save();
 
   const UIScene &scene = s->scene;
 
-
+/*
   // paint blindspot line
   painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.2) );
 
   int  left_cnt = scene.lane_line_vertices[0].cnt;
   int  right_cnt = scene.lane_line_vertices[1].cnt;
 
-  // QString text4;
-   //configFont( p, "Open Sans",  280, "Regular");
- // text4.sprintf("left_cnt = %d", left_cnt );
-  
- // painter.drawText( 200, 500, text4 );
 
    printf("drawLaneLines = %d, %d \n", left_cnt, right_cnt );
 
@@ -390,7 +385,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
      if( right_cnt > 1 )
         painter.drawPolygon(scene.lane_blindspot_vertices[1].v, right_cnt);
   }
-
+*/
 
   // lanelines
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
