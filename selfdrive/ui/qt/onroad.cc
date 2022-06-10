@@ -401,7 +401,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
       painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
   }
 
-
+/*
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
   if (scene.end_to_end) {
@@ -426,7 +426,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   if( scene.track_vertices.cnt > 0 )
     painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
 
-
+*/
 
 
   // stop line
