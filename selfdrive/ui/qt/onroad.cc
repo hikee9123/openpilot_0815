@@ -364,6 +364,8 @@ void NvgWindow::ui_draw_line(QPainter &painter, const line_vertices_data &vd)
   //painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.2) );
 
   QPainterPath path = QPainterPath();
+  
+  //      path.setFillRule();
   const QPointF *v = &vd.v[0];
   path.moveTo( v[0].x(), v[0].y() );
   for (int i = 1; i < vd.cnt; i++) {
