@@ -357,6 +357,9 @@ void NvgWindow::updateFrameMat(int w, int h) {
 }
 
 void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
+
+  return;
+  
   painter.save();
 
   const UIScene &scene = s->scene;
