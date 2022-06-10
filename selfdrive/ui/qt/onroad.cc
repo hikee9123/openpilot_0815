@@ -361,9 +361,7 @@ void NvgWindow::ui_draw_line(QPainter &painter, const line_vertices_data &vd)
 {
   if (vd.cnt == 0) return;
 
-
-
-  painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.2) );
+  //painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.2) );
 
   QPainterPath path = QPainterPath();
   const QPointF *v = &vd.v[0];
@@ -406,14 +404,14 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
 
   if( scene.scr.leftblindspot || 1 )
   {
-     if( left_cnt > 1 )
+   //  if( left_cnt > 1 )
        ui_draw_line(  painter, scene.lane_blindspot_vertices[0] );
         //painter.drawPolygon(scene.lane_blindspot_vertices[0].v, left_cnt);
   }
 
   if( scene.scr.rightblindspot || 1 )
   {
-     if( right_cnt > 1 )
+   //  if( right_cnt > 1 )
         ui_draw_line( painter, scene.lane_blindspot_vertices[1] );
         //painter.drawPolygon(scene.lane_blindspot_vertices[1].v, right_cnt);
   }
@@ -422,15 +420,16 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   // lanelines
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, std::clamp<float>(scene.lane_line_probs[i], 0.0, 0.7)));
-    painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
+    ui_draw_line( painter, scene.lane_line_vertices[i] );
+   // painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
   }
 
   // road edges
   for (int i = 0; i < std::size(scene.road_edge_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 0, 0, std::clamp<float>(1.0 - scene.road_edge_stds[i], 0.0, 1.0)));
 
-    if( scene.road_edge_vertices[i].cnt > 0 )
-      painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
+    ui_draw_line( painter, scene.road_edge_vertices[i] );
+    //painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
   }
 
 
@@ -455,7 +454,8 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
     bg.setColorAt(1, whiteColor(0));
   }
   painter.setBrush(bg);
-  painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
+  ui_draw_line( painter, scene.track_vertices );
+  //painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
 
 
 
