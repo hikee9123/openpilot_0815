@@ -120,7 +120,7 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
       tune.torque.kf = Kf / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
       tune.torque.ki = Ki / MAX_LAT_ACCEL        # 0.1 / 2.5 = 0.04
       tune.torque.friction = FRICTION
-  elif method ==  TunType.HYBRID:
+  elif method ==  TunType.LAT_HYBRID:
       tune.init('atom')
       tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 5), 
                                   get_method_config( MethodModel.lqr, 50) ]
