@@ -133,7 +133,7 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
       UseAngle      = float( params.get("TorqueUseAngle", encoding="utf8") )
 
 
-      tune.atom.torque.useSteeringAngle = UseAngle  #  False
+      tune.atom.torque.useSteeringAngle = True  #UseAngle  #  False
       tune.atom.torque.kp = torq_Kp / MAX_LAT_ACCEL        # 2.0 / 2.5 = 0.8
       tune.atom.torque.kf = torq_Ki / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
       tune.atom.torque.ki = torq_Kf / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
