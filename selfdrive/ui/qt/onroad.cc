@@ -398,7 +398,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
     painter.setBrush(QColor::fromRgbF(1.0, 0, 0, std::clamp<float>(1.0 - scene.road_edge_stds[i], 0.0, 1.0)));
     painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
   }
-
+*/
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
   if (scene.end_to_end) {
@@ -421,7 +421,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   }
   painter.setBrush(bg);
   painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
-*/
+
 
 
 
