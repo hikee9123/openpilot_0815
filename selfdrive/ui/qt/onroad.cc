@@ -363,16 +363,16 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
 
 
   // paint blindspot line
-  painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.3) );
+  painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.2) );
 
   int  left_cnt = scene.lane_line_vertices[0].cnt;
   int  right_cnt = scene.lane_line_vertices[1].cnt;
 
-   QString text4;
-   //configFont( p, "Open Sans",  280, "Regular");    
-  text4.sprintf("left_cnt = %d", left_cnt );                 
+  // QString text4;
+   //configFont( p, "Open Sans",  280, "Regular");
+ // text4.sprintf("left_cnt = %d", left_cnt );
   
-  painter.drawText( 200, 500, text4 );
+ // painter.drawText( 200, 500, text4 );
 
   if( scene.scr.leftblindspot || 1 )
   {
