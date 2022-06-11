@@ -7,7 +7,7 @@ from functools import lru_cache
 from common.basedir import BASEDIR
 from selfdrive.swaglog import cloudlog
 
-TESTED_BRANCHES = ['master', 'release2-staging', 'release3-staging', 'dashcam-staging', 'release2', 'release3', 'dashcam']
+TESTED_BRANCHES = ['master', 'release2-staging', 'dashcam-staging', 'release2', 'dashcam']
 
 training_version: bytes = b"0.2.0"
 terms_version: bytes = b"2"
@@ -68,7 +68,7 @@ def get_normalized_origin(default: Optional[str] = None) -> Optional[str]:
 
 @cache
 def get_version() -> str:
-  with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "common", "version.h")) as _versionf:
+  with open(os.path.join(BASEDIR, "common", "version.h")) as _versionf:
     version = _versionf.read().split('"')[1]
   return version
 

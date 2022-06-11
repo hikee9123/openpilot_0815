@@ -6,10 +6,10 @@
 #include <QtConcurrent>
 
 #include "common/transformations/orientation.hpp"
-#include "selfdrive/common/params.h"
-#include "selfdrive/common/swaglog.h"
-#include "selfdrive/common/util.h"
-#include "selfdrive/common/watchdog.h"
+#include "common/params.h"
+#include "common/swaglog.h"
+#include "common/util.h"
+#include "common/watchdog.h"
 #include "selfdrive/hardware/hw.h"
 
 #define BACKLIGHT_DT 0.05
@@ -85,6 +85,71 @@ static void update_line_data(const UIState *s, const cereal::ModelDataV2::XYZTDa
 }
 
 
+
+static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelDataV2::XYZTData::Reader &line,
+                             float y_off,  float z_off, line_vertices_data *pvd, int max_idx ) {
+  float  y_off1, y_off2;
+
+  if( lr == 0 )  // left
+  {
+    y_off1 = y_off;
+    y_off2 = 0;
+  }
+  else  // left
+  {
+      y_off1 = 0;
+      y_off2 = y_off;  
+  }
+
+
+  const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
+  QPointF *v = &pvd->v[0]; // *v = &pvd->v[0];
+  for (int i = 0; i <= max_idx; i++) {
+    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, v);
+  }
+  for (int i = max_idx; i >= 0; i--) {
+    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, v);
+  }
+
+  pvd->cnt = v - pvd->v;
+  assert(pvd->cnt <= std::size(pvd->v));
+
+/*
+  const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
+  bool l, r;
+  QPointF left, right;
+  std::vector<QPointF> left_points, right_points;
+
+  for (int i = 0; i <= max_idx; i++) {
+    l = calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, &left);
+    r = calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, &right);
+    if (l && r) {
+      // For wider lines the drawn polygon will "invert" when going over a hill and cause artifacts
+      if ( left_points.size() && left.y() > left_points.back().y()) {
+        continue;
+      }
+      left_points.push_back(left);
+      right_points.push_back(right);
+    }
+  }
+  
+  int  left_Size = left_points.size();
+  int  right_Size = right_points.size();
+
+  pvd->cnt = 2 * left_Size;
+  assert(left_Size == right_Size);
+  assert(pvd->cnt <= std::size(pvd->v));
+
+
+  for (int left_idx = 0; left_idx < left_Size; left_idx++){
+    int right_idx = 2 * left_Size - left_idx - 1;
+    pvd->v[left_idx] = left_points[left_idx];
+    pvd->v[right_idx] = right_points[left_idx];
+  }
+*/
+}
+
+
 static void update_stop_line_data(const UIState *s, const cereal::ModelDataV2::StopLineData::Reader &line,
                                   float x_off, float y_off, float z_off, line_vertices_data *pvd) {
   const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
@@ -112,6 +177,13 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
     update_line_data(s, lane_lines[i], 0.025 * scene.lane_line_probs[i], 0, &scene.lane_line_vertices[i], max_idx);
   }
 
+
+  // update blindspot line
+  for (int i = 0; i < std::size(scene.lane_blindspot_vertices); i++) {
+    if( lane_line_probs[i+1] < 0.2 ) continue;
+    update_blindspot_data(s, i, lane_lines[i+1], 2.0, 0, &scene.lane_blindspot_vertices[i], max_idx);
+  }   
+
   // update road edges
   const auto road_edges = model.getRoadEdges();
   const auto road_edge_stds = model.getRoadEdgeStds();
@@ -124,10 +196,14 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
   auto lead_one = (*s->sm)["radarState"].getRadarState().getLeadOne();
   if (lead_one.getStatus()) {
     const float lead_d = lead_one.getDRel() * 2.;
-    max_distance = std::clamp((float)(lead_d - fmin(lead_d * 0.35, 10.)), 0.0f, max_distance);
+    max_distance = std::clamp((float)(lead_d - fmin(lead_d * 0.35, 5.)), 0.0f, max_distance);
   }
   max_idx = get_path_length_idx(model_position, max_distance);
   update_line_data(s, model_position, scene.end_to_end ? 0.9 : 0.5, 1.22, &scene.track_vertices, max_idx, false);
+
+
+
+
 
 
 
@@ -190,10 +266,15 @@ static void update_state(UIState *s) {
     scene.pandaType = cereal::PandaState::PandaType::UNKNOWN;
   }
   if (sm.updated("carParams")) {
-    scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
-    scene.longitudinal_control |= sm["carParams"].getCarParams().getAtompilotLongitudinalControl();
+    scene.car_params = sm["carParams"].getCarParams();
+
+
+    scene.longitudinal_control = scene.car_params.getOpenpilotLongitudinalControl();
+    scene.longitudinal_control |= scene.car_params.getAtompilotLongitudinalControl();
+
+    //printf("carParams  %d\n", scene.longitudinal_control );  
   }
- // if (!scene.started && sm.updated("sensorEvents")) {
+
 
   float  gradient[2];
   gradient[0] = scene.scr.accel_prob[0];
@@ -284,6 +365,10 @@ static void update_state(UIState *s) {
     auto cruiseState = scene.car_state.getCruiseState();
     scene.scr.awake = cruiseState.getCruiseSwState();
     scene.scr.enginrpm =  scene.car_state.getEngineRpm();
+
+
+    scene.scr.leftblindspot = scene.car_state.getLeftBlindspot();
+    scene.scr.rightblindspot = scene.car_state.getRightBlindspot();    
    } 
    
    if( sm.updated("liveNaviData"))
@@ -302,7 +387,13 @@ static void update_state(UIState *s) {
     scene.lateralPlan = sm["lateralPlan"].getLateralPlan();
    } 
 
+  if ( sm.updated("updateEvents")) {
 
+    scene.update_data = sm["updateEvents"].getUpdateEvents();
+
+    //int nCmd = scene.update_data.getCommand();
+    //printf("updateEvents cmd = %d", nCmd );
+  }
 
 }
 
@@ -350,7 +441,7 @@ UIState::UIState(QObject *parent) : QObject(parent) {
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState", "roadCameraState",
     "pandaStates", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
     "wideRoadCameraState",
-    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters",
+    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters","updateEvents",
   });
 
   Params params;

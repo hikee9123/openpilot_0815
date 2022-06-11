@@ -1,4 +1,4 @@
-#include "selfdrive/common/params.h"
+#include "common/params.h"
 
 #include <dirent.h>
 #include <sys/file.h>
@@ -6,8 +6,8 @@
 #include <csignal>
 #include <unordered_map>
 
-#include "selfdrive/common/swaglog.h"
-#include "selfdrive/common/util.h"
+#include "common/swaglog.h"
+#include "common/util.h"
 #include "selfdrive/hardware/hw.h"
 
 namespace {
@@ -195,13 +195,41 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrRunNaviOnBoot", PERSISTENT},
     {"OpkrMapEnable", PERSISTENT},
     {"OpkrParameters", PERSISTENT},
-    {"OpkrCarModel", PERSISTENT},
+    //{"OpkrCarModel", PERSISTENT},
     {"OpkratomLongitudinal", PERSISTENT},
     
     {"OpkrPowerShutdown", PERSISTENT},
     {"OpkrDmonitor", PERSISTENT},
     {"OpkrUpdated", PERSISTENT},
     {"OpkrWhitePanda", PERSISTENT},
+
+
+    {"OpkrMaxAngleLimit", PERSISTENT},
+    {"OpkrSteerMethod", PERSISTENT},
+    {"OpkrMaxSteeringAngle", PERSISTENT},
+    {"OpkrMaxDriverAngleWait", PERSISTENT},
+    {"OpkrMaxSteerAngleWait", PERSISTENT},
+    {"OpkrDriverAngleWait", PERSISTENT},
+    
+    {"OpkrLateralControlMethod", PERSISTENT},
+   // Torque
+    {"TorqueMaxLatAccel", PERSISTENT},
+    {"TorqueFriction", PERSISTENT},
+    {"TorqueKp", PERSISTENT},
+    {"TorqueKf", PERSISTENT},
+    {"TorqueKi", PERSISTENT},
+    {"TorqueUseAngle", PERSISTENT},
+
+    // LQR
+    {"LqrScale", PERSISTENT},
+    {"LqrKi", PERSISTENT},
+    {"LqrDcGain", PERSISTENT},
+
+    // PID
+    {"PidKp", PERSISTENT},
+    {"PidKi", PERSISTENT},
+    {"PidKf", PERSISTENT},
+
 };
 
 } // namespace

@@ -11,9 +11,9 @@
 #include <QTransform>
 
 #include "cereal/messaging/messaging.h"
-#include "selfdrive/common/modeldata.h"
-#include "selfdrive/common/params.h"
-#include "selfdrive/common/timing.h"
+#include "common/modeldata.h"
+#include "common/params.h"
+#include "common/timing.h"
 
 const int bdr_s = 30;
 const int header_h = 420;
@@ -113,6 +113,7 @@ typedef struct UIScene {
   line_vertices_data track_vertices;
   line_vertices_data lane_line_vertices[4];
   line_vertices_data road_edge_vertices[2];
+  line_vertices_data lane_blindspot_vertices[2];
 
   // lead
   QPointF lead_vertices[2];
@@ -135,7 +136,9 @@ typedef struct UIScene {
   cereal::ControlsState::Reader controls_state;
   cereal::CarState::Reader car_state;
   cereal::LateralPlan::Reader lateralPlan;
- // cereal::RadarState::LeadData::Reader  lead_data[2];
+  cereal::CarParams::Reader  car_params;
+  cereal::UpdateEventData::Reader  update_data;
+  
 
   int  IsOpenpilotViewEnabled;
   struct _screen
@@ -155,6 +158,9 @@ typedef struct UIScene {
      int  OpkrWhitePanda;
      float accel_prob[2];
      int  enginrpm;
+
+     bool rightblindspot;
+     bool leftblindspot;     
   } scr;
 
 
@@ -174,6 +180,10 @@ public:
   UIState(QObject* parent = 0);
   void updateStatus();
   inline bool worldObjectsVisible() const {
+
+    if( scene.IsOpenpilotViewEnabled )
+        return 1;
+
     return sm->rcv_frame("liveCalibration") > scene.started_frame;
   };
   inline bool engaged() const {

@@ -22,7 +22,7 @@ LOW_SPEED_FACTOR = 200
 JERK_THRESHOLD = 0.2
 
 
-def set_torque_tune(tune, MAX_LAT_ACCEL=2.5, FRICTION=.1):
+def set_torque_tune(tune, MAX_LAT_ACCEL=2.5, FRICTION=0.01):
   tune.init('torque')
   tune.torque.useSteeringAngle = True
   tune.torque.kp = 1.0 / MAX_LAT_ACCEL
@@ -41,6 +41,11 @@ class LatControlTorque(LatControl):
     self.use_steering_angle = CP.lateralTuning.torque.useSteeringAngle
     self.friction = CP.lateralTuning.torque.friction
     self.kf = CP.lateralTuning.torque.kf
+
+  def live_tune(self, CP):
+    self.pid = PIDController(CP.lateralTuning.torque.kp, CP.lateralTuning.torque.ki,
+                             k_f=CP.lateralTuning.torque.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
+
 
   def reset(self):
     super().reset()

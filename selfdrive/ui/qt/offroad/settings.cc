@@ -14,8 +14,8 @@
 #include "selfdrive/ui/qt/maps/map_settings.h"
 #endif
 
-#include "selfdrive/common/params.h"
-#include "selfdrive/common/util.h"
+#include "common/params.h"
+#include "common/util.h"
 #include "selfdrive/hardware/hw.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/qt/widgets/input.h"
@@ -28,7 +28,7 @@
 
 #include "atom/DeveloperPanel.h"
 #include "atom/CommunityPanel.h"
-//#include "atom/ControlPanel.h"
+#include "atom/TuningPanel.h"
 
 
 TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
@@ -102,9 +102,6 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
     auto toggle = new ParamControl(param, title, desc, icon, this);
     bool locked = params.getBool((param + "Lock").toStdString());
     toggle->setEnabled(!locked);
-    if (!locked) {
-      connect(uiState(), &UIState::offroadTransition, toggle, &ParamControl::setEnabled);
-    }
     addItem(toggle);
   }
 }
@@ -400,7 +397,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Software", new SoftwarePanel(this)},
     {"Developer", new DeveloperPanel(this)},
     {"Community", new CommunityPanel(this)},
-  //  {"Control", new ControlPanel(this)},
+    {"Tuning", new TuningPanel(this)},
   };
 
 #ifdef ENABLE_MAPS

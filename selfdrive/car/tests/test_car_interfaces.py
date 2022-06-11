@@ -7,16 +7,25 @@ from cereal import car
 from selfdrive.car.fingerprints import all_known_cars
 from selfdrive.car.car_helpers import interfaces
 from selfdrive.car.fingerprints import _FINGERPRINTS as FINGERPRINTS
+import cereal.messaging as messaging
 
+from selfdrive.car.hyundai.values import CAR
 
-from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
+from selfdrive.controls.lib.latcontrol_pid import LatControlPID
+from selfdrive.controls.lib.latcontrol_indi import LatControlINDI
+from selfdrive.controls.lib.latcontrol_lqr import LatControlLQR
+from selfdrive.controls.lib.latcontrol_angle import LatControlAngle
+from selfdrive.controls.lib.latcontrol_torque import LatControlTorque
 from selfdrive.controls.lib.latcontrol_atom import LatControlATOM
+from selfdrive.controls.lib.latcontrol_multi import LatControlMULTI
+
 
 MethodModel = car.CarParams.MethodModel
 
 class TestCarInterfaces(unittest.TestCase):
 
-  @parameterized.expand([(car,) for car in all_known_cars()])
+  #@parameterized.expand([(car,) for car in all_known_cars()])
+  @parameterized.expand([(CAR.GRANDEUR_HEV_19,) ])
   def test_car_interfaces(self, car_name):
     if car_name in FINGERPRINTS:
       fingerprint = FINGERPRINTS[car_name][0]
@@ -30,6 +39,9 @@ class TestCarInterfaces(unittest.TestCase):
       2: fingerprint,
     }
 
+    self.pm = messaging.PubMaster(['sendcan', 'controlsState', 'carState',
+                                    'carControl', 'carEvents', 'carParams'])
+
     car_fw = []
 
     car_params = CarInterface.get_params(car_name, fingerprints, car_fw)
@@ -41,14 +53,20 @@ class TestCarInterfaces(unittest.TestCase):
     self.assertGreater(car_params.steerRateCost, 1e-3)
 
     print( 'test car name = {}'.format( car_name ) )
+    self.LaC = None
     if car_params.steerControlType != car.CarParams.SteerControlType.angle:
       tuning = car_params.lateralTuning.which()
       if tuning == 'pid':
         self.assertTrue(len(car_params.lateralTuning.pid.kpV))
+        self.LaC = LatControlPID( car_params, car_interface)
       elif tuning == 'torque':
         self.assertTrue(car_params.lateralTuning.torque.kf > 0)
+        self.LaC = LatControlTorque( car_params, car_interface)
       elif tuning == 'indi':
         self.assertTrue(len(car_params.lateralTuning.indi.outerLoopGainV))
+        self.LaC = LatControlINDI( car_params, car_interface)
+      elif tuning == 'lqr':
+        self.LaC = LatControlLQR( car_params, car_interface)
       elif tuning == 'atom':
         self.assertTrue(car_params.lateralTuning.atom.torque.kf > 0)
         self.LaC = LatControlATOM( car_params, car_interface)        
@@ -56,6 +74,15 @@ class TestCarInterfaces(unittest.TestCase):
         self.assertTrue(len(car_params.lateralTuning.multi.pid.kpV))
         self.LaC = LatControlMULTI( car_params, car_interface)
 
+
+    car_interface.get_tunning_params( car_params )
+    if self.LaC is not None:
+      self.LaC.live_tune( car_params )
+
+    cp_send = messaging.new_message('carParams')
+    cp_send.carParams = car_params
+    print(  cp_send )
+    self.pm.send('carParams', cp_send)
 
     # Run car interface
     CC = car.CarControl.new_message()

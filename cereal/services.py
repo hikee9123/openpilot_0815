@@ -71,6 +71,7 @@ services = {
 
 # atom
   "liveNaviData": (True, 0.),
+  "updateEvents": (True, 0.),
 
   # debug
   "testJoystick": (True, 0.),

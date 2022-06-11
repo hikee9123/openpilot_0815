@@ -434,6 +434,7 @@ struct CarParams {
   maxSteeringAngleDeg @54 :Float32;
   safetyConfigs @62 :List(SafetyConfig);
   alternativeExperience @65 :Int16;      # panda flag for features like no disengage on gas
+  maxLateralAccel @74 :Float32;
 
   steerMaxBPDEPRECATED @11 :List(Float32);
   steerMaxVDEPRECATED @12 :List(Float32);
@@ -496,6 +497,16 @@ struct CarParams {
   atompilotLongitudinalControl @70  :Bool;
   atomHybridSpeed @71  :Float32;
   opkrAutoResume @72 :Bool;
+  smoothSteer @73 :SmoothSteerData;
+
+  struct SmoothSteerData
+  {
+    method @0: Int8;
+    maxSteeringAngle @1 :Float32;
+    maxDriverAngleWait @2 :Float32;
+    maxSteerAngleWait @3 :Float32;
+    driverAngleWait @4 :Float32;
+  }
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;

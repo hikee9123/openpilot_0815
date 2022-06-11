@@ -58,11 +58,41 @@ def manager_init() -> None:
     ("OpkrPowerShutdown", "0"),
     ("OpkrRunNaviOnBoot", "0"),
     ("OpkrSSHLegacy", "0"),
-    ("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
+    #("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
     ("OpkratomLongitudinal", "0"), 
     ("OpkrDmonitor", "1"),
     ("OpkrUpdated", "1"),
     ("OpkrWhitePanda", "0"),
+
+    {"OpkrMaxAngleLimit", "85"},
+    ("OpkrSteerMethod", "0"),
+    ("OpkrMaxSteeringAngle", "85"),
+    ("OpkrMaxDriverAngleWait", "0.002"),
+    ("OpkrMaxSteerAngleWait", "0.001"),
+    ("OpkrDriverAngleWait", "0.001"),
+    
+    # Tunning
+    ("OpkrLateralControlMethod", "3"),
+
+    # 0.PID
+    ("PidKp", "0.25"),
+    ("PidKi", "0.05"),
+    ("PidKf", "0.00005"),
+
+    # 1.INDI
+
+    # 2.LQR
+    ("LqrScale", "2000"),
+    ("LqrKi", "0.01"),
+    ("LqrDcGain","0.0030"),    
+
+    # 3.Torque
+    ("TorqueMaxLatAccel", "3"),
+    ("TorqueKp", "1.0"),
+    ("TorqueKf", "1.0"),
+    ("TorqueKi", "0.1"),
+    ("TorqueFriction","0"),    
+    ("TorqueUseAngle", "1"),    
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
@@ -75,9 +105,15 @@ def manager_init() -> None:
 
   # set unset params
   for k, v in default_params:
-    if params.get(k) is None:
-      params.put(k, v)
-
+    try:      
+      if params.get(k) is None:
+        params.put(k, v)
+    except:  # Not on a branch, fallback
+      print("default_params:{}  {}".format( k, v) )
+      pass
+    finally:  # try end 
+      pass 
+    
   # is this dashcam?
   if os.getenv("PASSIVE") is not None:
     params.put_bool("Passive", bool(int(os.getenv("PASSIVE", "0"))))

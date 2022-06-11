@@ -3,7 +3,7 @@
 #include <QStackedLayout>
 #include <QWidget>
 
-#include "selfdrive/common/util.h"
+#include "common/util.h"
 #include "selfdrive/ui/qt/widgets/cameraview.h"
 #include "selfdrive/ui/ui.h"
 
@@ -65,6 +65,9 @@ private:
   int  m_nBrakeStatus;
   float m_gasVal;
 
+
+private:
+  void ui_draw_line(QPainter &painter, const line_vertices_data &vd);
 
 protected:
   void paintGL() override;

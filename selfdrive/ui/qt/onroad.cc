@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-#include "selfdrive/common/timing.h"
+#include "common/timing.h"
 #include "selfdrive/ui/qt/util.h"
 #ifdef ENABLE_MAPS
 #include "selfdrive/ui/qt/maps/map.h"
@@ -356,21 +356,66 @@ void NvgWindow::updateFrameMat(int w, int h) {
       .translate(-intrinsic_matrix.v[2], -intrinsic_matrix.v[5]);
 }
 
+
+void NvgWindow::ui_draw_line(QPainter &painter, const line_vertices_data &vd) 
+{
+  if (vd.cnt == 0) return;
+ 
+  QPainterPath path = QPainterPath();
+
+  const QPointF *v = &vd.v[0];
+  path.moveTo( v[0].x(), v[0].y() );
+  for (int i = 1; i < vd.cnt; i++) {
+    path.lineTo( v[i].x(), v[i].y());
+  }
+  painter.drawPath( path );
+}
+
 void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
   painter.save();
 
   const UIScene &scene = s->scene;
+
+
+  // paint blindspot line
+  painter.setBrush( QColor::fromRgbF(1.0, 0.1, 0.1, 0.2) );
+
+// int  left_cnt = scene.lane_line_vertices[0].cnt;
+ // int  right_cnt = scene.lane_line_vertices[1].cnt;
+
+
+  // printf("drawLaneLines = %d, %d \n", left_cnt, right_cnt );
+
+  if( scene.scr.leftblindspot  )
+  {
+   //  if( left_cnt > 1 )
+       ui_draw_line(  painter, scene.lane_blindspot_vertices[0] );
+        //painter.drawPolygon(scene.lane_blindspot_vertices[0].v, left_cnt);
+  }
+
+  if( scene.scr.rightblindspot  )
+  {
+   //  if( right_cnt > 1 )
+        ui_draw_line( painter, scene.lane_blindspot_vertices[1] );
+        //painter.drawPolygon(scene.lane_blindspot_vertices[1].v, right_cnt);
+  }
+
+
   // lanelines
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, std::clamp<float>(scene.lane_line_probs[i], 0.0, 0.7)));
-    painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
+    ui_draw_line( painter, scene.lane_line_vertices[i] );
+   // painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
   }
 
   // road edges
   for (int i = 0; i < std::size(scene.road_edge_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 0, 0, std::clamp<float>(1.0 - scene.road_edge_stds[i], 0.0, 1.0)));
-    painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
+
+    ui_draw_line( painter, scene.road_edge_vertices[i] );
+    //painter.drawPolygon(scene.road_edge_vertices[i].v, scene.road_edge_vertices[i].cnt);
   }
+
 
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
@@ -393,7 +438,9 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
     bg.setColorAt(1, whiteColor(0));
   }
   painter.setBrush(bg);
-  painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
+  ui_draw_line( painter, scene.track_vertices );
+  //painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
+
 
 
   // stop line
@@ -442,19 +489,20 @@ void NvgWindow::drawLead(QPainter &painter, const cereal::ModelDataV2::LeadDataV
 }
 
 void NvgWindow::paintGL() {
+  UIState *s = uiState();
+  const cereal::ModelDataV2::Reader &model = (*s->sm)["modelV2"].getModelV2();
   CameraViewWidget::paintGL();
 
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::NoPen);
 
-  UIState *s = uiState();
-  if (s->worldObjectsVisible()) {
+  if (s->worldObjectsVisible() ) {
 
     drawLaneLines(painter, s);
 
     if (s->scene.longitudinal_control || 1) {
-      auto leads = (*s->sm)["modelV2"].getModelV2().getLeadsV3();
+      const auto leads = model.getLeadsV3();
       if (leads[0].getProb() > .5) {
         drawLead(painter, leads[0], s->scene.lead_vertices[0]);
       }

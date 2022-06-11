@@ -3,26 +3,25 @@
 #include <cmath>
 
 #include <QDebug>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QConicalGradient>
+#include <QPen>
 
-#include "selfdrive/common/timing.h"
+#include "common/timing.h"
 #include "selfdrive/ui/qt/util.h"
 
 #include "selfdrive/logcatd/traffic_sign.h"
 
 
-int OnPaint::get_param( const std::string &key )
-{
-    auto str = QString::fromStdString(Params().get( key ));
-    int value = str.toInt();
-
-    return value;
-}
 
 // OnroadHud
 OnPaint::OnPaint(QWidget *parent) : QWidget(parent) 
 {
   m_param.bbh_left = 0;
   m_param.bbh_right = 0;
+
+  m_nOldSec = 0;
 
   state = uiState();
   scene = &(state->scene);
@@ -68,6 +67,30 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   scene->scr.OpkrWhitePanda = get_param("OpkrWhitePanda");
   scene->scr.nTime = scene->scr.autoScreenOff * 60 * UI_FREQ;
 }
+
+
+int OnPaint::get_time()
+{
+  int iRet;
+  struct timeval tv;
+  int seconds = 0;
+
+  iRet = gettimeofday(&tv, NULL);
+  if (iRet == 0)
+  {
+    seconds = (int)tv.tv_sec;
+  }
+  return seconds;
+}
+
+int OnPaint::get_param( const std::string &key )
+{
+    auto str = QString::fromStdString(Params().get( key ));
+    int value = str.toInt();
+
+    return value;
+}
+
 
 void OnPaint::updateState(const UIState &s)
 {
@@ -154,12 +177,42 @@ float OnPaint::interp( float xv, float xp[], float fp[], int N)
 	return  dResult;
 }
 
+
+void OnPaint::mousePressEvent(QMouseEvent* e) 
+{
+
+  /*
+  int e_x = e->x();
+  int e_y = e->y();
+  //int e_button= e->button();
+
+   UIState *s = uiState();
+  const int bb_dmr_w = 180;   
+  const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
+ //  printf("OnDashCam::mousePressEvent %d,%d  \n", e_x, e_y);
+
+  Rect btn_rec = btn_dashcam_rec;
+  btn_rec.x = bb_dmr_x;
+
+  if( btn_rec.ptInRect( e_x, e_y ) ) 
+  {
+    printf( "  captureState = %d \n", captureState );
+    screen_toggle_record_state();
+    update(); 
+    return;
+  }
+*/
+  QWidget::mousePressEvent(e);
+}
+
 void OnPaint::paintEvent(QPaintEvent *event) 
 {
   QPainter p(this);
   //p.setRenderHint(QPainter::Antialiasing);
 
 //  printf( "OnPaint::paintEvent" );
+
+
 
   bb_ui_draw_UI( p );
   ui_main_navi( p );
@@ -654,42 +707,50 @@ void OnPaint::bb_draw_rpm(QPainter &p, int compass_x, int compass_y )
  // float  bearingUblox = gps_ext.getBearingDeg();
  float fEngineRpm = enginRpm;//   enginRpm;// scene->scr.enginrpm;
 
-
+  //fEngineRpm = 3000;
 
   fEngineRpm *= 0.045;
 
   if( fEngineRpm <= 0 ) return;
 
 
+/*
   if( enginRpm < 2000 )
       p.setPen( QPen( QColor(0,255,0,200), 30) );
   else if( enginRpm < 3000 )
       p.setPen( QPen( QColor(255,255,0,200), 35 ) );
   else
       p.setPen( QPen( QColor(255,0,0,200), 35) );
-
-  p.drawArc(compass_x, compass_y, 500, 200, -180 * 16, -180 - fEngineRpm * 16);
-  //p.drawText(compass_x, compass_y, "30°");
-
-
-
-
-
-  p.setPen(Qt::NoPen);  
-  /*
-  int   size =  img_size_rpm * 0.5;
-
-    p.drawPixmap(compass_x , compass_y, img_rpm1 );
-
-    p.save();
-    p.setOpacity(0.8);
-    p.translate( compass_x+size, compass_y+size);
-    p.rotate( fEngineRpm );
-    p.drawPixmap( -size , -size, img_rpm2 );
-    p.restore();
 */
+  int nStartDegree = -140;
+ // p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
+
+
+//QRectF rect = QRectF(compass_x, compass_y, 500, 200);
+
+
+//int barWidth = 20;
+
+p.setRenderHint(QPainter::Antialiasing, true);
+QConicalGradient gradient;
+gradient.setCenter( compass_x+200, compass_y+100 );
+gradient.setAngle(-90);
+gradient.setColorAt(0, QColor(255, 44, 0));
+gradient.setColorAt(1, QColor(0, 255, 100));
+//gradient.setColorAt(1, QColor(255, 255, 0));
+
+
+int  m_width = 20;
+QPen pen(QBrush(gradient), m_width);
+pen.setCapStyle(Qt::RoundCap);
+p.setPen( pen );
+//p.setPen(QPen(Qt::black, barWidth, Qt::SolidLine,Qt::RoundCap));
+
+p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEngineRpm * 16);
+//p.drawArc(barWidth/2, barWidth/2, this->width() - barWidth, this->height() - barWidth,
+//                90*16, progressInDegrees*-16);}
   
-   
+  p.setPen(Qt::NoPen);  
 }
 
 void OnPaint::bb_ui_draw_UI(QPainter &p)
@@ -906,11 +967,94 @@ void OnPaint::ui_draw_debug1( QPainter &p )
   p.drawText( QRect(bb_x, bb_y, bb_w, 42), text2, textOpt );
   p.drawText( QRect(bb_x, bb_y+45, bb_w, 42), text3, textOpt );
 
-
  // text3.sprintf("BF:%.1f   RL:%.1f°", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
 }
 
+void OnPaint::ui_tunning_data( QPainter &p ) 
+{
+  int nCmd = scene->update_data.getCommand();
+  int bb_x = 250;
+  int bb_y = 300;
+
+  uint64_t nSec = get_time();
+  uint64_t nDelta = nSec - m_nOldSec;
+
+  if( m_nOldSec <= 0 )
+  {
+    m_nOldSec = nSec;
+    nDelta = 0;
+  }
+  else  if( m_nOldCmmand != nCmd ) 
+  {
+    m_nOldSec = nSec; 
+    m_nOldCmmand = nCmd;
+  }
+
+  //int nType = scene->update_data.getType();
+  //int nVersion = scene->update_data.getVersion();  
+  QString text4;
+
+  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
+  //p.drawText( bb_x, bb_y+=50, text4 );  
+
+  if( nDelta > 5*60 ) return; // 5 분.
+
+
+
+  p.save();
+
+  int  nYPos = bb_y;
+  int  nGap = 80;
+
+  auto car_params =  scene->car_params;
+  auto lateralTuning = car_params.getLateralTuning();
+  auto tunName =  lateralTuning.which();
+  // 0.PID, 1:INDI, 2:LQR, 3:Torque, 4:hybrid, 5:multi
+ 
+  if( tunName == 3 )
+  {
+    auto torque  = lateralTuning.getTorque();
+    auto max_lat_acc = car_params.getMaxLateralAccel();    
+
+    text4 = "Torque";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
+
+    configFont( p, "Open Sans",  80, "Regular");    
+    text4.sprintf("LA = %.2f", max_lat_acc );                 p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("FC = %.5f", torque.getFriction() );        p.drawText( bb_x, nYPos+=nGap, text4 );
+  }
+  else if( tunName == 2 )
+  {
+    auto lqr  = lateralTuning.getLqr();
+    text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
+    configFont( p, "Open Sans",  80, "Regular");
+    text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=nGap, text4 );   
+    text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=nGap, text4 );   
+  }
+  else if( tunName == 4 ) // hybrid
+  {
+    auto hybrid  = lateralTuning.getAtom();
+
+    auto torque  = hybrid.getTorque();
+    auto max_lat_acc = car_params.getMaxLateralAccel();  
+    text4 = "hybrid";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
+    configFont( p, "Open Sans",  80, "Regular");        
+    text4.sprintf("LA = %.2f", max_lat_acc );                 p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("FC = %.5f", torque.getFriction() );        p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+    auto lqr = hybrid.getLqr();
+    //text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=nGap, text4 );   
+    text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=nGap, text4 );   
+
+  }
+
+
+  p.restore();  
+}
 
 
 void OnPaint::ui_main_navi( QPainter &p ) 
@@ -918,4 +1062,8 @@ void OnPaint::ui_main_navi( QPainter &p )
   ui_draw_navi( p );
 
   ui_draw_debug1( p );
+
+  ui_tunning_data( p );
+
 }
+

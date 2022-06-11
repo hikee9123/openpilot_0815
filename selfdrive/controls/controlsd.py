@@ -17,6 +17,7 @@ from selfdrive.car.car_helpers import get_car, get_startup_event, get_one_can
 from selfdrive.controls.lib.lane_planner import CAMERA_OFFSET
 from selfdrive.controls.lib.drive_helpers import update_v_cruise, initialize_v_cruise
 from selfdrive.controls.lib.drive_helpers import get_lag_adjusted_curvature
+from selfdrive.controls.lib.latcontrol import LatControl
 from selfdrive.controls.lib.longcontrol import LongControl
 from selfdrive.controls.lib.latcontrol_pid import LatControlPID
 from selfdrive.controls.lib.latcontrol_indi import LatControlINDI
@@ -110,8 +111,9 @@ class Controls:
       ignore = ['driverCameraState', 'managerState'] if SIMULATION else None
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState','liveNaviData'] + self.camera_packets + joystick_packet + drivermonitor_packet,
-                                     ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan'])
+                                     'managerState', 'liveParameters', 'radarState','liveNaviData',
+                                     'updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
+                                     ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan', 'updateEvents'])
 
     # set alternative experiences from parameters
     self.disengage_on_accelerator = params.get_bool("DisengageOnAccelerator")
@@ -150,6 +152,7 @@ class Controls:
     self.LoC = LongControl(self.CP)
     self.VM = VehicleModel(self.CP)
 
+    self.LaC: LatControl
     if self.CP.steerControlType == car.CarParams.SteerControlType.angle:
       self.LaC = LatControlAngle(self.CP, self.CI)
     elif self.CP.lateralTuning.which() == 'pid':
@@ -210,6 +213,7 @@ class Controls:
     self.prof = Profiler(False)  # off by default
 
     # atom
+    self.update_command = None
     self.OpkrWhitePanda = params.get_bool("OpkrWhitePanda")
     self.openpilot_mode = 10
     LiveSteerRatio = params.get("OpkrLiveSteerRatio")
@@ -566,7 +570,6 @@ class Controls:
           if not self.CP.pcmCruise:
             self.v_cruise_kph = initialize_v_cruise(CS.vEgo, CS.buttonEvents, self.v_cruise_kph_last)
 
-
     # Check if openpilot is engaged and actuators are enabled
     self.enabled = self.state in ENABLED_STATES
     self.active = self.state in ACTIVE_STATES
@@ -846,11 +849,25 @@ class Controls:
       self.pm.send('carEvents', ce_send)
     self.events_prev = self.events.names.copy()
 
-    # carParams - logged every 50 seconds (> 1 per segment)
-    if (self.sm.frame % int(50. / DT_CTRL) == 0):
+    # updateEvents  carParams update
+    updateEvents = self.sm['updateEvents']
+    update_command = False
+    if updateEvents.version == 1:
+      #updateEvents.type
+      if updateEvents.command != self.update_command:
+        self.update_command = updateEvents.command
+        update_command = True
+        print( updateEvents )        
+        self.CI.get_tunning_params( self.CP )
+        self.LaC.live_tune( self.CP )
+
+     # carParams - logged every 50 seconds (> 1 per segment)
+    if update_command or (self.sm.frame % int(50. / DT_CTRL) == 0):
       cp_send = messaging.new_message('carParams')
       cp_send.carParams = self.CP
       self.pm.send('carParams', cp_send)
+      if update_command:
+        print( cp_send )
 
     # carControl
     cc_send = messaging.new_message('carControl')
