@@ -64,7 +64,7 @@ class LatCtrlLqrATOM(LatControlLQR):
 
     self.reset()
 
-def live_tune_LQR(self, LQR):    
+  def live_tune_LQR(self, LQR):    
     self.scale = LQR.scale
     self.ki = LQR.ki
     self.dc_gain = LQR.dcGain    
