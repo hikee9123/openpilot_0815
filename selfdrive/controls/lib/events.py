@@ -178,7 +178,7 @@ class EngagementAlert(Alert):
     super().__init__("", "",
                      AlertStatus.normal, AlertSize.none,
                      Priority.MID, VisualAlert.none,
-                     audible_alert, 3.),
+                     audible_alert, .2),
 
 
 class NormalPermanentAlert(Alert):
@@ -284,7 +284,7 @@ def comm_issue_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaste
 
 def camera_malfunction_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
   all_cams = ('roadCameraState', 'driverCameraState', 'wideRoadCameraState')
-  bad_cams = [s for s in all_cams if s in sm.data.keys() and not sm.all_checks([s, ])]
+  bad_cams = [s.replace('State', '') for s in all_cams if s in sm.data.keys() and not sm.all_checks([s, ])]
   return NormalPermanentAlert("Camera Malfunction", ', '.join(bad_cams))
 
 
@@ -559,13 +559,13 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   EventName.cameraMalfunction: {
     ET.PERMANENT: camera_malfunction_alert,
     ET.SOFT_DISABLE: soft_disable_alert("Camera Malfunction"),
-    ET.NO_ENTRY: NoEntryAlert("Camera Malfunction: Reboot Your Device"),    
+    ET.NO_ENTRY: NoEntryAlert("Camera Malfunction: Reboot Your Device"),
   },
   # Camera framerate too low
   EventName.cameraFrameRate: {
     ET.PERMANENT: NormalPermanentAlert("Camera Frame Rate Low", "Reboot your Device"),
     ET.SOFT_DISABLE: soft_disable_alert("Camera Frame Rate Low"),
-    ET.NO_ENTRY: NoEntryAlert("Camera Frame Rate Low: Reboot Your Device"),    
+    ET.NO_ENTRY: NoEntryAlert("Camera Frame Rate Low: Reboot Your Device"),
   },
 
   # Unused
@@ -737,6 +737,10 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.NO_ENTRY: NoEntryAlert("Low Communication Rate between Processes"),
   },
 
+  EventName.controlsdLagging: {
+    ET.SOFT_DISABLE: soft_disable_alert("Controls Lagging"),
+    ET.NO_ENTRY: NoEntryAlert("Controls Process Lagging: Reboot Your Device"),
+  },
 
   # Thrown when manager detects a service exited unexpectedly while driving
   EventName.processNotRunning: {

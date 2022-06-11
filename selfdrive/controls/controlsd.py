@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import math
-from numbers import Number
+from typing import SupportsFloat
 
 from cereal import car, log
 from common.numpy_fast import clip, interp
@@ -188,6 +188,8 @@ class Controls:
     self.logged_comm_issue = False
     self.button_timers = {ButtonEvent.Type.decelCruise: 0, ButtonEvent.Type.accelCruise: 0}
     self.last_actuators = car.CarControl.Actuators.new_message()
+    self.desired_curvature = 0.0
+    self.desired_curvature_rate = 0.0
 
     # TODO: no longer necessary, aside from process replay
     self.sm['liveParameters'].valid = True
@@ -261,10 +263,16 @@ class Controls:
       self.events.add(EventName.pedalPressedPreEnable if self.disengage_on_accelerator else
                       EventName.gasPressedOverride)
 
-    self.events.add_from_msg(CS.events)
-
-    if not self.CP.notCar and self.drivermonitor:
+    if not self.CP.notCar:
       self.events.add_from_msg(self.sm['driverMonitoringState'].events)
+
+    # Handle car events. Ignore when CAN is invalid
+    if CS.canTimeout:
+      self.events.add(EventName.canBusMissing)
+    elif not CS.canValid:
+      self.events.add(EventName.canError)
+    else:
+      self.events.add_from_msg(CS.events)
 
     # Create events for battery, temperature, disk space, and memory
     if EON and (self.sm['peripheralState'].pandaType != PandaType.uno) and \
@@ -317,11 +325,6 @@ class Controls:
     elif self.sm['lateralPlan'].laneChangeState in (LaneChangeState.laneChangeStarting,
                                                     LaneChangeState.laneChangeFinishing):
       self.events.add(EventName.laneChange)
-
-    if CS.canTimeout:
-      self.events.add(EventName.canBusMissing)
-    elif not CS.canValid:
-      self.events.add(EventName.canError)
 
     for i, pandaState in enumerate(self.sm['pandaStates']):
       # All pandas must match the list of safetyConfigs, and if outside this list, must be silent or noOutput
@@ -484,7 +487,8 @@ class Controls:
 
     # if stock cruise is completely disabled, then we can use our own set speed logic
     if not self.CP.pcmCruise:
-      self.v_cruise_kph = update_v_cruise(self.v_cruise_kph, CS.buttonEvents, self.button_timers, self.enabled, self.is_metric)
+      self.v_cruise_kph = update_v_cruise(self.v_cruise_kph, CS.vEgo, CS.gasPressed, CS.buttonEvents,
+                                          self.button_timers, self.enabled, self.is_metric)
     else:
       if CS.cruiseState.available:
         self.v_cruise_kph = CS.cruiseState.speed * CV.MS_TO_KPH
@@ -625,13 +629,13 @@ class Controls:
       actuators.accel = self.LoC.update(CC.longActive, CS, long_plan, pid_accel_limits, t_since_plan)
 
       # Steering PID loop and lateral MPC
-      desired_curvature, desired_curvature_rate = get_lag_adjusted_curvature(self.CP, CS.vEgo,
-                                                                             lat_plan.psis,
-                                                                             lat_plan.curvatures,
-                                                                             lat_plan.curvatureRates)
+      self.desired_curvature, self.desired_curvature_rate = get_lag_adjusted_curvature(self.CP, CS.vEgo,
+                                                                                       lat_plan.psis,
+                                                                                       lat_plan.curvatures,
+                                                                                       lat_plan.curvatureRates)
       actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(CC.latActive, CS, self.VM, params,
-                                                                             self.last_actuators, desired_curvature,
-                                                                             desired_curvature_rate, self.sm['liveLocationKalman'])
+                                                                             self.last_actuators, self.desired_curvature,
+                                                                             self.desired_curvature_rate, self.sm['liveLocationKalman'])
     else:
       lac_log = log.ControlsState.LateralDebugState.new_message()
       if self.sm.rcv_frame['testJoystick'] > 0:
@@ -663,7 +667,7 @@ class Controls:
     # Ensure no NaNs/Infs
     for p in ACTUATOR_FIELDS:
       attr = getattr(actuators, p)
-      if not isinstance(attr, Number):
+      if not isinstance(attr, SupportsFloat):
         continue
 
       if not math.isfinite(attr):

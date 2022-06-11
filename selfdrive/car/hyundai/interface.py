@@ -23,6 +23,8 @@ class CarInterface(CarInterfaceBase):
   @staticmethod
   def get_tunning_params( tune ):
     max_lat_accel = float( Params().get("TorqueMaxLatAccel", encoding="utf8") )
+    hybridSpeed = float( Params().get("TorqueHybridSpeed", encoding="utf8") )
+    tune.atomHybridSpeed = hybridSpeed * CV.KPH_TO_MS
     tune.maxLateralAccel = max_lat_accel
     method = update_lat_tune_patam( tune.lateralTuning, MAX_LAT_ACCEL=tune.maxLateralAccel )
     if method == TunType.LAT_DEFAULT:

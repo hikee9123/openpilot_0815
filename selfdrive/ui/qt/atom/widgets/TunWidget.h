@@ -44,8 +44,8 @@ public slots:
 private:
   void  FramePID(QVBoxLayout *parent=nullptr);
   void  FrameINDI(QVBoxLayout *parent=nullptr);
-  void  FrameLQR(QVBoxLayout *parent=nullptr);
-  void  FrameTOROUE(QVBoxLayout *parent=nullptr);
+  void  FrameLQR( int nMode=0, QVBoxLayout *parent=nullptr);
+  void  FrameTOROUE( int nMode=0, QVBoxLayout *parent=nullptr);
   void  FrameHYBRID(QVBoxLayout *parent=nullptr);
 
   void  FrameHide( int nID = -1 );

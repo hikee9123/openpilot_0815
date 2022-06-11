@@ -71,7 +71,7 @@ def set_long_tune(tune, name):
   else:
     raise NotImplementedError('This longitudinal tune does not exist')
 
-def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
+def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5, steering_angle_deadzone_deg=0.0):
   params = Params()
 
   OpkrLateralControlMethod = int( params.get("OpkrLateralControlMethod", encoding="utf8") )
@@ -112,14 +112,15 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
       Kp            = float( params.get("TorqueKp", encoding="utf8") )
       Ki            = float( params.get("TorqueKi", encoding="utf8") )
       Kf            = float( params.get("TorqueKf", encoding="utf8") )
-      UseAngle      = float( params.get("TorqueUseAngle", encoding="utf8") )
+      UseAngle      = params.getBool("TorqueUseAngle", encoding="utf8")
 
       tune.init('torque')
-      tune.torque.useSteeringAngle = True  #  False
+      tune.torque.useSteeringAngle = UseAngle  #  False
       tune.torque.kp = Kp / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
       tune.torque.kf = Kf / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
       tune.torque.ki = Ki / MAX_LAT_ACCEL        # 0.1 / 2.5 = 0.04
       tune.torque.friction = FRICTION
+      tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
   elif method ==  TunType.LAT_HYBRID:
       tune.init('atom')
       tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 5), 
@@ -130,14 +131,15 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
       torq_Kp       = float( params.get("TorqueKp", encoding="utf8") )
       torq_Ki       = float( params.get("TorqueKi", encoding="utf8") )
       torq_Kf       = float( params.get("TorqueKf", encoding="utf8") )
-      UseAngle      = float( params.get("TorqueUseAngle", encoding="utf8") )
+      UseAngle      =  params.getBool("TorqueUseAngle", encoding="utf8")
 
 
-      tune.atom.torque.useSteeringAngle = True  #UseAngle  #  False
+      tune.atom.torque.useSteeringAngle = UseAngle  #UseAngle  #  False
       tune.atom.torque.kp = torq_Kp / MAX_LAT_ACCEL        # 2.0 / 2.5 = 0.8
       tune.atom.torque.kf = torq_Ki / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
       tune.atom.torque.ki = torq_Kf / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
       tune.atom.torque.friction = FRICTION
+      tune.atom.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
 
       # 2. lqr
       lqr_scale = float( params.get("LqrScale", encoding="utf8") )
@@ -173,7 +175,7 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5):
   return  method
 
 ###### LAT ######
-def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01):
+def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01, steering_angle_deadzone_deg=0.0):
   if name == LatTunes.HYBRID:
     tune.init('atom')
     tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 5), 
@@ -185,6 +187,7 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01):
     tune.atom.torque.kf = 1.0 / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
     tune.atom.torque.ki = 0.1 / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
     tune.atom.torque.friction = FRICTION
+    tune.atom.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
 
     # 2. lqr
     tune.atom.lqr.scale = 1900     #1700.0
@@ -218,6 +221,7 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01):
     tune.multi.torque.kf = 1.0 / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
     tune.multi.torque.ki = 0.1 / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
     tune.multi.torque.friction = FRICTION
+    tune.multi.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
 
     # 3. pid
     tune.multi.pid.kf = 0.000005
@@ -230,6 +234,7 @@ def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01):
     tune.torque.kf = 1.0 / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
     tune.torque.ki = 0.1 / MAX_LAT_ACCEL        # 0.5 / 2.5 = 0.2
     tune.torque.friction = FRICTION
+    tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
   elif name == LatTunes.LQR_GRANDEUR:  
     tune.init('lqr')
     tune.lqr.scale = 1900     #1700.0
