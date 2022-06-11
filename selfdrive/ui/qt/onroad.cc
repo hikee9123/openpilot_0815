@@ -360,33 +360,15 @@ void NvgWindow::updateFrameMat(int w, int h) {
 void NvgWindow::ui_draw_line(QPainter &painter, const line_vertices_data &vd) 
 {
   if (vd.cnt == 0) return;
-
-  //painter.setBrush( QColor::fromRgbF(1.0, 0.5, 0, 0.2) );
-
+ 
   QPainterPath path = QPainterPath();
-  
-  //      path.setFillRule(   Qt::WindingFill );
+
   const QPointF *v = &vd.v[0];
   path.moveTo( v[0].x(), v[0].y() );
   for (int i = 1; i < vd.cnt; i++) {
     path.lineTo( v[i].x(), v[i].y());
   }
   painter.drawPath( path );
-
-/*
-  nvgBeginPath(s->vg);
-  nvgMoveTo(s->vg, v[0].x, v[0].y);
-  for (int i = 1; i < vd.cnt; i++) {
-    nvgLineTo(s->vg, v[i].x, v[i].y);
-  }
-  nvgClosePath(s->vg);
-  if (color) {
-    nvgFillColor(s->vg, *color);
-  } else if (paint) {
-    nvgFillPaint(s->vg, *paint);
-  }
-  nvgFill(s->vg);
-  */
 }
 
 void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
