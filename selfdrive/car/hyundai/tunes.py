@@ -112,7 +112,7 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5, steering_angle_deadzone_deg=0
       Kp            = float( params.get("TorqueKp", encoding="utf8") )
       Ki            = float( params.get("TorqueKi", encoding="utf8") )
       Kf            = float( params.get("TorqueKf", encoding="utf8") )
-      UseAngle      = params.getBool("TorqueUseAngle", encoding="utf8")
+      UseAngle      = True  #params.getBool("TorqueUseAngle", encoding="utf8")
       steering_angle_deadzone_deg  = float( params.getBool("Torquedeadzone", encoding="utf8") )
 
       tune.init('torque')
@@ -132,7 +132,7 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5, steering_angle_deadzone_deg=0
       torq_Kp       = float( params.get("TorqueKp", encoding="utf8") )
       torq_Ki       = float( params.get("TorqueKi", encoding="utf8") )
       torq_Kf       = float( params.get("TorqueKf", encoding="utf8") )
-      UseAngle      =  params.getBool("TorqueUseAngle", encoding="utf8")
+      UseAngle      = True  # params.getBool("TorqueUseAngle", encoding="utf8")
       steering_angle_deadzone_deg  = float( params.getBool("Torquedeadzone", encoding="utf8") )
 
       tune.atom.torque.useSteeringAngle = UseAngle  #UseAngle  #  False
