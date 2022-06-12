@@ -31,6 +31,7 @@ class LatCtrlToqATOM(LatControlTorque):
     self.use_steering_angle = TORQUE.useSteeringAngle
     self.friction = TORQUE.friction
     self.kf = TORQUE.kf
+    self.steering_angle_deadzone_deg = TORQUE.steeringAngleDeadzoneDeg
 
   def live_tune_TORQUE(self, TORQUE):
     self.pid = PIDController(TORQUE.kp, TORQUE.ki,
