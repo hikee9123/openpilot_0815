@@ -124,7 +124,7 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5, steering_angle_deadzone_deg=0
       tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
   elif method ==  TunType.LAT_HYBRID:
       tune.init('atom')
-      tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 5), 
+      tune.atom.methodConfigs = [ get_method_config( MethodModel.torque, 0), 
                                   get_method_config( MethodModel.lqr, 50) ]
 
       # 1. torque 
