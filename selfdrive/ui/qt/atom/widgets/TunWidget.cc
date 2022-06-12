@@ -300,6 +300,14 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
    pHybridSpeed->SetControl( 10, 80, 5 ); 
    box_layout->addWidget( pHybridSpeed );
 
+   MenuControl *pDeadzone = new MenuControl( 
+    "Torquedeadzone",
+    "steering angle deadzone",
+    "Adjust steering angle deadzone deg def:0"
+    );
+   pDeadzone->SetControl( 0, 5, 0.1 ); 
+   box_layout->addWidget( pDeadzone );
+
 
 
   box_layout->addWidget(horizontal_line());

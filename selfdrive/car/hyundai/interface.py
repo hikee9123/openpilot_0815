@@ -30,6 +30,8 @@ class CarInterface(CarInterfaceBase):
     if method == TunType.LAT_DEFAULT:
       set_lat_tune(tune.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=tune.maxLateralAccel, FRICTION=0.01)
 
+
+
   @staticmethod
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], disable_radar=False):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
