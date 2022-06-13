@@ -289,7 +289,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
     "Friction",
     "Adjust Friction def:0.01"
     );
-   pTorqFriction->SetControl( 0, 0.2, 0.001 ); 
+   pTorqFriction->SetControl( 0, 0.2, 0.01 ); 
    box_layout->addWidget( pTorqFriction );
 
    MenuControl *pHybridSpeed = new MenuControl( 
