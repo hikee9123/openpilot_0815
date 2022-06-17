@@ -3,7 +3,6 @@
 #include <QApplication>
 #include <QLayoutItem>
 #include <QStyleOption>
-#include <QPainterPath>
 
 #include "common/params.h"
 #include "common/swaglog.h"
