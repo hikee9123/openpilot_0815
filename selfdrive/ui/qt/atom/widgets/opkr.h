@@ -673,20 +673,6 @@ private:
   void refresh();
 };
 
-class SteerRateCost : public AbstractControl {
-  Q_OBJECT
-
-public:
-  SteerRateCost();
-
-private:
-  QPushButton btnplus;
-  QPushButton btnminus;
-  QLabel label;
-  Params params;
-  
-  void refresh();
-};
 
 class SteerLimitTimer : public AbstractControl {
   Q_OBJECT

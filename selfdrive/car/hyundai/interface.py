@@ -68,7 +68,6 @@ class CarInterface(CarInterfaceBase):
     ret.dashcamOnly = candidate in {CAR.KIA_OPTIMA_H, CAR.ELANTRA_GT_I30}
 
     ret.steerActuatorDelay = 0.1  # Default delay
-    ret.steerRateCost = 0.5
     ret.steerLimitTimer = 0.4
     tire_stiffness_factor = 1.
 
@@ -88,7 +87,6 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
       ret.steerRatio = 16.0  #13.96   #12.5
-      ret.steerRateCost = 1 #0.6   # 0.6, 0.35
       ret.steerActuatorDelay = 0.05   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
