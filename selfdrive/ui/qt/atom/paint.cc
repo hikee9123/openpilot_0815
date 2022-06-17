@@ -1040,13 +1040,13 @@ void OnPaint::ui_tunning_data( QPainter &p )
     auto max_lat_acc = car_params.getMaxLateralAccel();  
     text4 = "hybrid";                                         p.drawText( bb_x, nYPos+=nGap, text4 );
     configFont( p, "Open Sans",  80, "Regular");        
-    text4.sprintf("LA = %.2f", max_lat_acc );                 p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("ML = %.2f", max_lat_acc );                 p.drawText( bb_x, nYPos+=nGap, text4 );
     text4.sprintf("FC = %.5f", torque.getFriction() );        p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
     auto lqr = hybrid.getLqr();
     //text4 = "lqr";                                          p.drawText( bb_x, nYPos+=nGap, text4 );
-    text4.sprintf("scale = %f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("scale = %.1f", lqr.getScale() );           p.drawText( bb_x, nYPos+=nGap, text4 );
     text4.sprintf("ki = %f", lqr.getKi() );                 p.drawText( bb_x, nYPos+=nGap, text4 );   
     text4.sprintf("DcGain = %f", lqr.getDcGain() );         p.drawText( bb_x, nYPos+=nGap, text4 );   
 

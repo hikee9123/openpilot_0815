@@ -214,6 +214,8 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrLateralControlMethod", PERSISTENT},
    // Torque
     {"TorqueMaxLatAccel", PERSISTENT},
+    {"TorqueHybridSpeed", PERSISTENT},
+    {"Torquedeadzone", PERSISTENT},
     {"TorqueFriction", PERSISTENT},
     {"TorqueKp", PERSISTENT},
     {"TorqueKf", PERSISTENT},

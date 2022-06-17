@@ -5,7 +5,9 @@ Version 0.8.15 (2022-XX-XX)
   * Much smoother control, consistent across the speed range
   * Effective feedforward that uses road roll
   * Simplified tuning, all car-specific parameters can be derived from data
-* New lateral controller based on torque model + lqr model  
+* New lateral controller based on torque model + lqr model
+* tune data display wait after hide.
+
 
 Version 0.8.14 (2022-06-01)
 ========================

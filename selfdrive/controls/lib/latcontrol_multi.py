@@ -31,6 +31,8 @@ class LatCtrlToqMULTI(LatControlTorque):
     self.use_steering_angle = TORQUE.useSteeringAngle
     self.friction = TORQUE.friction
     self.kf = TORQUE.kf
+    self.steering_angle_deadzone_deg = TORQUE.steeringAngleDeadzoneDeg
+
 
 
 

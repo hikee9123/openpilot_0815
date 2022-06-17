@@ -234,7 +234,7 @@ void CTunWidget::FrameINDI(QVBoxLayout *parent)
 }
 
 
-void  CTunWidget::FrameLQR(QVBoxLayout *parent)
+void  CTunWidget::FrameLQR(int nMode,QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )  
@@ -264,11 +264,12 @@ void  CTunWidget::FrameLQR(QVBoxLayout *parent)
   pGain->SetControl( 0.0010, 0.0050, 0.0001 );
   box_layout->addWidget( pGain ); 
 
-  ConfirmButton( box_layout );
+  if( nMode == 0 )
+    ConfirmButton( box_layout );
 }
 
 
-void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
+void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
 {
   QVBoxLayout *box_layout = parent;
   if( parent == nullptr )    
@@ -288,8 +289,26 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
     "Friction",
     "Adjust Friction def:0.01"
     );
-   pTorqFriction->SetControl( 0, 0.2, 0.001 ); 
+   pTorqFriction->SetControl( 0, 0.2, 0.01 ); 
    box_layout->addWidget( pTorqFriction );
+
+   MenuControl *pHybridSpeed = new MenuControl( 
+    "TorqueHybridSpeed",
+    "Hybrid Speed",
+    "Adjust Hybrid speed def:50"
+    );
+   pHybridSpeed->SetControl( 10, 80, 5 ); 
+   box_layout->addWidget( pHybridSpeed );
+
+   MenuControl *pDeadzone = new MenuControl( 
+    "Torquedeadzone",
+    "steering angle deadzone",
+    "Adjust steering angle deadzone deg def:0"
+    );
+   pDeadzone->SetControl( 0, 5, 0.1 ); 
+   box_layout->addWidget( pDeadzone );
+
+
 
   box_layout->addWidget(horizontal_line());
 
@@ -318,12 +337,11 @@ void  CTunWidget::FrameTOROUE(QVBoxLayout *parent)
    PKi->SetControl( 0.0, 1, 0.01 ); 
    box_layout->addWidget( PKi );  
 
-  //box_layout->addWidget(new TorqueKp());
-  //box_layout->addWidget(new TorqueKf());
-  //box_layout->addWidget(new TorqueKi());
+
   box_layout->addWidget(new TorqueUseAngle());
 
-  ConfirmButton( box_layout );
+  if( nMode == 0 )
+    ConfirmButton( box_layout );
 }
 
 void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
@@ -334,10 +352,10 @@ void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
 
 
   box_layout->addWidget(new AbstractControl("[2.LQR]","lqr","../assets/offroad/icon_shell.png"));
-  FrameLQR( box_layout );
+  FrameLQR( 1, box_layout );
 
   box_layout->addWidget(new AbstractControl("[3.TORQUE]","torque","../assets/offroad/icon_shell.png"));
-  FrameTOROUE(  box_layout );
+  FrameTOROUE( 0,  box_layout );
 }
 
 
