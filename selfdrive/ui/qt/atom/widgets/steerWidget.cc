@@ -353,8 +353,8 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
     if( m_nSelect > 1 )
       m_nSelect = 0;
 
-    QString values = QString::number(m_nSelect);
-    params.put( str_param.toStdString(), values.toStdString());    
+    //QString values = QString::number(m_nSelect);
+   // params.put( str_param.toStdString(), values.toStdString());    
     refresh();
   });
 
@@ -369,7 +369,7 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
   refresh();
 }
 
-CLaneWidget::~CSteerWidget()
+CLaneWidget::~CLaneWidget()
 {
 
 }
