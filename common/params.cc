@@ -232,6 +232,12 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"PidKi", PERSISTENT},
     {"PidKf", PERSISTENT},
 
+    // lane
+    {"OpkrCameraOffsetAdj", PERSISTENT}, 
+    {"OpkrPathOffsetAdj", PERSISTENT}, 
+    {"OpkrLeftLaneOffset", PERSISTENT}, 
+    {"OpkrRightLaneOffset", PERSISTENT}, 
+
 };
 
 } // namespace

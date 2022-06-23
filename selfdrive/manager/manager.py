@@ -96,6 +96,11 @@ def manager_init() -> None:
     ("TorqueFriction","0"),    
     ("TorqueUseAngle", "1"), 
 
+   # lane
+    ("OpkrCameraOffsetAdj", "0"), 
+    ("OpkrPathOffsetAdj", "0"), 
+    ("OpkrLeftLaneOffset", "0"), 
+    ("OpkrRightLaneOffset", "0"), 
     
   ]
   if not PC:
