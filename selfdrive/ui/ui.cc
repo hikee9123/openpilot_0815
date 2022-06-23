@@ -395,6 +395,27 @@ static void update_state(UIState *s) {
     //printf("updateEvents cmd = %d", nCmd );
   }
 
+  if (sm.updated("longitudinalPlan")) {
+    scene.longitudinal_plan = sm["longitudinalPlan"].getLongitudinalPlan();
+    auto lop_data = sm["longitudinalPlan"].getLongitudinalPlan();
+    for (int i = 0; i < std::size(scene.longitudinalPlan.e2ex); i++) {
+      scene.longitudinalPlan.e2ex[i] = lop_data.getE2eX()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.lead0); i++) {
+      scene.longitudinalPlan.lead0[i] = lop_data.getLead0Obstacle()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.lead1); i++) {
+      scene.longitudinalPlan.lead1[i] = lop_data.getLead1Obstacle()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.cruisetg); i++) {
+      scene.longitudinalPlan.cruisetg[i] = lop_data.getCruiseTarget()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.stopline); i++) {
+      scene.longitudinalPlan.stopline[i] = lop_data.getStopLine()[i];
+    }
+    scene.longitudinalPlan.stopprob = lop_data.getStoplineProb();
+  }
+
 }
 
 void ui_update_params(UIState *s) {
@@ -441,7 +462,7 @@ UIState::UIState(QObject *parent) : QObject(parent) {
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState", "roadCameraState",
     "pandaStates", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
     "wideRoadCameraState",
-    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters","updateEvents",
+    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters","updateEvents","longitudinalPlan"
   });
 
   Params params;
