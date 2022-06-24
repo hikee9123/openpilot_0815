@@ -467,8 +467,8 @@ void CLaneWidget::refresh()
 
   switch( m_nSelect )
   {
-    case 0 : str = "0.Normal"; break;
-    case 1 : str = "1.Smooth"; break;
+    case 0 : str = "0.Lane"; break;
+    case 1 : str = "1.Camera"; break;
     default: str = "2.Empty";  break;
   }
 
