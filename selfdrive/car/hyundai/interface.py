@@ -22,6 +22,11 @@ class CarInterface(CarInterfaceBase):
 
   @staticmethod
   def get_tunning_params( tune ):
+    tune.laneParam.cameraOffsetAdj = float( Params().get("OpkrCameraOffsetAdj", encoding="utf8") )
+    tune.laneParam.pathOffsetAdj = float( Params().get("OpkrPathOffsetAdj", encoding="utf8") )
+    tune.laneParam.leftLaneOffset = float( Params().get("OpkrLeftLaneOffset", encoding="utf8") )
+    tune.laneParam.rightLaneOffset = float( Params().get("OpkrRightLaneOffset", encoding="utf8") )
+
     max_lat_accel = float( Params().get("TorqueMaxLatAccel", encoding="utf8") )
     hybridSpeed = float( Params().get("TorqueHybridSpeed", encoding="utf8") )
     tune.atomHybridSpeed = hybridSpeed * CV.KPH_TO_MS
@@ -86,6 +91,11 @@ class CarInterface(CarInterfaceBase):
 
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
 
+    ret.lateralTuning.pid.kf = 0.000005
+    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
+    ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]] 
+    CarInterface.get_tunning_params( ret )
+
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
@@ -95,14 +105,10 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.9
       ret.maxLateralAccel = 3.0
 
-      ret.lateralTuning.pid.kf = 0.000005
-      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]
-
-      #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
+       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
       #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      CarInterface.get_tunning_params( ret )
+
       #method = update_lat_tune_patam( ret.lateralTuning )
       #if method == TunType.LAT_DEFAULT:
       #  set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)

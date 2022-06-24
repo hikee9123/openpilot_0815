@@ -224,6 +224,8 @@ class Controls:
     else:
       self.OpkrLiveSteerRatio = 0    
 
+    self.camera_offset = CAMERA_OFFSET
+
   def update_modelToSteerRatio(self, learnerSteerRatio ):
     steerRatio = learnerSteerRatio
     if self.sm.updated['lateralPlan']:
@@ -719,6 +721,7 @@ class Controls:
     hudControl.leftLaneVisible = bool(left_lane_visible)
 
     # atom
+    self.camera_offset = self.CP.laneParam.cameraOffsetAdj
     speeds = self.sm['longitudinalPlan'].speeds
     if len(speeds) > 1:
       v_future = speeds[-1]
@@ -738,8 +741,8 @@ class Controls:
       r_lane_change_prob = desire_prediction[Desire.laneChangeRight - 1]
 
       lane_lines = model_v2.laneLines
-      l_lane_close = left_lane_visible and (lane_lines[1].y[0] > -(1.08 + CAMERA_OFFSET))
-      r_lane_close = right_lane_visible and (lane_lines[2].y[0] < (1.08 - CAMERA_OFFSET))
+      l_lane_close = left_lane_visible and (lane_lines[1].y[0] > -(1.08 + self.camera_offset))
+      r_lane_close = right_lane_visible and (lane_lines[2].y[0] < (1.08 - self.camera_offset))
 
       hudControl.leftLaneDepart = bool(l_lane_change_prob > LANE_DEPARTURE_THRESHOLD and l_lane_close)
       hudControl.rightLaneDepart = bool(r_lane_change_prob > LANE_DEPARTURE_THRESHOLD and r_lane_close)
