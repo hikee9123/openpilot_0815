@@ -95,7 +95,7 @@ class Planner:
     self.mpc.set_weights(prev_accel_constraint)
     self.mpc.set_accel_limits(accel_limits_turns[0], accel_limits_turns[1])
     self.mpc.set_cur_state(self.v_desired_filter.x, self.a_desired)
-    self.mpc.update(sm['carState'], sm['radarState'], v_cruise)
+    self.mpc.update(sm['carState'], sm['radarState'], sm['modelV2'], v_cruise)
 
     self.v_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.v_solution)
     self.a_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.a_solution)
@@ -129,5 +129,12 @@ class Planner:
     longitudinalPlan.fcw = self.fcw
 
     longitudinalPlan.solverExecutionTime = self.mpc.solve_time
+
+    longitudinalPlan.e2eX = self.mpc.e2e_x.tolist()
+    longitudinalPlan.lead0Obstacle = self.mpc.lead_0_obstacle.tolist()
+    longitudinalPlan.lead1Obstacle = self.mpc.lead_1_obstacle.tolist()
+    longitudinalPlan.cruiseTarget = self.mpc.cruise_target.tolist()
+    longitudinalPlan.stopLine = self.mpc.stopline.tolist()
+    longitudinalPlan.stoplineProb = self.mpc.stop_prob
 
     pm.send('longitudinalPlan', plan_send)

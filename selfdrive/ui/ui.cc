@@ -394,7 +394,7 @@ static void update_state(UIState *s) {
     //int nCmd = scene.update_data.getCommand();
     //printf("updateEvents cmd = %d", nCmd );
   }
-/*
+
   if (sm.updated("longitudinalPlan")) {
     scene.longitudinal_plan = sm["longitudinalPlan"].getLongitudinalPlan();
     auto lop_data = sm["longitudinalPlan"].getLongitudinalPlan();
@@ -415,7 +415,7 @@ static void update_state(UIState *s) {
     }
     scene.longitudinalPlan.stopprob = lop_data.getStoplineProb();
   }
-*/
+
 }
 
 void ui_update_params(UIState *s) {
