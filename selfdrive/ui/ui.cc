@@ -396,7 +396,6 @@ static void update_state(UIState *s) {
   }
 
   if (sm.updated("longitudinalPlan")) {
-    scene.longitudinal_plan = sm["longitudinalPlan"].getLongitudinalPlan();
     auto lop_data = sm["longitudinalPlan"].getLongitudinalPlan();
     for (int i = 0; i < std::size(scene.longitudinalPlan.e2ex); i++) {
       scene.longitudinalPlan.e2ex[i] = lop_data.getE2eX()[i];
