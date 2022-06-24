@@ -29,7 +29,6 @@
 
 TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent) 
 {
-  //QWidget *w = new QWidget(this);  
   QVBoxLayout *main_layout = new QVBoxLayout(this);
   main_layout->setContentsMargins(50, 0, 50, 0);
   main_layout->setSpacing(30);
@@ -38,7 +37,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
   // OPKR
   main_layout->addWidget(new CTunWidget());    
   main_layout->addWidget(new CSteerWidget());  
-
-
+  main_layout->addWidget(new CLaneWidget());  
+  
 
 }

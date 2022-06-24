@@ -498,6 +498,15 @@ struct CarParams {
   atomHybridSpeed @71  :Float32;
   opkrAutoResume @72 :Bool;
   smoothSteer @73 :SmoothSteerData;
+  laneParam @74 :LaneParamData;
+
+  struct LaneParamData
+  {
+    cameraOffsetAdj @0: Float32;
+    pathOffsetAdj @1: Float32;
+    leftLaneOffset @2: Float32;
+    rightLaneOffset @3: Float32;
+  }
 
   struct SmoothSteerData
   {
