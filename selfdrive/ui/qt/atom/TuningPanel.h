@@ -12,6 +12,7 @@
 #include <QScrollArea>
 #include <QStackedWidget>
 
+#include "selfdrive/ui/ui.h"
 #include "selfdrive/ui/qt/widgets/controls.h"
 
 
