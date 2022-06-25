@@ -335,7 +335,8 @@ struct DeviceState @0xa4d8b5af2aa492eb {
 
   # atom
   wifiIpAddress @42 :Text;
-
+  connectName @43 :Text;
+  
   struct ThermalZone {
     name @0 :Text;
     temp @1 :Float32;

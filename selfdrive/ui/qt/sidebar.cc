@@ -99,6 +99,7 @@ void Sidebar::updateState(const UIState &s) {
     m_battery_img = s.scene.deviceState.getBatteryStatusDEPRECATED() == "Charging" ? 1 : 0;
     m_batteryPercent = s.scene.deviceState.getBatteryPercent();
     m_strip = s.scene.deviceState.getWifiIpAddress();
+    m_strConnectName = s.scene.deviceState.getConnectName();
     repaint();
   }
 }
