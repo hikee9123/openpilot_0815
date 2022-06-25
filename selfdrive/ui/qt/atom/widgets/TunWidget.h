@@ -12,7 +12,7 @@
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/ui.h"
 
-#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
+//#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
 
 #include "selfdrive/ui/qt/atom/widgets/TuningPanel.h"
 
