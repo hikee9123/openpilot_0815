@@ -367,7 +367,6 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
   FrameLane( parent );
 
 
-  ConfirmButton( main_layout );
 
   main_layout->addStretch();
   refresh();
@@ -441,7 +440,7 @@ void CLaneWidget::FrameCamera(QWidget *parent)
 
   MenuControl *pMenu1 = new MenuControl( 
     "OpkrCameraOffsetAdj",
-    "Sets the Camera Offset value.",
+    "Camera Offset value.",
     "camera offset default:0.6"
     );
   pMenu1->SetControl( -5, 5, 0.1 );
@@ -449,11 +448,14 @@ void CLaneWidget::FrameCamera(QWidget *parent)
   
    MenuControl *pMenu2 = new MenuControl( 
     "OpkrPathOffsetAdj",
-    "Sets the PathOffset value.",
+    "PathOffset value.",
     "path offset default:0"
     );
   pMenu2->SetControl( -5, 5, 0.1 );
   menu_layout->addWidget( pMenu2 ); 
+
+  ConfirmButton( menu_layout );
+
 }
 
 void CLaneWidget::FrameLane(QWidget *parent) 
@@ -491,6 +493,7 @@ void CLaneWidget::FrameLane(QWidget *parent)
   pMenu2->SetControl( -5, 5, 0.1 );
   menu_layout->addWidget( pMenu2 );
 
+  ConfirmButton( menu_layout );
 }
 
 
