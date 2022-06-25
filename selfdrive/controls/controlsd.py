@@ -233,9 +233,6 @@ class Controls:
       if modelSpeed:
         dRate = interp( modelSpeed, [200,450], [ 1, 0.9 ] )
         steerRatio = learnerSteerRatio * dRate
-        str_log1 = '{:3.0f} sR={:.1f}'.format( modelSpeed, steerRatio )
-        #trace1.global_alertTextMsg1 = str_log1
-        trace1.printf1( '{}'.format( str_log1 ) )
     steerRatio = clip( steerRatio, 13.5, 19.5 )
 
     return steerRatio
@@ -594,9 +591,15 @@ class Controls:
      # atom
     if self.OpkrLiveSteerRatio == 2:  # 수동(고정)
       sr = max(self.CP.steerRatio, 5.0)
+      str_log1 = 'Fix sR={:.2f}'.format( sr )
     elif self.OpkrLiveSteerRatio == 1:  # 반학습
       steerRatio = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
+      str_log1 = '{:3.2f} sR={:.2f}'.format( params.steerRatio, sr )
+    else: # 학습.
+      str_log1 = 'sR={:.2f}'.format( sr )
+
+    trace1.printf1( '{}'.format( str_log1 ) )      
 
 
     self.VM.update_params(x, sr)

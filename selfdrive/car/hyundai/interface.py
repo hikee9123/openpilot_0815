@@ -90,10 +90,7 @@ class CarInterface(CarInterfaceBase):
     ret.stopAccel = 0.0
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
-
-
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
-
 
 
     if candidate in (CAR.GRANDEUR_HEV_19):
