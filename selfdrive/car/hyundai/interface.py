@@ -96,7 +96,7 @@ class CarInterface(CarInterfaceBase):
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
-      ret.steerRatio = 16.0  #13.96   #12.5
+      ret.steerRatio = 16.5  #13.96   #12.5
       ret.steerActuatorDelay = 0.05   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
