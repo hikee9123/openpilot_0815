@@ -305,6 +305,7 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
   m_bShow = 0;
   m_nSelect = 0; 
   m_nCommand = 0;
+  pm = new PubMaster({"updateEvents"});  
 
   main_layout = new QVBoxLayout(this);
   main_layout->setMargin(0);

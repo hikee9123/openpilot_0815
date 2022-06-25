@@ -73,7 +73,7 @@ private:
   int    m_bShow;
   int    m_nCommand;
 
-  PubMaster *pm;
+
 
 
    QFrame *m_pChildFrame[LAT_ALL];
