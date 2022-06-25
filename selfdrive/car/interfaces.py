@@ -63,7 +63,7 @@ class CarInterfaceBase(ABC):
     pass
 
   @staticmethod
-  def get_normal_params( TYPE, CP ):
+  def get_normal_params( version, CP ):
     pass  
 
   @staticmethod

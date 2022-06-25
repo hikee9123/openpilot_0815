@@ -12,13 +12,14 @@
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/ui.h"
 
+#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
 
 class CTunWidget : public QFrame 
 {
   Q_OBJECT
 
 public:
-  explicit CTunWidget(QWidget *parent = 0);
+  explicit CTunWidget( TuningPanel *panel, QWidget *parent = 0);
   ~CTunWidget();
 
   enum TunType {
@@ -52,10 +53,6 @@ private:
   void  FrameShow( int nID );
   QVBoxLayout *CreateBoxLayout( int nID );
 
-private:
-  int    m_nCommand;
-  PubMaster *pm = nullptr;
-  void  ConfirmButton(QVBoxLayout *parent);
 
   
  private:
@@ -70,7 +67,7 @@ private:
   QHBoxLayout *hlayout;
   QLabel *description = nullptr;  
 
-
+  TuningPanel  *m_pPanel;
   QPushButton  *method_label;
   int    m_nMethod;
   int    m_bShow;

@@ -27,6 +27,11 @@ private:
   int     get_time();
 
 private:
+  void  ui_tunning_data( QPainter &p );
+  void  ui_view_tunning( QPainter &p );
+  void  ui_view_normal( QPainter &p );
+
+private:
   UIState  *state;
   UIScene  *scene;
 
@@ -128,7 +133,7 @@ private:
   void  bb_draw_compass(QPainter &p, int compass_x, int compass_y );
   void  bb_draw_rpm(QPainter &p, int compass_x, int compass_y );
   void  bb_ui_draw_UI(QPainter &p);
-  void  ui_tunning_data( QPainter &p );
+
 
 signals:
   void valueChanged();  

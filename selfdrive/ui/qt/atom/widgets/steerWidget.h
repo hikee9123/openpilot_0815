@@ -12,14 +12,14 @@
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/ui.h"
 
-
+#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
 
 class CSteerWidget : public QFrame 
 {
   Q_OBJECT
 
 public:
-  explicit CSteerWidget(QWidget *parent = 0);
+  explicit CSteerWidget(TuningPanel *panel,QWidget *parent = 0);
   ~CSteerWidget();
 
 private:
@@ -46,7 +46,7 @@ private:
   QHBoxLayout *hlayout;
   QLabel *description = nullptr;  
 
-
+  TuningPanel  *m_pPanel;
   QPushButton  *method_label;
   int    m_nSelect;
   int    m_bShow;
@@ -76,11 +76,6 @@ private:
   void  FrameCamera(QWidget *parent);
   void  FrameLane(QWidget *parent);
 
-private:
-  int    m_nCommand;
-  PubMaster *pm = nullptr;
-  void  ConfirmButton(QVBoxLayout *parent);
-
 
  private:
   Params params; 
@@ -94,7 +89,7 @@ private:
   QHBoxLayout *hlayout;
   QLabel *description = nullptr;  
 
-
+  TuningPanel  *m_pPanel;
   QPushButton  *method_label;
   int    m_nSelect;
   int    m_bShow;

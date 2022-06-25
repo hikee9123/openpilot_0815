@@ -971,41 +971,20 @@ void OnPaint::ui_draw_debug1( QPainter &p )
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
 }
 
-void OnPaint::ui_tunning_data( QPainter &p ) 
+void OnPaint::ui_view_tunning( QPainter &p ) 
 {
-  int nCmd = scene->update_data.getCommand();
+  p.save();
+
   int bb_x = 250;
   int bb_y = 300;
 
-  uint64_t nSec = get_time();
-  uint64_t nDelta = nSec - m_nOldSec;
 
-  if( m_nOldSec <= 0 )
-  {
-    m_nOldSec = nSec;
-    nDelta = 0;
-  }
-  else  if( m_nOldCmmand != nCmd ) 
-  {
-    m_nOldSec = nSec; 
-    m_nOldCmmand = nCmd;
-  }
-
-  //int nType = scene->update_data.getType();
-  //int nVersion = scene->update_data.getVersion();  
   QString text4;
-
-  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
-  //p.drawText( bb_x, bb_y+=50, text4 );  
-
-  if( nDelta > 5*60 ) return; // 5 분.
-
-
-
-  p.save();
-
   int  nYPos = bb_y;
   int  nGap = 80;
+
+
+
 
   auto car_params =  scene->car_params;
   auto lateralTuning = car_params.getLateralTuning();
@@ -1054,6 +1033,77 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
 
   p.restore();  
+
+}
+
+
+void OnPaint::ui_view_normal( QPainter &p ) 
+{
+  p.save();
+
+  int bb_x = 250;
+  int bb_y = 300;
+
+
+  QString text4;
+  int  nYPos = bb_y;
+  int  nGap = 80;
+
+
+  auto car_params =  scene->car_params;
+  auto laneParam = car_params.getLaneParam();
+
+
+  auto cameraOffsetAdj = laneParam.getCameraOffsetAdj();    
+  auto pathOffsetAdj = laneParam.getPathOffsetAdj();    
+  auto leftLaneOffset = laneParam.getLeftLaneOffset();    
+  auto rightLaneOffset = laneParam.getRightLaneOffset();    
+
+  text4 = "Offset";                                    p.drawText( bb_x, nYPos+=nGap, text4 );
+
+  configFont( p, "Open Sans",  80, "Regular");    
+  text4.sprintf("Camera = %.1f", cameraOffsetAdj );    p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("Path = %.1f", pathOffsetAdj );        p.drawText( bb_x, nYPos+=nGap, text4 );
+
+  text4.sprintf("Left Lane = %.1f", leftLaneOffset );    p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("right Lane = %.1f", rightLaneOffset );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+  p.restore();  
+
+}
+
+void OnPaint::ui_tunning_data( QPainter &p ) 
+{
+  uint64_t nSec = get_time();
+  uint64_t nDelta = nSec - m_nOldSec;
+
+  int nCmd = scene->update_data.getCommand();
+
+  if( m_nOldSec <= 0 )
+  {
+    m_nOldSec = nSec;
+    nDelta = 0;
+  }
+  else  if( m_nOldCmmand != nCmd ) 
+  {
+    m_nOldSec = nSec; 
+    m_nOldCmmand = nCmd;
+  }
+
+  //int nType = scene->update_data.getType();
+  //int nVersion = scene->update_data.getVersion();  
+  //QString text4;
+  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
+  //p.drawText( bb_x, bb_y+=50, text4 );  
+
+  if( nDelta > 5*60 ) return; // 5 분.
+
+  int nVersion = scene->update_data.getVersion();
+  if( nVersion <= 1 )
+    ui_view_tunning( p );
+  else if( nVersion == 2 )
+    ui_view_normal( p );
 }
 
 

@@ -21,4 +21,16 @@ class TuningPanel : public QFrame {
 
 public:
   explicit TuningPanel(QWidget *parent = nullptr);
+  ~TuningPanel();
+
+public:
+  int    m_nCommand;
+  PubMaster *pm = nullptr;
+
+public: 
+  void  ConfirmButton(QVBoxLayout *parent, int version = 1 );
+
+
+public:
+
 };
