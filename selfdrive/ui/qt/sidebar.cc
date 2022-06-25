@@ -144,9 +144,9 @@ void Sidebar::paintEvent(QPaintEvent *event) {
   const QRect r2 = QRect(35, 295, 230, 50); // QRect(40, 295, 210, 50);
   configFont(p, "Open Sans", 28, "Regular");
   p.setPen(Qt::yellow);
-  p.drawText(r2, Qt::AlignLeft, strip);
+  p.drawText(r2, Qt::AlignHCenter, strip);
 
-  // connect name
+  // atom - ip (connect name)
   QString  strConnectName = m_strConnectName.c_str();  
   const QRect r3 = QRect(35, 335, 230, 45);
   configFont(p, "Open Sans", 25, "Bold");
