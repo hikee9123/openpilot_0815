@@ -14,7 +14,7 @@
 
 //#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
 
-#include "selfdrive/ui/qt/atom/widgets/TuningPanel.h"
+#include "selfdrive/ui/qt/atom/TuningPanel.h"
 
 
 class CTunWidget : public QFrame 
