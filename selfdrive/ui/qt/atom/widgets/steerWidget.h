@@ -13,7 +13,7 @@
 #include "selfdrive/ui/ui.h"
 
 //#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
-#include "selfdrive/ui/qt/atom/widgets/TuningPanel.h"
+#include "selfdrive/ui/qt/atom/TuningPanel.h"
 
 
 class CSteerWidget : public QFrame 
