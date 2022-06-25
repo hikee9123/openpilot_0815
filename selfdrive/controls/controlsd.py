@@ -867,6 +867,7 @@ class Controls:
         self.CI.get_tunning_params( self.CP )
         self.LaC.live_tune( self.CP )
       else:
+        update_command = True
         self.CI.get_normal_params( updateEvents.version, self.CP )
         
 
