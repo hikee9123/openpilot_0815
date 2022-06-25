@@ -304,6 +304,7 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
 {
   m_bShow = 0;
   m_nSelect = 0; 
+  m_nCommand = 0;
 
   main_layout = new QVBoxLayout(this);
   main_layout->setMargin(0);
@@ -365,6 +366,8 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
   FrameLane( parent );
 
 
+  ConfirmButton( parent );
+
   main_layout->addStretch();
   refresh();
 }
@@ -372,6 +375,46 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
 CLaneWidget::~CLaneWidget()
 {
 
+}
+
+
+void CLaneWidget::ConfirmButton(QVBoxLayout *parent) 
+{
+  QPushButton* confirm_btn = new QPushButton("confirm");
+  confirm_btn->setFixedSize(386, 125);
+  confirm_btn->setStyleSheet(R"(
+    font-size: 48px;
+    border-radius: 10px;
+    color: #E4E4E4;
+    background-color: #444444;
+  )");
+
+  
+
+  parent->addWidget(confirm_btn, 0, Qt::AlignRight );
+
+  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
+  {
+      m_nCommand++;
+      if( m_nCommand > 99 ) m_nCommand = 0;
+      
+      MessageBuilder msg;
+      auto update_events = msg.initEvent().initUpdateEvents();
+      update_events.setVersion(2);
+      update_events.setType( 0 );    
+      update_events.setCommand( m_nCommand );
+
+      pm->send("updateEvents", msg);
+
+      QString  strBtn;
+      strBtn.sprintf("confirm(%d)", m_nCommand);
+      confirm_btn->setText( strBtn );
+
+      m_bShow = 0;
+      refresh();
+  });
+
+ // QObject::connect(confirm_btn, &QPushButton::clicked, this, &CTunWidget::closeSettings);
 }
 
 

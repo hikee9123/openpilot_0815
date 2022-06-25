@@ -92,7 +92,8 @@ private:
   QPushButton  *method_label;
   int    m_nSelect;
   int    m_bShow;
-
+  int    m_nCommand;
+  
    QFrame *m_pChildFrame1;
    QFrame *m_pChildFrame2;
 };

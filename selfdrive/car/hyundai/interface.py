@@ -19,13 +19,15 @@ class CarInterface(CarInterfaceBase):
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
     return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
 
+  @staticmethod
+  def get_normal_params( TYPE, CP ):
+    CP.laneParam.cameraOffsetAdj = float( Params().get("OpkrCameraOffsetAdj", encoding="utf8") )
+    CP.laneParam.pathOffsetAdj = float( Params().get("OpkrPathOffsetAdj", encoding="utf8") )
+    CP.laneParam.leftLaneOffset = float( Params().get("OpkrLeftLaneOffset", encoding="utf8") )
+    CP.laneParam.rightLaneOffset = float( Params().get("OpkrRightLaneOffset", encoding="utf8") )
 
   @staticmethod
   def get_tunning_params( tune ):
-    tune.laneParam.cameraOffsetAdj = float( Params().get("OpkrCameraOffsetAdj", encoding="utf8") )
-    tune.laneParam.pathOffsetAdj = float( Params().get("OpkrPathOffsetAdj", encoding="utf8") )
-    tune.laneParam.leftLaneOffset = float( Params().get("OpkrLeftLaneOffset", encoding="utf8") )
-    tune.laneParam.rightLaneOffset = float( Params().get("OpkrRightLaneOffset", encoding="utf8") )
 
     max_lat_accel = float( Params().get("TorqueMaxLatAccel", encoding="utf8") )
     hybridSpeed = float( Params().get("TorqueHybridSpeed", encoding="utf8") )
@@ -91,10 +93,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
 
-    ret.lateralTuning.pid.kf = 0.000005
-    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
-    ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]] 
-    CarInterface.get_tunning_params( ret )
+
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
@@ -105,7 +104,12 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.9
       ret.maxLateralAccel = 3.0
 
-       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
+
+      ret.lateralTuning.pid.kf = 0.000005
+      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]       
+
+      #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
       #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
 
@@ -350,6 +354,9 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 12.069
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
+
+    CarInterface.get_tunning_params( ret )
+    CarInterface.get_normal_params( 0, ret )
 
     # these cars require a special panda safety mode due to missing counters and checksums in the messages
     if candidate in LEGACY_SAFETY_MODE_CAR:

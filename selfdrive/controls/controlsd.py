@@ -864,9 +864,13 @@ class Controls:
       if updateEvents.command != self.update_command:
         self.update_command = updateEvents.command
         update_command = True
-        print( updateEvents )        
-        self.CI.get_tunning_params( self.CP )
-        self.LaC.live_tune( self.CP )
+        print( updateEvents )
+        if updateEvents.type == 1:
+          self.CI.get_tunning_params( self.CP )
+          self.LaC.live_tune( self.CP )
+        else:
+          self.CI.get_normal_params( updateEvents.type, self.CP )
+        
 
      # carParams - logged every 50 seconds (> 1 per segment)
     if update_command or (self.sm.frame % int(50. / DT_CTRL) == 0):
