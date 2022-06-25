@@ -71,7 +71,7 @@ void TuningPanel::ConfirmButton( QVBoxLayout *parent, int version )
       MessageBuilder msg;
       auto update_events = msg.initEvent().initUpdateEvents();
       update_events.setVersion(version);
-      update_events.setType( m_nMethod );    
+      update_events.setType( 0 ); // m_nMethod );    
       update_events.setCommand( m_nCommand );
 
       pm->send("updateEvents", msg);
