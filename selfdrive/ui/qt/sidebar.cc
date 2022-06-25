@@ -141,9 +141,17 @@ void Sidebar::paintEvent(QPaintEvent *event) {
   // atom - ip
   if( m_batteryPercent <= 1) return;
   QString  strip = m_strip.c_str();
-  const QRect r2 = QRect(40, 295, 210, 50);
+  const QRect r2 = QRect(35, 295, 230, 50); // QRect(40, 295, 210, 50);
   configFont(p, "Open Sans", 28, "Regular");
+  p.setPen(Qt::yellow);
   p.drawText(r2, Qt::AlignLeft, strip);
+
+  // connect name
+  QString  strConnectName = m_strConnectName.c_str();  
+  const QRect r3 = QRect(35, 335, 230, 45);
+  configFont(p, "Open Sans", 25, "Bold");
+  p.setPen(Qt::white);
+  p.drawText(r3, Qt::AlignHCenter, strConnectName);
 
   // atom - battery
   QRect  rect(160, 247, 76, 36);
