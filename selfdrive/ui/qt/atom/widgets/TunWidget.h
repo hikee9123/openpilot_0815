@@ -52,6 +52,9 @@ private:
   void  FrameShow( int nID );
   QVBoxLayout *CreateBoxLayout( int nID );
 
+private:
+  int    m_nCommand;
+  PubMaster *pm = nullptr;
   void  ConfirmButton(QVBoxLayout *parent);
 
   
@@ -71,7 +74,7 @@ private:
   QPushButton  *method_label;
   int    m_nMethod;
   int    m_bShow;
-  int    m_nCommand;
+
 
 
 
