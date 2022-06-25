@@ -21,6 +21,7 @@ class CarInterface(CarInterfaceBase):
 
   @staticmethod
   def get_normal_params( TYPE, CP ):
+    # TYPE = 1. TURN,  2.lane control
     CP.laneParam.cameraOffsetAdj = float( Params().get("OpkrCameraOffsetAdj", encoding="utf8") )
     CP.laneParam.pathOffsetAdj = float( Params().get("OpkrPathOffsetAdj", encoding="utf8") )
     CP.laneParam.leftLaneOffset = float( Params().get("OpkrLeftLaneOffset", encoding="utf8") )

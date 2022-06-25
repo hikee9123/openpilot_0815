@@ -410,7 +410,7 @@ void CLaneWidget::ConfirmButton(QVBoxLayout *parent)
       strBtn.sprintf("confirm(%d)", m_nCommand);
       confirm_btn->setText( strBtn );
 
-      m_bShow = 0;
+     // m_bShow = 0;
       refresh();
   });
 
