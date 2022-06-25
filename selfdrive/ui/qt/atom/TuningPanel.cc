@@ -80,8 +80,8 @@ void TuningPanel::ConfirmButton( QVBoxLayout *parent, int version )
       strBtn.sprintf("confirm(%d)", m_nCommand);
       confirm_btn->setText( strBtn );
 
-      m_bShow = 0;
-      refresh();
+     // m_bShow = 0;
+     // refresh();
   });
 
  // QObject::connect(confirm_btn, &QPushButton::clicked, this, &CTunWidget::closeSettings);
