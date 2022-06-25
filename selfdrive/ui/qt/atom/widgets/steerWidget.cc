@@ -366,7 +366,7 @@ CLaneWidget::CLaneWidget(QWidget *parent) : QFrame(parent)
   FrameLane( parent );
 
 
-  ConfirmButton( parent );
+  ConfirmButton( main_layout );
 
   main_layout->addStretch();
   refresh();
