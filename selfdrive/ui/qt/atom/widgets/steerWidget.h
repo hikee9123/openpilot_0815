@@ -12,7 +12,7 @@
 #include "selfdrive/ui/qt/widgets/controls.h"
 #include "selfdrive/ui/ui.h"
 
-#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
+//#include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
 #include "selfdrive/ui/qt/atom/widgets/TuningPanel.h"
 
 
@@ -63,7 +63,7 @@ class CLaneWidget : public QFrame
   Q_OBJECT
 
 public:
-  explicit CLaneWidget(QWidget *parent = 0);
+  explicit CLaneWidget(TuningPanel *panel, QWidget *parent = 0);
   ~CLaneWidget();
 
 private:
