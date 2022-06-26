@@ -360,6 +360,12 @@ class Controls:
         not_freq_ok = [s for s, freq_ok in self.sm.freq_ok.items() if not freq_ok]
         cloudlog.event("commIssue", invalid=invalid, not_alive=not_alive, not_freq_ok=not_freq_ok, can_error=self.can_rcv_error, error=True)
         self.logged_comm_issue = True
+
+        service_list = self.sm.alive.keys()
+        for s in service_list:
+          if s not in self.sm.ignore_alive:
+            print('{} = alive={} freq_ok={} valid={}'.format( s, self.sm.alive[s], self.sm.freq_ok[s], self.sm.valid[s] ) )
+         
     else:
       self.logged_comm_issue = False
 
