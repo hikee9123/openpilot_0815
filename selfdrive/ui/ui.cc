@@ -90,8 +90,8 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
                              float y_off,  line_vertices_data *pvd, int max_idx ) {
   float  y_off1, y_off2;
 
-  float z_off_left = z_off;  def:0.0
-  float z_off_right = z_off;
+  float z_off_left = 0;  def:0.0
+  float z_off_right = 0;
 
   if( lr == 0 ) // left
   {
