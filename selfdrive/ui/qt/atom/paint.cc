@@ -1097,7 +1097,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
   //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
   //p.drawText( bb_x, bb_y+=50, text4 );  
 
-  if( nDelta > 5*60 ) return; // 5 분.
+  if( nDelta > 1*60 ) return; // 1 분.
 
   int nVersion = scene->update_data.getVersion();
   if( nVersion <= 1 )
@@ -1115,5 +1115,42 @@ void OnPaint::ui_main_navi( QPainter &p )
 
   ui_tunning_data( p );
 
+
+  ui_draw_stop_sign( p );
 }
 
+
+void OnPaint::ui_draw_stop_sign( QPainter &p ) 
+{
+
+  float center_x = 1400.0f;
+  float center_y = 105.0f;
+  float radius_i = 5.0f;
+  float radius_o = 75.0f;
+
+  UIState *s = state;
+
+  int   nSignal = 0;
+  if (scene->longitudinalPlan.e2ex[12] > 30 && scene->longitudinalPlan.stopline[12] < 10 && scene->car_state.getVEgo() < 0.5) {
+
+    nSignal = 1;
+
+  } else if ( scene->longitudinalPlan.e2ex[12] < 100 && scene->longitudinalPlan.stopline[12] < 100) {
+   nSignal = 2;
+  }
+
+  int bb_x = 250;
+  int bb_y = 500;
+
+
+  QString text4;
+  int  nYPos = bb_y;
+  int  nGap = 80;
+
+  configFont( p, "Open Sans",  70, "Regular");
+  text4.sprintf("e2ex = %.1f", scene->longitudinalPlan.e2ex[12] );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("stopline = %.1f", scene->longitudinalPlan.stopline[12] );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("nSignal = %.1f", nSignal );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+}

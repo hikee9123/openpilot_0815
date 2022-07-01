@@ -135,6 +135,9 @@ private:
   void  bb_ui_draw_UI(QPainter &p);
 
 
+private:
+  void  ui_draw_stop_sign( QPainter &p );
+
 signals:
   void valueChanged();  
 };
