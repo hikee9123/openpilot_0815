@@ -1132,9 +1132,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   int   nSignal = 0;
   if (scene->longitudinalPlan.e2ex[12] > 30 && scene->longitudinalPlan.stopline[12] < 10 && scene->car_state.getVEgo() < 0.5) {
-
     nSignal = 1;
-
   } else if ( scene->longitudinalPlan.e2ex[12] < 100 && scene->longitudinalPlan.stopline[12] < 100) {
    nSignal = 2;
   }
