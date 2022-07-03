@@ -1137,6 +1137,8 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
    nSignal = 2;
   }
 
+  if ( nSignal == 0 ) return;
+
   int bb_x = 250;
   int bb_y = 500;
 
