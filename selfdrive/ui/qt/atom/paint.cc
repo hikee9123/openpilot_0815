@@ -1123,12 +1123,12 @@ void OnPaint::ui_main_navi( QPainter &p )
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
 
-  float center_x = 1400.0f;
-  float center_y = 105.0f;
-  float radius_i = 5.0f;
-  float radius_o = 75.0f;
+  //float center_x = 1400.0f;
+  //float center_y = 105.0f;
+  //float radius_i = 5.0f;
+  //float radius_o = 75.0f;
 
-  UIState *s = state;
+ // UIState *s = state;
 
   int   nSignal = 0;
   if (scene->longitudinalPlan.e2ex[12] > 30 && scene->longitudinalPlan.stopline[12] < 10 && scene->car_state.getVEgo() < 0.5) {
@@ -1150,7 +1150,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   configFont( p, "Open Sans",  70, "Regular");
   text4.sprintf("e2ex = %.1f", scene->longitudinalPlan.e2ex[12] );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("stopline = %.1f", scene->longitudinalPlan.stopline[12] );  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("nSignal = %.1f", nSignal );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("nSignal = %d", nSignal );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
 }
