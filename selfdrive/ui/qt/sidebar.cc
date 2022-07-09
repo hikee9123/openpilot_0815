@@ -95,7 +95,7 @@ void Sidebar::updateState(const UIState &s) {
 
 
   // atom
-  if (s.sm->updated("deviceState") || s.sm->updated("pandaStates")) {
+  if (sm.updated("deviceState") || sm.updated("pandaStates")) {
     m_battery_img = s.scene.deviceState.getBatteryStatusDEPRECATED() == "Charging" ? 1 : 0;
     m_batteryPercent = s.scene.deviceState.getBatteryPercent();
     m_strip = s.scene.deviceState.getWifiIpAddress();
