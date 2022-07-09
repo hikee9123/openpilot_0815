@@ -6,7 +6,7 @@
 #include "common/params.h"
 #include "selfdrive/ui/ui.h"
 
-typedef QPair<QString, QColor> ItemStatus;
+typedef QPair<QPair<QString, QString>, QColor> ItemStatus;
 Q_DECLARE_METATYPE(ItemStatus);
 
 class Sidebar : public QFrame {
