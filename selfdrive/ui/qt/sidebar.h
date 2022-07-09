@@ -30,7 +30,7 @@ public slots:
 protected:
   void paintEvent(QPaintEvent *event) override;
   void mouseReleaseEvent(QMouseEvent *event) override;
-  void drawMetric(QPainter &p, const QString &label, QColor c, int y);
+  void drawMetric(QPainter &p, const QPair<QString, QString> &label, QColor c, int y);
 
   QPixmap home_img, settings_img;
   const QMap<cereal::DeviceState::NetworkType, QString> network_type = {
