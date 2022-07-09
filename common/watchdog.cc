@@ -4,7 +4,8 @@
 
 const std::string watchdog_fn_prefix = "/dev/shm/wd_";  // + <pid>
 
-bool watchdog_kick(uint64_t ts)) {
+bool watchdog_kick(uint64_t ts)
+{
   static std::string fn = watchdog_fn_prefix + std::to_string(getpid());
 
  // uint64_t ts = nanos_since_boot();
