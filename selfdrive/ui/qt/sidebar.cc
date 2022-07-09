@@ -57,39 +57,32 @@ void Sidebar::updateState(const UIState &s) {
   ItemStatus connectStatus;
   auto last_ping = deviceState.getLastAthenaPingTime();
   if (last_ping == 0) {
-    connectStatus = params.getBool("PrimeRedirected") ? ItemStatus{"NO\nPRIME", danger_color} : ItemStatus{"CONNECT\nOFFLINE", warning_color};
+    connectStatus = ItemStatus{{tr("CONNECT"), tr("OFFLINE")}, warning_color};
   } else {
-    connectStatus = nanos_since_boot() - last_ping < 80e9 ? ItemStatus{"CONNECT\nONLINE", good_color} : ItemStatus{"CONNECT\nERROR", danger_color};
+    connectStatus = nanos_since_boot() - last_ping < 80e9 ? ItemStatus{{tr("CONNECT"), tr("ONLINE")}, good_color} : ItemStatus{{tr("CONNECT"), tr("ERROR")}, danger_color};
   }
   setProperty("connectStatus", QVariant::fromValue(connectStatus));
 
 
-  QString strTempC = "HIGH\n";
-  QColor  tempColor = danger_color;
+  ItemStatus tempStatus = {{tr("TEMP"), tr("HIGH")}, danger_color};
   auto ts = deviceState.getThermalStatus();
   if (ts == cereal::DeviceState::ThermalStatus::GREEN) {
-    strTempC = "GOOD\n";    
-    tempColor = good_color;
+    tempStatus = {{tr("TEMP"), tr("GOOD")}, good_color};
   } else if (ts == cereal::DeviceState::ThermalStatus::YELLOW) {
-    strTempC = "OK\n";    
-    tempColor = warning_color;
+    tempStatus = {{tr("TEMP"), tr("OK")}, warning_color};
   }
-
-
-  //strTempC.append( QVariant::fromValue(ItemStatus{QString("%1°C").arg((int)deviceState.getAmbientTempC()), tempColor}) );
-  strTempC.append( QString("%1°C").arg((int)deviceState.getAmbientTempC()) );
-  ItemStatus tempStatus = { strTempC, tempColor};
   setProperty("tempStatus", QVariant::fromValue(tempStatus));
 
-  ItemStatus pandaStatus = {"VEHICLE\nONLINE", good_color};
+
+  ItemStatus pandaStatus = {{tr("VEHICLE"), tr("ONLINE")}, good_color};
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
-    pandaStatus = {"NO\nPANDA", danger_color};
+    pandaStatus = {{tr("NO"), tr("PANDA")}, danger_color};
   } else if (s.scene.pandaType == cereal::PandaState::PandaType::WHITE_PANDA) {
-    pandaStatus = {"WHITE\nPANDA", warning_color};
+    pandaStatus = {{tr("WHITE"), tr("PANDA")}, warning_color};
   } else if (s.scene.pandaType == cereal::PandaState::PandaType::GREY_PANDA) {
-    pandaStatus = {"GREY\nPANDA", warning_color};
+    pandaStatus = {{tr("GREY"),tr("PANDA")}, warning_color};
   } else if (s.scene.started && !sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK()) {
-    pandaStatus = {"GPS\nSEARCH", warning_color};
+    pandaStatus = {{tr("GPS"), tr("SEARCH")}, warning_color};
   }
   setProperty("pandaStatus", QVariant::fromValue(pandaStatus));
 

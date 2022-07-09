@@ -243,7 +243,7 @@ void NvgWindow::drawHud(QPainter &p) {
   p.setPen(Qt::NoPen);
 
   configFont(p, "Open Sans", 45, "Regular");
-  drawText(p, rc.center().x(), 85, "MAX", is_cruise_set ? 200 : 100);
+  drawText(p, rc.center().x(), 85, tr("MAX"), is_cruise_set ? 200 : 100);
   if (is_cruise_set) {
     configFont(p, "Open Sans", 88, "Bold");
     drawText(p, rc.center().x(), 205, maxSpeed, 255);
