@@ -73,7 +73,7 @@ void Sidebar::updateState(const UIState &s) {
 
   QString  strTempC;
   strTempC.append( QString("%1°C").arg((int)deviceState.getAmbientTempC()) );  
-  ItemStatus tempStatus = {{tr("TEMP\nHIGH"), strTempC, danger_color};
+  ItemStatus tempStatus = {{tr("TEMP\nHIGH"), strTempC}, danger_color};
   auto ts = deviceState.getThermalStatus();
   if (ts == cereal::DeviceState::ThermalStatus::GREEN) {
     tempStatus = {{tr("TEMP\nGOOD"), strTempC}, good_color};
