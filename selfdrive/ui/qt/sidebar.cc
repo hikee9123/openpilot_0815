@@ -71,12 +71,14 @@ void Sidebar::updateState(const UIState &s) {
   setProperty("connectStatus", QVariant::fromValue(connectStatus));
 
 
-  ItemStatus tempStatus = {{tr("TEMP"), tr("HIGH")}, danger_color};
+  QString  strTempC;
+  strTempC.append( QString("%1°C").arg((int)deviceState.getAmbientTempC()) );  
+  ItemStatus tempStatus = {{tr("TEMP\nHIGH"), strTempC, danger_color};
   auto ts = deviceState.getThermalStatus();
   if (ts == cereal::DeviceState::ThermalStatus::GREEN) {
-    tempStatus = {{tr("TEMP"), tr("GOOD")}, good_color};
+    tempStatus = {{tr("TEMP\nGOOD"), strTempC}, good_color};
   } else if (ts == cereal::DeviceState::ThermalStatus::YELLOW) {
-    tempStatus = {{tr("TEMP"), tr("OK")}, warning_color};
+    tempStatus = {{tr("TEMP\nOK"), strTempC}, warning_color};
   }
   setProperty("tempStatus", QVariant::fromValue(tempStatus));
 
