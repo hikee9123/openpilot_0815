@@ -275,7 +275,7 @@ MultiOptionDialog::MultiOptionDialog(const QString &prompt_text, const QStringLi
   main_layout->setContentsMargins(55, 50, 55, 50);
 
   QLabel *title = new QLabel(prompt_text, this);
-  title->setStyleSheet("font-size: 70px; font-weight: 500;");
+  title->setStyleSheet("font-size: 60px; font-weight: 450;");
   main_layout->addWidget(title, 0, Qt::AlignLeft | Qt::AlignTop);
   main_layout->addSpacing(25);
 
@@ -284,11 +284,11 @@ MultiOptionDialog::MultiOptionDialog(const QString &prompt_text, const QStringLi
   listLayout->setSpacing(20);
   listWidget->setStyleSheet(R"(
     QPushButton {
-      height: 135;
+      height: 100;
       padding: 0px 50px;
       text-align: left;
-      font-size: 55px;
-      font-weight: 300;
+      font-size: 50px;
+      font-weight: 250;
       border-radius: 10px;
       background-color: #4F4F4F;
     }

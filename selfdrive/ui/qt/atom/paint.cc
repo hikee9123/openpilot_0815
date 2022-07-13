@@ -180,28 +180,21 @@ float OnPaint::interp( float xv, float xp[], float fp[], int N)
 
 void OnPaint::mousePressEvent(QMouseEvent* e) 
 {
-
-  /*
   int e_x = e->x();
   int e_y = e->y();
-  //int e_button= e->button();
 
-   UIState *s = uiState();
-  const int bb_dmr_w = 180;   
-  const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
- //  printf("OnDashCam::mousePressEvent %d,%d  \n", e_x, e_y);
 
-  Rect btn_rec = btn_dashcam_rec;
-  btn_rec.x = bb_dmr_x;
 
-  if( btn_rec.ptInRect( e_x, e_y ) ) 
+  printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
+
+  if( scene->IsOpenpilotViewEnabled )
   {
-    printf( "  captureState = %d \n", captureState );
-    screen_toggle_record_state();
-    update(); 
-    return;
+     cal_view ^= 1;
+
   }
-*/
+  
+   printf("OnPaint::mousePressEvent %d,%d  cal_view=%d \n", e_x, e_y, cal_view);
+
   QWidget::mousePressEvent(e);
 }
 
@@ -216,6 +209,11 @@ void OnPaint::paintEvent(QPaintEvent *event)
 
   bb_ui_draw_UI( p );
   ui_main_navi( p );
+
+  if( cal_view )
+  {
+    ui_draw_grid( p );
+  }
 }
 // 
 void OnPaint::drawText(QPainter &p, int x, int y, const QString &text, QColor qColor, int nAlign ) 
@@ -1091,11 +1089,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
     m_nOldCmmand = nCmd;
   }
 
-  //int nType = scene->update_data.getType();
-  //int nVersion = scene->update_data.getVersion();  
-  //QString text4;
-  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
-  //p.drawText( bb_x, bb_y+=50, text4 );  
+ 
 
   if( nDelta > 1*60 ) return; // 1 분.
 
@@ -1122,14 +1116,6 @@ void OnPaint::ui_main_navi( QPainter &p )
 
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
-
-  //float center_x = 1400.0f;
-  //float center_y = 105.0f;
-  //float radius_i = 5.0f;
-  //float radius_o = 75.0f;
-
- // UIState *s = state;
-
   int   nSignal = 0;
   if (scene->longitudinalPlan.e2ex[12] > 30 && scene->longitudinalPlan.stopline[12] < 10 && scene->car_state.getVEgo() < 0.5) {
     nSignal = 1;
@@ -1137,7 +1123,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
    nSignal = 2;
   }
 
-  if ( nSignal == 0 ) return;
+
+  if ( nSignal == 0 || cal_view ) return;
+
 
   int bb_x = 250;
   int bb_y = 500;
@@ -1153,4 +1141,28 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("nSignal = %d", nSignal );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
+}
+
+
+// grid line by opkr for mounting device appropriate position  BF:Back and Forth Angle, RL:Right and Left Angle
+void OnPaint::ui_draw_grid( QPainter &p  ) 
+{
+  int x_center = state->fb_w/2;
+  int y_center = state->fb_h/2;
+  
+  for (int i = 0; i < 5; i++) {
+    p.drawLine( x_center + (i*200), 0, x_center+ (i*200) , state->fb_h);  // line
+    p.drawLine( x_center - (i*200), 0, x_center- (i*200) , state->fb_h); 
+  }
+
+  for (int i = 0; i < 5; i++) {
+    p.drawLine( 0, y_center + (i*108), state->fb_w, y_center + (i*108)); 
+    p.drawLine( 0, y_center - (i*108), state->fb_w, y_center - (i*108)); 
+  }
+
+
+  QString text4;
+  configFont( p, "Open Sans",  80, "SemiBold");
+  text4.sprintf("BF %.2f  RL %.2f", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
+  drawText( p, x_center, y_center, text4 ); 
 }

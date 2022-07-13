@@ -37,6 +37,7 @@ private:
 
   int   enginRpm = 0;
 
+  int   cal_view = 0;
 
  
   struct _PARAM_
@@ -106,6 +107,7 @@ private:
 
 // navi
 private:
+  void   ui_draw_grid( QPainter &p  ) ;
   float  interp( float xv, float xp[], float fp[], int N);
   void   ui_main_navi( QPainter &p );
   void   ui_draw_debug1( QPainter &p );
