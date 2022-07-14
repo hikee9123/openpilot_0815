@@ -1,12 +1,16 @@
-Version 0.8.15 (2022-XX-XX)
+Version 0.8.15 (2022-07-20)
 ========================
 * New driving model
+  * Path planning uses end-to-end output instead of lane lines at all times
+  * Reduced ping pong
+  * Improved lane centering
 * New lateral controller based on physical wheel torque model
   * Much smoother control, consistent across the speed range
   * Effective feedforward that uses road roll
   * Simplified tuning, all car-specific parameters can be derived from data
 * New lateral controller based on torque model + lqr model
 * tune data display wait after hide.
+* NEOS 20: improved reliability
 
 
 Version 0.8.14 (2022-06-01)
