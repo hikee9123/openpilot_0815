@@ -185,7 +185,7 @@ void OnPaint::mousePressEvent(QMouseEvent* e)
 
 
 
- // printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
+  printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
 
  // cal_view = scene->scr.IsCalibraionGridViewToggle;
   
