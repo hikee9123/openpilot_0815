@@ -232,7 +232,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 
 void DeveloperPanel::showEvent(QShowEvent *event) 
 {
-  Params params = Params();
+//  Params params = Params();
 
 
 }
