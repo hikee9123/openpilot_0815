@@ -185,15 +185,11 @@ void OnPaint::mousePressEvent(QMouseEvent* e)
 
 
 
-  printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
+ // printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
 
-  if( scene->IsOpenpilotViewEnabled )
-  {
-     cal_view ^= 1;
-
-  }
+ // cal_view = scene->scr.IsCalibraionGridViewToggle;
   
-   printf("OnPaint::mousePressEvent %d,%d  cal_view=%d \n", e_x, e_y, cal_view);
+ //  printf("OnPaint::mousePressEvent %d,%d  cal_view=%d \n", e_x, e_y, cal_view);
 
   QWidget::mousePressEvent(e);
 }
@@ -210,7 +206,7 @@ void OnPaint::paintEvent(QPaintEvent *event)
   bb_ui_draw_UI( p );
   ui_main_navi( p );
 
-  if( cal_view )
+  if( scene->scr.IsCalibraionGridViewToggle )
   {
     ui_draw_grid( p );
   }
@@ -1124,7 +1120,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   }
 
 
-  if ( nSignal == 0 || cal_view ) return;
+  if ( nSignal == 0 || scene->scr.IsCalibraionGridViewToggle ) return;
 
 
   int bb_x = 250;

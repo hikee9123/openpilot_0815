@@ -37,7 +37,7 @@ private:
 
   int   enginRpm = 0;
 
-  int   cal_view = 0;
+ // int   cal_view = 0;
 
  
   struct _PARAM_
