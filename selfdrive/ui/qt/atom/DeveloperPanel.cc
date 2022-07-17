@@ -239,7 +239,7 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 
 
 IsCalibraionGridViewToggle::IsCalibraionGridViewToggle() 
-        : ToggleControl("주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "../assets/offroad/icon_eon.png", Params().getBool("IsOpenpilotViewEnabled")) 
+        : ToggleControl("Calibraion Grid view", "장착에 필요한 Grid 화면과 기울기를 제공합니다..", "../assets/offroad/icon_eon.png", Params().getBool("IsOpenpilotViewEnabled")) 
 {
   QObject::connect(this, &IsCalibraionGridViewToggle::toggleFlipped, [=](int state) {
     UIScene  &scene =  uiState()->scene;
