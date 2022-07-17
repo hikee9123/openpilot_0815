@@ -170,7 +170,9 @@ typedef struct UIScene {
      int  enginrpm;
 
      bool rightblindspot;
-     bool leftblindspot;     
+     bool leftblindspot; 
+
+     bool IsCalibraionGridViewToggle;
   } scr;
 
 

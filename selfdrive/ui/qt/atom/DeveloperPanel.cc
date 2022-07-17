@@ -92,6 +92,8 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 
   layout()->addWidget(horizontal_line());
 
+
+  layout()->addWidget(new IsCalibraionGridViewToggle());
   layout()->addWidget(new IsOpenpilotViewEnabledToggle());
 
 
@@ -236,6 +238,15 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 }
 
 
+IsCalibraionGridViewToggle::IsCalibraionGridViewToggle() 
+        : ToggleControl("주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "../assets/offroad/icon_eon.png", Params().getBool("IsOpenpilotViewEnabled")) 
+{
+  QObject::connect(this, &IsCalibraionGridViewToggle::toggleFlipped, [=](int state) {
+    UIScene  &scene =  uiState()->scene;
+    scene.scr.IsCalibraionGridViewToggle = state;
+
+  });
+}
 
 
 IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle() 

@@ -189,6 +189,13 @@ public:
 
 };
 
+class IsCalibraionGridViewToggle : public ToggleControl {
+  Q_OBJECT
+
+public:
+   IsCalibraionGridViewToggle();
+
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
