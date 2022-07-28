@@ -108,7 +108,9 @@ class Controls:
 
     self.sm = sm
     if self.sm is None:
-      ignore = ['driverCameraState', 'managerState'] if SIMULATION else None
+      ignore = []
+      if SIMULATION:
+        ignore += ['driverCameraState', 'managerState']
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
                                      'managerState', 'liveParameters', 'radarState','liveNaviData',
@@ -595,14 +597,14 @@ class Controls:
 
     
      # atom
-    if self.OpkrLiveSteerRatio == 2:  # 수동(고정)
+    if self.OpkrLiveSteerRatio == 2:  # ?�동(고정)
       sr = max(self.CP.steerRatio, 5.0)
       str_log1 = 'Fix sR={:.2f}'.format( sr )
-    elif self.OpkrLiveSteerRatio == 1:  # 반학습
+    elif self.OpkrLiveSteerRatio == 1:  # 반학??
       steerRatio = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
       str_log1 = '{:3.2f} sR={:.2f}'.format( params.steerRatio, sr )
-    else: # 학습.
+    else: # ?�습.
       str_log1 = 'sR={:.2f}'.format( sr )
 
     trace1.printf1( '{}'.format( str_log1 ) )      

@@ -254,6 +254,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
    pTorqFriction->SetControl( 0, 0.2, 0.01 ); 
    box_layout->addWidget( pTorqFriction );
 
+/*
    MenuControl *pHybridSpeed = new MenuControl( 
     "TorqueHybridSpeed",
     "Hybrid Speed",
@@ -261,7 +262,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
     );
    pHybridSpeed->SetControl( 10, 80, 5 ); 
    box_layout->addWidget( pHybridSpeed );
-
+*/
    MenuControl *pDeadzone = new MenuControl( 
     "Torquedeadzone",
     "steering angle deadzone",
@@ -317,7 +318,18 @@ void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
   FrameLQR( 1, box_layout );
 
   box_layout->addWidget(new AbstractControl("[3.TORQUE]","torque","../assets/offroad/icon_shell.png"));
-  FrameTOROUE( 0,  box_layout );
+  FrameTOROUE( 1,  box_layout );
+
+   MenuControl *pHybridSpeed = new MenuControl( 
+    "TorqueHybridSpeed",
+    "Hybrid Speed",
+    "Adjust Hybrid speed def:50"
+    );
+   pHybridSpeed->SetControl( 10, 80, 5 ); 
+   box_layout->addWidget( pHybridSpeed );  
+
+
+    m_pPanel->ConfirmButton( box_layout );   
 }
 
 

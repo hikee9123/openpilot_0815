@@ -27,6 +27,7 @@ class CarControllerParams:
     self.STEER_DRIVER_ALLOWANCE = 50
     self.STEER_DRIVER_MULTIPLIER = 2
     self.STEER_DRIVER_FACTOR = 1
+    self.STEER_THRESHOLD = 150
 
 
 class CAR:
@@ -51,7 +52,7 @@ class CAR:
   SANTA_FE_PHEV_2022 = "HYUNDAI SANTA FE PlUG-IN HYBRID 2022"
   SONATA = "HYUNDAI SONATA 2020"
   SONATA_LF = "HYUNDAI SONATA 2019"
-  TUCSON_DIESEL_2019 = "HYUNDAI TUCSON DIESEL 2019"
+  TUCSON = "HYUNDAI TUCSON 2019"
   PALISADE = "HYUNDAI PALISADE 2020"
   VELOSTER = "HYUNDAI VELOSTER 2019"
   SONATA_HYBRID = "HYUNDAI SONATA HYBRID 2021"
@@ -84,7 +85,7 @@ class HyundaiCarInfo(CarInfo):
 
 
 CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
-  CAR.ELANTRA: HyundaiCarInfo("Hyundai Elantra 2017-19", min_enable_speed=19 * CV.MPH_TO_MS,  harness=Harness.hyundai_b),
+  CAR.ELANTRA: HyundaiCarInfo("Hyundai Elantra 2017-19", min_enable_speed=19 * CV.MPH_TO_MS, harness=Harness.hyundai_b),
   CAR.ELANTRA_2021: HyundaiCarInfo("Hyundai Elantra 2021-22", video_link="https://youtu.be/_EdYQtV52-c", harness=Harness.hyundai_k),
   CAR.ELANTRA_HEV_2021: HyundaiCarInfo("Hyundai Elantra Hybrid 2021-22", video_link="https://youtu.be/_EdYQtV52-c", harness=Harness.hyundai_k),
   CAR.ELANTRA_GT_I30: None,  # dashcamOnly and same platform as CAR.ELANTRA
@@ -97,14 +98,17 @@ CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
   CAR.IONIQ_PHEV: HyundaiCarInfo("Hyundai Ioniq Plug-in Hybrid 2020-21", harness=Harness.hyundai_h),
   CAR.KONA: HyundaiCarInfo("Hyundai Kona 2020", harness=Harness.hyundai_b),
   CAR.KONA_EV: HyundaiCarInfo("Hyundai Kona Electric 2018-21", harness=Harness.hyundai_g),
-  CAR.KONA_HEV: HyundaiCarInfo("Hyundai Kona Hybrid 2020", harness=Harness.hyundai_i),
+  CAR.KONA_HEV: HyundaiCarInfo("Hyundai Kona Hybrid 2020", video_link="https://youtu.be/0dwpAHiZgFo", harness=Harness.hyundai_i),
   CAR.SANTA_FE: HyundaiCarInfo("Hyundai Santa Fe 2019-20", "All", harness=Harness.hyundai_d),
   CAR.SANTA_FE_2022: HyundaiCarInfo("Hyundai Santa Fe 2021-22", "All", harness=Harness.hyundai_l),
   CAR.SANTA_FE_HEV_2022: HyundaiCarInfo("Hyundai Santa Fe Hybrid 2022", "All", harness=Harness.hyundai_l),
   CAR.SANTA_FE_PHEV_2022: HyundaiCarInfo("Hyundai Santa Fe Plug-in Hybrid 2022", "All", harness=Harness.hyundai_l),
   CAR.SONATA: HyundaiCarInfo("Hyundai Sonata 2020-22", "All", video_link="https://www.youtube.com/watch?v=ix63r9kE3Fw", harness=Harness.hyundai_a),
   CAR.SONATA_LF: HyundaiCarInfo("Hyundai Sonata 2018-19", harness=Harness.hyundai_e),
-  CAR.TUCSON_DIESEL_2019: HyundaiCarInfo("Hyundai Tucson Diesel 2019", harness=Harness.hyundai_l),
+  CAR.TUCSON: [
+    HyundaiCarInfo("Hyundai Tucson 2021", min_enable_speed=19 * CV.MPH_TO_MS, harness=Harness.hyundai_l),
+    HyundaiCarInfo("Hyundai Tucson Diesel 2019", harness=Harness.hyundai_l),
+  ],
   CAR.PALISADE: [
     HyundaiCarInfo("Hyundai Palisade 2020-21", "All", video_link="https://youtu.be/TAnDqjF4fDY?t=456", harness=Harness.hyundai_h),
     HyundaiCarInfo("Kia Telluride 2020", harness=Harness.hyundai_h),
@@ -117,13 +121,13 @@ CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
     HyundaiCarInfo("Kia Forte 2018", harness=Harness.hyundai_b),
     HyundaiCarInfo("Kia Forte 2019-21", harness=Harness.hyundai_g),
   ],
-  CAR.KIA_K5_2021: HyundaiCarInfo("Kia K5 2021-22", "SCC + LFA", harness=Harness.hyundai_a),
+  CAR.KIA_K5_2021: HyundaiCarInfo("Kia K5 2021-22", "SCC", harness=Harness.hyundai_a),
   CAR.KIA_NIRO_EV: [
     HyundaiCarInfo("Kia Niro Electric 2019-20", "All", video_link="https://www.youtube.com/watch?v=lT7zcG6ZpGo", harness=Harness.hyundai_f),
     HyundaiCarInfo("Kia Niro Electric 2021", "All", video_link="https://www.youtube.com/watch?v=lT7zcG6ZpGo", harness=Harness.hyundai_c),
     HyundaiCarInfo("Kia Niro Electric 2022", "All", video_link="https://www.youtube.com/watch?v=lT7zcG6ZpGo", harness=Harness.hyundai_h),
   ],
-  CAR.KIA_NIRO_HEV: HyundaiCarInfo("Kia Niro Plug-in Hybrid 2019", min_enable_speed=10. * CV.MPH_TO_MS, harness=Harness.hyundai_c),
+  CAR.KIA_NIRO_HEV: HyundaiCarInfo("Kia Niro Plug-in Hybrid 2018-19", min_enable_speed=10. * CV.MPH_TO_MS, harness=Harness.hyundai_c),
   CAR.KIA_NIRO_HEV_2021: [
     HyundaiCarInfo("Kia Niro Hybrid 2021", harness=Harness.hyundai_f),  # TODO: could be hyundai_d, verify
     HyundaiCarInfo("Kia Niro Hybrid 2022", harness=Harness.hyundai_h),
@@ -138,14 +142,14 @@ CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
     HyundaiCarInfo("Kia Sorento 2018", video_link="https://www.youtube.com/watch?v=Fkh3s6WHJz8", harness=Harness.hyundai_c),
     HyundaiCarInfo("Kia Sorento 2019", video_link="https://www.youtube.com/watch?v=Fkh3s6WHJz8", harness=Harness.hyundai_e),
   ],
-  CAR.KIA_STINGER: HyundaiCarInfo("Kia Stinger 2018", video_link="https://www.youtube.com/watch?v=MJ94qoofYw0", harness=Harness.hyundai_c),
+  CAR.KIA_STINGER: HyundaiCarInfo("Kia Stinger 2018-20", video_link="https://www.youtube.com/watch?v=MJ94qoofYw0", harness=Harness.hyundai_c),
   CAR.KIA_CEED: HyundaiCarInfo("Kia Ceed 2019", harness=Harness.hyundai_e),
 
   # Genesis
-  CAR.GENESIS_G70: HyundaiCarInfo("Genesis G70 2018", "All", harness=Harness.hyundai_f),
+  CAR.GENESIS_G70: HyundaiCarInfo("Genesis G70 2018-19", "All", harness=Harness.hyundai_f),
   CAR.GENESIS_G70_2020: HyundaiCarInfo("Genesis G70 2020", "All", harness=Harness.hyundai_f),
-  CAR.GENESIS_G80: HyundaiCarInfo("Genesis G80 2018", "All", harness=Harness.hyundai_h),
-  CAR.GENESIS_G90: HyundaiCarInfo("Genesis G90 2018", "All", harness=Harness.hyundai_c),
+  CAR.GENESIS_G80: HyundaiCarInfo("Genesis G80 2017-19", "All", harness=Harness.hyundai_h),
+  CAR.GENESIS_G90: HyundaiCarInfo("Genesis G90 2017-18", "All", harness=Harness.hyundai_c),
 }
 
 class Buttons:
@@ -153,7 +157,7 @@ class Buttons:
   RES_ACCEL = 1
   SET_DECEL = 2
   GAP_DIST = 3
-  CANCEL = 4
+  CANCEL = 4  # on newer models, this is a pause/resume button
 
 FINGERPRINTS = {
   CAR.ELANTRA: [{
@@ -372,7 +376,7 @@ FW_VERSIONS = {
       b'\xf1\x8799110L0000\xf1\x00DN8_ SCC FHCUP      1.00 1.00 99110-L0000         ',
     ],
     (Ecu.esp, 0x7d1, None): [
-      b'\xf1\x00DN ESC \a 106 \a\x01 58910-L0100',
+      b'\xf1\x00DN ESC \x07 106 \x07\x01 58910-L0100',
       b'\xf1\x00DN ESC \x01 102\x19\x04\x13 58910-L1300',
       b'\xf1\x00DN ESC \x03 100 \x08\x01 58910-L0300',
       b'\xf1\x00DN ESC \x06 104\x19\x08\x01 58910-L0100',
@@ -402,8 +406,8 @@ FW_VERSIONS = {
       b'\xf1\x8739110-2S278\xf1\x82DNDVD5GMCCXXXL5B',
     ],
     (Ecu.eps, 0x7d4, None): [
-      b'\xf1\x00DN8 MDPS C 1,00 1,01 56310L0010\x00 4DNAC101', # modified firmware
-      b'\xf1\x8756310L0010\x00\xf1\x00DN8 MDPS C 1,00 1,01 56310L0010\x00 4DNAC101', # modified firmware
+      b'\xf1\x00DN8 MDPS C 1,00 1,01 56310L0010\x00 4DNAC101',  # modified firmware
+      b'\xf1\x8756310L0010\x00\xf1\x00DN8 MDPS C 1,00 1,01 56310L0010\x00 4DNAC101',  # modified firmware
       b'\xf1\x00DN8 MDPS C 1.00 1.01 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00 4DNAC101',
       b'\xf1\x00DN8 MDPS C 1.00 1.01 56310-L0010 4DNAC101',
       b'\xf1\x00DN8 MDPS C 1.00 1.01 56310L0010\x00 4DNAC101',
@@ -482,6 +486,9 @@ FW_VERSIONS = {
       b'\xf1\x87SAMFBA9283024GJ2wwwwEUuWwwgwwwwwwwww\x87/\xfb\xff\x98w\x8f\xff<\xd3\xf1\x81U913\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U913\x00\x00\x00\x00\x00\x00SDN8T16NB2\n\xdd^\xbc',
       b'\xf1\x87SAMFBA9708354GJ2wwwwVf\x86h\x88wx\x87xww\x87\x88\x88\x88\x88w/\xfa\xff\x97w\x8f\xff\x86\xa0\xf1\x81U913\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U913\x00\x00\x00\x00\x00\x00SDN8T16NB2\n\xdd^\xbc',
       b'\xf1\x87SANDB45316691GC6\x99\x99\x99\x99\x88\x88\xa8\x8avfwfwwww\x87wxwT\x9f\xfd\xff\x88wo\xff\x1c\xfa\xf1\x89HT6WAD10A1\xf1\x82SDN8G25NB3\x00\x00\x00\x00\x00\x00',
+      b'\xf1\x87SALFBA7460044GJ2gx\x87\x88Vf\x86hx\x88\x87\x88wwwwgw\x86wd?\xfa\xff\x86U_\xff\xaf\x1f\xf1\x81U913\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U913\x00\x00\x00\x00\x00\x00SDN8T16NB2\n\xdd^\xbc',
+      b'\xf1\x87SAMFBA8105254GJ2wx\x87\x88Vf\x86hx\x88\x87\x88wwwwwwww\x86O\xfa\xff\x99\x88\x7f\xffZG\xf1\x81U913\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U913\x00\x00\x00\x00\x00\x00SDN8T16NB2\n\xdd^\xbc',
+      b'\xf1\x87SANFB45889451GC7wx\x87\x88gw\x87x\x88\x88x\x88\x87wxw\x87wxw\x87\x8f\xfc\xffeU\x8f\xff+Q\xf1\x81U913\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U913\x00\x00\x00\x00\x00\x00SDN8T16NB2\n\xdd^\xbc',
     ],
   },
   CAR.SONATA_LF: {
@@ -499,6 +506,7 @@ FW_VERSIONS = {
     ],
     (Ecu.fwdCamera, 0x7c4, None): [
       b'\xf1\x00LFF LKAS AT USA LHD 1.00 1.01 95740-C1000 E51',
+      b'\xf1\x00LFF LKAS AT USA LHD 1.01 1.02 95740-C1000 E52',
     ],
     (Ecu.transmission, 0x7e1, None): [
       b'\xf1\x006T6H0_C2\x00\x006T6B4051\x00\x00TLF0G24NL1\xb0\x9f\xee\xf5',
@@ -507,20 +515,25 @@ FW_VERSIONS = {
       b'\xf1\x87\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xf1\x816T6B4051\x00\x00\xf1\x006T6H0_C2\x00\x006T6B4051\x00\x00TLF0G24SL2n\x8d\xbe\xd8',
       b'\xf1\x87LAHSGN012918KF10\x98\x88x\x87\x88\x88x\x87\x88\x88\x98\x88\x87w\x88w\x88\x88\x98\x886o\xf6\xff\x98w\x7f\xff3\x00\xf1\x816W3B1051\x00\x00\xf1\x006W351_C2\x00\x006W3B1051\x00\x00TLF0T20NL2\x00\x00\x00\x00',
       b'\xf1\x87LAHSGN012918KF10\x98\x88x\x87\x88\x88x\x87\x88\x88\x98\x88\x87w\x88w\x88\x88\x98\x886o\xf6\xff\x98w\x7f\xff3\x00\xf1\x816W3B1051\x00\x00\xf1\x006W351_C2\x00\x006W3B1051\x00\x00TLF0T20NL2H\r\xbdm',
+      b'\xf1\x87LAJSG49645724HF0\x87x\x87\x88\x87www\x88\x99\xa8\x89\x88\x99\xa8\x89\x88\x99\xa8\x89S_\xfb\xff\x87f\x7f\xff^2\xf1\x816W3B1051\x00\x00\xf1\x006W351_C2\x00\x006W3B1051\x00\x00TLF0T20NL2H\r\xbdm',
     ],
   },
-  CAR.TUCSON_DIESEL_2019: {
+  CAR.TUCSON: {
     (Ecu.fwdRadar, 0x7d0, None): [
       b'\xf1\x00TL__ FCA F-CUP      1.00 1.01 99110-D3500         ',
+      b'\xf1\x00TL__ FCA F-CUP      1.00 1.02 99110-D3510         ',
     ],
     (Ecu.engine, 0x7e0, None): [
       b'\xf1\x8971TLC2NAIDDIR002\xf1\x8271TLC2NAIDDIR002',
+      b'\xf1\x81606G3051\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.fwdCamera, 0x7c4, None): [
       b'\xf1\x00TL  MFC  AT KOR LHD 1.00 1.02 95895-D3800 180719',
+      b'\xf1\x00TL  MFC  AT USA LHD 1.00 1.06 95895-D3800 190107',
     ],
     (Ecu.transmission, 0x7e1, None): [
       b'\xf1\x87LBJXAN202299KF22\x87x\x87\x88ww\x87xx\x88\x97\x88\x87\x88\x98x\x88\x99\x98\x89\x87o\xf6\xff\x87w\x7f\xff\x12\x9a\xf1\x81U083\x00\x00\x00\x00\x00\x00\xf1\x00bcsh8p54  U083\x00\x00\x00\x00\x00\x00TTL2V20KL1\x8fRn\x8a',
+      b'\xf1\x87KMLDCU585233TJ20wx\x87\x88x\x88\x98\x89vfwfwwww\x87f\x9f\xff\x98\xff\x7f\xf9\xf7s\xf1\x816T6G4051\x00\x00\xf1\x006T6J0_C2\x00\x006T6G4051\x00\x00TTL4G24NH2\x00\x00\x00\x00',
     ],
   },
   CAR.SANTA_FE: {
@@ -600,6 +613,7 @@ FW_VERSIONS = {
       b'\xf1\x82TACVN5GSI3XXXH0A',
       b'\xf1\x82TMCFD5MMCXXXXG0A',
       b'\xf1\x870\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf1\x82TMDWN5TMD3TXXJ1A',
+      b'\xf1\x81HM6M2_0a0_G00',
     ],
     (Ecu.eps, 0x7d4, None): [
       b'\xf1\x00TM  MDPS C 1.00 1.02 56370-S2AA0 0B19',
@@ -618,6 +632,7 @@ FW_VERSIONS = {
       b'\xf1\x87954A02N250\x00\x00\x00\x00\x00\xf1\x81T02730A1  \xf1\x00T02601BL  T02730A1  VTMPT25XXX730NS2\xa6\x06\x88\xf7',
       b'\xf1\x87KMMYBU034207SB72x\x89\x88\x98h\x88\x98\x89\x87fhvvfWf33_\xff\x87\xff\x8f\xfa\x81\xe5\xf1\x89HT6TAF00A1\xf1\x82STM0M25GS1\x00\x00\x00\x00\x00\x00',
       b'\xf1\x87954A02N250\x00\x00\x00\x00\x00\xf1\x81T02730A1  \xf1\x00T02601BL  T02730A1  VTMPT25XXX730NS2\xa6',
+      b'\xf1\x00HT6TA290BLHT6TAF00A1STM0M25GS1\x00\x00\x00\x00\x00\x006\xd8\x97\x15',
     ],
   },
   CAR.SANTA_FE_HEV_2022: {
@@ -836,6 +851,12 @@ FW_VERSIONS = {
       b'\xf1\x81640H0051\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
   },
+  CAR.GENESIS_G90: {
+    (Ecu.transmission, 0x7e1, None): [b'\xf1\x87VDGMD15866192DD3x\x88x\x89wuFvvfUf\x88vWwgwwwvfVgx\x87o\xff\xbc^\xf1\x81E14\x00\x00\x00\x00\x00\x00\x00\xf1\x00bcshcm49  E14\x00\x00\x00\x00\x00\x00\x00SHI0G50NB1tc5\xb7'],
+    (Ecu.fwdRadar, 0x7d0, None): [b'\xf1\x00HI__ SCC F-CUP      1.00 1.01 96400-D2100         '],
+    (Ecu.fwdCamera, 0x7c4, None): [b'\xf1\x00HI  LKAS AT USA LHD 1.00 1.00 95895-D2020 160302'],
+    (Ecu.engine, 0x7e0, None): [b'\xf1\x810000000000\x00'],
+  },
   CAR.KONA: {
     (Ecu.fwdRadar, 0x7d0, None): [b'\xf1\x00OS__ SCC F-CUP      1.00 1.00 95655-J9200         ', ],
     (Ecu.esp, 0x7d1, None): [b'\xf1\x816V5RAK00018.ELF\xf1\x00\x00\x00\x00\x00\x00\x00', ],
@@ -846,7 +867,7 @@ FW_VERSIONS = {
   },
   CAR.KIA_CEED:  {
     (Ecu.fwdRadar, 0x7D0, None): [b'\xf1\000CD__ SCC F-CUP      1.00 1.02 99110-J7000         ', ],
-    (Ecu.esp, 0x7D4, None): [b'\xf1\000CD  MDPS C 1.00 1.06 56310-XX000 4CDEC106', ],
+    (Ecu.eps, 0x7D4, None): [b'\xf1\000CD  MDPS C 1.00 1.06 56310-XX000 4CDEC106', ],
     (Ecu.fwdCamera, 0x7C4, None): [b'\xf1\000CD  LKAS AT EUR LHD 1.00 1.01 99211-J7000 B40', ],
     (Ecu.engine, 0x7E0, None): [b'\001TCD-JECU4F202H0K', ],
     (Ecu.transmission, 0x7E1, None): [
@@ -944,6 +965,7 @@ FW_VERSIONS = {
   CAR.KIA_NIRO_EV: {
     (Ecu.fwdRadar, 0x7D0, None): [
       b'\xf1\x00DEev SCC F-CUP      1.00 1.00 99110-Q4000         ',
+      b'\xf1\x00DEev SCC F-CUP      1.00 1.02 96400-Q4000         ',
       b'\xf1\x00DEev SCC F-CUP      1.00 1.02 96400-Q4100         ',
       b'\xf1\x00DEev SCC F-CUP      1.00 1.03 96400-Q4100         ',
       b'\xf1\x8799110Q4000\xf1\x00DEev SCC F-CUP      1.00 1.00 99110-Q4000         ',
@@ -956,6 +978,7 @@ FW_VERSIONS = {
     (Ecu.eps, 0x7D4, None): [
       b'\xf1\x00DE  MDPS C 1.00 1.05 56310Q4000\x00 4DEEC105',
       b'\xf1\x00DE  MDPS C 1.00 1.05 56310Q4100\x00 4DEEC105',
+      b'\xf1\x00DE  MDPS C 1.00 1.04 56310Q4100\x00 4DEEC104',
     ],
     (Ecu.fwdCamera, 0x7C4, None): [
       b'\xf1\x00DEE MFC  AT EUR LHD 1.00 1.00 99211-Q4100 200706',
@@ -963,24 +986,29 @@ FW_VERSIONS = {
       b'\xf1\x00DEE MFC  AT USA LHD 1.00 1.00 99211-Q4000 191211',
       b'\xf1\x00DEE MFC  AT USA LHD 1.00 1.03 95740-Q4000 180821',
       b'\xf1\x00DEE MFC  AT USA LHD 1.00 1.01 99211-Q4500 210428',
+      b'\xf1\x00DEE MFC  AT EUR LHD 1.00 1.03 95740-Q4000 180821',
     ],
   },
   CAR.KIA_NIRO_HEV: {
     (Ecu.engine, 0x7e0, None): [
-      b'\xf1\x816H6F4051\000\000\000\000\000\000\000\000',
+      b'\xf1\x816H6F4051\x00\x00\x00\x00\x00\x00\x00\x00',
+      b'\xf1\x816H6D1051\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.transmission, 0x7e1, None): [
-      b"\xf1\x816U3J2051\000\000\xf1\0006U3H0_C2\000\0006U3J2051\000\000PDE0G16NS2\xf4\'\\\x91",
-      b'\xf1\x816U3J2051\000\000\xf1\0006U3H0_C2\000\0006U3J2051\000\000PDE0G16NS2\000\000\000\000',
+      b"\xf1\x816U3J2051\x00\x00\xf1\x006U3H0_C2\x00\x006U3J2051\x00\x00PDE0G16NS2\xf4'\\\x91",
+      b'\xf1\x816U3J2051\x00\x00\xf1\x006U3H0_C2\x00\x006U3J2051\x00\x00PDE0G16NS2\x00\x00\x00\x00',
+      b'\xf1\x816U3H3051\x00\x00\xf1\x006U3H0_C2\x00\x006U3H3051\x00\x00PDE0G16NS1\x00\x00\x00\x00',
+      b'\xf1\x816U3H3051\x00\x00\xf1\x006U3H0_C2\x00\x006U3H3051\x00\x00PDE0G16NS1\x13\xcd\x88\x92',
     ],
     (Ecu.eps, 0x7D4, None): [
-      b'\xf1\000DE  MDPS C 1.00 1.09 56310G5301\000 4DEHC109',
+      b'\xf1\x00DE  MDPS C 1.00 1.09 56310G5301\x00 4DEHC109',
     ],
     (Ecu.fwdCamera, 0x7C4, None): [
-      b'\xf1\000DEP MFC  AT USA LHD 1.00 1.01 95740-G5010 170424',
+      b'\xf1\x00DEP MFC  AT USA LHD 1.00 1.01 95740-G5010 170424',
+      b'\xf1\x00DEP MFC  AT USA LHD 1.00 1.00 95740-G5010 170117',
     ],
     (Ecu.fwdRadar, 0x7D0, None): [
-      b'\xf1\000DEhe SCC H-CUP      1.01 1.02 96400-G5100         ',
+      b'\xf1\x00DEhe SCC H-CUP      1.01 1.02 96400-G5100         ',
     ],
   },
   CAR.KIA_NIRO_HEV_2021: {
@@ -1029,18 +1057,27 @@ FW_VERSIONS = {
     ],
   },
   CAR.KIA_OPTIMA: {
-    (Ecu.fwdRadar, 0x7d0, None): [b'\xf1\x00JF__ SCC F-CUP      1.00 1.00 96400-D4110         '],
-    (Ecu.esp, 0x7d1, None): [b'\xf1\x00JF ESC \v 11 \x18\x030 58920-D5180',],
+    (Ecu.fwdRadar, 0x7d0, None): [
+      b'\xf1\x00JF__ SCC F-CUP      1.00 1.00 96400-D4110         ',
+    ],
+    (Ecu.esp, 0x7d1, None): [
+      b'\xf1\x00JF ESC \x0b 11 \x18\x030 58920-D5180',
+    ],
     (Ecu.engine, 0x7e0, None): [
-      b'\x01TJFAJNU06F201H03',
       b'\xf1\x89F1JF600AISEIU702\xf1\x82F1JF600AISEIU702',
     ],
-    (Ecu.eps, 0x7d4, None): [b'\xf1\x00TM  MDPS C 1.00 1.00 56340-S2000 8409'],
+    (Ecu.eps, 0x7d4, None): [
+      b'\xf1\x00TM  MDPS C 1.00 1.00 56340-S2000 8409',
+    ],
     (Ecu.fwdCamera, 0x7c4, None): [
       b'\xf1\x00JFA LKAS AT USA LHD 1.00 1.00 95895-D5001 h32',
       b'\xf1\x00JFA LKAS AT USA LHD 1.00 1.02 95895-D5000 h31',
     ],
-    (Ecu.transmission, 0x7e1, None): [b'\xf1\x816U2V8051\x00\x00\xf1\x006U2V0_C2\x00\x006U2V8051\x00\x00DJF0T16NL0\t\xd2GW'],
+    (Ecu.transmission, 0x7e1, None): [
+      b'\xf1\x816U2V8051\x00\x00\xf1\x006U2V0_C2\x00\x006U2V8051\x00\x00DJF0T16NL0\t\xd2GW',
+      b'\xf1\x816U2VA051\x00\x00\xf1\x006U2V0_C2\x00\x006U2VA051\x00\x00DJF0T16NL1\xca3\xeb.',
+      b'\xf1\x816U2VA051\x00\x00\xf1\x006U2V0_C2\x00\x006U2VA051\x00\x00DJF0T16NL1\x00\x00\x00\x00',
+    ],
   },
   CAR.ELANTRA_2021: {
     (Ecu.fwdRadar, 0x7d0, None): [
@@ -1130,9 +1167,6 @@ FW_VERSIONS = {
       b'\xf1\000DNhe SCC F-CUP      1.00 1.02 99110-L5000         ',
       b'\xf1\x8799110L5000\xf1\000DNhe SCC F-CUP      1.00 1.02 99110-L5000         ',
     ],
-    (Ecu.esp, 0x7b0, None): [
-      b'\xf1\x87\x00\x00\x00\x00\x00\x00\x00\x00\xf1\x81\x00\x00\x00\x00\x00\x00\x00\x00',
-    ],
     (Ecu.eps, 0x7d4, None): [
       b'\xf1\x8756310-L5500\xf1\x00DN8 MDPS C 1.00 1.02 56310-L5500 4DNHC102',
       b'\xf1\x8756310-L5450\xf1\x00DN8 MDPS C 1.00 1.02 56310-L5450 4DNHC102',
@@ -1184,11 +1218,11 @@ CHECKSUM = {
 FEATURES = {
   # which message has the gear
   "use_cluster_gears": {CAR.ELANTRA, CAR.ELANTRA_GT_I30, CAR.KONA},
-  "use_tcu_gears": {CAR.KIA_OPTIMA, CAR.SONATA_LF, CAR.VELOSTER, CAR.TUCSON_DIESEL_2019},
+  "use_tcu_gears": {CAR.KIA_OPTIMA, CAR.SONATA_LF, CAR.VELOSTER, CAR.TUCSON},
   "use_elect_gears": {CAR.GRANDEUR_HEV_19, CAR.KIA_NIRO_EV, CAR.KIA_NIRO_HEV, CAR.KIA_NIRO_HEV_2021, CAR.KIA_OPTIMA_H, CAR.IONIQ_EV_LTD, CAR.KONA_EV, CAR.IONIQ, CAR.IONIQ_EV_2020, CAR.IONIQ_PHEV, CAR.ELANTRA_HEV_2021,CAR.SONATA_HYBRID, CAR.KONA_HEV, CAR.IONIQ_HEV_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022, CAR.IONIQ_PHEV_2019},
 
   # these cars use the FCA11 message for the AEB and FCW signals, all others use SCC12
-  "use_fca": {CAR.SONATA, CAR.SONATA_HYBRID, CAR.ELANTRA, CAR.ELANTRA_2021, CAR.ELANTRA_HEV_2021, CAR.ELANTRA_GT_I30, CAR.KIA_STINGER, CAR.IONIQ_EV_2020, CAR.IONIQ_PHEV, CAR.KONA_EV, CAR.KIA_FORTE, CAR.KIA_NIRO_EV, CAR.PALISADE, CAR.GENESIS_G70, CAR.GENESIS_G70_2020, CAR.KONA, CAR.SANTA_FE, CAR.KIA_SELTOS, CAR.KONA_HEV, CAR.SANTA_FE_2022, CAR.KIA_K5_2021, CAR.IONIQ_HEV_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022, CAR.TUCSON_DIESEL_2019},
+  "use_fca": {CAR.SONATA, CAR.SONATA_HYBRID, CAR.ELANTRA, CAR.ELANTRA_2021, CAR.ELANTRA_HEV_2021, CAR.ELANTRA_GT_I30, CAR.KIA_STINGER, CAR.IONIQ_EV_2020, CAR.IONIQ_PHEV, CAR.KONA_EV, CAR.KIA_FORTE, CAR.KIA_NIRO_EV, CAR.PALISADE, CAR.GENESIS_G70, CAR.GENESIS_G70_2020, CAR.KONA, CAR.SANTA_FE, CAR.KIA_SELTOS, CAR.KONA_HEV, CAR.SANTA_FE_2022, CAR.KIA_K5_2021, CAR.IONIQ_HEV_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022, CAR.TUCSON},
   "send_lfa_mfa": {CAR.SONATA, CAR.PALISADE, CAR.IONIQ, CAR.KIA_NIRO_EV, CAR.KONA_EV,CAR.IONIQ_EV_2020, CAR.IONIQ_PHEV, CAR.KIA_CEED, CAR.KIA_SELTOS, CAR.ELANTRA_2021, CAR.ELANTRA_HEV_2021},
   "send_hda_mfa": {CAR.GRANDEUR_HEV_19},
 }
@@ -1236,7 +1270,7 @@ DBC = {
   CAR.SANTA_FE_PHEV_2022: dbc_dict('hyundai_kia_generic', None),
   CAR.SONATA: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
   CAR.SONATA_LF: dbc_dict('hyundai_kia_generic', None), # Has 0x5XX messages, but different format
-  CAR.TUCSON_DIESEL_2019: dbc_dict('hyundai_kia_generic', None),
+  CAR.TUCSON: dbc_dict('hyundai_kia_generic', None),
   CAR.PALISADE: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar'),
   CAR.VELOSTER: dbc_dict('hyundai_kia_generic', None),
   CAR.KIA_CEED: dbc_dict('hyundai_kia_generic', None),
@@ -1244,4 +1278,3 @@ DBC = {
   CAR.GRANDEUR_HEV_19: dbc_dict('hyundai_kia_generic', None),
 }
 
-STEER_THRESHOLD = 150
