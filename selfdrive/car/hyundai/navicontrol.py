@@ -107,7 +107,7 @@ class NaviControl():
       self.btn_cnt += 1
       #if self.btn_cnt <= 1:
       # btn_signal = None  #Buttons.NONE
-      if self.btn_cnt > 5: 
+      if self.btn_cnt > 6: 
         self.seq_command = 0
       return btn_signal
 
