@@ -122,7 +122,8 @@ class CarController():
 
   def cutin_detect(self, CS):
     cut_in, drel, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    if drel < 40 and abs(cut_in) >= 3:
+    kph_speed = CS.out.aEgo * CV.MS_TO_KPH
+    if kph_speed > 30 and drel < 40 and abs(cut_in) >= 3:
       self.cut_in_car_time = 100
 
     if self.cut_in_car_time > 1:
