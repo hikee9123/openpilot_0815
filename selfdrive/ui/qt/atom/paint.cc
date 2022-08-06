@@ -1120,7 +1120,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   if ( fe2ex > 30 && fstopline < 10 && scene->car_state.getVEgo() < 0.5) {
     nSignal = 1;
-  } else if ( fe2ex > 1 && fe2ex < 100 && fstopline < 100) {
+  } else if ( fe2ex > 0 && fe2ex < 100 && fstopline < 100) {
     nSignal = 2;
   }
 
