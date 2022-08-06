@@ -1,5 +1,7 @@
 Version 0.8.16 (2022-XX-XX)
 ========================
+* New driving model
+  * fpdriving model
 * Hyundai Kona Electric 2022 support thanks to sunnyhaibin!
 
 
