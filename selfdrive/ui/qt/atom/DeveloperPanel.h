@@ -157,6 +157,9 @@ private:
   QLabel remote_hash;
   QLabel label_desc;
 
+
+  QString  str_desc;
+
   void refresh();
 };
 

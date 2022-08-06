@@ -234,7 +234,7 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 //
 //  Git
 
-GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") 
+GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", str_desc, "") 
 {
   local_hash.setAlignment(Qt::AlignVCenter);
   remote_hash.setAlignment(Qt::AlignVCenter);
@@ -259,6 +259,8 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
     QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
     QString desc = QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+    str_desc = desc;
+    
     label_desc.setText( desc );
 
     if (!label_desc.isVisible()) {
