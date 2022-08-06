@@ -346,17 +346,17 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
 
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
 
-  main_layout->addLayout(hlayout);
+  main_layout->addLayout( hlayout );
 
   connect(title_label, &QPushButton::clicked, [=]() {
 
-    if( !hlayout->isValid() )
+    if( !hlayout->isVisible() )
     {
-      hlayout->show();
+      //hlayout->show();
     }
     else 
     {
-      hlayout->hide();
+      //hlayout->hide();
     }
 
     hlayout->setVisible( !hlayout->isVisible() );
