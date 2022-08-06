@@ -262,6 +262,10 @@ void GitHash::update()
 {
       if ( !description->isVisible() ) 
       {
+        str_desc = "Wait! git commit check";
+        description->setText( str_desc );
+        emit showDescription();
+
         local_hash.setStyleSheet("color: #83c744");
 
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
@@ -277,9 +281,11 @@ void GitHash::update()
 
         str_desc += QString("\n\nLOCAL: %1  REMOTE: %2").arg(commit_local, commit_remote );
         description->setText( str_desc );
-        emit showDescription();
+        
       }
       description->setVisible(!description->isVisible());
+
+      refresh();
 }
 
 void GitHash::refresh()
