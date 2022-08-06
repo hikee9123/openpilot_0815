@@ -342,7 +342,6 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
         "", 
         Params().getBool("IsOpenpilotViewEnabled")) 
 {
-  UIScene  &scene =  uiState()->scene;
 
   win_widget = new QWidget;
   QHBoxLayout *hlayout = new QHBoxLayout(win_widget);
@@ -378,7 +377,7 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
   QObject::connect(this, &IsOpenpilotViewEnabledToggle::toggleFlipped, [=](int state) {
     char value = state ? '1' : '0';
 
-    //QUIState::ui_state.scene;
+    UIScene  &scene =  uiState()->scene;
     scene.IsOpenpilotViewEnabled = state;
     Params().put("IsOpenpilotViewEnabled", &value, 1);
     refresh();
