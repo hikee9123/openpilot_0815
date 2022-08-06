@@ -1,3 +1,4 @@
+from pickle import TRUE
 from cereal import car, log
 from common.realtime import DT_CTRL
 from common.numpy_fast import clip, interp
@@ -120,11 +121,16 @@ class CarController():
 
     return  int(round(float(apply_torque)))
 
-  def cutin_detect(self, CS):
-    cut_in, drel, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    kph_speed = CS.out.aEgo * CV.MS_TO_KPH
-    if kph_speed > 30 and drel < 40 and abs(cut_in) >= 3:
-      self.cut_in_car_time = 100
+  def cutin_detect(self, CS, radar ):
+    cutin_dist = CS.clu_Vanz * 0.5
+    if radar:
+      cut_in, dRel = self.NC.get_cut_in_radar()
+      if dRel < cutin_dist and cut_in:
+        self.cut_in_car_time = 100      
+    else:
+      cut_in, dRel = self.NC.get_cut_in_car()
+      if dRel < cutin_dist and abs(cut_in) >= 3:
+        self.cut_in_car_time = 100
 
     if self.cut_in_car_time > 1:
       self.cut_in_car_time -= 1      
@@ -270,7 +276,7 @@ class CarController():
       self.cut_in_car_time = 0
       self.cut_in_car_alert = False
     else:
-      self.cutin_detect( CS )
+      self.cutin_detect( CS, True )
 
     lkas_active = enabled and active and not CS.out.steerFaultTemporary and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
 
