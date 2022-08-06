@@ -118,9 +118,8 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
   MenuControl *pMenu1 = new MenuControl( 
     "OpkrMaxSteeringAngle",
     "Driver to Steer Angle",
-    "mprove the edge between the driver and the openpilot.",
-    "../assets/offroad/icon_shell.png"    
-    );
+    "mprove the edge between the driver and the openpilot."
+     );
   pMenu1->SetControl( 10, 180, 5 );
   menu_layout->addWidget( pMenu1 );
 
@@ -128,8 +127,7 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
    MenuControl *pMenu2 = new MenuControl( 
     "OpkrMaxDriverAngleWait",
     "Driver to Steer",
-    "Controls smooth torque by the driver  From OpkrMaxSteeringAngle. def:0.002(5sec)",
-    "../assets/offroad/icon_shell.png"    
+    "Controls smooth torque by the driver  From OpkrMaxSteeringAngle. def:0.002(5sec)"
     );
   pMenu2->SetControl( 0, 1, 0.001 );
   pMenu2->SetString( 0, "Not");
@@ -139,8 +137,7 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
    MenuControl *pMenu3 = new MenuControl( 
     "OpkrMaxSteerAngleWait" ,
     "Steer angle",
-    "Controls torque by steering angle From OpkrMaxSteeringAngle. def:0.001(10sec)",
-    "../assets/offroad/icon_shell.png"    
+    "Controls torque by steering angle From OpkrMaxSteeringAngle. def:0.001(10sec)"
     );
   pMenu3->SetControl( 0, 1, 0.001 );
   pMenu3->SetString( 0, "Not");
@@ -149,8 +146,7 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
    MenuControl *pMenu4 = new MenuControl( 
     "OpkrDriverAngleWait" ,
     "Normal driver to Steer",
-    "Controls torque limitation due to normal driver handle intervention. def:0.001(10sec)",
-    "../assets/offroad/icon_shell.png"
+    "Controls torque limitation due to normal driver handle intervention. def:0.001(10sec)"
     );
   pMenu4->SetControl( 0, 1, 0.001 );
   pMenu4->SetString( 0, "Not");
