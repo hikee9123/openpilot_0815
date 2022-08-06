@@ -239,14 +239,31 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
   local_hash.setAlignment(Qt::AlignVCenter);
   local_hash.setStyleSheet("color: #aaaaaa");
 
-  update_notif = new ButtonControl("UPDATE");
+  update_notif = new QPushButton("UPDATE");
  // update_notif->setVisible(false);
-  update_notif->setStyleSheet("background-color: #364DEF;");
+  update_notif->setStyleSheet(R"(
+    QPushButton {
+      padding: 0;
+      border-radius: 50px;
+      font-size: 35px;
+      font-weight: 500;
+      color: #E4E4E4;
+      background-color: #393939;
+    }
+    QPushButton:pressed {
+      background-color: #4a4a4a;
+    }
+    QPushButton:disabled {
+      color: #33E4E4E4;
+    }
+  )");
+  update_notif->setFixedSize(250, 100); 
+
 
 
   hlayout->addWidget(&local_hash);
-
-  hlayout->addWidget(update_notif, 0, Qt::AlignHCenter | Qt::AlignRight);
+  hlayout->addWidget(update_notif);
+  //hlayout->addWidget(update_notif, 0, Qt::AlignHCenter | Qt::AlignRight);
 
   if( description == nullptr )
   {
@@ -261,7 +278,7 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
 
 
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
-  QObject::connect( update_notif, &ButtonControl::clicked, this, &GitHash::update);
+  QObject::connect( update_notif, &QPushButton::clicked, this, &GitHash::update);
 
   refresh();
 }
