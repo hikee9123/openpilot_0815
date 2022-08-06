@@ -229,10 +229,14 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
     refresh();
   });
 
+  refresh();
+}
 
-
-
-
+void SetControl( float nMin, float nMax, float nDelta )  
+{ 
+  m_nDelta = nDelta; 
+  m_nMin = nMin;  
+  m_nMax = nMax;
   refresh();
 }
 

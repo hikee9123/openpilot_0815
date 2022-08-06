@@ -82,7 +82,7 @@ private:
    QString  m_strValue;
 
 public:
-   void SetControl( float nMin=0, float nMax=100, float nDelta = 1 )  { m_nDelta = nDelta; m_nMin = nMin;  m_nMax = nMax; }
+   void SetControl( float nMin=0, float nMax=100, float nDelta = 1 );
    void SetString( const QString strList );
    void SetString( float nValue, const QString str );
 };
