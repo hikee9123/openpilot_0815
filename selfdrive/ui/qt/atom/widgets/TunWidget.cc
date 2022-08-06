@@ -144,7 +144,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
     "Kp",
     "Adjust Kp def:0.25"
     );
-  pKp->SetControl( 0.1, 1, 0.001 );
+  pKp->SetControl( 0.1, 1, 0.1 );
   box_layout->addWidget( pKp );          
 
   MenuControl *pKi = new MenuControl( 
@@ -152,7 +152,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
     "Ki",
     "Adjust Ki def:0.05"
     );
-  pKi->SetControl( 0.0, 0.1, 0.001 );
+  pKi->SetControl( 0.0, 0.1, 0.01 );
   box_layout->addWidget( pKi );
 
   MenuControl *pKf = new MenuControl( 
@@ -215,7 +215,7 @@ void  CTunWidget::FrameLQR(int nMode,QVBoxLayout *parent)
     "Ki",
     "Adjust Ki def:0.01"
     );
-  pKi->SetControl( 0.0, 1, 0.001 );
+  pKi->SetControl( 0.0, 1, 0.01 );
   box_layout->addWidget( pKi ); 
 
   MenuControl *pGain = new MenuControl( 
@@ -265,7 +265,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
 */
    MenuControl *pDeadzone = new MenuControl( 
     "Torquedeadzone",
-    "steering angle deadzone",
+    "Steer deadzone",
     "Adjust steering angle deadzone deg def:0"
     );
    pDeadzone->SetControl( 0, 5, 0.1 ); 
