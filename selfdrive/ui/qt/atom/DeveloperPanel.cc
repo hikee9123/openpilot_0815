@@ -339,31 +339,30 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
         "", 
         Params().getBool("IsOpenpilotViewEnabled")) 
 {
-  QWidget *window = new QWidget;
-  hlayout = new QHBoxLayout(window);
+  QWidget *win_widget = new QWidget;
+  hlayout = new QHBoxLayout(win_widget);
   hlayout->setMargin(0);
   hlayout->setSpacing(20);
 
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
 
 
-
-  main_layout->addWidget( window );
+  main_layout->addWidget( hlayout );
 
   connect(title_label, &QPushButton::clicked, [=]() {
 
-    int  isVisable = window->isVisible();
+    int  isVisable = win_widget->isVisible();
     if( !isVisable )
     {
-      window->show();
+      win_widget->show();
       emit showDescription();
     }
     else 
     {
-      window->hide();
+      win_widget->hide();
     }
 
-    window->setVisible( !isVisable );
+    win_widget->setVisible( !isVisable );
     //  if (!description->isVisible()) {
     //    emit showDescription();
      // }
