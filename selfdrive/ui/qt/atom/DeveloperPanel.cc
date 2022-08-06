@@ -391,6 +391,7 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
 
 void IsOpenpilotViewEnabledToggle::refresh()
 {
+  UIScene  &scene =  uiState()->scene;
   if( scene.IsOpenpilotViewEnabled )
   {
     win_widget->show();
