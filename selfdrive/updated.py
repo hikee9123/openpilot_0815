@@ -134,6 +134,7 @@ def set_params(new_version: bool, failed_count: int, exception: Optional[str]) -
     except Exception:
       params.put("ReleaseNotes", "")
     params.put_bool("UpdateAvailable", True)
+    os.system("/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh" )
 
   # Handle user prompt
   for alert in ("Offroad_UpdateFailed", "Offroad_ConnectivityNeeded", "Offroad_ConnectivityNeededPrompt"):

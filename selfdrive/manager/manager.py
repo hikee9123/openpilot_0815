@@ -305,8 +305,11 @@ def main() -> None:
     cloudlog.warning("reboot")
     HARDWARE.reboot()
   elif params.get_bool("DoShutdown"):
+    updateAvailable = params.get_bool("UpdateAvailable");    
     pre_built_on = params.get_bool("OpkrPrebuiltOn")
-    if pre_built_on:
+    if updateAvailable:
+       os.system( "cd /data/openpilot; touch prebuilt" )
+    elif pre_built_on:
       PREBUILT = os.path.exists(os.path.join(BASEDIR, 'prebuilt'))
       cloudlog.warning("check PREBUILT")
       if not PREBUILT:
