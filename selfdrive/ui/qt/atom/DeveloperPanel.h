@@ -160,6 +160,7 @@ private:
   QString  str_desc;
 
   void refresh();
+  void update();
 };
 
 

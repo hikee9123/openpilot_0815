@@ -253,11 +253,17 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
     main_layout->addWidget(description);
   }
 
+  QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::update);
 
-  connect( title_label, &QPushButton::clicked, [=]() {
+  refresh();
+}
 
+void GitHash::update()
+{
       if ( !description->isVisible() ) 
       {
+        local_hash.setStyleSheet("color: #83c744");
+
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         std::system( gitcommit );
         std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
@@ -265,21 +271,18 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
         QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
         QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
-        str_desc = QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+ 
+        if (commit_local == commit_remote) str_desc = QString("로컬과 리모트가 일치합니다.");
+        else str_desc = QString("업데이트가 있습니다.");
+
+        str_desc += QString("\n\nLOCAL: %1  REMOTE: %2").arg(commit_local, commit_remote );
         description->setText( str_desc );
         emit showDescription();
       }
       description->setVisible(!description->isVisible());
-
-
-    refresh();
-  });
-
-  refresh();
 }
 
-
-void GitHash::refresh() 
+void GitHash::refresh()
 {
   QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
   QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
