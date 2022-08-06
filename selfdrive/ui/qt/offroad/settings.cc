@@ -120,6 +120,7 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
                                    tr("Preview the driver facing camera to help optimize device mounting position for best driver monitoring experience. (vehicle must be off)"));
   connect(dcamBtn, &ButtonControl::clicked, [=]() { emit showDriverView(); });
   addItem(dcamBtn);
+
   addItem(new IsOpenpilotViewEnabledToggle());
 
   auto resetCalibBtn = new ButtonControl(tr("Reset Calibration"), tr("RESET"), " ");
