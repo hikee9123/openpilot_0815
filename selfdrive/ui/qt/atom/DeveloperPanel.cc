@@ -339,8 +339,8 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
         "", 
         Params().getBool("IsOpenpilotViewEnabled")) 
 {
-
-  hlayout = new QHBoxLayout;
+  QWidget *window = new QWidget;
+  hlayout = new QHBoxLayout(window);
   hlayout->setMargin(0);
   hlayout->setSpacing(20);
 
@@ -350,16 +350,18 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
 
   connect(title_label, &QPushButton::clicked, [=]() {
 
-    if( !hlayout->isVisible() )
+    int  isVisible = window->isVisible();
+    if( !isVisible )
     {
-      //hlayout->show();
+      window>show();
+      emit showDescription();
     }
     else 
     {
-      //hlayout->hide();
+      window->hide();
     }
 
-    hlayout->setVisible( !hlayout->isVisible() );
+    window->setVisible( !isVisible );
     //  if (!description->isVisible()) {
     //    emit showDescription();
      // }
