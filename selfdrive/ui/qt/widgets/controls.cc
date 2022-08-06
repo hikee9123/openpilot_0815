@@ -171,11 +171,11 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
 
   QObject::connect(&btnsel, &QPushButton::clicked, [=]() {
 
-    if(  m_nDelta <= 0.001 )  m_nDelta = 0.01;
-    else if(  m_nDelta <= 0.01 )  m_nDelta = 0.1;
-    else if(  m_nDelta <= 0.1 )  m_nDelta = 1;
-    else if(  m_nDelta <= 1 )  m_nDelta = 10;
-    else if(  m_nDelta <= 10 )  m_nDelta = 100;
+    if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+    else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+    else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+    else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
+    else if(  m_nDelta <= 10.05 )  m_nDelta = 100;
     else m_nDelta = 0.001;
 
     refresh();
