@@ -352,8 +352,8 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
 
   connect(title_label, &QPushButton::clicked, [=]() {
 
-    int  isVisible = window->isVisible();
-    if( !isVisible )
+    int  isVisable = window->isVisible();
+    if( !isVisable )
     {
       window>show();
       emit showDescription();
@@ -363,7 +363,7 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
       window->hide();
     }
 
-    window->setVisible( !isVisible );
+    window->setVisible( !isVisable );
     //  if (!description->isVisible()) {
     //    emit showDescription();
      // }
