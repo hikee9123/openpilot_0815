@@ -170,7 +170,7 @@ class SshLegacyToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  SshLegacyToggle() : ToggleControl("기존 공개KEY 사용", "SSH 접속시 기존 공개KEY(0.8.2이하)를 사용합니다.", "", Params().getBool("OpkrSSHLegacy")) {
+  SshLegacyToggle() : ToggleControl("Use Legacy SSH Key", "Public KEY (0.8.2 or less) is used when accessing SSH.", "", Params().getBool("OpkrSSHLegacy")) {
     QObject::connect(this, &SshLegacyToggle::toggleFlipped, [=](int state) {
       char value = state ? '1' : '0';
       Params().put("OpkrSSHLegacy", &value, 1);
@@ -203,41 +203,3 @@ public:
    IsCalibraionGridViewToggle();
 
 };
-
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Combo box
-/*
-class CarSelectCombo : public AbstractControl 
-{
-  Q_OBJECT
-
-public:
-  CarSelectCombo();
-
-public:
-  QComboBox  combobox;
-
-  void refresh();
-
-};
-
-class CarSelectBtn : public AbstractControl 
-{
-  Q_OBJECT
-
-public:
-  CarSelectBtn( CarSelectCombo *pCarSelectmenu );
-
-
-  CarSelectCombo *m_pCarSelectMenu;
-
-private:
-  QPushButton btnplus;
-  QPushButton btnminus;
-  QLabel label;
-
-  void refresh();
-};
-
-*/
