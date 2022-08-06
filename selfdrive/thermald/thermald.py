@@ -16,7 +16,6 @@ from common.dict_helpers import strip_deprecated_keys
 from common.filter_simple import FirstOrderFilter
 from common.params import Params
 from common.realtime import DT_TRML, sec_since_boot
-from common.basedir import BASEDIR
 from selfdrive.controls.lib.alertmanager import set_offroad_alert
 from selfdrive.hardware import EON, HARDWARE, PC, TICI
 from selfdrive.loggerd.config import get_available_percent
@@ -390,12 +389,6 @@ def thermald_thread(end_event, hw_queue):
 
     # Check if we need to shut down
     if power_monitor.should_shutdown(peripheralState, onroad_conditions["ignition"], in_car, off_ts, started_seen):
-      pre_built_on = params.get_bool("OpkrPrebuiltOn")
-      if pre_built_on:
-        PREBUILT = os.path.exists(os.path.join(BASEDIR, 'prebuilt'))
-        if not PREBUILT:
-          os.system( "cd /data/openpilot; touch prebuilt" )
-    
       cloudlog.warning(f"shutting device down, offroad since {off_ts}")
       params.put_bool("DoShutdown", True)
 
