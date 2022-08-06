@@ -266,7 +266,8 @@ void GitHash::update()
         description->setText( str_desc );
         emit showDescription();
 
-        local_hash.setStyleSheet("color: #83c744");
+
+        remote_hash.setStyleSheet("color: #505050");
 
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         std::system( gitcommit );
