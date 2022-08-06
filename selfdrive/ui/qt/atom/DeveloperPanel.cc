@@ -55,7 +55,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   layout()->addWidget(horizontal_line());
 
 
-  layout()->addWidget(new IsCalibraionGridViewToggle());
+  //layout()->addWidget(new IsCalibraionGridViewToggle());
   //layout()->addWidget(new IsOpenpilotViewEnabledToggle());
 
 
@@ -332,7 +332,7 @@ IsCalibraionGridViewToggle::IsCalibraionGridViewToggle()
   });
 }
 
-
+//layout()->addWidget(new IsCalibraionGridViewToggle());
 IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle() 
         : ToggleControl("주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "", Params().getBool("IsOpenpilotViewEnabled")) 
 {
