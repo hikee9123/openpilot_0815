@@ -180,13 +180,35 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
 
   QObject::connect(&btnsel, &QPushButton::clicked, [=]() {
 
-    if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
-    else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
-    else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
-    else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
-    else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
-    else if(  m_nDelta <= 10.05 )  m_nDelta = 100;
-    else m_nDelta = 0.0001;
+    if( m_defDelta >= 10 )
+    {
+      if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
+      else if(  m_nDelta <= 10.05 )  m_nDelta = 100;
+      else m_nDelta = 0.1;
+    }
+    else if( m_defDelta > 0.1 )
+    {
+      if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else m_nDelta = 0.001;
+    }    
+    else if( m_defDelta > 0.01 )
+    {
+      if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
+      else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else m_nDelta = 0.0001;
+    }       
+    else 
+    {
+      if(  m_nDelta <= 0.000015 )  m_nDelta = 0.0001;
+      else if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
+      else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else m_nDelta = 0.00001;
+    }
+
 
     refresh();
   });
@@ -244,6 +266,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
 
 void MenuControl::SetControl( float nMin, float nMax, float nDelta )  
 { 
+  m_defDelta = nDelta;
   m_nDelta = nDelta; 
   m_nMin = nMin;  
   m_nMax = nMax;

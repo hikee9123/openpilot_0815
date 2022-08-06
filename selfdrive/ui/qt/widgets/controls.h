@@ -77,6 +77,7 @@ private:
   float  m_dValue;
   
  private:
+   float   m_defDelta;
    float   m_nDelta, m_nMax, m_nMin;
    QStringList  m_strList;
 
