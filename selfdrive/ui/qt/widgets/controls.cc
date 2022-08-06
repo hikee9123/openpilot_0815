@@ -156,6 +156,31 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
   float value = str.toDouble();
   m_dValue = value;
 
+  // 1. selected
+  btnsel.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnsel.setFixedSize(150, 100);
+  //btnsel.setText( values );
+  hlayout->addWidget(&btnsel);
+
+  QObject::connect(&btnsel, &QPushButton::clicked, [=]() {
+
+    if(  m_nDelta > 10 )  m_nDelta = 10;
+    else if(  m_nDelta == 10 )  m_nDelta = 1;
+    else if(  m_nDelta == 1 )  m_nDelta = 0.1;
+    else if(  m_nDelta == 0.1 )  m_nDelta = 0.01;
+    else  m_nDelta = 0.001;
+
+    refresh();
+  });
+
+  // 2. minus
   btnminus.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -180,7 +205,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
     refresh();
   });
 
-
+  // 3. plus
   btnplus.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -202,6 +227,11 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
     params.put( str_param.toStdString(), values.toStdString());
     refresh();
   });
+
+
+
+
+
   refresh();
 }
 
@@ -222,9 +252,10 @@ void MenuControl::refresh()
     if( m_nValue == m_dValue  )
         values = m_strValue;
   }
-
-
   label.setText( values );
+
+  values = QString::number(m_nDelta);
+  btnsel.setText( values );  
 }
 
 void MenuControl::SetString( const QString strList )

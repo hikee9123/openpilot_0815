@@ -68,6 +68,7 @@ private:
 private:
   QPushButton btnplus;
   QPushButton btnminus;
+  QPushButton btnsel;
   QLabel label;
   Params params;
 
