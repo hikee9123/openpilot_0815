@@ -277,11 +277,11 @@ void GitHash::update()
  
         if (commit_local == commit_remote)
         {
-          str_desc = QString("로컬과 리모트가 일치합니다.");
+          str_desc = "로컬과 리모트가 일치합니다.";
         } 
         else 
         {
-          str_desc = QString("업데이트가 있습니다.");
+          str_desc = "업데이트가 있습니다.";
           description->setStyleSheet("color: #0099ff");
         }
 
