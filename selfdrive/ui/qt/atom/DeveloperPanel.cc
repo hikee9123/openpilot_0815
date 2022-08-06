@@ -58,7 +58,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   });
   main_layout->addWidget(updateBtn);
 
-
+  main_layout->addWidget(new GitHash());
 
 
   auto exe_git_pull = new ButtonControl("Git Pull 실행", "실행");
@@ -87,7 +87,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   main_layout->setMargin(100);
   setLayout(main_layout);
 
-  layout()->addWidget(new GitHash());
+
   layout()->addWidget(new SshLegacyToggle());
 
   layout()->addWidget(horizontal_line());
