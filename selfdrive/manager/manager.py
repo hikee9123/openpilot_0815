@@ -45,7 +45,6 @@ def manager_init() -> None:
     ("HasAcceptedTerms", "0"),
     ("OpenpilotEnabledToggle", "1"),
 
-    ("IsOpenpilotViewEnabled", "0"),
     ("OpkrAutoResume", "0"),
     ("OpkrLiveSteerRatio", "0"),
     ("OpkrTurnSteeringDisable", "0"),

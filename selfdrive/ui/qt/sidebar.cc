@@ -93,7 +93,11 @@ void Sidebar::updateState(const UIState &s) {
   } else if (s.scene.started && !sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK()) {
     pandaStatus = {{tr("GPS"), tr("SEARCH")}, warning_color};
   }
+
+
   setProperty("pandaStatus", QVariant::fromValue(pandaStatus));
+
+
 
 
   // atom

@@ -326,10 +326,21 @@ static void update_state(UIState *s) {
   }
   //scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
 
+
+
   if( scene.IsOpenpilotViewEnabled )
-    scene.started = sm["deviceState"].getDeviceState().getStarted();
+  {
+    if ( scene.pandaType != cereal::PandaState::PandaType::UNKNOWN) 
+      scene.IsOpenpilotViewEnabled = false;
+
+     scene.started = sm["deviceState"].getDeviceState().getStarted();
+  }
   else
-  scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
+  {
+     scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
+  }
+    
+
 
   
    if (sm.updated("gpsLocationExternal")) {

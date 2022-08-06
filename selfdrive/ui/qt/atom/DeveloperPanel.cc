@@ -314,19 +314,18 @@ void GitHash::refresh()
 
   local_hash.setText( lhash );
   if (lhash == rhash) {
-  updateBtn->setEnabled(false);    
+    updateBtn->setEnabled(false);
     local_hash.setStyleSheet("color: #aaaaaa");
   } else {
     local_hash.setStyleSheet("color: #0099ff");
-          updateBtn->setEnabled(true);       
+    updateBtn->setEnabled(true);       
   }  
 }
 
 IsCalibraionGridViewToggle::IsCalibraionGridViewToggle() 
         : ToggleControl("Calibraion Grid view", 
-        "장착에 필요한 Grid 화면과 기울기를 제공합니다..", 
-        "", 
-        Params().getBool("IsOpenpilotViewEnabled")) 
+        "장착에 필요한 Grid 화면과 기울기를 제공합니다.."
+        ) 
 {
   QObject::connect(this, &IsCalibraionGridViewToggle::toggleFlipped, [=](int state) {
     UIScene  &scene =  uiState()->scene;
@@ -335,14 +334,13 @@ IsCalibraionGridViewToggle::IsCalibraionGridViewToggle()
   });
 }
 
-//layout()->addWidget(new IsCalibraionGridViewToggle());
+// s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN
 IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle() 
         : ToggleControl("주행화면 미리보기", 
         "오픈파일럿 주행화면을 미리보기 합니다.", 
         "", 
         Params().getBool("IsOpenpilotViewEnabled")) 
 {
-
   win_widget = new QWidget;
   QHBoxLayout *hlayout = new QHBoxLayout(win_widget);
   hlayout->setMargin(0);
@@ -351,28 +349,6 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
   main_layout->addWidget( win_widget );
 
-
-/*
-  connect(title_label, &QPushButton::clicked, [=]() {
-
-    int  isVisable = win_widget->isVisible();
-    if( !isVisable )
-    {
-      win_widget->show();
-      emit showDescription();
-    }
-    else 
-    {
-      win_widget->hide();
-    }
-
-    win_widget->setVisible( !isVisable );
-    //  if (!description->isVisible()) {
-    //    emit showDescription();
-     // }
-    //  description->setVisible(!description->isVisible());
-  });
-*/
 
   QObject::connect(this, &IsOpenpilotViewEnabledToggle::toggleFlipped, [=](int state) {
     char value = state ? '1' : '0';
@@ -391,13 +367,17 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
 void IsOpenpilotViewEnabledToggle::refresh()
 {
   UIScene  &scene =  uiState()->scene;
-  if( scene.IsOpenpilotViewEnabled )
+
+  if ( scene.pandaType != cereal::PandaState::PandaType::UNKNOWN) 
   {
-    win_widget->show();
+      toggle.setEnabled(false);
+      win_widget->show();
   }
   else
   {
-    win_widget->hide();
+      toggle.setEnabled(true);
+      if( scene.IsOpenpilotViewEnabled )  win_widget->show();
+      else win_widget->hide();
   }
 }
 
