@@ -40,7 +40,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
     QString desc = "";
     QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 7));
-    QString commit_remote = QString::fromStdString(Params().get("GitRemote").substr(0, 7));
+    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 7));
  
     desc += QString("(로컬/리모트): %1/%2\n").arg(commit_local, commit_remote );
     if (commit_local == commit_remote) {
@@ -237,6 +237,49 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 
 }
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+//  Git
+
+
+GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
+
+  hlayout->addStretch(2);
+
+  local_hash.setAlignment(Qt::AlignVCenter);
+  remote_hash.setAlignment(Qt::AlignVCenter);
+  local_hash.setStyleSheet("color: #aaaaaa");
+
+  hlayout->addWidget(&local_hash);
+  hlayout->addWidget(&remote_hash);
+
+  connect( title_label, &QPushButton::clicked, [=]() {
+    const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
+    std::system( gitcommit );
+    std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
+    refresh();
+  });
+
+  refresh();
+}
+
+
+void GitHash::refresh() 
+{
+  QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
+  QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+
+  local_hash.setText( lhash );
+  remote_hash.setText( rhash );
+
+  if (lhash == rhash) {
+    remote_hash.setStyleSheet("color: #aaaaaa");
+  } else {
+    remote_hash.setStyleSheet("color: #0099ff");
+  }  
+}
 
 IsCalibraionGridViewToggle::IsCalibraionGridViewToggle() 
         : ToggleControl("Calibraion Grid view", "장착에 필요한 Grid 화면과 기울기를 제공합니다..", "../assets/offroad/icon_eon.png", Params().getBool("IsOpenpilotViewEnabled")) 
@@ -728,31 +771,6 @@ void CAutoFocus::refresh()
   btnminus.setText("－");
   btnplus.setText("＋");
 }
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Git
-
-
-GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
-
-  QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
-  QString rhash = QString::fromStdString(Params().get("GitRemote").substr(0, 10));
-  hlayout->addStretch(2);
-  
-  local_hash.setText( lhash );
-  remote_hash.setText( rhash );
-  local_hash.setAlignment(Qt::AlignVCenter);
-  remote_hash.setAlignment(Qt::AlignVCenter);
-  local_hash.setStyleSheet("color: #aaaaaa");
-  if (lhash == rhash) {
-    remote_hash.setStyleSheet("color: #aaaaaa");
-  } else {
-    remote_hash.setStyleSheet("color: #0099ff");
-  }
-  hlayout->addWidget(&local_hash);
-  hlayout->addWidget(&remote_hash);
-}
-
 
 /*
 ////////////////////////////////////////////////////////////////////////////////////////

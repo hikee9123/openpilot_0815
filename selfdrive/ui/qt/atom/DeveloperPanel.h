@@ -155,6 +155,8 @@ public:
 private:
   QLabel local_hash;
   QLabel remote_hash;
+
+  void refresh();
 };
 
 
