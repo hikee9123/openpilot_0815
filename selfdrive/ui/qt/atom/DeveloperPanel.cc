@@ -334,7 +334,10 @@ IsCalibraionGridViewToggle::IsCalibraionGridViewToggle()
 
 //layout()->addWidget(new IsCalibraionGridViewToggle());
 IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle() 
-        : ToggleControl("주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "", Params().getBool("IsOpenpilotViewEnabled")) 
+        : ToggleControl("주행화면 미리보기", 
+        "오픈파일럿 주행화면을 미리보기 합니다.", 
+        "", 
+        Params().getBool("IsOpenpilotViewEnabled")) 
 {
 
   hlayout = new QHBoxLayout;
@@ -343,15 +346,25 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
 
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
 
-
-  connect(title_label, &QPushButton::clicked, [=]() {
-      if (!description->isVisible()) {
-        emit showDescription();
-      }
-      description->setVisible(!description->isVisible());
-  });
   main_layout->addLayout(hlayout);
 
+  connect(title_label, &QPushButton::clicked, [=]() {
+
+    if( !hlayout->isValid() )
+    {
+      hlayout->show();
+    }
+    else 
+    {
+      hlayout->hide();
+    }
+
+    hlayout->setVisible( !hlayout->isVisible() );
+    //  if (!description->isVisible()) {
+    //    emit showDescription();
+     // }
+    //  description->setVisible(!description->isVisible());
+  });
 
 
   QObject::connect(this, &IsOpenpilotViewEnabledToggle::toggleFlipped, [=](int state) {
