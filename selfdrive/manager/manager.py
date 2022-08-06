@@ -309,7 +309,7 @@ def main() -> None:
     updateAvailable = params.get_bool("UpdateAvailable");    
     pre_built_on = params.get_bool("OpkrPrebuiltOn")
     if updateAvailable:
-       os.system( "cd /data/openpilot; touch prebuilt" )
+       os.system( "cd /data/openpilot; rm -f prebuilt" )
     elif pre_built_on:
       PREBUILT = os.path.exists(os.path.join(BASEDIR, 'prebuilt'))
       cloudlog.warning("check PREBUILT")
