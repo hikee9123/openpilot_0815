@@ -331,7 +331,12 @@ static void update_state(UIState *s) {
   if( scene.IsOpenpilotViewEnabled )
   {
     if ( scene.pandaType != cereal::PandaState::PandaType::UNKNOWN) 
+    {
       scene.IsOpenpilotViewEnabled = false;
+      char value = '0';
+      Params().put("IsOpenpilotViewEnabled", &value, 1);
+    }
+      
 
      scene.started = sm["deviceState"].getDeviceState().getStarted();
   }
