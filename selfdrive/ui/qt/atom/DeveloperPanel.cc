@@ -279,7 +279,7 @@ void GitHash::update()
         if (commit_local == commit_remote) str_desc = QString("로컬과 리모트가 일치합니다.");
         else str_desc = QString("업데이트가 있습니다.");
 
-        str_desc += QString("\n\nLOCAL: %1  REMOTE: %2").arg(commit_local, commit_remote );
+        str_desc += QString("\nLOCAL: %1  REMOTE: %2").arg(commit_local, commit_remote );
         description->setText( str_desc );
         
       }
