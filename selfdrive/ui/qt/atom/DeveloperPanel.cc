@@ -278,7 +278,7 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
 
 
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
-  QObject::connect( update_notif, &QPushButton::clicked, this, &GitHash::update);
+  QObject::connect( updateBtn, &QPushButton::clicked, this, &GitHash::update);
 
   refresh();
 }
