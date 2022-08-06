@@ -50,8 +50,10 @@ signals:
 protected:
   void hideEvent(QHideEvent *e) override;
 
+  QVBoxLayout *main_layout;
   QHBoxLayout *hlayout;
   QPushButton *title_label;
+
   QLabel *description = nullptr;
 };
 

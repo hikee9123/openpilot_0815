@@ -155,7 +155,6 @@ public:
 private:
   QLabel local_hash;
   QLabel remote_hash;
-  QLabel label_desc;
 
 
   QString  str_desc;
