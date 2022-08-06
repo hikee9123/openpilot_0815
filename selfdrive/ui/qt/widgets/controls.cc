@@ -154,7 +154,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
   label.setStyleSheet( R"(
     color: #e0e879;
     font-size: 70px;
-    font-weight: light;    
+    font-weight: 300;    
     background-color: transparent;    
   )");
 
