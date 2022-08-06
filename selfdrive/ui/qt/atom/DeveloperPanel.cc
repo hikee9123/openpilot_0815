@@ -262,12 +262,10 @@ void GitHash::update()
 {
       if ( !description->isVisible() ) 
       {
-        str_desc = "Wait! git commit check";
-        description->setText( str_desc );
-        emit showDescription();
-
+        str_desc = "checking";
+        remote_hash.setText( str_desc );
         remote_hash.setEnabled(false);
-        //remote_hash.setStyleSheet("color: #505050");
+
 
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         std::system( gitcommit );
@@ -291,6 +289,7 @@ void GitHash::update()
         description->setText( str_desc );
         
         remote_hash.setEnabled(true);
+        emit showDescription();
       }
       description->setVisible(!description->isVisible());
 
