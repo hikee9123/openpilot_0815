@@ -204,7 +204,7 @@ class CarController():
   def update_resume(self, can_sends,  c, CS, path_plan):
     pcm_cancel_cmd = c.cruiseControl.cancel
     if pcm_cancel_cmd:
-      can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL))
+      can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL, self.CP.carFingerprint))
     elif CS.out.cruiseState.standstill:
       if not self.CP.opkrAutoResume:
         self.last_lead_distance = 0
@@ -219,7 +219,7 @@ class CarController():
         self.resume_cnt = 0
       # when lead car starts moving, create 6 RES msgs
       elif CS.lead_distance != self.last_lead_distance and (self.frame - self.last_resume_frame) > 5:
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, Buttons.RES_ACCEL))
+        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, Buttons.RES_ACCEL, self.CP.carFingerprint))
         self.resume_cnt += 1
         # interval after 6 msgs
         if self.resume_cnt > 5:
@@ -233,7 +233,7 @@ class CarController():
       btn_signal = self.NC.update( c, CS, path_plan )
       if btn_signal != None:
         self.debug_button = btn_signal
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal ))
+        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal, self.CP.carFingerprint ))
         self.resume_cnt += 1
       else:
         self.debug_button = 0
