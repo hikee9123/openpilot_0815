@@ -276,7 +276,7 @@ void GitHash::update()
 
 void GitHash::information()
 {
-  updateBtn->setEnabled(false);
+
       if ( !description->isVisible() ) 
       {
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
@@ -295,6 +295,7 @@ void GitHash::information()
         {
           str_desc = "업데이트가 있습니다.";
           description->setStyleSheet("color: #0099ff");
+       
         }
 
         str_desc += QString("\nLOCAL:%1 REMOTE:%2").arg(commit_local, commit_remote );
@@ -304,7 +305,7 @@ void GitHash::information()
       }
       description->setVisible(!description->isVisible());
       refresh();
-    updateBtn->setEnabled(true);
+
 }
 
 void GitHash::refresh()
@@ -314,9 +315,11 @@ void GitHash::refresh()
 
   local_hash.setText( lhash );
   if (lhash == rhash) {
+  updateBtn->setEnabled(false);    
     local_hash.setStyleSheet("color: #aaaaaa");
   } else {
     local_hash.setStyleSheet("color: #0099ff");
+          updateBtn->setEnabled(true);       
   }  
 }
 
