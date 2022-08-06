@@ -234,11 +234,14 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 //
 //  Git
 
-GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") 
+GitHash::GitHash() : AbstractControl("업데이트 체크") 
 {
   local_hash.setAlignment(Qt::AlignVCenter);
   remote_hash.setAlignment(Qt::AlignVCenter);
+  remote_hash.setText( "UPDATE" );
   local_hash.setStyleSheet("color: #aaaaaa");
+
+
 
   hlayout->addWidget(&local_hash);
   hlayout->addWidget(&remote_hash);
@@ -253,20 +256,39 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
     main_layout->addWidget(description);
   }
 
-  QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::update);
+  QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
+  QObject::connect( remote_hash, &QPushButton::clicked, this, &GitHash::update);
 
   refresh();
 }
 
 void GitHash::update()
 {
+
+    QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 7));
+    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 7));
+ 
+    QString desc = QString("(로컬/리모트): %1/%2\n").arg(commit_local, commit_remote );
+    if (commit_local == commit_remote) {
+      desc += QString("로컬과 리모트가 일치합니다.");
+      ConfirmationDialog::alert( desc, this );
+    } else {
+      desc += QString("업데이트가 있습니다.");
+      if ( ConfirmationDialog::confirm(desc, this) ) {
+
+        std::system( "cd /data/openpilot; rm -f prebuilt" );
+        const char* gitpull = "/data/openpilot/selfdrive/assets/addon/sh/gitpull.sh";
+        std::system( gitpull );
+      }      
+    }
+
+
+}
+
+void GitHash::information()
+{
       if ( !description->isVisible() ) 
       {
-        str_desc = "checking";
-        remote_hash.setText( str_desc );
-        remote_hash.setEnabled(false);
-
-
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         std::system( gitcommit );
         std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
@@ -288,26 +310,22 @@ void GitHash::update()
         str_desc += QString("\nLOCAL:%1 REMOTE:%2").arg(commit_local, commit_remote );
         description->setText( str_desc );
         
-        remote_hash.setEnabled(true);
         emit showDescription();
       }
       description->setVisible(!description->isVisible());
-
       refresh();
 }
 
 void GitHash::refresh()
 {
   QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
-  QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+ // QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
   local_hash.setText( lhash );
-  remote_hash.setText( rhash );
-
   if (lhash == rhash) {
-    remote_hash.setStyleSheet("color: #aaaaaa");
+    local_hash.setStyleSheet("color: #aaaaaa");
   } else {
-    remote_hash.setStyleSheet("color: #0099ff");
+    local_hash.setStyleSheet("color: #0099ff");
   }  
 }
 
