@@ -40,7 +40,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
     QString desc = "";
     QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 7));
-    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 7));
+    QString commit_remote = QString::fromStdString(Params().get("GitRemote").substr(0, 7));
  
     desc += QString("(로컬/리모트): %1/%2\n").arg(commit_local, commit_remote );
     if (commit_local == commit_remote) {
@@ -736,11 +736,11 @@ void CAutoFocus::refresh()
 GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
 
   QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
-  QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+  QString rhash = QString::fromStdString(Params().get("GitRemote").substr(0, 10));
   hlayout->addStretch(2);
   
-  local_hash.setText(QString::fromStdString(Params().get("GitCommit").substr(0, 10)));
-  remote_hash.setText(QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10)));
+  local_hash.setText( lhash );
+  remote_hash.setText( rhash );
   local_hash.setAlignment(Qt::AlignVCenter);
   remote_hash.setAlignment(Qt::AlignVCenter);
   local_hash.setStyleSheet("color: #aaaaaa");
