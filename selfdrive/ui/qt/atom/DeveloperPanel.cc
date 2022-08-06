@@ -61,15 +61,6 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   main_layout->addWidget(new GitHash());
 
 
-  auto exe_git_pull = new ButtonControl("Git Pull 실행", "실행");
-  QObject::connect(exe_git_pull, &ButtonControl::clicked, [=]() 
-  { 
-          if (ConfirmationDialog::confirm("Are you sure you want to git pull?", this)) 
-          {
-            std::system("git pull");
-          }
-  });
-  main_layout->addWidget(exe_git_pull);
 
   auto exe_git_cancel = new ButtonControl("Git Pull 취소", "실행");
   QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
@@ -243,10 +234,8 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 //
 //  Git
 
-GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
-
-  hlayout->addStretch(2);
-
+GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") 
+{
   local_hash.setAlignment(Qt::AlignVCenter);
   remote_hash.setAlignment(Qt::AlignVCenter);
   local_hash.setStyleSheet("color: #aaaaaa");
@@ -254,10 +243,30 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
   hlayout->addWidget(&local_hash);
   hlayout->addWidget(&remote_hash);
 
+
+  str_description.setContentsMargins(40, 20, 40, 20);
+  str_description.setStyleSheet("font-size: 40px; color: grey");
+  str_description.setWordWrap(true);
+  str_description.setVisible(false);
+  hlayout->addWidget(str_description);
+
   connect( title_label, &QPushButton::clicked, [=]() {
     const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
     std::system( gitcommit );
     std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
+
+    QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
+    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+
+    str_description = "";
+    str_description += QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+
+    if (!str_description.isVisible()) {
+        emit showDescription();
+    }
+    str_description.setVisible(!str_description.isVisible());
+
+
     refresh();
   });
 
