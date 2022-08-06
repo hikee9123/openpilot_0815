@@ -1154,15 +1154,18 @@ void OnPaint::ui_draw_grid( QPainter &p  )
 {
   int x_center = state->fb_w/2;
   int y_center = state->fb_h/2;
-  
+  int nGap = 0;
+
   for (int i = 0; i < 5; i++) {
-    p.drawLine( x_center + (i*200), 0, x_center+ (i*200) , state->fb_h);  // line
-    p.drawLine( x_center - (i*200), 0, x_center- (i*200) , state->fb_h); 
+    nGap = i * 200;
+    p.drawLine( x_center + nGap, 0, x_center+ nGap , state->fb_h);  // line
+    p.drawLine( x_center - nGap, 0, x_center- nGap , state->fb_h); 
   }
 
   for (int i = 0; i < 5; i++) {
-    p.drawLine( 0, y_center + (i*108), state->fb_w, y_center + (i*108)); 
-    p.drawLine( 0, y_center - (i*108), state->fb_w, y_center - (i*108)); 
+    nGap = i * 200;
+    p.drawLine( 0, y_center + nGap, state->fb_w, y_center + nGap); 
+    p.drawLine( 0, y_center - nGap, state->fb_w, y_center - nGap); 
   }
 
 
