@@ -148,9 +148,19 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
   m_nMin = 0;
   m_nValue = 0;
 
+
+
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
   hlayout->addWidget(&label);
+
+  setStyleSheet(R"(
+    QLabel {
+      color: white;
+      font-size: 80px;
+      background-color: transparent;
+    }
+  )");
 
   auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
   float value = str.toDouble();
