@@ -231,7 +231,6 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
   updateBtn->setFixedSize(250, 100); 
 
 
-
   hlayout->addWidget(&local_hash);
   hlayout->addWidget(updateBtn);
   //hlayout->addWidget(update_notif, 0, Qt::AlignHCenter | Qt::AlignRight);
