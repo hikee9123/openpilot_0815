@@ -266,8 +266,8 @@ void GitHash::update()
         description->setText( str_desc );
         emit showDescription();
 
-
-        remote_hash.setStyleSheet("color: #505050");
+        remote_hash.setEnabled(false);
+        //remote_hash.setStyleSheet("color: #505050");
 
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         std::system( gitcommit );
@@ -290,6 +290,7 @@ void GitHash::update()
         str_desc += QString("\nLOCAL: %1  REMOTE: %2").arg(commit_local, commit_remote );
         description->setText( str_desc );
         
+        remote_hash.setEnabled(true);
       }
       description->setVisible(!description->isVisible());
 
