@@ -1101,10 +1101,11 @@ void OnPaint::ui_main_navi( QPainter &p )
 {
   ui_draw_navi( p );
 
+  if( scene->scr.IsCalibraionGridViewToggle )  return;
+
   ui_draw_debug1( p );
 
   ui_tunning_data( p );
-
 
   ui_draw_stop_sign( p );
 }
@@ -1113,14 +1114,14 @@ void OnPaint::ui_main_navi( QPainter &p )
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
 
-  if( scene->scr.IsCalibraionGridViewToggle )  return;
-
-
   int   nSignal = 0;
-  if (scene->longitudinalPlan.e2ex[12] > 30 && scene->longitudinalPlan.stopline[12] < 10 && scene->car_state.getVEgo() < 0.5) {
+  float fe2ex = scene->longitudinalPlan.e2ex[12];
+  float fstopline = scene->longitudinalPlan.stopline[12];
+
+  if ( fe2ex > 30 && fstopline < 10 && scene->car_state.getVEgo() < 0.5) {
     nSignal = 1;
-  } else if ( scene->longitudinalPlan.e2ex[12] < 100 && scene->longitudinalPlan.stopline[12] < 100) {
-   nSignal = 2;
+  } else if ( fe2ex > 1 && fe2ex < 100 && fstopline < 100) {
+    nSignal = 2;
   }
 
   int bb_x = 250;
@@ -1132,19 +1133,18 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
 
   configFont( p, "Open Sans",  70, "Regular");
-
   if ( nSignal == 0  ) 
   {
     float   remainTime =  scene->liveNaviData.getRemainTime();
     float   roadCurvature =  scene->liveNaviData.getRoadCurvature();
 
-    text4.sprintf("remainTime = %f", remainTime );  p.drawText( bb_x, nYPos+=nGap, text4 );
-    text4.sprintf("roadCurvature = %f", roadCurvature );  p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("remainTime = %.2f", remainTime );  p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("roadCurvature = %.2f", roadCurvature );  p.drawText( bb_x, nYPos+=nGap, text4 );
     return;
   }
 
-  text4.sprintf("e2ex = %.1f", scene->longitudinalPlan.e2ex[12] );  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("stopline = %.1f", scene->longitudinalPlan.stopline[12] );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("e2ex = %.0f", fe2ex );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("stopline = %.0f", fstopline );  p.drawText( bb_x, nYPos+=nGap, text4 );
  // text4.sprintf("nSignal = %d", nSignal );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
