@@ -244,11 +244,11 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
   hlayout->addWidget(&remote_hash);
 
 
-  str_description.setContentsMargins(40, 20, 40, 20);
-  str_description.setStyleSheet("font-size: 40px; color: grey");
-  str_description.setWordWrap(true);
-  str_description.setVisible(false);
-  hlayout->addWidget(str_description);
+  label_desc.setContentsMargins(40, 20, 40, 20);
+  label_desc.setStyleSheet("font-size: 40px; color: grey");
+  label_desc.setWordWrap(true);
+  label_desc.setVisible(false);
+  hlayout->addWidget(&label_desc);
 
   connect( title_label, &QPushButton::clicked, [=]() {
     const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
@@ -258,13 +258,13 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
     QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
     QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
-    str_description = "";
-    str_description += QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+    QString desc = QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+    label_desc.setText( desc );
 
-    if (!str_description.isVisible()) {
+    if (!label_desc.isVisible()) {
         emit showDescription();
     }
-    str_description.setVisible(!str_description.isVisible());
+    label_desc.setVisible(!label_desc.isVisible());
 
 
     refresh();
