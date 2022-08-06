@@ -29,35 +29,6 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   main_layout->setSpacing(10);
 
   // wifi + tethering buttons
-  auto updateBtn = new ButtonControl("업데이트 체크 및 적용", "업데이트");
-  QObject::connect(updateBtn, &ButtonControl::clicked, [=]() 
-  { 
-    const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
-    const char* gitpull = "/data/openpilot/selfdrive/assets/addon/sh/gitpull.sh";
-
-
-    std::system( gitcommit );
-    std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
-    QString desc = "";
-    QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 7));
-    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 7));
- 
-    desc += QString("(로컬/리모트): %1/%2\n").arg(commit_local, commit_remote );
-    if (commit_local == commit_remote) {
-      desc += QString("로컬과 리모트가 일치합니다.");
-    } else {
-      desc += QString("업데이트가 있습니다.");
-    }
-    if (ConfirmationDialog::confirm(desc, this)) {
-      //Params().putBool("OpkrPrebuiltOn", 0);
-      std::system( "cd /data/openpilot; rm -f prebuilt" );
-      std::system( gitpull );
-    }
-
-
-  });
-  main_layout->addWidget(updateBtn);
-
   main_layout->addWidget(new GitHash());
 
 
