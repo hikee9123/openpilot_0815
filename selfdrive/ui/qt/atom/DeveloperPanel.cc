@@ -336,6 +336,24 @@ IsCalibraionGridViewToggle::IsCalibraionGridViewToggle()
 IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle() 
         : ToggleControl("주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "", Params().getBool("IsOpenpilotViewEnabled")) 
 {
+
+  hlayout = new QHBoxLayout;
+  hlayout->setMargin(0);
+  hlayout->setSpacing(20);
+
+  hlayout->addWidget( new IsCalibraionGridViewToggle() );
+
+
+  connect(title_label, &QPushButton::clicked, [=]() {
+      if (!description->isVisible()) {
+        emit showDescription();
+      }
+      description->setVisible(!description->isVisible());
+  });
+  main_layout->addLayout(hlayout);
+
+
+
   QObject::connect(this, &IsOpenpilotViewEnabledToggle::toggleFlipped, [=](int state) {
     char value = state ? '1' : '0';
 
@@ -343,6 +361,8 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
     scene.IsOpenpilotViewEnabled = state;
     Params().put("IsOpenpilotViewEnabled", &value, 1);
   });
+
+  main_layout->addStretch();  
 }
 
 

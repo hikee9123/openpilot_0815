@@ -194,6 +194,9 @@ class IsOpenpilotViewEnabledToggle : public ToggleControl {
 public:
    IsOpenpilotViewEnabledToggle();
 
+private:
+  QHBoxLayout *hlayout;
+
 };
 
 class IsCalibraionGridViewToggle : public ToggleControl {
