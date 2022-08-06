@@ -145,7 +145,7 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
 
    MenuControl *pMenu4 = new MenuControl( 
     "OpkrDriverAngleWait" ,
-    "Normal driver to Steer",
+    "Normal driver",
     "Controls torque limitation due to normal driver handle intervention. def:0.001(10sec)"
     );
   pMenu4->SetControl( 0, 1, 0.001 );
