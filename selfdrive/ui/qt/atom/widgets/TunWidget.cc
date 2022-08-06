@@ -265,7 +265,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
 */
    MenuControl *pDeadzone = new MenuControl( 
     "Torquedeadzone",
-    "steering angle deadzone",
+    "Steer angle deadzone",
     "Adjust steering angle deadzone deg def:0"
     );
    pDeadzone->SetControl( 0, 5, 0.1 ); 
