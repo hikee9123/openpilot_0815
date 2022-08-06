@@ -772,7 +772,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   // 3. compass
   if( true )
   {
-    const int compass_x = state->fb_w / 2 - 100;
+    const int compass_x = state->fb_w / 2 - 150;
     const int compass_y = state->fb_h - 150;
     bb_draw_compass( p, compass_x, compass_y );
   }
