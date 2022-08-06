@@ -241,10 +241,14 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
   remote_hash.setText( "UPDATE" );
   local_hash.setStyleSheet("color: #aaaaaa");
 
+  update_notif = new QPushButton("UPDATE");
+ // update_notif->setVisible(false);
+  update_notif->setStyleSheet("background-color: #364DEF;");
 
 
   hlayout->addWidget(&local_hash);
   hlayout->addWidget(&remote_hash);
+  hlayout->addWidget(update_notif, 0, Qt::AlignHCenter | Qt::AlignRight);
 
   if( description == nullptr )
   {
@@ -256,8 +260,10 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
     main_layout->addWidget(description);
   }
 
+
+
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
-  QObject::connect( remote_hash, &QPushButton::clicked, this, &GitHash::update);
+  QObject::connect( update_notif, &QPushButton::clicked, this, &GitHash::update);
 
   refresh();
 }
@@ -319,7 +325,7 @@ void GitHash::information()
 void GitHash::refresh()
 {
   QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
- // QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+  QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
   local_hash.setText( lhash );
   if (lhash == rhash) {
