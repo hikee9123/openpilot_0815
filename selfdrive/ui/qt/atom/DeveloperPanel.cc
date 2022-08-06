@@ -355,7 +355,7 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
     int  isVisable = window->isVisible();
     if( !isVisable )
     {
-      window>show();
+      window->show();
       emit showDescription();
     }
     else 
