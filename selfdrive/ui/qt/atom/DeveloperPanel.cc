@@ -285,7 +285,7 @@ void GitHash::update()
           description->setStyleSheet("color: #0099ff");
         }
 
-        str_desc += QString("\nLOCAL: %1  REMOTE: %2").arg(commit_local, commit_remote );
+        str_desc += QString("\nLOCAL:%1 REMOTE:%2").arg(commit_local, commit_remote );
         description->setText( str_desc );
         
         remote_hash.setEnabled(true);
