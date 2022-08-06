@@ -255,18 +255,18 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "")
 
 
   connect( title_label, &QPushButton::clicked, [=]() {
-    const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
-    std::system( gitcommit );
-    std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
 
-    QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
-    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+      if ( !description->isVisible() ) 
+      {
+        const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
+        std::system( gitcommit );
+        std::system("date '+%F %T' > /data/params/d/LastUpdateTime");
 
-    str_desc = QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+        QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
+        QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
-
-
-      if (!description->isVisible()) {
+        str_desc = QString("LOCAL: %1  REMOTE: %2\n").arg(commit_local, commit_remote );
+        description->setText( str_desc );
         emit showDescription();
       }
       description->setVisible(!description->isVisible());
