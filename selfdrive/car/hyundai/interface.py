@@ -4,7 +4,7 @@ from panda import Panda
 from common.params import Params
 from common.conversions import Conversions as CV
 from selfdrive.car.hyundai.tunes import LatTunes, TunType, LongTunes, set_long_tune, set_lat_tune, update_lat_tune_patam
-from selfdrive.car.hyundai.values import CAR, DBC, EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
+from selfdrive.car.hyundai.values import CAR, DBC, CAMERA_SCC_CAR,  EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
 from selfdrive.car.hyundai.radar_interface import RADAR_START_ADDR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
 from selfdrive.car.interfaces import CarInterfaceBase
@@ -55,7 +55,7 @@ class CarInterface(CarInterfaceBase):
       ret.atompilotLongitudinalControl = Params().get_bool("OpkratomLongitudinal")
     else:
       # WARNING: disabling radar also disables AEB (and we show the same warning on the instrument cluster as if you manually disabled AEB)
-      ret.openpilotLongitudinalControl = Params().get_bool("DisableRadar")
+      ret.openpilotLongitudinalControl = disable_radar and (candidate not in (LEGACY_SAFETY_MODE_CAR | CAMERA_SCC_CAR))
     
     ret.pcmCruise = not ret.openpilotLongitudinalControl
 
@@ -382,6 +382,9 @@ class CarInterface(CarInterfaceBase):
     if ret.openpilotLongitudinalControl or ret.atompilotLongitudinalControl:
       ret.safetyConfigs[0].safetyParam |= Panda.FLAG_HYUNDAI_LONG
 
+    if candidate in CAMERA_SCC_CAR:
+      ret.safetyConfigs[0].safetyParam |= Panda.FLAG_HYUNDAI_CAMERA_SCC
+    
     return ret
 
   @staticmethod
