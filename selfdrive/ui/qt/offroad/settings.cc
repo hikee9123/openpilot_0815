@@ -351,6 +351,7 @@ C2NetworkPanel::C2NetworkPanel(QWidget *parent) : QWidget(parent) {
   // SSH key management
   list->addItem(new SshToggle());
   list->addItem(new SshControl());
+  list->addItem(new SshLegacyToggle());
   layout->addWidget(list);
   layout->addStretch(1);
 }

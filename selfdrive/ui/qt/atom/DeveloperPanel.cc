@@ -50,7 +50,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   setLayout(main_layout);
 
 
-  layout()->addWidget(new SshLegacyToggle());
+  //layout()->addWidget(new SshLegacyToggle());
 
   layout()->addWidget(horizontal_line());
 
