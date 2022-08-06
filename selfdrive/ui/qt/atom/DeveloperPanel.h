@@ -195,7 +195,9 @@ public:
    IsOpenpilotViewEnabledToggle();
 
 private:
-  QHBoxLayout *hlayout;
+ 
+  QWidget *win_widget;
+   void refresh();
 
 };
 

@@ -325,7 +325,7 @@ void GitHash::refresh()
 IsCalibraionGridViewToggle::IsCalibraionGridViewToggle() 
         : ToggleControl("Calibraion Grid view", 
         "장착에 필요한 Grid 화면과 기울기를 제공합니다..", 
-        "../assets/offroad/icon_eon.png", 
+        "", 
         Params().getBool("IsOpenpilotViewEnabled")) 
 {
   QObject::connect(this, &IsCalibraionGridViewToggle::toggleFlipped, [=](int state) {
@@ -342,16 +342,18 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
         "", 
         Params().getBool("IsOpenpilotViewEnabled")) 
 {
-  QWidget *win_widget = new QWidget;
-  hlayout = new QHBoxLayout(win_widget);
+  UIScene  &scene =  uiState()->scene;
+
+  win_widget = new QWidget;
+  QHBoxLayout *hlayout = new QHBoxLayout(win_widget);
   hlayout->setMargin(0);
   hlayout->setSpacing(20);
 
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
-
-
   main_layout->addWidget( win_widget );
 
+
+/*
   connect(title_label, &QPushButton::clicked, [=]() {
 
     int  isVisable = win_widget->isVisible();
@@ -371,19 +373,33 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
      // }
     //  description->setVisible(!description->isVisible());
   });
-
+*/
 
   QObject::connect(this, &IsOpenpilotViewEnabledToggle::toggleFlipped, [=](int state) {
     char value = state ? '1' : '0';
 
-    UIScene  &scene =  uiState()->scene;//QUIState::ui_state.scene;
+    //QUIState::ui_state.scene;
     scene.IsOpenpilotViewEnabled = state;
     Params().put("IsOpenpilotViewEnabled", &value, 1);
+    refresh();
   });
 
-  main_layout->addStretch();  
+  main_layout->addStretch();
+
+  refresh();
 }
 
+void IsOpenpilotViewEnabledToggle::refresh()
+{
+  if( scene.IsOpenpilotViewEnabled )
+  {
+    win_widget->show();
+  }
+  else
+  {
+    win_widget->hide();
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
