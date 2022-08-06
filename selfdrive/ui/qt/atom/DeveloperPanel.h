@@ -154,7 +154,7 @@ public:
 
 private:
   QLabel local_hash;
-  QPushButton* update_notif;
+  QPushButton* updateBtn;
 
   QString  str_desc;
 

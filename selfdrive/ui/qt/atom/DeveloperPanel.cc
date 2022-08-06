@@ -239,9 +239,9 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
   local_hash.setAlignment(Qt::AlignVCenter);
   local_hash.setStyleSheet("color: #aaaaaa");
 
-  update_notif = new QPushButton("UPDATE");
- // update_notif->setVisible(false);
-  update_notif->setStyleSheet(R"(
+  updateBtn = new QPushButton("UPDATE");
+ // updateBtn->setVisible(false);
+  updateBtn->setStyleSheet(R"(
     QPushButton {
       padding: 0;
       border-radius: 50px;
@@ -257,12 +257,12 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
       color: #33E4E4E4;
     }
   )");
-  update_notif->setFixedSize(250, 100); 
+  updateBtn->setFixedSize(250, 100); 
 
 
 
   hlayout->addWidget(&local_hash);
-  hlayout->addWidget(update_notif);
+  hlayout->addWidget(updateBtn);
   //hlayout->addWidget(update_notif, 0, Qt::AlignHCenter | Qt::AlignRight);
 
   if( description == nullptr )
@@ -285,7 +285,6 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
 
 void GitHash::update()
 {
-
     QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 7));
     QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 7));
  
@@ -302,12 +301,11 @@ void GitHash::update()
         std::system( gitpull );
       }      
     }
-
-
 }
 
 void GitHash::information()
 {
+  updateBtn->setEnabled(false);
       if ( !description->isVisible() ) 
       {
         const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
@@ -335,6 +333,7 @@ void GitHash::information()
       }
       description->setVisible(!description->isVisible());
       refresh();
+    updateBtn->setEnabled(true);
 }
 
 void GitHash::refresh()
