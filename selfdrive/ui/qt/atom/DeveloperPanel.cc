@@ -345,10 +345,10 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
   hlayout->setSpacing(20);
 
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
-  window->addItem( hlayout );
 
 
-  main_layout->addLayout( window );
+
+  main_layout->addWidget( window );
 
   connect(title_label, &QPushButton::clicked, [=]() {
 
