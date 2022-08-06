@@ -1735,15 +1735,16 @@ struct LiveNaviData {
   speedLimitDistance @3 :Float32;
   safetySign @4 :Float32;
   roadCurvature @5 :Float32;
-  mapValid @6 :Bool;
-  mapEnable @7 :Int32;
-  trafficType @8 :Int32;
+  remainTime @6 :Float32;
+  mapValid @7 :Bool;
+  mapEnable @8 :Int32;
+  trafficType @9 :Int32;
 
-  turnInfo @9 :Int32;
-  distanceToTurn @10 :Int32;      
+  turnInfo @10 :Int32;
+  distanceToTurn @11 :Int32;      
 
-   arrivalSec @11 :Float32;
-   arrivalDistance @12 :Float32;
+   arrivalSec @12 :Float32;
+   arrivalDistance @13 :Float32;
 }
 
 

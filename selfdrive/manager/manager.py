@@ -278,10 +278,11 @@ def main() -> None:
   if not prepare_only:
     managed_processes['ui'].start()
 
-  if navi_on_boot:
-    map_hide()
 
   manager_prepare()
+
+  if navi_on_boot:
+    map_hide()
 
   if prepare_only:
     return

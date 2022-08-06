@@ -14,6 +14,7 @@
 typedef struct LiveNaviDataResult {
       float speedLimit;  // Float32;
       float speedLimitDistance;  // Float32;
+      float remainTime;  // Float32;
       float safetySign;    // Float32;
       float roadCurvature;    // Float32;
       int   turnInfo;    // Int32;
@@ -171,10 +172,15 @@ int main() {
         event.roadCurvature = atoi( entry.message );
         opkr = 3;
       }
+      else if( strcmp( entry.tag, "opkrremaintime" ) == 0 )
+      {
+        event.remainTime = atoi( entry.message );
+        opkr = 4;
+      }      
       else if( strcmp( entry.tag, "opkrsigntype" ) == 0 )  // 4.
       {
         event.safetySign = atoi( entry.message );
-        opkr = 4;
+        opkr = 5;
         event.dEventSec = dCurrentSec;
         update_event( &event, dSpeed_ms );
       }
@@ -234,6 +240,7 @@ int main() {
       framed.setSpeedLimitDistance( event.speedLimitDistance );  // raw_target_speed_map_dist Float32;
       framed.setSafetySign( event.safetySign ); // map_sign Float32;
       framed.setRoadCurvature( event.roadCurvature ); // road_curvature Float32;
+      framed.setRemainTime( event.remainTime ); // road_curvature Float32;
 
       // Turn Info
       framed.setTurnInfo( event.turnInfo );
