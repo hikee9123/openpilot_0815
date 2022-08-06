@@ -243,7 +243,6 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 //
 //  Git
 
-
 GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
 
   hlayout->addStretch(2);
