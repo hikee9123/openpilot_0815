@@ -230,7 +230,7 @@ class CarController():
       self.last_lead_distance = 0
 
     elif CS.out.cruiseState.accActive:
-      btn_signal = self.NC.update( c, CS, path_plan )
+      btn_signal = self.NC.update( c, CS, path_plan, self.frame )
       if btn_signal != None:
         self.debug_button = btn_signal
         can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal, self.CP.carFingerprint ))

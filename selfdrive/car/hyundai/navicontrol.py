@@ -26,12 +26,14 @@ class NaviControl():
     self.set_point = 0
     self.wait_timer2 = 0
     self.set_speed_kph = 0
-
+ 
     self.moveAvg = mvAvg.MoveAvg()
 
     self.gasPressed_time = 0
     self.gasWait_time = 0
 
+    self.frame_camera = 0
+  
 
 
 
@@ -119,25 +121,6 @@ class NaviControl():
     btn_signal = self.switch( self.seq_command )
     return btn_signal
 
-  def get_forword_car_speed( self, CS,  cruiseState_speed):
-    radarState = self.sm['radarState']
-    self.lead_0 = radarState.leadOne
-    self.lead_1 = radarState.leadTwo
-    cruise_set_speed_kph = cruiseState_speed
-
-    if self.lead_0.status:
-      dRel = self.lead_0.dRel
-    else:
-      dRel = 150
-
-    dRelTarget = 30
-    if dRel < dRelTarget and CS.VSetDis > 60:
-      nVDelta = CS.VSetDis - CS.clu_Vanz
-      if nVDelta > 30:
-        cruise_set_speed_kph = CS.clu_Vanz + 20
-        if cruise_set_speed_kph < 60:
-          cruise_set_speed_kph = 60
-    return  cruise_set_speed_kph
 
   def get_dRel(self):
       radarState = self.sm['radarState']
@@ -187,7 +170,7 @@ class NaviControl():
     return self.cut_in, d_rel
 
 
-  def get_navi_speed(self, sm, CS, cruiseState_speed ):
+  def get_navi_speed(self, sm, CS, cruiseState_speed, frame ):
     cruise_set_speed_kph = cruiseState_speed
     v_ego_kph = CS.out.vEgo * CV.MS_TO_KPH    
     self.liveNaviData = sm['liveNaviData']
@@ -197,7 +180,15 @@ class NaviControl():
     mapValid = self.liveNaviData.mapValid
     trafficType = self.liveNaviData.trafficType
     
-    if not mapValid or trafficType == 0:
+    if not mapValid or trafficType == 0:  # ACC
+      if cruise_set_speed_kph >  self.VSetDis:
+        #if frame % 10 == 0:
+        #  cruise_set_speed_kph = self.VSetDis + 1
+        frame_delta = abs(frame - self.frame_camera)
+        cruise_set_speed_kph = interp( frame_delta, [0, 500], [ self.VSetDis, cruise_set_speed_kph ] )
+      else:
+        self.frame_camera = frame
+
       return  cruise_set_speed_kph
 
     elif CS.is_highway or speedLimit < 30:
@@ -244,12 +235,7 @@ class NaviControl():
           ctrl_speed = 90
 
     clu_Vanz = CS.clu_Vanz
-    if CS.cruise_set_mode == 1:
-      cluVanz = self.get_forword_car_speed( CS, CS.VSetDis )
-      nDelta = cluVanz - CS.VSetDis
-      if abs(nDelta) > 5:
-        ctrl_speed = cluVanz
-        cruise_speed = True
+
 
     if cruise_speed:
       ctrl_speed = max( ctrl_speed, clu_Vanz )
@@ -258,14 +244,14 @@ class NaviControl():
     return  ctrl_speed
 
 
-  def update(self, c, CS, path_plan ):  
+  def update(self, c, CS, path_plan, frame ):  
     # send scc to car if longcontrol enabled and SCC not on bus 0 or ont live
     btn_signal = None
     if not self.button_status( CS  ):
       pass
     elif CS.acc_active:
       cruiseState_speed = CS.out.cruiseState.speed * CV.MS_TO_KPH      
-      kph_set_vEgo = self.get_navi_speed(  self.sm , CS, cruiseState_speed )
+      kph_set_vEgo = self.get_navi_speed(  self.sm , CS, cruiseState_speed, frame )
       self.ctrl_speed = min( cruiseState_speed, kph_set_vEgo)
 
       if CS.cruise_set_mode:
