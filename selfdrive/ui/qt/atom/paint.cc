@@ -133,11 +133,9 @@ void OnPaint::updateState(const UIState &s)
     auto radar_state = sm["radarState"].getRadarState();  // radar
     m_param.lead_radar = radar_state.getLeadOne();
 
-    //if( memcmp( &m_param, &m_old, sizeof(m_param)) )
-    //{
-    //   m_old = m_param;
-       update(); 
-    //}
+
+    update(); 
+
 
 
 }
@@ -1113,8 +1111,14 @@ void OnPaint::ui_main_navi( QPainter &p )
 
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
+   SubMaster &sm = *(state->sm);
+
   // osm
   const auto osm = sm["liveMapData"].getLiveMapData();
+
+
+   int  valid = osm.getSpeedLimitValid()
+   float speedLimit = osm.getSpeedLimit()
 
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
@@ -1124,6 +1128,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   int  nYPos = 700;
   int  nGap = 80;
   text4.sprintf("strRoadname = %s", strRoadname );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("SpeedLimit = %d, %.1f", valid, speedLimit );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 /*
   int   nSignal = 0;
