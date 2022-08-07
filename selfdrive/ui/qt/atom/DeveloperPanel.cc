@@ -295,8 +295,8 @@ void GitHash::information()
 {
       if ( !description->isVisible() ) 
       {
-        //const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
-        //std::system( gitcommit );
+        const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
+        std::system( gitcommit );
        // std::system("pkill -1 -f selfdrive.updated");
 
 
