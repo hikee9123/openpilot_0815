@@ -1,7 +1,12 @@
-Version 0.8.16 (2022-XX-XX)
+Version 0.8.16 (2022-08-XX)
 ========================
 * New driving model
   * fpdriving model
+* OSM updates
+* UI updates
+  * Multilanguage support
+  * Tuning menu update
+  * OSM enable menu append
 * Hyundai Kona Electric 2022 support thanks to sunnyhaibin!
 
 
