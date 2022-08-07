@@ -178,8 +178,22 @@ function launch {
   tmux capture-pane -pq -S-1000 > /tmp/launch_log
 
   # start manager
-  cd selfdrive/manager
-  ./custom_dep.py && ./build.py && ./manager.py
+  cd selfdrive/manager  
+
+  if [ -f "$BASEDIR/prebuilt" ]; then
+    ./manager.py
+  else
+    if [ -f "/data/params/d/OpkrOSMEnable" ]; then
+      OSM_ENABLE=$(cat /data/params/d/OpkrOSMEnable)
+    fi
+    if [ "$OSM_ENABLE" == "1" ]; then
+      ./custom_dep.py && ./build.py && ./manager.py
+    else
+      ./build.py && ./manager.py
+    fi
+  fi
+
+  
 
   # if broken, keep on screen error
   while true; do sleep 1; done
