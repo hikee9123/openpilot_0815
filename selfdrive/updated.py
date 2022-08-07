@@ -413,6 +413,7 @@ def main() -> None:
   overlay_init = Path(os.path.join(BASEDIR, ".overlay_init"))
   overlay_init.unlink(missing_ok=True)
 
+  print('updated  start {}'.format( overlay_init ) )
   first_run = True
   last_fetch_time = 0.0
   update_failed_count = 0
