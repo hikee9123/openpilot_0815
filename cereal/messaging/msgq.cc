@@ -308,7 +308,7 @@ int msgq_msg_ready(msgq_queue_t * q){
 
   if (q->read_uid_local != *q->read_uids[id]){
     std::cout << q->endpoint << ": Reader was evicted, 1.reconnecting" << std::endl;    
-    Sleep(10);
+    Sleep(1);
     msgq_init_subscriber(q);
     goto start;
   }
