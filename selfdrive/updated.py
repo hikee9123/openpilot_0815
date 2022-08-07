@@ -134,7 +134,6 @@ def set_params(new_version: bool, failed_count: int, exception: Optional[str]) -
     except Exception:
       params.put("ReleaseNotes", "")
     params.put_bool("UpdateAvailable", True)
-    os.system("/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh" )
 
   # Handle user prompt
   for alert in ("Offroad_UpdateFailed", "Offroad_ConnectivityNeeded", "Offroad_ConnectivityNeededPrompt"):
@@ -355,9 +354,9 @@ def fetch_update(wait_helper: WaitTimeHelper) -> bool:
   cloudlog.info(f"comparing {cur_hash} to {upstream_hash}")
   if new_version or git_fetch_result:
     cloudlog.info("Running update")
-
     if new_version:
       cloudlog.info("git reset in progress")
+      Params().put("GitCommitRemote", str(upstream_hash))
       cmds = [
         ["git", "reset", "--hard", "@{u}"],
         ["git", "clean", "-xdf"],

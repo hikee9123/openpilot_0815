@@ -19,7 +19,7 @@ from selfdrive.manager.process import ensure_running
 from selfdrive.manager.process_config import managed_processes
 from selfdrive.athena.registration import register, UNREGISTERED_DONGLE_ID
 from selfdrive.swaglog import cloudlog, add_file_handler
-from selfdrive.version import is_dirty, get_commit, get_version, get_origin, get_short_branch, \
+from selfdrive.version import is_dirty, get_commit, get_commit_remote, get_version, get_origin, get_short_branch, \
                               terms_version, training_version, is_tested_branch
 
 
@@ -142,6 +142,7 @@ def manager_init() -> None:
   params.put("TermsVersion", terms_version)
   params.put("TrainingVersion", training_version)
   params.put("GitCommit", get_commit(default=""))
+  params.put("GitCommitRemote", get_commit_remote(default=""))
   params.put("GitBranch", get_short_branch(default=""))
   params.put("GitRemote", get_origin(default=""))
   params.put_bool("IsTestedBranch", is_tested_branch())
