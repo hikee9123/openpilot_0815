@@ -2,6 +2,7 @@ Version 0.8.16 (2022-08-XX)
 ========================
 * New driving model
   * fpdriving model
+
 * OSM updates
 * UI updates
   * Multilanguage support
