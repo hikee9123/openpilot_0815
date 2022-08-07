@@ -13,6 +13,7 @@
 
 #include "selfdrive/ui/qt/atom/widgets/steerWidget.h"
 #include "selfdrive/ui/qt/atom/widgets/TunWidget.h"
+#include "selfdrive/ui/qt/atom/widgets/osmWidget.h"
 
 #include "common/params.h"
 #include "common/util.h"
@@ -39,6 +40,7 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
   main_layout->addWidget(new CTunWidget(this));    
   main_layout->addWidget(new CSteerWidget(this));  
   main_layout->addWidget(new CLaneWidget(this));  
+  main_layout->addWidget(new CosmWidget(this));  
   
 }
 

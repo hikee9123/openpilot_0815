@@ -16,12 +16,12 @@
 
 
 
-class COSMWidget : public CGroupWidget 
+class CosmWidget : public CGroupWidget 
 {
   Q_OBJECT
 
 public:
-  explicit COSMWidget();
+  explicit CosmWidget();
 
   enum emType {
     TP_NONE = 0,

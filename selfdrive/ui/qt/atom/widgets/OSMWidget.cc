@@ -11,7 +11,7 @@
 
 
 
-COSMWidget::COSMWidget() : CGroupWidget( "OSM Enable" ) 
+CosmWidget::CosmWidget() : CGroupWidget( "OSM Enable" ) 
 {
   QString str_param = "OpkrOSMEnable";
   auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
@@ -46,7 +46,7 @@ COSMWidget::COSMWidget() : CGroupWidget( "OSM Enable" )
 }  
 
 /*
-void  COSMWidget::FramePID(QVBoxLayout *layout)
+void  CosmWidget::FramePID(QVBoxLayout *layout)
 {
   // QVBoxLayout *pBoxLayout = CreateBoxLayout(TP_NONE);
 
@@ -58,7 +58,7 @@ void  COSMWidget::FramePID(QVBoxLayout *layout)
 */
 
 
-void COSMWidget::refresh( int nID )
+void CosmWidget::refresh( int nID )
 {
   CGroupWidget::refresh( m_nMethod );
  
