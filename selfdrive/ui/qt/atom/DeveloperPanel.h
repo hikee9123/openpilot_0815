@@ -197,7 +197,10 @@ public:
 private:
  
   QWidget *win_widget;
-   void refresh();
+  void refresh();
+
+  void showEvent(QShowEvent *event) override;
+
 
 };
 
