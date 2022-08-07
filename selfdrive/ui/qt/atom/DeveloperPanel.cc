@@ -381,6 +381,11 @@ void IsOpenpilotViewEnabledToggle::refresh()
   }
 }
 
+void IsOpenpilotViewEnabledToggle::showEvent(QShowEvent *event) 
+{
+// Params params = Params(); 
+   refresh();
+}
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  CLiveSteerRatioToggle
