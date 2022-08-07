@@ -1121,13 +1121,13 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
    float speedLimit = osm.getSpeedLimit();
 
 
-  //QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
+  QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
   QString text4;
 
   int  bb_x = 250;
   int  nYPos = 700;
   int  nGap = 80;
-  text4.sprintf("Roadname = %s", osm.getCurrentRoadName() );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4 = "Road Name = " + strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("SpeedLimit = %d, %.1f", valid, speedLimit );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 /*
