@@ -95,12 +95,7 @@ CommunityPanel::CommunityPanel(QWidget* parent) : ListWidget(parent)
       "../assets/offroad/icon_shell.png",
     },
 
-    {
-      "OpkrOSMEnable",
-      "OSM 지원",
-      "OSM을 지원 합니다.",
-      "../assets/offroad/icon_shell.png",
-    },
+
     
   };
 

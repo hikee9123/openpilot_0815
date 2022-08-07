@@ -30,6 +30,7 @@ CosmWidget::CosmWidget() : CGroupWidget( "OSM Enable" )
   )");
   method_label->setFixedSize( 500, 100);
   hlayout->addWidget(method_label);
+  
   connect(method_label, &QPushButton::clicked, [=]() {
     m_nMethod += 1;
     if( m_nMethod >= TP_ALL )
@@ -42,7 +43,7 @@ CosmWidget::CosmWidget() : CGroupWidget( "OSM Enable" )
   main_layout->addLayout(hlayout);
 
   //FramePID( CreateBoxLayout(TP_NONE) );
-
+  refresh();
 }  
 
 /*
