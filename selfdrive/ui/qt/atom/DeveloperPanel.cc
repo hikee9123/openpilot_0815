@@ -253,7 +253,7 @@ GitHash::GitHash() : AbstractControl("Check for Update")
   vlayout->setMargin(0);
   vlayout->setSpacing(20);
 
-  auto exe_git_pull = new ButtonControl("Git Pull", "UPDATE");
+  auto exe_git_pull = new ButtonControl("  Git Pull", "UPDATE");
   QObject::connect(exe_git_pull, &ButtonControl::clicked, [=]() 
   { 
         if (ConfirmationDialog::confirm("GitPull을 실행후 프로그램을 Update합니다. 진행하시겠습니까?", this))
@@ -265,7 +265,7 @@ GitHash::GitHash() : AbstractControl("Check for Update")
   });
   vlayout->addWidget( exe_git_pull );
 
-  auto exe_git_cancel = new ButtonControl("Git Pull cancel", "Cancel");
+  auto exe_git_cancel = new ButtonControl("  Git Pull cancel", "Cancel");
   QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
   { 
         if (ConfirmationDialog::confirm("GitPull 이전 상태로 되돌립니다. 진행하시겠습니까?", this))
