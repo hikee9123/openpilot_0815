@@ -1113,7 +1113,19 @@ void OnPaint::ui_main_navi( QPainter &p )
 
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
+  // osm
+  const auto osm = sm["liveMapData"].getLiveMapData();
 
+
+  QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
+  QString text4;
+
+  int  bb_x = 250;
+  int  nYPos = 700;
+  int  nGap = 80;
+  text4.sprintf("strRoadname = %s", strRoadname );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+/*
   int   nSignal = 0;
   float fe2ex = scene->longitudinalPlan.e2ex[12];
   float fstopline = scene->longitudinalPlan.stopline[12];
@@ -1145,7 +1157,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   text4.sprintf("e2ex = %.0f", fe2ex );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("stopline = %.0f", fstopline );  p.drawText( bb_x, nYPos+=nGap, text4 );
- // text4.sprintf("nSignal = %d", nSignal );  p.drawText( bb_x, nYPos+=nGap, text4 );
+*/
 }
 
 

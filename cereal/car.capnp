@@ -113,6 +113,10 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     cutInCarDetect  @112;
     laneChangedisengaged @113;
 
+    # osm
+    speedLimitActive @114;
+    speedLimitValueChange @115;
+
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
     radarCommIssueDEPRECATED @67;

@@ -101,6 +101,9 @@ def manager_init() -> None:
     ("OpkrLeftLaneOffset", "0"), 
     ("OpkrRightLaneOffset", "0"), 
     
+    # osm
+    ("OpkrOSMEnable", "0"), 
+    
   ]
   if not PC:
     default_params.append(("LastUpdateTime", datetime.datetime.utcnow().isoformat().encode('utf8')))
