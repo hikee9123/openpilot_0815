@@ -341,6 +341,12 @@ void GitHash::refresh()
   }  
 }
 
+void GitHash::showEvent(QShowEvent *event) 
+{
+
+   refresh();
+}
+
 IsCalibraionGridViewToggle::IsCalibraionGridViewToggle() 
         : ToggleControl("Calibraion Grid view", 
         "장착에 필요한 Grid 화면과 기울기를 제공합니다.."

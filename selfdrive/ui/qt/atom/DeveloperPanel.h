@@ -165,6 +165,9 @@ private:
 
   void information();
   void update();
+
+private:
+  void showEvent(QShowEvent *event) override;
 };
 
 
