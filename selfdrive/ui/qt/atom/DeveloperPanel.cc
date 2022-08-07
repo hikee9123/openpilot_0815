@@ -293,7 +293,8 @@ GitHash::GitHash() : AbstractControl("Check for Update")
       updateBtn->setEnabled(true);
 
       win_widget->show();
-      emit showDescription();      
+      emit showDescription();
+      description->setVisible( true );
       refresh();
   });
 
