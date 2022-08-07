@@ -346,6 +346,9 @@ def fetch_update(wait_helper: WaitTimeHelper) -> bool:
   upstream_hash = run(["git", "rev-parse", "@{u}"], OVERLAY_MERGED).rstrip()
   new_version = cur_hash != upstream_hash
   print('fetch_update = cur_hash:{} upstream_hash:{}'.format(cur_hash, upstream_hash) )
+  if new_version:
+    Params().put("GitCommitRemote", str(upstream_hash))
+
   git_fetch_result = check_git_fetch_result(git_fetch_output)
 
   new_branch = Params().get("SwitchToBranch", encoding='utf8')
@@ -357,7 +360,6 @@ def fetch_update(wait_helper: WaitTimeHelper) -> bool:
     cloudlog.info("Running update")
     if new_version:
       cloudlog.info("git reset in progress")
-      Params().put("GitCommitRemote", str(upstream_hash))
       cmds = [
         ["git", "reset", "--hard", "@{u}"],
         ["git", "clean", "-xdf"],
