@@ -186,7 +186,7 @@ class NaviControl():
         #if frame % 10 == 0:
         #  cruise_set_speed_kph = self.VSetDis + 1
         frame_delta = abs(frame - self.frame_camera)
-        cruise_set_speed_kph = interp( frame_delta, [0, 500], [ self.VSetDis, cruise_set_speed_kph ] )
+        cruise_set_speed_kph = interp( frame_delta, [0, 2000], [ self.VSetDis, cruise_set_speed_kph ] )
       else:
         self.frame_camera = frame
 
