@@ -122,6 +122,7 @@ def set_params(new_version: bool, failed_count: int, exception: Optional[str]) -
   else:
     params.put("LastUpdateException", exception)
 
+  print('set_params = failed_count:{} last_update:{}'.format( failed_count, last_update ) )
   # Write out release notes for new versions
   if new_version:
     try:
