@@ -449,7 +449,7 @@ def main() -> None:
       if internet_ok and not update_available:
         update_failed_count = 0
 
-      print('updated = internet_ok:{} update_available:{}'.format( internet_ok, update_available) )
+      print('updated = internet_ok:{} update_available:{} update_now:{}'.format( internet_ok, update_available, update_now) )
       # Fetch updates at most every 10 minutes
       if internet_ok and (update_now or time.monotonic() - last_fetch_time > 60*10):
         new_version = fetch_update(wait_helper)
