@@ -5,7 +5,6 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include "selfdrive/common/params.h"
 
 #include "selfdrive/ui/qt/atom/widgets/osmWidget.h"
 
@@ -72,5 +71,7 @@ void CosmWidget::refresh( int nID )
     case TP_USES : str = "1.사용";  break;
   }
 
+
+  method_label->setStyleSheet("background-color: #E22C2C;");
   method_label->setText( str ); 
 }
