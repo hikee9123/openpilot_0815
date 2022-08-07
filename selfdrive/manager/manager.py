@@ -142,7 +142,7 @@ def manager_init() -> None:
   params.put("TermsVersion", terms_version)
   params.put("TrainingVersion", training_version)
   params.put("GitCommit", get_commit(branch="HEAD",default=""))
-  params.put("GitCommitRemote", get_commit(branch="@{u}",default=""))
+  #params.put("GitCommitRemote", get_commit(branch="@{u}",default=""))
   params.put("GitBranch", get_short_branch(default=""))
   params.put("GitRemote", get_origin(default=""))
   params.put_bool("IsTestedBranch", is_tested_branch())
