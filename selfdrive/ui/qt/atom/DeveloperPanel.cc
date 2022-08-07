@@ -253,7 +253,7 @@ GitHash::GitHash() : AbstractControl("Check for Update")
   vlayout->setMargin(0);
   vlayout->setSpacing(20);
 
-  auto exe_git_pull = new ButtonControl("Git Pull", "실행");
+  auto exe_git_pull = new ButtonControl("Git Pull", "UPDATE");
   QObject::connect(exe_git_pull, &ButtonControl::clicked, [=]() 
   { 
         if (ConfirmationDialog::confirm("GitPull을 실행후 프로그램을 Update합니다. 진행하시겠습니까?", this))

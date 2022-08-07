@@ -11,6 +11,7 @@
 #include <QButtonGroup>
 #include <QScrollArea>
 #include <QStackedWidget>
+#include <QFileSystemWatcher>
 
 #include "selfdrive/ui/qt/widgets/controls.h"
 
@@ -158,7 +159,7 @@ public:
 private:
   Params params;
   QFileSystemWatcher *fs_watch;
-  
+
 private:
   QLabel local_hash;
   QPushButton* updateBtn;
