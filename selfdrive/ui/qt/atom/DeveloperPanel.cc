@@ -298,7 +298,7 @@ void GitHash::information()
         //const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         //std::system( gitcommit );
         //std::system("pkill -1 -f selfdrive.updated");
-        std::string cmd1 = "git fetch";//  > /data/params/d/GitCommitRemote";
+        std::string cmd1 = "git fetch";
         std::system(cmd1.c_str());
 
         std::string cmd2 = "git rev-parse @{u}   > /data/params/d/GitCommitRemote";
