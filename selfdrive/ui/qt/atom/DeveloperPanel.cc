@@ -301,7 +301,7 @@ void GitHash::information()
         std::string cmd1 = "git fetch";//  > /data/params/d/GitCommitRemote";
         std::system(cmd1.c_str());
 
-        std::string cmd2 = "git rev-parse @{u}";//  > /data/params/d/GitCommitRemote";
+        std::string cmd2 = "git rev-parse @{u}   > /data/params/d/GitCommitRemote";
         std::system(cmd2.c_str());
 
         win_widget->show();
