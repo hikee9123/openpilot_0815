@@ -315,7 +315,7 @@ void GitHash::refresh()
   QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
   QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
 
-  local_hash.setText( lhash );
+  local_hash.setText( rhash );
   if (lhash == rhash) {
     str_desc = "로컬과 리모트가 일치합니다.";
     updateBtn->setEnabled(false);
