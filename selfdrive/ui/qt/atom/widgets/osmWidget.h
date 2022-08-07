@@ -9,9 +9,10 @@
 #include <QTimer>
 #include <QWidget>
 
-#include "selfdrive/ui/qt/widgets/controls.h"
-#include "selfdrive/ui/ui.h"
+//#include "selfdrive/ui/qt/widgets/controls.h"
+//#include "selfdrive/ui/ui.h"
 
+#include "selfdrive/ui/qt/atom/TuningPanel.h"
 #include "selfdrive/ui/qt/widgets/groupWidget.h"
 
 
@@ -21,7 +22,7 @@ class CosmWidget : public CGroupWidget
   Q_OBJECT
 
 public:
-  explicit CosmWidget();
+  explicit CosmWidget( TuningPanel *panel );
 
   enum emType {
     TP_NONE = 0,
@@ -30,6 +31,7 @@ public:
   };  
 
  private:
+  TuningPanel  *m_pPanel;
   QPushButton  *method_label;
   int    m_nMethod;
   Params params;

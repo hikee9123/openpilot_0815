@@ -10,8 +10,9 @@
 
 
 
-CosmWidget::CosmWidget() : CGroupWidget( "OSM Enable" ) 
+CosmWidget::CosmWidget( TuningPanel *panel ) : CGroupWidget( "OSM Enable" ) 
 {
+  m_pPanel = panel;
   QString str_param = "OpkrOSMEnable";
   auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
   int value = str.toInt();
