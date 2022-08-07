@@ -324,7 +324,7 @@ void GitHash::refresh()
     local_hash.setStyleSheet("color: #aaaaaa");
   } else {
     str_desc = "업데이트가 있습니다.";
-    description->setStyleSheet("color: #0099ff");    
+    description->setStyleSheet("color: #0099ff");
     local_hash.setStyleSheet("color: #0099ff");
     updateBtn->setEnabled(true);       
   }  
