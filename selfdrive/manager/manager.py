@@ -10,6 +10,7 @@ from typing import List, Tuple, Union
 import cereal.messaging as messaging
 import selfdrive.sentry as sentry
 from common.basedir import BASEDIR
+from common.spinner import Spinner
 from common.params import Params, ParamKeyType
 from common.text_window import TextWindow
 from selfdrive.boardd.set_time import set_time
@@ -264,6 +265,8 @@ def map_return():
   os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
 
 def main() -> None:
+  spinner = Spinner()
+  spinner.update_progress(0, 100)  
   param_navi = Params().get("OpkrRunNaviOnBoot")
   if param_navi is not None:
     navi_on_boot = int(param_navi)
@@ -276,17 +279,18 @@ def main() -> None:
   prepare_only = os.getenv("PREPAREONLY") is not None
 
   manager_init()
-
+  spinner.update_progress( 10, 100.)
   # Start UI early so prepare can happen in the background
   if not prepare_only:
     managed_processes['ui'].start()
 
-
+  spinner.update_progress( 80, 100.)
   manager_prepare()
-
+  spinner.update_progress( 100, 100.)
   if navi_on_boot:
     map_hide()
 
+  spinner.close()
   if prepare_only:
     return
 
