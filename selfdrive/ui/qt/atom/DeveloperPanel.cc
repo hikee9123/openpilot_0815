@@ -291,6 +291,10 @@ GitHash::GitHash() : AbstractControl("Check for Update")
   QObject::connect(fs_watch, &QFileSystemWatcher::fileChanged, [=](const QString path) {
       updateBtn->setText(tr("CHECK"));
       updateBtn->setEnabled(true);
+
+      win_widget->show();
+      emit showDescription();      
+      refresh();
   });
 
 
