@@ -5,12 +5,19 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
+#include "selfdrive/common/params.h"
+
 #include "selfdrive/ui/qt/atom/widgets/osmWidget.h"
 
 
 
 COSMWidget::COSMWidget() : CGroupWidget( "OSM Enable" ) 
 {
+  QString str_param = "OpkrOSMEnable";
+  auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
+  int value = str.toInt();
+  m_nMethod = value;    
+
   // label
   method_label = new QPushButton("method"); // .setAlignment(Qt::AlignVCenter|Qt::AlignHCenter);
   method_label->setStyleSheet(R"(
@@ -29,7 +36,7 @@ COSMWidget::COSMWidget() : CGroupWidget( "OSM Enable" )
       m_nMethod = 0;
 
     QString values = QString::number(m_nMethod);
-    //params.put( str_param.toStdString(), values.toStdString());      
+    params.put( str_param.toStdString(), values.toStdString());      
     refresh();
   });
   main_layout->addLayout(hlayout);
