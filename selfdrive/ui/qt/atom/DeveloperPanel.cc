@@ -349,7 +349,7 @@ IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle()
   hlayout->addWidget( new IsCalibraionGridViewToggle() );
   main_layout->addWidget( win_widget );
 
-
+  QObject::connect( title_label, &QPushButton::clicked, this, &IsOpenpilotViewEnabledToggle::refresh); 
   QObject::connect(this, &IsOpenpilotViewEnabledToggle::toggleFlipped, [=](int state) {
     char value = state ? '1' : '0';
 
