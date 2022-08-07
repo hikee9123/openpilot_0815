@@ -272,25 +272,24 @@ def main() -> None:
     navi_on_boot = int(param_navi)
   else:
     navi_on_boot = 0
-
+  spinner.update_progress( 50, 100.)
   if navi_on_boot:
     map_exec()
 
   prepare_only = os.getenv("PREPAREONLY") is not None
 
   manager_init()
-  spinner.update_progress( 10, 100.)
+
+  spinner.close()  
   # Start UI early so prepare can happen in the background
   if not prepare_only:
     managed_processes['ui'].start()
 
-  spinner.update_progress( 80, 100.)
   manager_prepare()
-  spinner.update_progress( 100, 100.)
   if navi_on_boot:
     map_hide()
 
-  spinner.close()
+
   if prepare_only:
     return
 
