@@ -291,12 +291,17 @@ GitHash::GitHash() : AbstractControl("Check for Update")
   QObject::connect(fs_watch, &QFileSystemWatcher::fileChanged, [=](const QString path) {
       updateBtn->setText(tr("CHECK"));
       updateBtn->setEnabled(true);
-      
-      refresh();
-      win_widget->show();
+
+      QString lhash = QString::fromStdString(params.get("GitCommit").substr(0, 10));
+      QString rhash = QString::fromStdString(params.get("GitCommitRemote").substr(0, 10));
+      if (lhash != rhash) {
+        win_widget->show();        
+      }
+
+
       emit showDescription();
       description->setVisible( true );
-
+      refresh();
   });
 
   refresh();
