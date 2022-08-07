@@ -85,9 +85,9 @@ void CosmWidget::refresh( int nID )
   }
 
   if( m_nMethod == TP_NONE )
-    method_label->setStyleSheet("background-color: #E22C2C;");
-  else
     method_label->setStyleSheet("background-color: #393939;");
+  else
+    method_label->setStyleSheet("background-color: #E22C2C;");
 
   method_label->setText( str ); 
 }
