@@ -302,7 +302,6 @@ void GitHash::information()
         std::string cmd = "git rev-parse @{u}";//  > /data/params/d/GitCommitRemote";
         std::system(cmd.c_str());
 
-
         win_widget->show();
         emit showDescription();
       } else  {
