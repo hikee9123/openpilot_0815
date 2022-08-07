@@ -34,7 +34,7 @@ class NaviControl():
 
     self.frame_camera = 0
     self.VSetDis = 30
-  
+    self.frame_VSetDis = 30
 
 
 
@@ -185,10 +185,16 @@ class NaviControl():
       if cruise_set_speed_kph >  self.VSetDis:
         #if frame % 10 == 0:
         #  cruise_set_speed_kph = self.VSetDis + 1
-        frame_delta = abs(frame - self.frame_camera)
-        cruise_set_speed_kph = interp( frame_delta, [0, 2000], [ self.VSetDis + 1, cruise_set_speed_kph ] )
+        if v_ego_kph < (self.VSetDis-5):
+          self.frame_camera = frame
+          self.frame_VSetDis = self.VSetDis
+          cruise_set_speed_kph = self.VSetDis
+        else:
+          frame_delta = abs(frame - self.frame_camera)
+          cruise_set_speed_kph = interp( frame_delta, [0, 2000], [ self.frame_VSetDis, cruise_set_speed_kph ] )
       else:
         self.frame_camera = frame
+        self.frame_VSetDis = self.VSetDis
 
       return  cruise_set_speed_kph
 

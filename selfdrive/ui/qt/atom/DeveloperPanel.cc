@@ -32,7 +32,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   main_layout->addWidget(new GitHash());
 
 
-
+/*
   auto exe_git_cancel = new ButtonControl("Git Pull 취소", "실행");
   QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
   { 
@@ -43,7 +43,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
         }
   });  
   main_layout->addWidget(exe_git_cancel);
-
+*/
 
 
   main_layout->setMargin(100);
@@ -246,6 +246,22 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
   }
 
 
+  win_widget = new QWidget;
+  QHBoxLayout *hlayout = new QHBoxLayout(win_widget);
+  hlayout->setMargin(0);
+  hlayout->setSpacing(20);
+  auto exe_git_cancel = new ButtonControl("Git Pull 취소", "실행");
+  QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
+  { 
+        if (ConfirmationDialog::confirm("GitPull 이전 상태로 되돌립니다. 진행하시겠습니까?", this))
+        {
+          const char* gitpull_cancel = "/data/openpilot/selfdrive/assets/addon/sh/gitpull_cancel.sh ''";
+          std::system(gitpull_cancel);
+        }
+  });
+  hlayout->addWidget( exe_git_cancel );
+  main_layout->addWidget( win_widget );
+ // main_layout->addWidget(exe_git_cancel);
 
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
   QObject::connect( updateBtn, &QPushButton::clicked, this, &GitHash::update);
@@ -299,8 +315,10 @@ void GitHash::information()
 
         str_desc += QString("\nLOCAL:%1 REMOTE:%2").arg(commit_local, commit_remote );
         description->setText( str_desc );
-        
+        win_widget->show();
         emit showDescription();
+      } else  {
+        win_widget->hide();
       }
       description->setVisible(!description->isVisible());
       refresh();
@@ -334,7 +352,7 @@ IsCalibraionGridViewToggle::IsCalibraionGridViewToggle()
   });
 }
 
-// s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN
+
 IsOpenpilotViewEnabledToggle::IsOpenpilotViewEnabledToggle() 
         : ToggleControl("주행화면 미리보기", 
         "오픈파일럿 주행화면을 미리보기 합니다.", 
