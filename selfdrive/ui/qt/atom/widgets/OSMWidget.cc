@@ -42,6 +42,7 @@ CosmWidget::CosmWidget() : CGroupWidget( "OSM Enable" )
   });
   main_layout->addLayout(hlayout);
 
+
   //FramePID( CreateBoxLayout(TP_NONE) );
   refresh();
 }  
