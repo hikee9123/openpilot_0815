@@ -23,7 +23,10 @@ widgets_src = ["qt/util.cc", "qt/widgets/input.cc", "qt/widgets/drive_stats.cc",
                "qt/widgets/offroad_alerts.cc", "qt/widgets/prime.cc", "qt/widgets/keyboard.cc",
                "qt/widgets/scrollview.cc", "qt/widgets/cameraview.cc", "#third_party/qrcode/QrCode.cc", "qt/api.cc",
                "qt/request_repeater.cc", "qt/qt_window.cc"]
-widgets_src += ["qt/atom/widgets/steerWidget.cc","qt/atom/widgets/TunWidget.cc"]
+widgets_src += ["qt/widgets/groupWidget.cc",
+                "qt/atom/widgets/steerWidget.cc",
+                "qt/atom/widgets/osmWidget.cc",
+                "qt/atom/widgets/TunWidget.cc"]
 
 if arch != 'aarch64':
   widgets_src += ["qt/offroad/networking.cc", "qt/offroad/wifiManager.cc"]
