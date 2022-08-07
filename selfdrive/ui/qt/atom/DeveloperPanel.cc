@@ -298,7 +298,6 @@ GitHash::GitHash() : AbstractControl("Check for Update")
         win_widget->show();        
       }
 
-
       emit showDescription();
       description->setVisible( true );
       refresh();
