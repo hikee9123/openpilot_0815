@@ -297,7 +297,7 @@ void GitHash::information()
       {
         //const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         //std::system( gitcommit );
-        std::system("pkill -1 -f selfdrive.updated");
+       // std::system("pkill -1 -f selfdrive.updated");
 
 
         QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
