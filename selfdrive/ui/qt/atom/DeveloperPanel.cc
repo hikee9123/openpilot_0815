@@ -307,7 +307,6 @@ void GitHash::information()
       }
       description->setVisible(!description->isVisible());
       refresh();
-
 }
 
 void GitHash::refresh()
