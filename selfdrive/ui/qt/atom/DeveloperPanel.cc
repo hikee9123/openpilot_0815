@@ -205,12 +205,14 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 //
 //  Git
 
-GitHash::GitHash() : AbstractControl("업데이트 체크") 
+GitHash::GitHash() : AbstractControl("Check for Update") 
 {
+  params = Params();
+
   local_hash.setAlignment(Qt::AlignVCenter);
   local_hash.setStyleSheet("color: #aaaaaa");
 
-  updateBtn = new QPushButton("UPDATE");
+  updateBtn = new QPushButton("CHECK");
  // updateBtn->setVisible(false);
   updateBtn->setStyleSheet(R"(
     QPushButton {
@@ -250,7 +252,20 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
   QVBoxLayout *vlayout = new QVBoxLayout(win_widget);
   vlayout->setMargin(0);
   vlayout->setSpacing(20);
-  auto exe_git_cancel = new ButtonControl("Git Pull 취소", "실행");
+
+  auto exe_git_pull = new ButtonControl("Git Pull", "실행");
+  QObject::connect(exe_git_pull, &ButtonControl::clicked, [=]() 
+  { 
+        if (ConfirmationDialog::confirm("GitPull을 실행후 프로그램을 Update합니다. 진행하시겠습니까?", this))
+        {
+          std::system( "cd /data/openpilot; rm -f prebuilt" );
+          const char* gitpull = "/data/openpilot/selfdrive/assets/addon/sh/gitpull.sh";
+          std::system( gitpull );
+        }
+  });
+  vlayout->addWidget( exe_git_pull );
+
+  auto exe_git_cancel = new ButtonControl("Git Pull cancel", "Cancel");
   QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
   { 
         if (ConfirmationDialog::confirm("GitPull 이전 상태로 되돌립니다. 진행하시겠습니까?", this))
@@ -260,6 +275,8 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
         }
   });
   vlayout->addWidget( exe_git_cancel );
+
+
   vlayout->addWidget( new CPrebuiltToggle() );
   main_layout->addWidget( win_widget );
   win_widget->hide();
@@ -267,37 +284,33 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
 
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
   QObject::connect( updateBtn, &QPushButton::clicked, this, &GitHash::update);
-
   refresh();
+
+
+  fs_watch = new QFileSystemWatcher(this);
+  QObject::connect(fs_watch, &QFileSystemWatcher::fileChanged, [=](const QString path) {
+      updateBtn->setText(tr("CHECK"));
+      updateBtn->setEnabled(true);
+  });
+
+
 }
 
 void GitHash::update()
 {
-    QString commit_local = QString::fromStdString(Params().get("GitCommit").substr(0, 7));
-    QString commit_remote = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 7));
- 
-    QString desc = QString("(로컬/리모트): %1/%2\n").arg(commit_local, commit_remote );
-    if (commit_local == commit_remote) {
-      desc += QString("로컬과 리모트가 일치합니다.");
-      ConfirmationDialog::alert( desc, this );
-    } else {
-      desc += QString("업데이트가 있습니다.");
-      if ( ConfirmationDialog::confirm(desc, this) ) {
-
-        std::system( "cd /data/openpilot; rm -f prebuilt" );
-        const char* gitpull = "/data/openpilot/selfdrive/assets/addon/sh/gitpull.sh";
-        std::system( gitpull );
-      }      
+    if (params.getBool("IsOffroad")) {
+      fs_watch->addPath(QString::fromStdString(params.getParamPath("LastUpdateTime")));
+      fs_watch->addPath(QString::fromStdString(params.getParamPath("UpdateFailedCount")));
+      updateBtn->setText(tr("CHECKING"));
+      updateBtn->setEnabled(false);
     }
+    std::system("pkill -1 -f selfdrive.updated");
 }
 
 void GitHash::information()
 {
-      if ( !description->isVisible() ) 
+      if( !description->isVisible() ) 
       {
-        //const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
-        //std::system( gitcommit );
-        //std::system("pkill -1 -f selfdrive.updated");
         std::string cmd1 = "git fetch";
         std::system(cmd1.c_str());
 
@@ -315,19 +328,19 @@ void GitHash::information()
 
 void GitHash::refresh()
 {
-  QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
-  QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
+  QString lhash = QString::fromStdString(params.get("GitCommit").substr(0, 10));
+  QString rhash = QString::fromStdString(params.get("GitCommitRemote").substr(0, 10));
 
   local_hash.setText( rhash );
   if (lhash == rhash) {
     str_desc = "로컬과 리모트가 일치합니다.";
-    updateBtn->setEnabled(false);
+   // updateBtn->setEnabled(false);
     local_hash.setStyleSheet("color: #aaaaaa");
   } else {
     str_desc = "업데이트가 있습니다.";
     description->setStyleSheet("color: #0099ff");
     local_hash.setStyleSheet("color: #0099ff");
-    updateBtn->setEnabled(true);       
+   // updateBtn->setEnabled(true);       
   }  
 
   str_desc += QString("\nLOCAL:%1 REMOTE:%2").arg(lhash, rhash );

@@ -156,10 +156,17 @@ public:
   GitHash();
 
 private:
+  Params params;
+  QFileSystemWatcher *fs_watch;
+  
+private:
   QLabel local_hash;
   QPushButton* updateBtn;
   QWidget *win_widget;
   QString  str_desc;
+
+
+
 
   void refresh();
 
