@@ -7,6 +7,7 @@ Version 0.8.16 (2022-08-XX)
   * Multilanguage support
   * Tuning menu update
   * OSM enable menu append
+  * Cut-in detect message
 * Hyundai Kona Electric 2022 support thanks to sunnyhaibin!
 
 
