@@ -49,7 +49,10 @@ class CPrebuiltToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  CPrebuiltToggle() : ToggleControl("Prebuilt 파일 생성", "Prebuilt 파일을 생성하며 부팅속도를 단축시킵니다. UI수정을 한 경우 기능을 끄십시오.", "../assets/offroad/icon_shell.png", Params().getBool("OpkrPrebuiltOn")) {
+  CPrebuiltToggle() : ToggleControl("Prebuilt 파일 생성", 
+    "Prebuilt 파일을 생성하며 부팅속도를 단축시킵니다. UI수정을 한 경우 기능을 끄십시오.", 
+    "", 
+    Params().getBool("OpkrPrebuiltOn")) {
     QObject::connect(this, &CPrebuiltToggle::toggleFlipped, [=](int state) {
       Params().putBool("OpkrPrebuiltOn", (bool)state);
 
