@@ -61,7 +61,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 
   // layout()->addWidget(new CPrebuiltToggle());
   
-  layout()->addWidget(horizontal_line());
+  //layout()->addWidget(horizontal_line());
 
   layout()->addWidget(new CLiveSteerRatioToggle());
   layout()->addWidget(new BrightnessControl());
@@ -247,9 +247,9 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
 
 
   win_widget = new QWidget;
-  QHBoxLayout *hlayout = new QHBoxLayout(win_widget);
-  hlayout->setMargin(0);
-  hlayout->setSpacing(20);
+  QVBoxLayout *vlayout = new QVBoxLayout(win_widget);
+  vlayout->setMargin(0);
+  vlayout->setSpacing(20);
   auto exe_git_cancel = new ButtonControl("Git Pull 취소", "실행");
   QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
   { 
@@ -259,8 +259,8 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
           std::system(gitpull_cancel);
         }
   });
-  hlayout->addWidget( exe_git_cancel );
-  hlayout->addWidget( new CPrebuiltToggle() );
+  vlayout->addWidget( exe_git_cancel );
+  vlayout->addWidget( new CPrebuiltToggle() );
   main_layout->addWidget( win_widget );
   win_widget->hide();
 
