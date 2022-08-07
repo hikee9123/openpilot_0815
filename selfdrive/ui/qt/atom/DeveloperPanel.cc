@@ -59,7 +59,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   //layout()->addWidget(new IsOpenpilotViewEnabledToggle());
 
 
-   layout()->addWidget(new CPrebuiltToggle());
+  // layout()->addWidget(new CPrebuiltToggle());
   
   layout()->addWidget(horizontal_line());
 
@@ -260,8 +260,10 @@ GitHash::GitHash() : AbstractControl("업데이트 체크")
         }
   });
   hlayout->addWidget( exe_git_cancel );
+  hlayout->addWidget( new CPrebuiltToggle() );
   main_layout->addWidget( win_widget );
- // main_layout->addWidget(exe_git_cancel);
+  win_widget->hide();
+
 
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
   QObject::connect( updateBtn, &QPushButton::clicked, this, &GitHash::update);
