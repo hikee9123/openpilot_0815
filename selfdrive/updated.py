@@ -345,7 +345,7 @@ def fetch_update(wait_helper: WaitTimeHelper) -> bool:
   cur_hash = run(["git", "rev-parse", "HEAD"], OVERLAY_MERGED).rstrip()
   upstream_hash = run(["git", "rev-parse", "@{u}"], OVERLAY_MERGED).rstrip()
   new_version = cur_hash != upstream_hash
-  print('fetch_update = cur_hash:{} upstream_hash:{}'.format(cur_hash, upstream_hash) )
+  print('fetch_update = git_fetch_output:{} cur_hash:{} upstream_hash:{}'.format(git_fetch_output, cur_hash, upstream_hash) )
   if new_version:
     Params().put("GitCommitRemote", str(upstream_hash))
 
