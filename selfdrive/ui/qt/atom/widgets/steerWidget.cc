@@ -323,7 +323,7 @@ CLaneWidget::CLaneWidget( TuningPanel *panel, QWidget *parent) : QFrame(parent)
   hlayout->addWidget(icon_label);
 
   // title
-  QString  title = "lane control";
+  QString  title = "Lane control";
   title_label = new QPushButton(title);
   title_label->setFixedHeight(120);
   title_label->setStyleSheet("font-size: 50px; font-weight: 400; text-align: left");
