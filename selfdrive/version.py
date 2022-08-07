@@ -32,9 +32,6 @@ def run_cmd_default(cmd: List[str], default: Optional[str] = None) -> Optional[s
 def get_commit(branch: str = "HEAD", default: Optional[str] = None) -> Optional[str]:
   return run_cmd_default(["git", "rev-parse", branch], default=default)
 
-@cache
-def get_commit_remote(branch: str = "@{u}", default: Optional[str] = None) -> Optional[str]:
-  return run_cmd_default(["git", "rev-parse", branch], default=default)
 
 @cache
 def get_short_branch(default: Optional[str] = None) -> Optional[str]:
