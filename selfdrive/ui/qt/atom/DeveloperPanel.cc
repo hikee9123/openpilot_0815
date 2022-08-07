@@ -301,7 +301,7 @@ void GitHash::information()
      // std::string cmd = "echo -n " + "'$(git rev-parse @{u})' " +
      //                   " > /data/params/d/GitCommitRemote";
 
-      std::string cmd = "echo -n " + "'$(git rev-parse @{u})' ";         
+      std::string cmd = "echo -n " + "$(git rev-parse @{u}) ";         
       std::system(cmd.c_str());
 
       //  const char* gitcommit = "echo -n ""$(git rev-parse @{u})"" > /data/params/d/GitCommitRemote";
