@@ -68,11 +68,17 @@ void CosmWidget::refresh( int nID )
   QString  str;
   switch( m_nMethod )
   {
-    case TP_NONE : str = "0.미사용"; break;
-    case TP_USES : str = "1.사용";  break;
+    case TP_NONE :
+      str = "0.미사용"; 
+      break;
+    case TP_USES : 
+      str = "1.사용";  
+      break;
   }
 
-
-  method_label->setStyleSheet("background-color: #E22C2C;");
+  if( m_nMethod == TP_NONE )
+    method_label->setStyleSheet("background-color: #E22C2C;");
+  else
+    method_label->setStyleSheet("background-color: #393939;");
   method_label->setText( str ); 
 }
