@@ -284,7 +284,7 @@ GitHash::GitHash() : AbstractControl("Check for Update")
 
   QObject::connect( title_label, &QPushButton::clicked, this, &GitHash::information);
   QObject::connect( updateBtn, &QPushButton::clicked, this, &GitHash::update);
-  refresh();
+
 
 
   fs_watch = new QFileSystemWatcher(this);
@@ -298,7 +298,7 @@ GitHash::GitHash() : AbstractControl("Check for Update")
       refresh();
   });
 
-
+  refresh();
 }
 
 void GitHash::update()
