@@ -298,7 +298,14 @@ void GitHash::information()
         //const char* gitcommit = "/data/openpilot/selfdrive/assets/addon/sh/gitcommit.sh";
         //std::system( gitcommit );
         //std::system("pkill -1 -f selfdrive.updated");
+     // std::string cmd = "echo -n " + "'$(git rev-parse @{u})' " +
+     //                   " > /data/params/d/GitCommitRemote";
 
+      std::string cmd = "echo -n " + "'$(git rev-parse @{u})' ";         
+      std::system(cmd.c_str());
+
+      //  const char* gitcommit = "echo -n ""$(git rev-parse @{u})"" > /data/params/d/GitCommitRemote";
+      //  std::system( gitcommit );
 
         win_widget->show();
         emit showDescription();
