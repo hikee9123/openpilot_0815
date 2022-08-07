@@ -215,7 +215,7 @@ void  CTunWidget::FrameLQR(int nMode,QVBoxLayout *parent)
     "Ki",
     "Adjust Ki def:0.01"
     );
-  pKi->SetControl( 0.0, 1, 0.01 );
+  pKi->SetControl( 0.0, 1, 0.1 );
   box_layout->addWidget( pKi ); 
 
   MenuControl *pGain = new MenuControl( 
