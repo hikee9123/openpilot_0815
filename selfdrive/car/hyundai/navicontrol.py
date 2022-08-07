@@ -33,7 +33,7 @@ class NaviControl():
     self.gasWait_time = 0
 
     self.frame_camera = 0
-    self.VSetDis = 0
+    self.VSetDis = 30
   
 
 
