@@ -43,21 +43,29 @@ CosmWidget::CosmWidget( TuningPanel *panel ) : CGroupWidget( "OSM Enable" )
   main_layout->addLayout(hlayout);
 
 
-  //FramePID( CreateBoxLayout(TP_NONE) );
+  FrameOSM( CreateBoxLayout(TP_USES) );
   refresh();
 }  
 
-/*
-void  CosmWidget::FramePID(QVBoxLayout *layout)
+
+void  CosmWidget::FrameOSM(QVBoxLayout *layout)
 {
   // QVBoxLayout *pBoxLayout = CreateBoxLayout(TP_NONE);
 
-    layout->addWidget(new PidKp());
-    layout->addWidget(new PidKi());
-    layout->addWidget(new PidKd());
-    layout->addWidget(new PidKf());
+   // layout->addWidget(new PidKp());
+   // layout->addWidget(new PidKi());
+   // layout->addWidget(new PidKd());
+   // layout->addWidget(new PidKf());
+
+  MenuControl *pMenu1 = new MenuControl( 
+    "OpkrMaxSteeringAngle",
+    "Driver to Steer Angle",
+    "mprove the edge between the driver and the openpilot."
+     );
+  pMenu1->SetControl( 10, 180, 5 );
+  layout->addWidget( pMenu1 );
 }
-*/
+
 
 
 void CosmWidget::refresh( int nID )
@@ -80,5 +88,6 @@ void CosmWidget::refresh( int nID )
     method_label->setStyleSheet("background-color: #E22C2C;");
   else
     method_label->setStyleSheet("background-color: #393939;");
+
   method_label->setText( str ); 
 }

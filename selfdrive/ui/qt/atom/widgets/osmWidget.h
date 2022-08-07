@@ -36,7 +36,7 @@ public:
   int    m_nMethod;
   Params params;
   
-//  void  FramePID(QVBoxLayout *parent=nullptr);
+  void  FrameOSM(QVBoxLayout *parent=nullptr);
 //  void  FrameINDI(QVBoxLayout *parent=nullptr);
 //  void  FrameLQR(QVBoxLayout *parent=nullptr);
 //  void  FrameTORQUE(QVBoxLayout *parent=nullptr);
