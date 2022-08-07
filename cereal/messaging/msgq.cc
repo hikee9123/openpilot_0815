@@ -307,7 +307,7 @@ int msgq_msg_ready(msgq_queue_t * q){
   assert(id >= 0); // Make sure subscriber is initialized
 
   if (q->read_uid_local != *q->read_uids[id]){
-    std::cout << q->endpoint << ": Reader was evicted, reconnecting" << std::endl;
+    std::cout << q->endpoint << ": Reader was evicted, 1.reconnecting" << std::endl;
     msgq_init_subscriber(q);
     goto start;
   }
@@ -334,7 +334,7 @@ int msgq_msg_recv(msgq_msg_t * msg, msgq_queue_t * q){
   assert(id >= 0); // Make sure subscriber is initialized
 
   if (q->read_uid_local != *q->read_uids[id]){
-    std::cout << q->endpoint << ": Reader was evicted, reconnecting" << std::endl;
+    std::cout << q->endpoint << ": Reader was evicted, 2.reconnecting" << std::endl;
     msgq_init_subscriber(q);
     goto start;
   }
