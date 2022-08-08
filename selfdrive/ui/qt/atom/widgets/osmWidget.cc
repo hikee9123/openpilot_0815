@@ -63,10 +63,11 @@ void  CosmWidget::FrameOSM(QVBoxLayout *layout)
      );
 
   pMenu1->SetControl( 0, 3, 1 );
-  pMenu1->SetString( 0, "None");
-  pMenu1->SetString( 1, "Vision+OSM");
-  pMenu1->SetString( 2, "Vision Only");
-  pMenu1->SetString( 3, "OSM Only");
+  pMenu1->SetString( "None,Vision+OSM,Vision,OSM" );
+  //pMenu1->SetString( 0, "None");
+  //pMenu1->SetString( 1, "Vision+OSM");
+  //pMenu1->SetString( 2, "Vision Only");
+  //pMenu1->SetString( 3, "OSM Only");
   layout->addWidget( pMenu1 );
 }
 
