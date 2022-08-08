@@ -1144,9 +1144,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
    
 
 
-  auto  *pturnSpeedLimitsAhead  = osm.getTurnSpeedLimitsAhead();
-  auto  *pturnSpeedLimitsAheadDistances  = osm.getTurnSpeedLimitsAheadDistances();
-  auto  *pturnSpeedLimitsAheadSigns  = osm.getTurnSpeedLimitsAheadSigns();
+  auto  pturnSpeedLimitsAhead  = osm.getTurnSpeedLimitsAhead();
+  auto  pturnSpeedLimitsAheadDistances  = osm.getTurnSpeedLimitsAheadDistances();
+  auto  pturnSpeedLimitsAheadSigns  = osm.getTurnSpeedLimitsAheadSigns();
 
 
   speedLimitAhead *= 3.6;
@@ -1179,7 +1179,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
     }
  }
 
-  text4.sprintf("GPS = %.1f, %.1f, %.1f, %.1f, %.1f, %.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed, lastGpsBearingDeg, lastGpsAccuracy, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("GPS = %.1f, %.1f, %.1f, %.1f, %.2f, %.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed, lastGpsBearingDeg, lastGpsAccuracy, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 
