@@ -21,6 +21,8 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   m_param.bbh_left = 0;
   m_param.bbh_right = 0;
 
+  m_osm.fSpeedLimit = 0;
+
   m_nOldSec = 0;
 
   state = uiState();
