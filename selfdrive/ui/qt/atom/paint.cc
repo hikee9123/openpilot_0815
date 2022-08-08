@@ -1168,19 +1168,18 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
-
+/*
   auto turnSpeedLimitsAhead = osm.getTurnSpeedLimitsAhead();
   auto turnSpeedLimitsAheadDistances = osm.getTurnSpeedLimitsAheadDistances();
   auto turnSpeedLimitsAheadSigns = osm.getTurnSpeedLimitsAheadSigns();
 
-// if( pturnSpeedLimitsAheadSigns )
-// {
-    for( int i = 0; i<1; i++ )  // max 15.
-    {
+
+  for( int i = 0; i<1; i++ )  // max 15.
+  {
       text4.sprintf("TSLA.%d =  %.1f, %.1f,  %d", i, (float)turnSpeedLimitsAhead[i], (float)turnSpeedLimitsAheadDistances[i], (int)turnSpeedLimitsAheadSigns[i] );
       p.drawText( bb_x, nYPos+=nGap, text4 );
-    }
-// }
+  }
+*/
 
 
   text4.sprintf("GPS = %.1f, %.1f, %.1f, %.1f, %.2f, %.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed, lastGpsBearingDeg, lastGpsAccuracy, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
