@@ -1141,9 +1141,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
 
-  float *pturnSpeedLimitsAhead  = (float*) osm.getTurnSpeedLimitsAhead();
-  float *pturnSpeedLimitsAheadDistances  = (float*) osm.getTurnSpeedLimitsAheadDistances();
-  int   *pturnSpeedLimitsAheadSigns  = (int*) osm.getTurnSpeedLimitsAheadSigns();
+//  float *pturnSpeedLimitsAhead  = (float*) osm.getTurnSpeedLimitsAhead();
+//  float *pturnSpeedLimitsAheadDistances  = (float*) osm.getTurnSpeedLimitsAheadDistances();
+//  int   *pturnSpeedLimitsAheadSigns  = (int*) osm.getTurnSpeedLimitsAheadSigns();
 
 
   speedLimitAhead * 3.6;
@@ -1167,7 +1167,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
- 
+/* 
  if( pturnSpeedLimitsAheadSigns )
  {
     for( int i = 0; i<2; i++ )  // max 15.
@@ -1175,7 +1175,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
       text4.sprintf("TSLA.%d = %d, %.1f, %.1f",i, pturnSpeedLimitsAheadSigns[i], pturnSpeedLimitsAhead[i], pturnSpeedLimitsAheadDistances[i] );  p.drawText( bb_x, nYPos+=nGap, text4 );
     }
  }
- 
+*/
 
   text4.sprintf("GPS = %.1f, %.1f, %.1f, %.1f, %.1f, %.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed, lastGpsBearingDeg, lastGpsAccuracy, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
