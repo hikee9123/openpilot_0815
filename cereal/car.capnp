@@ -114,8 +114,8 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     laneChangedisengaged @113;
 
     # osm
-    speedLimitActive @114;
-    speedLimitValueChange @115;
+    curvSpeedDown @114;
+
 
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
@@ -500,9 +500,13 @@ struct CarParams {
 
   atompilotLongitudinalControl @70  :Bool;
   atomHybridSpeed @71  :Float32;
+
   opkrAutoResume @72 :Bool;
+
   smoothSteer @73 :SmoothSteerData;
   laneParam @75 :LaneParamData;
+
+  opkrOsmCurvOption  @76 :Int16;
 
   struct LaneParamData
   {

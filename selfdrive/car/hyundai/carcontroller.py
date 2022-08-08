@@ -33,11 +33,13 @@ class CarController():
     self.last_lead_distance = 0
     self.lkas11_cnt = 0
     self.scc12_cnt = 0
-    self.NC = NaviControl(self.params)
+    
+    self.NC = NaviControl(self.params, CP)
     self.debug_button = 0
     self.cut_in_car_alert = False
     self.cut_in_car_time = 0
     
+
 
     # hud
     self.hud_timer_alert = 0
@@ -46,6 +48,7 @@ class CarController():
     self.steer_timer_apply_torque = 1.0
     self.DT_STEER = 0.005             # 0.01 1sec, 0.005  2sec
     self.scc_live = not CP.radarOffCan
+
 
 
 

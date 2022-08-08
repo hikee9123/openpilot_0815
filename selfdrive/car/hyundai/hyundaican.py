@@ -91,7 +91,7 @@ def create_hda_mfc(packer, CS, c ):
   values = CS.lfahda
   enabled = c.enabled
 
-  #if CS.cruise_set_mode == 0:
+
   ldwSysState = 0
   if c.hudControl.leftLaneVisible :
      ldwSysState += 1

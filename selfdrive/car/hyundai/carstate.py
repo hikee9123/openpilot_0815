@@ -43,7 +43,7 @@ class CarState(CarStateBase):
     self.prev_acc_set_btn = False
     self.acc_active = 0
     self.cruise_set_speed_kph = 0
-    self.cruise_set_mode = 1     # 모드 설정.
+    self.cruise_set_mode = 0     # 모드 설정.
     self.gasPressed = False
     self.aReqValue = 0
 
@@ -240,10 +240,7 @@ class CarState(CarStateBase):
 
       self.cruise_available = cp_cruise.vl["SCC11"]["MainMode_ACC"] == 1
       self.acc_mode = cp_cruise.vl["SCC12"]["ACCMode"] != 0
-      if self.cruise_set_mode == 4:
-        ret.cruiseState.available = False
-      else:
-        ret.cruiseState.available = self.cruise_available
+      ret.cruiseState.available = self.cruise_available
       ret.cruiseState.standstill = cp_cruise.vl["SCC11"]["SCCInfoDisplay"] == 4.
 
 

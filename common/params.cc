@@ -243,7 +243,9 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrRightLaneOffset", PERSISTENT}, 
 
     // osm
-    {"OpkrOSMEnable", PERSISTENT},    
+    {"OpkrOSMEnable", PERSISTENT},
+    {"OpkrOSMCurvDecelOption", PERSISTENT},
+    
 };
 
 } // namespace

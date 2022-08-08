@@ -44,7 +44,7 @@ class CarInterface(CarInterfaceBase):
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], disable_radar=False):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
 
-
+    Param = Params()
     ret.carName = "hyundai"
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundai, 0)]
     ret.radarOffCan = False  # RADAR_START_ADDR not in fingerprint[1] or DBC[ret.carFingerprint]["radar"] is None
@@ -52,26 +52,29 @@ class CarInterface(CarInterfaceBase):
 
 
     if (candidate in LEGACY_SAFETY_MODE_CAR):
-      ret.atompilotLongitudinalControl = Params().get_bool("OpkratomLongitudinal")
+      ret.atompilotLongitudinalControl = Param.get_bool("OpkratomLongitudinal")
     else:
       # WARNING: disabling radar also disables AEB (and we show the same warning on the instrument cluster as if you manually disabled AEB)
       ret.openpilotLongitudinalControl = disable_radar and (candidate not in (LEGACY_SAFETY_MODE_CAR | CAMERA_SCC_CAR))
     
     ret.pcmCruise = not ret.openpilotLongitudinalControl
 
-    ret.opkrAutoResume = Params().get_bool("OpkrAutoResume")    
 
-    ret.maxSteeringAngleDeg = float( Params().get("OpkrMaxAngleLimit", encoding="utf8") )
-    ret.smoothSteer.method = int( Params().get("OpkrSteerMethod", encoding="utf8") )   # 1
-    ret.smoothSteer.maxSteeringAngle = float( Params().get("OpkrMaxSteeringAngle", encoding="utf8") )   # 90
-    ret.smoothSteer.maxDriverAngleWait = float( Params().get("OpkrMaxDriverAngleWait", encoding="utf8") )  # 0.002
-    ret.smoothSteer.maxSteerAngleWait = float( Params().get("OpkrMaxSteerAngleWait", encoding="utf8") )   # 0.001  # 10 sec
-    ret.smoothSteer.driverAngleWait = float( Params().get("OpkrDriverAngleWait", encoding="utf8") )  #0.001 
 
-    ret.laneParam.cameraOffsetAdj = float( Params().get("OpkrCameraOffsetAdj", encoding="utf8") )
-    ret.laneParam.pathOffsetAdj = float( Params().get("OpkrPathOffsetAdj", encoding="utf8") )
-    ret.laneParam.leftLaneOffset = float( Params().get("OpkrLeftLaneOffset", encoding="utf8") )
-    ret.laneParam.rightLaneOffset = float( Params().get("OpkrRightLaneOffset", encoding="utf8") )
+    ret.opkrAutoResume = Param.get_bool("OpkrAutoResume")
+    ret.opkrOsmCurvOption = int( Param.get( "OpkrOSMCurvDecelOption", encoding="utf8" ) )
+
+    ret.maxSteeringAngleDeg = float( Param.get("OpkrMaxAngleLimit", encoding="utf8") )
+    ret.smoothSteer.method = int( Param.get("OpkrSteerMethod", encoding="utf8") )   # 1
+    ret.smoothSteer.maxSteeringAngle = float( Param.get("OpkrMaxSteeringAngle", encoding="utf8") )   # 90
+    ret.smoothSteer.maxDriverAngleWait = float( Param.get("OpkrMaxDriverAngleWait", encoding="utf8") )  # 0.002
+    ret.smoothSteer.maxSteerAngleWait = float( Param.get("OpkrMaxSteerAngleWait", encoding="utf8") )   # 0.001  # 10 sec
+    ret.smoothSteer.driverAngleWait = float( Param.get("OpkrDriverAngleWait", encoding="utf8") )  #0.001 
+
+    ret.laneParam.cameraOffsetAdj = float( Param.get("OpkrCameraOffsetAdj", encoding="utf8") )
+    ret.laneParam.pathOffsetAdj = float( Param.get("OpkrPathOffsetAdj", encoding="utf8") )
+    ret.laneParam.leftLaneOffset = float( Param.get("OpkrLeftLaneOffset", encoding="utf8") )
+    ret.laneParam.rightLaneOffset = float( Param.get("OpkrRightLaneOffset", encoding="utf8") )
 
     # These cars have been put into dashcam only due to both a lack of users and test coverage.
     # These cars likely still work fine. Once a user confirms each car works and a test route is
@@ -440,12 +443,14 @@ class CarInterface(CarInterfaceBase):
     if ret.vEgo > (self.CP.minSteerSpeed + 4.):
       self.low_speed_alert = False
     if self.low_speed_alert:
-      events.add(car.CarEvent.EventName.belowSteerSpeed)
-      #if self.sm['lateralPlan'].laneChangeState == LaneChangeState.laneChangeDisEngage:      
+      events.add(EventName.belowSteerSpeed)
     elif self.CC.cut_in_car_alert:
-      events.add(car.CarEvent.EventName.cutInCarDetect)
+      events.add(EventName.cutInCarDetect)
+    elif self.CC.NC.event_navi_alert != None:
+      events.add( self.CC.NC.event_navi_alert )
+      self.CC.NC.event_navi_alert = None
     #elif self.CS.lkas_button_on == 15:
-    #  events.add(car.CarEvent.EventName.invalidLkasSetting)
+    #  events.add(EventName.invalidLkasSetting)
     
 
     ret.events = events.to_msg()

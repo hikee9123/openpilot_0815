@@ -1119,51 +1119,58 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
    int  valid = osm.getSpeedLimitValid();
    float speedLimit = osm.getSpeedLimit();
-   
-   speedLimit *= 3.6;
+
+  int   speedLimitAheadValid  = osm.getSpeedLimitAheadValid();
+  float speedLimitAhead  = osm.getSpeedLimitAhead();
+  float speedLimitAheadDistance   = osm.getSpeedLimitAheadDistance();
+
+  int   turnSpeedLimitValid  = osm.getTurnSpeedLimitValid();
+  float turnSpeedLimit  = osm.getTurnSpeedLimit();
+  float turnSpeedLimitEndDistance  = osm.getTurnSpeedLimitEndDistance();
+  int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
+
+  int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
+  double lastGpsLatitude  = osm.getLastGpsLatitude();
+  double lastGpsLongitude  = osm.getLastGpsLongitude();
+  float lastGpsSpeed  = osm.getLastGpsSpeed();
+  float lastGpsBearingDeg  = osm.getLastGpsBearingDeg();
+  float lastGpsAccuracy  = osm.getLastGpsAccuracy();
+  float lastGpsBearingAccuracyDeg  = osm.getLastGpsBearingAccuracyDeg();
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
+
+  float *pturnSpeedLimitsAhead  = osm.getTurnSpeedLimitsAhead();  // @9 :List(Float32);
+  float *pturnSpeedLimitsAheadDistances  = osm.getTurnSpeedLimitsAheadDistances();  // @10 :List(Float32);
+  int   *pturnSpeedLimitsAheadSigns  = osm.getTurnSpeedLimitsAheadSigns(); // @11 :List(Int16);
+
+
+
+  speedLimit *= 3.6;
+  if( speedLimit >= 20 )
+  {
+      m_osm.fSpeedLimit = speedLimit;
+  }
+  
+
   QString text4;
 
   int  bb_x = 250;
-  int  nYPos = 700;
-  int  nGap = 80;
-  text4 = "Road Name = " + strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("SpeedLimit = %d, %.0f", valid, speedLimit );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  int  nYPos = 300;
+  int  nGap = 40;
 
-/*
-  int   nSignal = 0;
-  float fe2ex = scene->longitudinalPlan.e2ex[12];
-  float fstopline = scene->longitudinalPlan.stopline[12];
-
-  if ( fe2ex > 30 && fstopline < 10 && scene->car_state.getVEgo() < 0.5) {
-    nSignal = 1;
-  } else if ( fe2ex > 0 && fe2ex < 100 && fstopline < 100) {
-    nSignal = 2;
-  }
-
-  int bb_x = 250;
-  int bb_y = 700;
-  int  nYPos = bb_y;
-  int  nGap = 80;
-
-  QString text4;
-
-
-  configFont( p, "Open Sans",  70, "Regular");
-  if ( nSignal == 0  ) 
+  text4 = "RN = " + strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("SL = %d, %.0f", valid, m_osm.fSpeedLimit );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("SLA = %d, %.0f, %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("TSL = %d, %.1f, %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  if( pturnSpeedLimitsAheadSigns )
   {
-    float   remainTime =  scene->liveNaviData.getRemainTime();
-    float   roadCurvature =  scene->liveNaviData.getRoadCurvature();
-
-    text4.sprintf("remainTime = %.2f", remainTime );  p.drawText( bb_x, nYPos+=nGap, text4 );
-    text4.sprintf("roadCurvature = %.2f", roadCurvature );  p.drawText( bb_x, nYPos+=nGap, text4 );
-    return;
+    for( int i = 0; i<2; i++ )  // max 15.
+    {
+      text4.sprintf("TSLA.%d = %d, %.1f, %.1f",i, pturnSpeedLimitsAheadSigns[i], pturnSpeedLimitsAhead[i], pturnSpeedLimitsAheadDistances[i] );  p.drawText( bb_x, nYPos+=nGap, text4 );
+    }
   }
 
-  text4.sprintf("e2ex = %.0f", fe2ex );  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("stopline = %.0f", fstopline );  p.drawText( bb_x, nYPos+=nGap, text4 );
-*/
+  text4.sprintf("GPS = %d, %.1f, %.1f, %.1f, %.1f, %.1f, %.1f", lastGpsTimestamp, lastGpsLatitude, lastGpsLongitude, lastGpsSpeed, lastGpsBearingDeg, lastGpsAccuracy, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 

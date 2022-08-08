@@ -104,6 +104,8 @@ def manager_init() -> None:
     
     # osm
     ("OpkrOSMEnable", "0"), 
+    ("OpkrOSMCurvDecelOption", "0"), 
+    
     
   ]
   if not PC:

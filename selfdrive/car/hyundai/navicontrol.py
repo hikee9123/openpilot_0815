@@ -2,7 +2,7 @@ import math
 import numpy as np
 
 
-
+from cereal import car
 from common.conversions import Conversions as CV
 from selfdrive.car.hyundai.values import Buttons
 from common.numpy_fast import clip, interp
@@ -13,12 +13,14 @@ import common.MoveAvg as mvAvg
 
 #from selfdrive.road_speed_limiter import  road_speed_limiter_get_active, get_road_speed_limiter
 
+EventName = car.CarEvent.EventName
 
 class NaviControl():
-  def __init__(self, p = None ):
+  def __init__(self, p , CP ):
     self.p = p
+    self.CP = CP
     
-    self.sm = messaging.SubMaster(['liveNaviData','lateralPlan','radarState','modelV2']) 
+    self.sm = messaging.SubMaster(['liveNaviData','lateralPlan','radarState','modelV2','liveMapData']) 
 
     self.btn_cnt = 0
     self.seq_command = 0
@@ -30,14 +32,15 @@ class NaviControl():
     self.moveAvg = mvAvg.MoveAvg()
 
     self.gasPressed_time = 0
-    self.gasWait_time = 0
+
 
     self.frame_camera = 0
     self.VSetDis = 30
     self.frame_VSetDis = 30
 
+    self.event_navi_alert = None
 
-
+    # self.CP.opkrOsmCurvOption
 
   def update_lateralPlan( self ):
     self.sm.update(0)
@@ -217,38 +220,45 @@ class NaviControl():
     return  cruise_set_speed_kph
 
 
+  def osm_speed_control( self, c, CS, ctrl_speed ):
+    liveMapData = self.sm['liveMapData']
+    if liveMapData.turnSpeedLimitEndDistance > 30 and CS.out.vEgo > 8.3:
+      turnSpeedLimit = liveMapData.turnSpeedLimit
+      if ctrl_speed > turnSpeedLimit:  # osm speed control.
+        self.event_navi_alert = EventName.curvSpeedDown
+    else:
+      turnSpeedLimit = ctrl_speed
+
+    return turnSpeedLimit
+
   def auto_speed_control( self, c, CS, ctrl_speed, path_plan ):
-    cruise_speed = False
-    if CS.cruise_set_mode == 2:
+    cruise_set_speed = 0
+    if CS.gasPressed:
+      self.gasPressed_time = 100
+    elif self.gasPressed_time > 0:
+      self.gasPressed_time -= 1
+      if self.gasPressed_time <= 0:
+        cruise_set_speed = CS.clu_Vanz - 5
+    elif CS.cruise_set_mode == 1:  # osm control speed.
+      osm_speed = self.osm_speed_control( c, CS, ctrl_speed )
+      ctrl_speed = min( osm_speed, ctrl_speed )
+    elif CS.cruise_set_mode == 2:  # comma long control speed.
       vFuture = c.hudControl.vFuture * CV.MS_TO_KPH
       ctrl_speed = min( vFuture, ctrl_speed )
-    elif CS.gasPressed:
-      self.gasPressed_time += 1
-      if self.gasPressed_time > 100:
-        self.gasPressed_time = 0
-        cruise_speed = True
-    elif self.gasPressed_time:
-      self.gasPressed_time = 0
-      self.gasWait_time = 500      
-      cruise_speed = True
-    elif CS.cruise_set_mode == 3:
-      if self.gasWait_time > 0:
-        self.gasWait_time -= 1
-      elif ctrl_speed > 90:
-        modelSpeed = path_plan.modelSpeed * CV.MS_TO_KPH
-        dRate = interp( modelSpeed, [80,200], [ 0.9, 1 ] )
-        ctrl_speed *= dRate
-        if ctrl_speed < 90:
-          ctrl_speed = 90
-
-    clu_Vanz = CS.clu_Vanz
+    elif CS.cruise_set_mode == 3:  # vision의 모델 speed를 이용한 감속.
+      modelSpeed = path_plan.modelSpeed * CV.MS_TO_KPH
+      vision_speed = interp( modelSpeed, [80, 250], [ 60, 120 ] )
+      ctrl_speed = min( vision_speed, ctrl_speed )
 
 
-    if cruise_speed:
-      ctrl_speed = max( ctrl_speed, clu_Vanz )
-      CS.set_cruise_speed( ctrl_speed )  
+    if cruise_set_speed > 30:
+      CS.set_cruise_speed( cruise_set_speed )  
 
     return  ctrl_speed
+
+
+
+
 
 
   def update(self, c, CS, path_plan, frame ):  

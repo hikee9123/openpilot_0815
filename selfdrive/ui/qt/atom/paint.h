@@ -102,7 +102,13 @@ private:
   QPixmap img_rpm2;
 
 
-
+// osm
+private:
+  struct _OSM__
+  {
+    float  fSpeedLimit;
+  } m_osm;
+   
 
 
 // navi
