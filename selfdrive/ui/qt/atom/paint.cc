@@ -803,33 +803,33 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
 
     QPixmap  *traffic_sign = NULL;
 
-    if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  // êµ½ì€ë„ë¡œ
-    else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;  // ê°€ë³€ ë‹¨ì†. ( by opkr)
-    else if( nTrafficSign == TS_BUS_ONLY ) traffic_sign = &img_bus_only;  // ë²„ìŠ¤ì „ìš©ì°¨ë¡œë‹¨ì†
-    else if( nTrafficSign == TS_BUMP_ROAD ) traffic_sign = &img_speed_bump;  // ê³¼ì†ë°©ì§€í„±
-    else if( nTrafficSign == TS_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;  // ìŠ¤í´ì¡´
-    else if( nTrafficSign == TS_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone;  // ìŠ¤í´ì¡´
-    else if( nTrafficSign == TS_CURVE_RIGHT ) traffic_sign = &img_curve_right;  // ì˜¤ë¥¸ìª½ ê¸‰ì»¤ë¸Œ
-    else if( nTrafficSign == TS_CURVE_LEFT ) traffic_sign = &img_curve_left;  // ì™¼ìª½ ê¸‰ì»¤ë¸Œ
-    else if( nTrafficSign == TS_NARROW_ROAD ) traffic_sign = &img_narrow_road; // ì¢ì•„ì§€ëŠ” ë„ë¡œ
-    else if( nTrafficSign == TS_RAIL_ROAD ) traffic_sign = &img_rail_road;   // ì² ê¸¸ê±´ë„ëª©
-    else if( nTrafficSign == TS_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;  // ì£¼ì •ì°¨ë‹¨ì†
-    else if( nTrafficSign == TS_LANE_CHANGE1 ) traffic_sign = &img_img_space;  // ì°¨ì„ ë³€ê²½ê¸ˆì§€ì‹œìž‘
-    else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space;  // ì°¨ì„ ë³€ê²½ê¸ˆì§€ì¢…ë£Œ
-    else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space;  // ê³¼ì ë‹¨ì†
-    else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space;  // êµí†µì •ë³´ìˆ˜ì§‘
-    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  // ì¶”ì›”ê¸ˆì§€êµ¬ê°„
-    else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; // ê°“ê¸¸ë‹¨ì†
-    else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space;  // ì ìž¬ë¶ˆëŸ‰ë‹¨ì†  
+    if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  // êµ½ì???„ë¡?
+    else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;  // ê°?ë³? ?‹¨?†. ( by opkr)
+    else if( nTrafficSign == TS_BUS_ONLY ) traffic_sign = &img_bus_only;  // ë²„ìŠ¤? „?š©ì°¨ë¡œ?‹¨?†
+    else if( nTrafficSign == TS_BUMP_ROAD ) traffic_sign = &img_speed_bump;  // ê³¼ì†ë°©ì???„±
+    else if( nTrafficSign == TS_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;  // ?Š¤?´ì¡?
+    else if( nTrafficSign == TS_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone;  // ?Š¤?´ì¡?
+    else if( nTrafficSign == TS_CURVE_RIGHT ) traffic_sign = &img_curve_right;  // ?˜¤ë¥¸ìª½ ê¸‰ì»¤ë¸?
+    else if( nTrafficSign == TS_CURVE_LEFT ) traffic_sign = &img_curve_left;  // ?™¼ìª? ê¸‰ì»¤ë¸?
+    else if( nTrafficSign == TS_NARROW_ROAD ) traffic_sign = &img_narrow_road; // ì¢ì•„ì§??Š” ?„ë¡?
+    else if( nTrafficSign == TS_RAIL_ROAD ) traffic_sign = &img_rail_road;   // ì² ê¸¸ê±´ë„ëª?
+    else if( nTrafficSign == TS_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;  // ì£¼ì •ì°¨ë‹¨?†
+    else if( nTrafficSign == TS_LANE_CHANGE1 ) traffic_sign = &img_img_space;  // ì°¨ì„ ë³?ê²½ê¸ˆì§??‹œ?ž‘
+    else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space;  // ì°¨ì„ ë³?ê²½ê¸ˆì§?ì¢…ë£Œ
+    else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space;  // ê³¼ì ?‹¨?†
+    else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space;  // êµí†µ? •ë³´ìˆ˜ì§?
+    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  // ì¶”ì›”ê¸ˆì??êµ¬ê°„
+    else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; // ê°“ê¸¸?‹¨?†
+    else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space;  // ? ?ž¬ë¶ˆëŸ‰?‹¨?†  
     
-    //else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// ë‹¨ì†ì¹´ë©”ë¼(ì‹ í˜¸ìœ„ë°˜ì¹´ë©”ë¼)  
-    else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; // ê³ ì •ì‹  - í˜¸ì•¼
-    //else if( nTrafficSign == TS_CAMERA3 ) traffic_sign = &img_img_space; // ê²½ì°°ì°¨(ì´ë™ì‹)  - í˜¸ì•¼
-    //else if( nTrafficSign == TS_CAMERA4 ) traffic_sign = &img_img_space; // ë‹¨ì†êµ¬ê°„(ê³ ì •í˜• ì´ë™ì‹)
-    //else if( nTrafficSign == TS_CAMERA5  ) traffic_sign = &img_img_space;  // ë‹¨ì†(ì¹´ë©”ë¼, ì‹ í˜¸ìœ„ë°˜)    
+    //else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// ?‹¨?†ì¹´ë©”?¼(?‹ ?˜¸?œ„ë°˜ì¹´ë©”ë¼)  
+    else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; // ê³ ì •?‹  - ?˜¸?•¼
+    //else if( nTrafficSign == TS_CAMERA3 ) traffic_sign = &img_img_space; // ê²½ì°°ì°?(?´?™?‹)  - ?˜¸?•¼
+    //else if( nTrafficSign == TS_CAMERA4 ) traffic_sign = &img_img_space; // ?‹¨?†êµ¬ê°„(ê³ ì •?˜• ?´?™?‹)
+    //else if( nTrafficSign == TS_CAMERA5  ) traffic_sign = &img_img_space;  // ?‹¨?†(ì¹´ë©”?¼, ?‹ ?˜¸?œ„ë°?)    
     else if( speedLimit ) 
     {
-      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )   // êµ¬ê°„ ë‹¨ì†
+      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )   // êµ¬ê°„ ?‹¨?†
       {
         traffic_sign = &img_section;
       }
@@ -1087,7 +1087,7 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
  
 
-  if( nDelta > 1*60 ) return; // 1 ë¶„.
+  if( nDelta > 1*60 ) return; // 1 ë¶?.
 
   int nVersion = scene->update_data.getVersion();
   if( nVersion <= 1 )
@@ -1146,7 +1146,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 //  int   *pturnSpeedLimitsAheadSigns  = (int*) osm.getTurnSpeedLimitsAheadSigns();
 
 
-  speedLimitAhead * 3.6;
+  speedLimitAhead *= 3.6;
   speedLimit *= 3.6;
   turnSpeedLimit *= 3.6;
 	
