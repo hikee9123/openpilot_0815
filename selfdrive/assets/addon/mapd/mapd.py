@@ -62,7 +62,7 @@ class MapD():
     self._disengaging = not controls_state.enabled and self._op_enabled
     self._op_enabled = controls_state.enabled
 
-  def angle( degree, x1, y1 ):
+  def angle( self, degree, x1, y1 ):
     rad = degree * math.pi / 180  # 각도 설정.
     x2 = math.cos(rad) * x1 - math.sin(rad) * y1
     y2 = math.sin(rad) * x1 + math.cos(rad) * y1
