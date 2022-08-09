@@ -1131,7 +1131,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float turnSpeedLimitEndDistance  = osm.getTurnSpeedLimitEndDistance();
   int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
 
- // int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
+  int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
   double lastGpsLatitude  = osm.getLastGpsLatitude();
   double lastGpsLongitude  = osm.getLastGpsLongitude();
   float lastGpsSpeed  = osm.getLastGpsSpeed();
@@ -1142,8 +1142,8 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
   
   
-  m_osm.delta_gpstimestamp = turnSpeedLimitValid - m_osm.lastGpsTimestamp;
-  m_osm.lastGpsTimestamp = turnSpeedLimitValid;
+  m_osm.delta_gpstimestamp = lastGpsTimestamp - m_osm.lastGpsTimestamp;
+  m_osm.lastGpsTimestamp = lastGpsTimestamp;
 
 
   speedLimitAhead *= 3.6;
