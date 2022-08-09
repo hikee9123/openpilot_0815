@@ -1131,7 +1131,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float turnSpeedLimitEndDistance  = osm.getTurnSpeedLimitEndDistance();
   int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
 
-  int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
+ // int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
   double lastGpsLatitude  = osm.getLastGpsLatitude();
   double lastGpsLongitude  = osm.getLastGpsLongitude();
   float lastGpsSpeed  = osm.getLastGpsSpeed();
