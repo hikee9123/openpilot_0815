@@ -62,7 +62,7 @@ class MapD():
     self._disengaging = not controls_state.enabled and self._op_enabled
     self._op_enabled = controls_state.enabled
 
-  def angle( self, degree, x1, y1 ):
+  def rotate( self, degree, x1, y1 ):
     rad = degree * math.pi / 180  # 각도 설정.
     x2 = math.cos(rad) * x1 - math.sin(rad) * y1
     y2 = math.sin(rad) * x1 + math.cos(rad) * y1
@@ -84,7 +84,7 @@ class MapD():
     gps_latitude = log.latitude     # y
     gps_longitude = log.longitude   # x
     gps_degree = log.bearingDeg
-    x_long, y_lat = self.angle( gps_degree, 0, 0.0009 )  # 0.0009 약 100m
+    x_long, y_lat = self.rotate( gps_degree, 0, 0.0009 )  # 0.0009 약 100m
     _debug( f'Mapd: ** rotate {gps_degree} = x_long:{x_long}, y_lat:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
 
     delta_latitude = gps_latitude - self._gps_latitude
