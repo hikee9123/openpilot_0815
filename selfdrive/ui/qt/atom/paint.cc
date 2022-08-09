@@ -1141,6 +1141,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
   
+  if( valid == 0 ) return;
   
   m_osm.delta_gpstimestamp = lastGpsTimestamp - m_osm.lastGpsTimestamp;
   m_osm.lastGpsTimestamp = lastGpsTimestamp;
