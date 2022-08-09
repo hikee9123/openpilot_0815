@@ -106,6 +106,8 @@ private:
 private:
   struct _OSM__
   {
+    int    lastGpsTimestamp;
+    int    delta_gpstimestamp;
     float  fSpeedLimit;
   } m_osm;
    

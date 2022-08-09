@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import math
 import threading
 from traceback import print_exception
 import numpy as np
@@ -57,6 +58,13 @@ class MapD():
     self._disengaging = not controls_state.enabled and self._op_enabled
     self._op_enabled = controls_state.enabled
 
+  def angle( degree, x1, y1 ):
+    rad = degree * math.pi / 180  # 각도 설정.
+    x2 = math.cos(rad) * x1 - math.sin(rad) * y1
+    y2 = math.sin(rad) * x1 + math.cos(rad) * y1
+
+    return x2, y2
+
   def update_gps(self, sm):
     sock = 'gpsLocationExternal'
     if not sm.updated[sock] or not sm.valid[sock]:
@@ -69,9 +77,16 @@ class MapD():
     if log.flags % 2 == 0:
       return
 
+    gps_latitude = log.latitude     # y
+    gps_longitude = log.longitude   # x
+    gps_degree = log.bearingDeg
+    x_long, y_lat = self.angle( gps_degree,  0.0009, 0 )  # 0.0009 약 100m
+
+    _debug( f'Mapd: ** rotate {gps_degree} = x:{x_long}, y:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
+
     self.last_gps_fix_timestamp = log.timestamp  # Unix TS. Milliseconds since January 1, 1970.
-    self.location_rad = np.radians(np.array([log.latitude, log.longitude], dtype=float))
-    self.location_deg = (log.latitude, log.longitude)
+    self.location_rad = np.radians(np.array([gps_latitude, gps_longitude], dtype=float))
+    self.location_deg = (gps_latitude, gps_longitude)
     self.bearing_rad = np.radians(log.bearingDeg, dtype=float)
     self.gps_speed = log.speed
     self.location_stdev = log.accuracy  # log accuracies are presumably 1 standard deviation.

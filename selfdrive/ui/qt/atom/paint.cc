@@ -1131,7 +1131,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float turnSpeedLimitEndDistance  = osm.getTurnSpeedLimitEndDistance();
   int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
 
-  //int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
+  int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
   double lastGpsLatitude  = osm.getLastGpsLatitude();
   double lastGpsLongitude  = osm.getLastGpsLongitude();
   float lastGpsSpeed  = osm.getLastGpsSpeed();
@@ -1140,10 +1140,10 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float lastGpsBearingAccuracyDeg  = osm.getLastGpsBearingAccuracyDeg();
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
-
-   
-
-
+  
+  
+  m_osm.delta_gpstimestamp = turnSpeedLimitValid - m_osm.lastGpsTimestamp
+  m_osm.lastGpsTimestamp = turnSpeedLimitValid
 
 
   speedLimitAhead *= 3.6;
@@ -1184,9 +1184,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
       p.drawText( bb_x, nYPos+=nGap, text4 );
   }
 
-
+  lastGpsSpeed *= 3.6;
   nYPos += nGap;
-  text4.sprintf("GPS = %.5f, %.5f, %.1f, %.1f, %.2f, %.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed, lastGpsBearingDeg, lastGpsAccuracy, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("GPS(%d) = %.5f, %.5f, %.0f, %.2f, %.1f,%.1f", m_osm.delta_gpstimestamp,  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed,  lastGpsAccuracy, lastGpsBearingDeg, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 
