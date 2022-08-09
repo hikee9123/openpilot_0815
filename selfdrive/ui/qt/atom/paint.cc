@@ -1176,7 +1176,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   for( int i = 0; i<1; i++ )  // max 15.
   {
-      float tsla_spd = urnSpeedLimitsAhead[i];
+      float tsla_spd = turnSpeedLimitsAhead[i];
       float tsla_dist = turnSpeedLimitsAheadDistances[i];
       int   tsla_sign = turnSpeedLimitsAheadSigns[i];
 
