@@ -1175,12 +1175,12 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
  
 
-  for( int i = 0; i<1; i++ )  // max 15.
+  for( int i = 0; i<3; i++ )  // max 15.
   {
     if( turnSpeedLimitValid == 0 ) break;
      float tsla_spd =  osm.getTurnSpeedLimitsAhead()[i];
-     float tsla_dist = 0; // osm.getTurnSpeedLimitsAheadDistances()[i];
-     int  tsla_sign = 0;  // osm.getTurnSpeedLimitsAheadSigns()[i];
+     float tsla_dist =  osm.getTurnSpeedLimitsAheadDistances()[i];
+     int  tsla_sign = osm.getTurnSpeedLimitsAheadSigns()[i];
 
      text4.sprintf("TSLA.%d =  %.1f, %.1f,  %d", i, tsla_spd, tsla_dist, tsla_sign );
      p.drawText( bb_x, nYPos+=nGap, text4 );
