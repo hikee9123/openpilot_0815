@@ -1142,8 +1142,8 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
   
   
-  m_osm.delta_gpstimestamp = turnSpeedLimitValid - m_osm.lastGpsTimestamp
-  m_osm.lastGpsTimestamp = turnSpeedLimitValid
+  m_osm.delta_gpstimestamp = turnSpeedLimitValid - m_osm.lastGpsTimestamp;
+  m_osm.lastGpsTimestamp = turnSpeedLimitValid;
 
 
   speedLimitAhead *= 3.6;
