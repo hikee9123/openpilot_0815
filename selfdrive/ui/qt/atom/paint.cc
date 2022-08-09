@@ -1144,6 +1144,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   if( m_osm.fSpeedLimit <= 0 )
   {
      if( valid ) m_osm.fSpeedLimit = 1;
+     else if( speedLimitAheadValid ) m_osm.fSpeedLimit = 1;
      else if (turnSpeedLimitValid) m_osm.fSpeedLimit = 1;
      return;
   }
