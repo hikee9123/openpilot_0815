@@ -49,6 +49,10 @@ class MapD():
     self._query_thread = None
     self._lock = threading.RLock()
 
+    self._gps_latitude = 0
+    self._gps_longitude = 0
+    self._gps_degree = 0
+
   def udpate_state(self, sm):
     sock = 'controlsState'
     if not sm.updated[sock] or not sm.valid[sock]:
@@ -81,8 +85,17 @@ class MapD():
     gps_longitude = log.longitude   # x
     gps_degree = log.bearingDeg
     x_long, y_lat = self.angle( gps_degree,  0.0009, 0 )  # 0.0009 약 100m
+    _debug( f'Mapd: ** rotate {gps_degree} = x_long:{x_long}, y_lat:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
 
-    _debug( f'Mapd: ** rotate {gps_degree} = x:{x_long}, y:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
+    delta_latitude = gps_latitude - self._gps_latitude
+    delta_longitude =  gps_longitude - self._gps_longitude
+    delta_degree =  gps_degree  - self._gps_degree
+    _debug( f'Mapd: ** delta {delta_degree} = x_long:{delta_longitude}, y_lat:{delta_latitude} ' )
+
+
+    self._gps_latitude = gps_latitude
+    self._gps_longitude = gps_longitude
+    self._gps_degree = gps_degree
 
     self.last_gps_fix_timestamp = log.timestamp  # Unix TS. Milliseconds since January 1, 1970.
     self.location_rad = np.radians(np.array([gps_latitude, gps_longitude], dtype=float))
