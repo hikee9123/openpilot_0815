@@ -1174,7 +1174,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
  
-
+/*
   for( int i = 0; i<3; i++ )  // max 15.
   {
     if( turnSpeedLimitValid == 0 ) break;
@@ -1185,7 +1185,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
      text4.sprintf("TSLA.%d =  %.1f, %.1f,  %d", i, tsla_spd, tsla_dist, tsla_sign );
      p.drawText( bb_x, nYPos+=nGap, text4 );
   }
-
+*/
   int stamp = 0;
   if(  m_osm.delta_gpstimestamp ) stamp = 1;
   lastGpsSpeed *= 3.6;
