@@ -1141,11 +1141,11 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
   
-  if( valid == 0 ) return;
+  if( m_osm.fSpeedLimit <= 10 ) return;
   
   m_osm.delta_gpstimestamp = lastGpsTimestamp - m_osm.lastGpsTimestamp;
   m_osm.lastGpsTimestamp = lastGpsTimestamp;
-
+  
 
   speedLimitAhead *= 3.6;
   speedLimit *= 3.6;
@@ -1181,9 +1181,11 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
      p.drawText( bb_x, nYPos+=nGap, text4 );
   }
 
+  int stamp = 0;
+  if(  m_osm.delta_gpstimestamp ) stamp = 1;
   lastGpsSpeed *= 3.6;
   nYPos += nGap;
-  text4.sprintf("GPS(%d) = %.5f, %.5f, %.0f, %.2f, %.1f,%.1f", m_osm.delta_gpstimestamp,  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed,  lastGpsAccuracy, lastGpsBearingDeg, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("GPS(%d) = %.5f, %.5f, %.0f, %.2f, %.1f,%.1f", stamp,  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed,  lastGpsAccuracy, lastGpsBearingDeg, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 
