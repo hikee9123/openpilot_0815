@@ -83,7 +83,7 @@ class MapD():
 
     gps_latitude = log.latitude     # y
     gps_longitude = log.longitude   # x
-    gps_degree = log.bearingDeg
+    gps_degree = -log.bearingDeg
     x_long, y_lat = self.rotate( gps_degree, 0, 0.0009 )  # 0.0009 약 100m
     _debug( f'Mapd: ** rotate {gps_degree} = x_long:{x_long}, y_lat:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
 
