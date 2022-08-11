@@ -219,6 +219,11 @@ class NaviControl():
     cruise_set_speed_kph = min( spdTarget, v_ego_kph )
     return  cruise_set_speed_kph
 
+  def osm_turnLimit_alert( self, CS ):
+    liveMapData = self.sm['liveMapData']
+    if liveMapData.turnSpeedLimitEndDistance > 30 and CS.out.vEgo > 8.3:
+      self.event_navi_alert = EventName.curvSpeedDown
+
 
   def osm_speed_control( self, c, CS, ctrl_speed ):
     liveMapData = self.sm['liveMapData']

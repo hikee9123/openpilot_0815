@@ -241,6 +241,8 @@ class CarController():
       else:
         self.debug_button = 0
         self.resume_cnt = 0
+    else:
+      self.NC.osm_turnLimit_alert( CS )
 
     return  can_sends
 
@@ -321,6 +323,7 @@ class CarController():
       self.updateLongitudinal( can_sends, c, CS )
     else:
       self.update_resume( can_sends, c, CS, path_plan )
+
 
     if self.CP.atompilotLongitudinalControl:
       if (self.frame % 2 == 0) and CS.cruise_set_mode == 2:
