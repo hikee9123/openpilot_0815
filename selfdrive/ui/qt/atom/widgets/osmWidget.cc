@@ -77,7 +77,7 @@ void  CosmWidget::FrameOSM(QVBoxLayout *layout)
      );
 
   pMenu2->SetControl( 0, 1, 1 );
-  layout->pMenu2( pMenu1 );
+  layout->pMenu2( pMenu2 );
 }
 
 
@@ -380,7 +380,7 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
 
 
 
-void CWidgetosmConfig::refresh( int nID )
+void CWidgetosmNodesData::refresh( int nID )
 {
   CGroupWidget::refresh( m_nMethod );
  
