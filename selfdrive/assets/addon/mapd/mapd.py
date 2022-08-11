@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import math
 import threading
+from common.params import Params
 from traceback import print_exception
 import numpy as np
 from time import strftime, gmtime
