@@ -77,7 +77,7 @@ void  CosmWidget::FrameOSM(QVBoxLayout *layout)
      );
 
   pMenu2->SetControl( 0, 1, 1 );
-  layout->pMenu2( pMenu2 );
+  layout->addWidget( pMenu2 );
 }
 
 
