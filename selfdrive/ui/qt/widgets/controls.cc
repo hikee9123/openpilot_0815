@@ -153,8 +153,8 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet( R"(
     color: #e0e879;
-    font-size: 30px;
-    font-weight: 100;    
+    font-size: 70px;
+    font-weight: 300;    
     background-color: transparent;    
   )");
 
