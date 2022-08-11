@@ -40,8 +40,10 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
   main_layout->addWidget(new CTunWidget(this));    
   main_layout->addWidget(new CSteerWidget(this));  
   main_layout->addWidget(new CLaneWidget(this));  
-  main_layout->addWidget(new CosmWidget(this));  
   
+  main_layout->addWidget(new CosmWidget(this));  
+  main_layout->addWidget(new CWidgetosmConfig(this));
+  main_layout->addWidget(new CWidgetosmNodesData(this));
 }
 
 

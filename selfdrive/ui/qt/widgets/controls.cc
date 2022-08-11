@@ -153,8 +153,8 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet( R"(
     color: #e0e879;
-    font-size: 70px;
-    font-weight: 300;    
+    font-size: 50px;
+    font-weight: 200;    
     background-color: transparent;    
   )");
 
@@ -185,13 +185,15 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
       if(  m_nDelta <= 0.105 )  m_nDelta = 1;
       else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
       else if(  m_nDelta <= 10.05 )  m_nDelta = 100;
+      else if(  m_nDelta <= 100.05 )  m_nDelta = 1000;
       else m_nDelta = 0.1;
     }
     else if( m_defDelta >= 1 )
     {
       if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
       else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
-      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;      
+      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
+      else if(  m_nDelta <= 10.05 )  m_nDelta = 100;      
       else m_nDelta = 0.01;
     }      
     else if( m_defDelta >= 0.1 )
@@ -199,6 +201,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
       if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
       else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
       else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
       else m_nDelta = 0.001;
     }    
     else if( m_defDelta >= 0.01 )
@@ -206,6 +209,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
       if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
       else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
       else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
       else m_nDelta = 0.0001;
     }       
     else 
@@ -213,6 +217,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
       if(  m_nDelta <= 0.000015 )  m_nDelta = 0.0001;
       else if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
       else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
       else m_nDelta = 0.00001;
     }
 

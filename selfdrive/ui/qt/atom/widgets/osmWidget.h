@@ -47,3 +47,61 @@ public:
 public slots:  
   virtual void refresh(int nID = 0);  
 };
+
+
+
+class CWidgetosmConfig : public CGroupWidget 
+{
+  Q_OBJECT
+
+public:
+  explicit CWidgetosmConfig( TuningPanel *panel );
+
+  enum emType {
+    TP_NONE = 0,
+    TP_USES,
+    TP_ALL,
+  };  
+
+ private:
+  TuningPanel  *m_pPanel;
+  QPushButton  *method_label;
+  int    m_nMethod;
+  Params params;
+  
+  void  FrameOSM(QVBoxLayout *parent=nullptr);
+
+  
+
+public slots:  
+  virtual void refresh(int nID = 0);  
+};
+
+
+
+class CWidgetosmNodesData : public CGroupWidget 
+{
+  Q_OBJECT
+
+public:
+  explicit CWidgetosmNodesData( TuningPanel *panel );
+
+  enum emType {
+    TP_NONE = 0,
+    TP_USES,
+    TP_ALL,
+  };  
+
+ private:
+  TuningPanel  *m_pPanel;
+  QPushButton  *method_label;
+  int    m_nMethod;
+  Params params;
+  
+  void  FrameOSM(QVBoxLayout *parent=nullptr);
+
+  
+
+public slots:  
+  virtual void refresh(int nID = 0);  
+};
