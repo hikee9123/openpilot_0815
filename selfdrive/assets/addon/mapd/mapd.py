@@ -14,8 +14,8 @@ from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NE
 
 
 #_DEBUG = True
-_DEBUG  = Params().get_bool("OpkrOSMDebug", encoding="utf8")
-PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE", encoding="utf8") ) # 100.  #  1 about 1M distance
+_DEBUG  = Params().get_bool("OpkrOSMDebug")
+PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
 
 def _debug(msg):
   if not _DEBUG:
