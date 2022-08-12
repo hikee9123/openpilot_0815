@@ -10,12 +10,12 @@ from common.realtime import Ratekeeper
 from selfdrive.assets.addon.mapd.lib.osm import OSM
 from selfdrive.assets.addon.mapd.lib.geo import distance_to_points
 from selfdrive.assets.addon.mapd.lib.WayCollection import WayCollection
-from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NEW_QUERY, FULL_STOP_MAX_SPEED, LOOK_AHEAD_HORIZON_TIME, PRE_LANE_DISTANCE
+from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NEW_QUERY, FULL_STOP_MAX_SPEED, LOOK_AHEAD_HORIZON_TIME
 
 
-_DEBUG  = Params().get_bool("OpkrOSMDebug", encoding="utf8")
 #_DEBUG = True
-
+_DEBUG  = Params().get_bool("OpkrOSMDebug", encoding="utf8")
+PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE", encoding="utf8") ) # 100.  #  1 about 1M distance
 
 def _debug(msg):
   if not _DEBUG:
