@@ -247,6 +247,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrOSMCurvDecelOption", PERSISTENT},
     {"OpkrOSMDebug", PERSISTENT},
 
+    // osm config
     {"OpkrOSM_QUERY_RADIUS", PERSISTENT},
     {"OpkrOSM_MIN_DISTANCE_FOR_NEW_QUERY", PERSISTENT},
     {"OpkrOSM_FULL_STOP_MAX_SPEED", PERSISTENT},
