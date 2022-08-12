@@ -10,7 +10,7 @@ from common.realtime import Ratekeeper
 from selfdrive.assets.addon.mapd.lib.osm import OSM
 from selfdrive.assets.addon.mapd.lib.geo import distance_to_points
 from selfdrive.assets.addon.mapd.lib.WayCollection import WayCollection
-from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NEW_QUERY, FULL_STOP_MAX_SPEED, LOOK_AHEAD_HORIZON_TIME, PRE_VLANE_DISTANCE
+from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NEW_QUERY, FULL_STOP_MAX_SPEED, LOOK_AHEAD_HORIZON_TIME, PRE_LANE_DISTANCE
 
 
 _DEBUG  = int( Params().get("OpkrOSMDebug", encoding="utf8") )
@@ -86,7 +86,7 @@ class MapD():
     gps_latitude = log.latitude     # y
     gps_longitude = log.longitude   # x
     gps_degree = log.bearingDeg
-    gps_pre_distance = 0.00000899364875 * PRE_VLANE_DISTANCE      # 1.11189.77  111189.577
+    gps_pre_distance = 0.00000899364875 * PRE_LANE_DISTANCE      # 1.11189.77  111189.577
     x_long, y_lat = self.rotate( -gps_degree, gps_pre_distance )  # 0.000899364875   #약 100m
     _debug( f'Mapd: ** rotate {gps_degree} = x_long:{x_long}, y_lat:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
     
