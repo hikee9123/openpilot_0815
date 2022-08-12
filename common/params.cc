@@ -245,7 +245,15 @@ std::unordered_map<std::string, uint32_t> keys = {
     // osm
     {"OpkrOSMEnable", PERSISTENT},
     {"OpkrOSMCurvDecelOption", PERSISTENT},
-    
+    {"OpkrOSMDebug", PERSISTENT},
+
+    {"OpkrOSM_QUERY_RADIUS", PERSISTENT},
+    {"OpkrOSM_MIN_DISTANCE_FOR_NEW_QUERY", PERSISTENT},
+    {"OpkrOSM_FULL_STOP_MAX_SPEED", PERSISTENT},
+    {"OpkrOSM_LOOK_AHEAD_HORIZON_TIME", PERSISTENT},
+    {"OpkrOSM_LANE_WIDTH", PERSISTENT},
+    {"OpkrOSM_PRE_LANE_DISTANCE", PERSISTENT},
+
 };
 
 } // namespace

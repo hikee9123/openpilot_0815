@@ -147,8 +147,6 @@ CWidgetosmConfig::CWidgetosmConfig( TuningPanel *panel ) : CGroupWidget( "OSM Co
 
 void  CWidgetosmConfig::FrameOSM(QVBoxLayout *layout)
 {
-
-
   // 1.
   MenuControl *pMenu2 = new MenuControl( 
     "OpkrOSM_QUERY_RADIUS",
@@ -198,6 +196,16 @@ void  CWidgetosmConfig::FrameOSM(QVBoxLayout *layout)
 
   pMenu6->SetControl( 2, 4, 0.1 );
   layout->addWidget( pMenu6 ); 
+
+  MenuControl *pMenu7 = new MenuControl( 
+    "OpkrOSM_PRE_LANE_DISTANCE",
+    "Pre Lane Distance",
+    "PRE_LANE_DISTANCE. Distance to pre-detect the position of the curve shown on the map.  def:100"
+     );
+
+  pMenu7->SetControl( 100, 500, 10 );
+  layout->addWidget( pMenu7 ); 
+  
 }
 
 
