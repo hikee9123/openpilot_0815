@@ -15,7 +15,7 @@ from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NE
 
 #_DEBUG = True
 _DEBUG  = Params().get_bool("OpkrOSMDebug")
-PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
+PRE_LANE_DISTANCE = 100. # int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
 
 def _debug(msg):
   if not _DEBUG:
@@ -54,6 +54,12 @@ class MapD():
     self._gps_latitude = 0
     self._gps_longitude = 0
     self._gps_degree = 0
+
+
+  def update_param(self):
+    _DEBUG  = Params().get_bool("OpkrOSMDebug")
+    PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
+   
 
   def udpate_state(self, sm):
     sock = 'controlsState'
