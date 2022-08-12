@@ -56,13 +56,18 @@ class MapD():
     self._gps_degree = 0
 
     self._PRE_LANE_DISTANCE = 100.
+    self._QUERY_RADIUS = QUERY_RADIUS
+    self._MIN_DISTANCE_FOR_NEW_QUERY = MIN_DISTANCE_FOR_NEW_QUERY
+    self._FULL_STOP_MAX_SPEED = FULL_STOP_MAX_SPEED
+    self._LOOK_AHEAD_HORIZON_TIME = LOOK_AHEAD_HORIZON_TIME
+
 
   def update_param(self):
     self._PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
-    QUERY_RADIUS = int( Params().get("OpkrOSM_QUERY_RADIUS", encoding="utf8") )   # def: 3000  # mts. Radius to use on OSM data queries.
-    MIN_DISTANCE_FOR_NEW_QUERY = int( Params().get("OpkrOSM_MIN_DISTANCE_FOR_NEW_QUERY", encoding="utf8") ) # 1000  # mts. Minimum distance to query area edge before issuing a new query.
-    FULL_STOP_MAX_SPEED = float( Params().get("OpkrOSM_FULL_STOP_MAX_SPEED", encoding="utf8") ) # 1.39  # m/s Max speed for considering car is stopped.
-    LOOK_AHEAD_HORIZON_TIME =  float( Params().get("OpkrOSM_LOOK_AHEAD_HORIZON_TIME", encoding="utf8") )  #15.  # s. Time horizon for look ahead of turn speed sections to provide on liveMapData msg.
+    self._QUERY_RADIUS = int( Params().get("OpkrOSM_QUERY_RADIUS", encoding="utf8") )   # def: 3000  # mts. Radius to use on OSM data queries.
+    self._MIN_DISTANCE_FOR_NEW_QUERY = int( Params().get("OpkrOSM_MIN_DISTANCE_FOR_NEW_QUERY", encoding="utf8") ) # 1000  # mts. Minimum distance to query area edge before issuing a new query.
+    self._FULL_STOP_MAX_SPEED = float( Params().get("OpkrOSM_FULL_STOP_MAX_SPEED", encoding="utf8") ) # 1.39  # m/s Max speed for considering car is stopped.
+    self._LOOK_AHEAD_HORIZON_TIME =  float( Params().get("OpkrOSM_LOOK_AHEAD_HORIZON_TIME", encoding="utf8") )  #15.  # s. Time horizon for look ahead of turn speed sections to provide on liveMapData msg.
       
 
   def udpate_state(self, sm):
@@ -153,13 +158,13 @@ class MapD():
       return
 
     self._query_thread = threading.Thread(target=query, args=(self.osm, self.location_deg, self.location_rad,
-                                                              QUERY_RADIUS))
+                                                              self._QUERY_RADIUS))
     self._query_thread.start()
 
   def updated_osm_data(self):
     if self.route is not None:
       distance_to_end = self.route.distance_to_end
-      if distance_to_end is not None and distance_to_end >= MIN_DISTANCE_FOR_NEW_QUERY:
+      if distance_to_end is not None and distance_to_end >= self._MIN_DISTANCE_FOR_NEW_QUERY:
         # do not query as long as we have a route with enough distance ahead.
         return
 
@@ -168,7 +173,7 @@ class MapD():
 
     if self.last_fetch_location is not None:
       distance_since_last = distance_to_points(self.last_fetch_location, np.array([self.location_rad]))[0]
-      if distance_since_last < QUERY_RADIUS - MIN_DISTANCE_FOR_NEW_QUERY:
+      if distance_since_last < self._QUERY_RADIUS - self._MIN_DISTANCE_FOR_NEW_QUERY:
         # do not query if are still not close to the border of previous query area
         return
 
@@ -201,7 +206,7 @@ class MapD():
       # Do not attempt to update the route if the car is going close to a full stop, as the bearing can start
       # jumping and creating unnecesary loosing of the route. Since the route update timestamp has been updated
       # a new liveMapData message will be published with the current values (which is desirable)
-      if self.gps_speed < FULL_STOP_MAX_SPEED:
+      if self.gps_speed < self._FULL_STOP_MAX_SPEED:
         _debug('Mapd *****: Route Not updated as car has Stopped ********')
         return
 
@@ -236,7 +241,7 @@ class MapD():
     speed_limit = self.route.current_speed_limit
     next_speed_limit_section = self.route.next_speed_limit_section
     turn_speed_limit_section = self.route.current_curvature_speed_limit_section
-    horizon_mts = self.gps_speed * LOOK_AHEAD_HORIZON_TIME
+    horizon_mts = self.gps_speed * self._LOOK_AHEAD_HORIZON_TIME
     next_turn_speed_limit_sections = self.route.next_curvature_speed_limit_sections(horizon_mts)
     current_road_name = self.route.current_road_name
 
