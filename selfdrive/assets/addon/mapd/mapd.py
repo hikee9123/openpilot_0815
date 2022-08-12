@@ -15,7 +15,7 @@ from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NE
 
 #_DEBUG = True
 _DEBUG  = Params().get_bool("OpkrOSMDebug")
-PRE_LANE_DISTANCE = 100. # int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
+
 
 def _debug(msg):
   if not _DEBUG:
@@ -55,10 +55,10 @@ class MapD():
     self._gps_longitude = 0
     self._gps_degree = 0
 
+    self._PRE_LANE_DISTANCE = 100.
 
   def update_param(self):
-    _DEBUG  = Params().get_bool("OpkrOSMDebug")
-    PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
+    self._PRE_LANE_DISTANCE = int( Params().get("OpkrOSM_PRE_LANE_DISTANCE") ) # 100.  #  1 about 1M distance
    
 
   def udpate_state(self, sm):
@@ -92,7 +92,7 @@ class MapD():
     gps_latitude = log.latitude     # y
     gps_longitude = log.longitude   # x
     gps_degree = log.bearingDeg
-    gps_pre_distance = 0.00000899364875 * PRE_LANE_DISTANCE      # 1.11189.77  111189.577
+    gps_pre_distance = 0.00000899364875 * self._PRE_LANE_DISTANCE      # 1.11189.77  111189.577
     x_long, y_lat = self.rotate( -gps_degree, gps_pre_distance )  # 0.000899364875   #약 100m
     _debug( f'Mapd: ** rotate {gps_degree} = x_long:{x_long}, y_lat:{y_lat}   gps data={gps_longitude},{gps_latitude}' )
     
@@ -282,6 +282,9 @@ def mapd_thread(sm=None, pm=None):
     sm = messaging.SubMaster(['gpsLocationExternal', 'controlsState'])
   if pm is None:
     pm = messaging.PubMaster(['liveMapData'])
+
+
+  mapd.update_param()
 
   while True:
     sm.update()
