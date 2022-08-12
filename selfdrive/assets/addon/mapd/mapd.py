@@ -70,6 +70,9 @@ class MapD():
     self._LOOK_AHEAD_HORIZON_TIME =  float( Params().get("OpkrOSM_LOOK_AHEAD_HORIZON_TIME", encoding="utf8") )  #15.  # s. Time horizon for look ahead of turn speed sections to provide on liveMapData msg.
       
 
+    _debug( f'Mapd: Param _PRE_LANE_DISTANCE {self._PRE_LANE_DISTANCE} = _QUERY_RADIUS:{self._QUERY_RADIUS}, _MIN_DISTANCE_FOR_NEW_QUERY:{self._MIN_DISTANCE_FOR_NEW_QUERY}  _FULL_STOP_MAX_SPEED:{self._FULL_STOP_MAX_SPEED}  _LOOK_AHEAD_HORIZON_TIME:{self._LOOK_AHEAD_HORIZON_TIME}' )
+
+
   def udpate_state(self, sm):
     sock = 'controlsState'
     if not sm.updated[sock] or not sm.valid[sock]:
@@ -294,6 +297,8 @@ def mapd_thread(sm=None, pm=None):
 
 
   mapd.update_param()
+
+
 
   while True:
     sm.update()
