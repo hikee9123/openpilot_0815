@@ -13,7 +13,7 @@ from selfdrive.assets.addon.mapd.lib.WayCollection import WayCollection
 from selfdrive.assets.addon.mapd.config import QUERY_RADIUS, MIN_DISTANCE_FOR_NEW_QUERY, FULL_STOP_MAX_SPEED, LOOK_AHEAD_HORIZON_TIME, PRE_LANE_DISTANCE
 
 
-_DEBUG  = int( Params().get("OpkrOSMDebug", encoding="utf8") )
+_DEBUG  = Params().get_bool("OpkrOSMDebug", encoding="utf8")
 #_DEBUG = True
 
 
