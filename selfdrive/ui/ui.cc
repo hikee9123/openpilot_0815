@@ -389,7 +389,7 @@ static void update_state(UIState *s) {
     scene.longitudinalPlan.maxPredCurvature = lp_data.getMaxPredCurvature();
     scene.longitudinalPlan.maxPredLatAcc  = lp_data.getMaxPredLatAcc();
     scene.longitudinalPlan.maxPredLatAcc  = lp_data.getMaxPredLatAcc();
-    scene.longitudinalPlan.vtc_speed = lp_data.getVisionTurnSpeed()
+    scene.longitudinalPlan.vtc_speed = lp_data.getVisionTurnSpeed();
     scene.longitudinalPlan.visionTurnControllerState = (int)lp_data.getVisionTurnControllerState();
   }
 
