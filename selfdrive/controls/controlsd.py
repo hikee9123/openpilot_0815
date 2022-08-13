@@ -227,18 +227,18 @@ class Controls:
       self.OpkrLiveSteerRatio = 0    
 
     self.camera_offset = CAMERA_OFFSET
+    self.modelSpeed = 0
 
   def update_modelToSteerRatio(self, learnerSteerRatio ):
     steerRatio = learnerSteerRatio
-    modelSpeed = 0
     if self.sm.updated['lateralPlan']:
-      modelSpeed = self.sm['lateralPlan'].modelSpeed * CV.MS_TO_KPH
-      if modelSpeed:
-        dRate = interp( modelSpeed, [200,450], [ 1, 0.9 ] )
+      self.modelSpeed = self.sm['lateralPlan'].modelSpeed * CV.MS_TO_KPH
+      if self.modelSpeed:
+        dRate = interp( self.modelSpeed, [200,450], [ 1, 0.9 ] )
         steerRatio = learnerSteerRatio * dRate
     steerRatio = clip( steerRatio, 13.5, 19.5 )
 
-    return steerRatio, modelSpeed
+    return steerRatio, self.modelSpeed
 
 
   def update_events(self, CS):
