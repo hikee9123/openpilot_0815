@@ -136,6 +136,7 @@ typedef struct UIScene {
 
     float maxPredCurvature;
     float maxPredLatAcc;
+    float vtc_speed;
     int   visionTurnControllerState;
   } longitudinalPlan; 
 

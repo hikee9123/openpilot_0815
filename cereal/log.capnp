@@ -926,7 +926,8 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
 
   maxPredCurvature @44 :Float32;
   maxPredLatAcc @45 :Float32;
-  visionTurnControllerState @46 :VisionTurnControllerState;
+  visionTurnSpeed @46 :Float32;
+  visionTurnControllerState @47 :VisionTurnControllerState;
 
   enum LongitudinalPlanSource {
     cruise @0;

@@ -146,8 +146,9 @@ class Planner:
     longitudinalPlan.stopLine = self.mpc.stopline.tolist()
     longitudinalPlan.stoplineProb = self.mpc.stop_prob
 
-    longitudinalPlan.maxPredCurvature = self.vision_turn_controller._max_pred_curvature
-    longitudinalPlan.maxPredLatAcc = self.vision_turn_controller._max_pred_lat_acc
+    longitudinalPlan.maxPredCurvature = float(self.vision_turn_controller._max_pred_curvature)
+    longitudinalPlan.maxPredLatAcc = float(self.vision_turn_controller._max_pred_lat_acc)
+    longitudinalPlan.visionTurnSpeed = float(self.vision_turn_controller.v_turn)    
     longitudinalPlan.visionTurnControllerState = self.vision_turn_controller.state
 
     pm.send('longitudinalPlan', plan_send)
