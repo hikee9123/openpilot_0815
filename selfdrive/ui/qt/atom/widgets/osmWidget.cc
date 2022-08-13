@@ -147,15 +147,6 @@ CWidgetosmConfig::CWidgetosmConfig( TuningPanel *panel ) : CGroupWidget( "OSM Co
 
 void  CWidgetosmConfig::FrameOSM(QVBoxLayout *layout)
 {
-  // 1.
-  MenuControl *pMenu2 = new MenuControl( 
-    "OpkrOSM_QUERY_RADIUS",
-    "Query radius",
-    "QUERY_RADIUS Radius to use on OSM data queries.(mts) def:3000"
-     );
-
-  pMenu2->SetControl( 100, 9000, 10 );
-  layout->addWidget( pMenu2 );
 
   // 2.
   MenuControl *pMenu3 = new MenuControl( 
@@ -187,16 +178,7 @@ void  CWidgetosmConfig::FrameOSM(QVBoxLayout *layout)
   pMenu5->SetControl( 0, 100, 0.1 );
   layout->addWidget( pMenu5 );  
 
-  // 5.
-  MenuControl *pMenu6 = new MenuControl( 
-    "OpkrOSM_LANE_WIDTH",
-    "Lane width",
-    "LANE_WIDTH Lane width estimate. Used for detecting departures from way. def:3.7"
-     );
-
-  pMenu6->SetControl( 2, 4, 0.1 );
-  layout->addWidget( pMenu6 ); 
-
+  // 7.
   MenuControl *pMenu7 = new MenuControl( 
     "OpkrOSM_PRE_LANE_DISTANCE",
     "Pre Lane Distance",
@@ -289,6 +271,8 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   pMenu1->SetControl( 0, 1, 0.001 );
   layout->addWidget( pMenu1 );  
 
+
+/*
   // 2.
   MenuControl *pMenu2 = new MenuControl( 
     "OpkrOSM_MAX_LAT_ACC",
@@ -300,7 +284,7 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   layout->addWidget( pMenu2 );
 
 
-  // 7.
+  // 3.
   MenuControl *pMenu3 = new MenuControl( 
     "OpkrOSM_SPLINE_EVAL_STEP",
     "Spline eval step",
@@ -310,7 +294,7 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   pMenu3->SetControl( 1, 10, 0.1 );
   layout->addWidget( pMenu3 );
   
-  // 7.
+  // 4.
   MenuControl *pMenu4 = new MenuControl( 
     "OpkrOSM_MIN_SPEED_SECTION_LENGTH",
     "Min speed section length",
@@ -320,7 +304,7 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   pMenu4->SetControl( 0, 200, 1 );
   layout->addWidget( pMenu4 );
 
-   // 7.
+   // 5.
   MenuControl *pMenu5 = new MenuControl( 
     "OpkrOSM_MAX_CURV_DEVIATION_FOR_SPLIT",
     "Max curv deviation for split",
@@ -330,7 +314,7 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   pMenu5->SetControl( 0, 5, 0.1 );
   layout->addWidget( pMenu5 );
 
-   // 7.
+   // 6.
   MenuControl *pMenu6 = new MenuControl( 
     "OpkrOSM_MAX_CURV_SPLIT_ARC_ANGLE",
     "Max curv split arc angle",
@@ -352,7 +336,7 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   layout->addWidget( pMenu7 );          
 
 
-   // 7.
+   // 8.
   MenuControl *pMenu8 = new MenuControl( 
     "OpkrOSM_ADDED_NODES_DIST",
     "Added nodes dist",
@@ -361,9 +345,9 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
 
   pMenu8->SetControl( 0, 50, 1 );
   layout->addWidget( pMenu8 );
+*/
 
-
-   // 7.
+   // 9.
   MenuControl *pMenu9 = new MenuControl( 
     "OpkrOSM_DIVERTION_SEARCH_RANGE1",
     "Divertion search range1",

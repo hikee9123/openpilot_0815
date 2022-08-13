@@ -1,5 +1,6 @@
 import numpy as np
 from enum import Enum
+from common.params import Params
 from selfdrive.assets.addon.mapd.lib.geo import DIRECTION, R, vectors
 
 from selfdrive.hardware import EON
@@ -10,7 +11,7 @@ else:
   from scipy.interpolate import splev, splprep
 
 
-_TURN_CURVATURE_THRESHOLD = 0.002  # 1/mts. A curvature over this value will generate a speed limit section.
+#_TURN_CURVATURE_THRESHOLD = 0.002  # 1/mts. A curvature over this value will generate a speed limit section.
 _MAX_LAT_ACC = 2.3  # Maximum lateral acceleration in turns.
 _SPLINE_EVAL_STEP = 5  # mts for spline evaluation for curvature calculation
 _MIN_SPEED_SECTION_LENGTH = 100.  # mts. Sections below this value will not be split in smaller sections.
@@ -18,7 +19,13 @@ _MAX_CURV_DEVIATION_FOR_SPLIT = 2.  # Split a speed section if the max curvature
 _MAX_CURV_SPLIT_ARC_ANGLE = 90.  # degrees. Arc section to split into new speed section around max curvature.
 _MIN_NODE_DISTANCE = 50.  # mts. Minimum distance between nodes for spline evaluation. Data is enhanced if not met.
 _ADDED_NODES_DIST = 15.  # mts. Distance between added nodes when data is enhanced for spline evaluation.
-_DIVERTION_SEARCH_RANGE = [-200., 50.]  # mt. Range of distance to current location for divertion search.
+#_DIVERTION_SEARCH_RANGE = [-200., 50.]  # mt. Range of distance to current location for divertion search.
+
+_DRIVERTION_RANGE1 = float( Params().get("OpkrOSM_DIVERTION_SEARCH_RANGE1") )
+_DRIVERTION_RANGE2 = float( Params().get("OpkrOSM_DIVERTION_SEARCH_RANGE2") )
+
+_TURN_CURVATURE_THRESHOLD = float( Params().get("OpkrOSM_TURN_CURVATURE_THRESHOLD") )
+_DIVERTION_SEARCH_RANGE = [_DRIVERTION_RANGE1, _DRIVERTION_RANGE2]
 
 
 def nodes_raw_data_array_for_wr(wr, drop_last=False):
