@@ -12,7 +12,10 @@ from selfdrive.controls.lib.longcontrol import LongCtrlState
 from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import LongitudinalMpc
 from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import T_IDXS as T_IDXS_MPC
 from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX, CONTROL_N
+from selfdrive.controls.lib.vision_turn_controller import VisionTurnController
 from selfdrive.swaglog import cloudlog
+
+
 
 LON_MPC_STEP = 0.2  # first step is 0.2s
 AWARENESS_DECEL = -0.2  # car smoothly decel at .2m/s^2 when user is distracted
@@ -59,6 +62,8 @@ class Planner:
     self.j_desired_trajectory = np.zeros(CONTROL_N)
     self.solverExecutionTime = 0.0
 
+    self.vision_turn_controller = VisionTurnController(CP)
+
   def update(self, sm):
     v_ego = sm['carState'].vEgo
 
@@ -81,6 +86,9 @@ class Planner:
 
     # Prevent divergence, smooth in current v_ego
     self.v_desired_filter.x = max(0.0, self.v_desired_filter.update(v_ego))
+
+    self.vision_turn_controller.update( not reset_state, self.v_desired_filter.x, self.a_desired, v_cruise, sm)    
+
 
     accel_limits = [A_CRUISE_MIN, get_max_accel(v_ego)]
     accel_limits_turns = limit_accel_in_turns(v_ego, sm['carState'].steeringAngleDeg, accel_limits, self.CP)
@@ -111,6 +119,7 @@ class Planner:
     self.a_desired = float(interp(DT_MDL, T_IDXS[:CONTROL_N], self.a_desired_trajectory))
     self.v_desired_filter.x = self.v_desired_filter.x + DT_MDL * (self.a_desired + a_prev) / 2.0
 
+
   def publish(self, sm, pm):
     plan_send = messaging.new_message('longitudinalPlan')
 
@@ -136,5 +145,9 @@ class Planner:
     longitudinalPlan.cruiseTarget = self.mpc.cruise_target.tolist()
     longitudinalPlan.stopLine = self.mpc.stopline.tolist()
     longitudinalPlan.stoplineProb = self.mpc.stop_prob
+
+    longitudinalPlan.maxPredCurvature = self.vision_turn_controller._max_pred_curvature
+    longitudinalPlan.maxPredLatAcc = self.vision_turn_controller._max_pred_lat_acc
+    longitudinalPlan.visionTurnControllerState = self.vision_turn_controller.state
 
     pm.send('longitudinalPlan', plan_send)

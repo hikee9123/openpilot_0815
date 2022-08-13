@@ -924,6 +924,10 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   stopLine @42 :List(Float64) = [0.];
   stoplineProb @43 :Float32;
 
+  maxPredCurvature @44 :Float32;
+  maxPredLatAcc @45 :Float32;
+  visionTurnControllerState @36 :VisionTurnControllerState;
+
   enum LongitudinalPlanSource {
     cruise @0;
     lead0 @1;
@@ -1769,6 +1773,13 @@ struct LiveMapData {
   lastGpsBearingDeg @17 :Float32;
   lastGpsAccuracy @18 :Float32;
   lastGpsBearingAccuracyDeg @19 :Float32;
+}
+
+enum VisionTurnControllerState { 
+  disabled @0; # No predicted substancial turn on vision range or feature disabled.
+  entering @1; # A subsantial turn is predicted ahead, adapting speed to turn confort levels.
+  turning @2; # Actively turning. Managing acceleration to provide a roll on turn feeling.
+  leaving @3; # Road ahead straightens. Start to allow positive acceleration.
 }
 
 struct LiveMapDataDEPRECATED {

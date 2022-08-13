@@ -133,6 +133,10 @@ typedef struct UIScene {
     float cruisetg[13] = {0};
     float stopline[13] = {0};
     float stopprob;
+
+    float maxPredCurvature;
+    float maxPredLatAcc;
+    int   visionTurnControllerState;
   } longitudinalPlan; 
 
   float stop_line_probs;

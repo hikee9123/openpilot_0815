@@ -237,7 +237,7 @@ class Controls:
         steerRatio = learnerSteerRatio * dRate
     steerRatio = clip( steerRatio, 13.5, 19.5 )
 
-    return steerRatio
+    return steerRatio, modelSpeed
 
 
   def update_events(self, CS):
@@ -597,15 +597,15 @@ class Controls:
 
     
      # atom
-    if self.OpkrLiveSteerRatio == 2:  # ?�동(고정)
+    if self.OpkrLiveSteerRatio == 2:  # FIX
       sr = max(self.CP.steerRatio, 5.0)
-      str_log1 = 'Fix sR={:.2f}'.format( sr )
-    elif self.OpkrLiveSteerRatio == 1:  # 반학??
-      steerRatio = self.update_modelToSteerRatio( params.steerRatio )
+      str_log1 = '2.Fix sR={:.2f}'.format( sr )
+    elif self.OpkrLiveSteerRatio == 1:  
+      steerRatio, modelSpeed = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
-      str_log1 = '{:3.2f} sR={:.2f}'.format( params.steerRatio, sr )
-    else: # ?�습.
-      str_log1 = 'sR={:.2f}'.format( sr )
+      str_log1 = '1.MS={:3.1f} sR={:.2f},{:.2f}'.format( modelSpeed, params.steerRatio, sr )
+    else: 
+      str_log1 = '0.sR={:.2f}'.format( sr )
 
     trace1.printf1( '{}'.format( str_log1 ) )      
 

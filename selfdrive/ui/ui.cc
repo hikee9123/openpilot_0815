@@ -117,39 +117,6 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
   pvd->cnt = v - pvd->v;
   assert(pvd->cnt <= std::size(pvd->v));
 
-/*
-  const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
-  bool l, r;
-  QPointF left, right;
-  std::vector<QPointF> left_points, right_points;
-
-  for (int i = 0; i <= max_idx; i++) {
-    l = calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, &left);
-    r = calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, &right);
-    if (l && r) {
-      // For wider lines the drawn polygon will "invert" when going over a hill and cause artifacts
-      if ( left_points.size() && left.y() > left_points.back().y()) {
-        continue;
-      }
-      left_points.push_back(left);
-      right_points.push_back(right);
-    }
-  }
-  
-  int  left_Size = left_points.size();
-  int  right_Size = right_points.size();
-
-  pvd->cnt = 2 * left_Size;
-  assert(left_Size == right_Size);
-  assert(pvd->cnt <= std::size(pvd->v));
-
-
-  for (int left_idx = 0; left_idx < left_Size; left_idx++){
-    int right_idx = 2 * left_Size - left_idx - 1;
-    pvd->v[left_idx] = left_points[left_idx];
-    pvd->v[right_idx] = right_points[left_idx];
-  }
-*/
 }
 
 
@@ -417,6 +384,11 @@ static void update_state(UIState *s) {
       scene.longitudinalPlan.stopline[i] = lop_data.getStopLine()[i];
     }
     scene.longitudinalPlan.stopprob = lop_data.getStoplineProb();
+
+
+    scene.longitudinalPlan.maxPredCurvature = lop_data.getMaxPredCurvature();
+    scene.longitudinalPlan.maxPredLatAcc  = lop_data.getMaxPredLatAcc();
+    scene.longitudinalPlan.visionTurnControllerState = lop_data.getVisionTurnControllerState();
   }
 
 }

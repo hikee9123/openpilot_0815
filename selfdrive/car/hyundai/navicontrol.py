@@ -11,7 +11,8 @@ import cereal.messaging as messaging
 import common.loger as trace1
 import common.MoveAvg as mvAvg
 
-#from selfdrive.road_speed_limiter import  road_speed_limiter_get_active, get_road_speed_limiter
+
+
 
 EventName = car.CarEvent.EventName
 
@@ -40,7 +41,7 @@ class NaviControl():
 
     self.event_navi_alert = None
 
-    # self.CP.opkrOsmCurvOption
+
 
   def update_lateralPlan( self ):
     self.sm.update(0)
