@@ -367,28 +367,28 @@ static void update_state(UIState *s) {
   }
 
   if (sm.updated("longitudinalPlan")) {
-    auto lop_data = sm["longitudinalPlan"].getLongitudinalPlan();
+    auto lp_data = sm["longitudinalPlan"].getLongitudinalPlan();
     for (int i = 0; i < std::size(scene.longitudinalPlan.e2ex); i++) {
-      scene.longitudinalPlan.e2ex[i] = lop_data.getE2eX()[i];
+      scene.longitudinalPlan.e2ex[i] = lp_data.getE2eX()[i];
     }
     for (int i = 0; i < std::size(scene.longitudinalPlan.lead0); i++) {
-      scene.longitudinalPlan.lead0[i] = lop_data.getLead0Obstacle()[i];
+      scene.longitudinalPlan.lead0[i] = lp_data.getLead0Obstacle()[i];
     }
     for (int i = 0; i < std::size(scene.longitudinalPlan.lead1); i++) {
-      scene.longitudinalPlan.lead1[i] = lop_data.getLead1Obstacle()[i];
+      scene.longitudinalPlan.lead1[i] = lp_data.getLead1Obstacle()[i];
     }
     for (int i = 0; i < std::size(scene.longitudinalPlan.cruisetg); i++) {
-      scene.longitudinalPlan.cruisetg[i] = lop_data.getCruiseTarget()[i];
+      scene.longitudinalPlan.cruisetg[i] = lp_data.getCruiseTarget()[i];
     }
     for (int i = 0; i < std::size(scene.longitudinalPlan.stopline); i++) {
-      scene.longitudinalPlan.stopline[i] = lop_data.getStopLine()[i];
+      scene.longitudinalPlan.stopline[i] = lp_data.getStopLine()[i];
     }
-    scene.longitudinalPlan.stopprob = lop_data.getStoplineProb();
+    scene.longitudinalPlan.stopprob = lp_data.getStoplineProb();
 
 
-    scene.longitudinalPlan.maxPredCurvature = lop_data.getMaxPredCurvature();
-    scene.longitudinalPlan.maxPredLatAcc  = lop_data.getMaxPredLatAcc();
-    scene.longitudinalPlan.visionTurnControllerState = lop_data.getVisionTurnControllerState();
+    scene.longitudinalPlan.maxPredCurvature = lp_data.getMaxPredCurvature();
+    scene.longitudinalPlan.maxPredLatAcc  = lp_data.getMaxPredLatAcc();
+    scene.longitudinalPlan.visionTurnControllerState = (int)lp_data.getVisionTurnControllerState();
   }
 
 }
