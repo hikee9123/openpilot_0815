@@ -596,7 +596,7 @@ class Controls:
     sr = max(params.steerRatio, 0.1)
 
     
-     # atom
+    # atom
     if self.OpkrLiveSteerRatio == 2:  # FIX
       sr = max(self.CP.steerRatio, 5.0)
       str_log1 = '2.Fix sR={:.2f}'.format( sr )
