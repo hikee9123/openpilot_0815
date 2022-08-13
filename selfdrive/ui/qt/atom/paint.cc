@@ -1174,17 +1174,19 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
+  nYPos += nGap;
   text4.sprintf("VLP(%d) = %.1f,  %.1f", scene.longitudinalPlan.visionTurnControllerState, scene.longitudinalPlan.maxPredCurvature, scene.longitudinalPlan.maxPredLatAcc  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
 
  
-
+/*
   int stamp = 0;
   if(  m_osm.delta_gpstimestamp ) stamp = 1;
   lastGpsSpeed *= 3.6;
   nYPos += nGap;
-  text4.sprintf("GPS(%d) = %.5f, %.5f, %.0f, %.2f, %.1f,%.1f", stamp,  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed,  lastGpsAccuracy, lastGpsBearingDeg, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("GPS = %.5f, %.5f, %.0f, %.2f, %.1f,%.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed,  lastGpsAccuracy, lastGpsBearingDeg, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
+*/
 }
 
 
