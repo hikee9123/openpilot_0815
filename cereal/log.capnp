@@ -970,6 +970,15 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
     x @0 :List(Float32);
     y @1 :List(Float32);
   }
+
+
+
+  enum VisionTurnControllerState { 
+    disabled @0; # No predicted substancial turn on vision range or feature disabled.
+    entering @1; # A subsantial turn is predicted ahead, adapting speed to turn confort levels.
+    turning @2; # Actively turning. Managing acceleration to provide a roll on turn feeling.
+    leaving @3; # Road ahead straightens. Start to allow positive acceleration.
+  }  
 }
 
 struct LateralPlan @0xe1e9318e2ae8b51e {
@@ -1776,12 +1785,6 @@ struct LiveMapData {
   lastGpsBearingAccuracyDeg @19 :Float32;
 }
 
-enum VisionTurnControllerState { 
-  disabled @0; # No predicted substancial turn on vision range or feature disabled.
-  entering @1; # A subsantial turn is predicted ahead, adapting speed to turn confort levels.
-  turning @2; # Actively turning. Managing acceleration to provide a roll on turn feeling.
-  leaving @3; # Road ahead straightens. Start to allow positive acceleration.
-}
 
 struct LiveMapDataDEPRECATED {
   speedLimitValid @0 :Bool;
