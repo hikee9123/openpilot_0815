@@ -190,6 +190,8 @@ def speed_limits_for_curvatures_data(curv, dist):
   # Find where curvatures overshoot turn curvature threshold and define as section
   is_section = curv_abs >= _TURN_CURVATURE_THRESHOLD
 
+  print( 'curv_abs:{}'.format( curv_abs ) )
+
   # Find the indexes where the sections start and end. i.e. change indexes.
   c_idx = np.nonzero(np.diff(is_section))[0] + 1
 
