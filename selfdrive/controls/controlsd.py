@@ -230,6 +230,7 @@ class Controls:
 
   def update_modelToSteerRatio(self, learnerSteerRatio ):
     steerRatio = learnerSteerRatio
+    modelSpeed = 0
     if self.sm.updated['lateralPlan']:
       modelSpeed = self.sm['lateralPlan'].modelSpeed * CV.MS_TO_KPH
       if modelSpeed:
