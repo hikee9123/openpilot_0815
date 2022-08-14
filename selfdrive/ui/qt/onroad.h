@@ -53,17 +53,13 @@ private:
   const int img_size = (radius / 2) * 1.5;
   QString speed;
   QString speedUnit;
- // QString maxSpeed;
-  float setSpeed;
-  float speedLimit;  
+  QString maxSpeed;
+
   bool is_cruise_set = false;
   bool engageable = false;
   bool dmActive = false;
   bool hideDM = false;
-  bool rightHandDM = false;
-  bool has_us_speed_limit = false;
-  bool has_eu_speed_limit = false;
-  bool v_ego_cluster_seen = false;  
+
   int status = STATUS_DISENGAGED;
 
 
