@@ -1168,7 +1168,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   nYPos += nGap;
 
   float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
-  text4.sprintf("VLP(%d) = %.1f,  %.1f, %.0f", scene->longitudinalPlan.visionTurnControllerState, scene->longitudinalPlan.maxPredCurvature, scene->longitudinalPlan.maxPredLatAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("VLP(%d) = %.1f,  %.2f, %.0f", scene->longitudinalPlan.visionTurnControllerState, scene->longitudinalPlan.maxPredCurvature, scene->longitudinalPlan.maxPredLatAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
 
