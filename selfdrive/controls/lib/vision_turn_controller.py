@@ -175,6 +175,11 @@ class VisionTurnController():
         c_y = width_pts / 2 + lll_y
         path_poly = np.polyfit(ll_x, c_y, 3)
 
+      pred_curvatures = eval_curvature(path_poly, _EVAL_RANGE)
+      max_pred_curvature = np.amax(pred_curvatures)
+      self._max_pred_lat_acc = self._v_ego**2 * max_pred_curvature
+      self._max_pred_curvature = max_pred_curvature              
+
     # 2. If not polynomial derived from lanes, then derive it from compensated driving path with lanes as
     # provided by `lateralPlanner`.
     if path_poly is None and lat_planner_data is not None and len(lat_planner_data.dPathWLinesX) > 0 \
@@ -194,7 +199,7 @@ class VisionTurnController():
     pred_curvatures = eval_curvature(path_poly, _EVAL_RANGE)
     max_pred_curvature = np.amax(pred_curvatures)
     self._max_pred_lat_acc = self._v_ego**2 * max_pred_curvature
-    self._max_pred_curvature = max_pred_curvature
+
 
     max_curvature_for_vego = _A_LAT_REG_MAX / max(self._v_ego, 0.1)**2
     lat_acc_overshoot_idxs = np.nonzero(pred_curvatures >= max_curvature_for_vego)[0]
@@ -244,7 +249,7 @@ class VisionTurnController():
 
 
   def update(self, enabled, v_ego, a_ego, v_cruise_setpoint, sm):
-    self._op_enabled = enabled
+    self._op_enabled = True  # enabled
     self._gas_pressed = sm['carState'].gasPressed
     self._v_ego = v_ego
     self._a_ego = a_ego
