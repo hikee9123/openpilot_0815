@@ -161,6 +161,7 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
       Params().put("LanguageSetting", langs[selection].toStdString());
       qApp->exit(18);
       watchdog_kick(0);
+      Hardware::reboot();
     }
   });
   addItem(translateBtn);
