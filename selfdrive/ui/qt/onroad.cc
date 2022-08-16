@@ -430,6 +430,7 @@ void NvgWindow::drawHud(QPainter &p) {
   int top_radius = 32;
   int bottom_radius = has_eu_speed_limit ? 100 : 32;
 
+  speedLimit = 10;
 
   if( speedLimit > 1 )
   {
