@@ -422,7 +422,7 @@ void NvgWindow::drawHud(QPainter &p) {
   int has_eu_speed_limit = 1;  
   int default_rect_width = 172;
   int rect_width = default_rect_width;
-  if (is_metric || has_eu_speed_limit) rect_width = 200;
+  if ( has_eu_speed_limit) rect_width = 200;
 
   int rect_height = 204;
   if (has_eu_speed_limit) rect_height = 392;
@@ -483,7 +483,7 @@ void NvgWindow::drawHud(QPainter &p) {
   p.drawText(speed_rect, Qt::AlignCenter, setSpeedStr);
 
   // EU (Vienna style) sign
-  if (true) {
+  if (has_eu_speed_limit) {
     int outer_radius = 176 / 2;
     int inner_radius_1 = outer_radius - 6; // White outer border
     int inner_radius_2 = inner_radius_1 - 20; // Red circle
