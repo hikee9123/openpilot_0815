@@ -175,10 +175,10 @@ class VisionTurnController():
         c_y = width_pts / 2 + lll_y
         path_poly = np.polyfit(ll_x, c_y, 3)
 
-      pred_curvatures = eval_curvature(path_poly, _EVAL_RANGE)
-      max_pred_curvature = np.amax(pred_curvatures)
-      self._max_pred_lat_acc = self._v_ego**2 * max_pred_curvature
-      self._max_pred_curvature = max_pred_curvature              
+        pred_curvatures = eval_curvature(path_poly, _EVAL_RANGE)
+        max_pred_curvature = np.amax(pred_curvatures)
+        self._max_pred_lat_acc = self._v_ego**2 * max_pred_curvature
+        self._max_pred_curvature = max_pred_curvature              
 
     # 2. If not polynomial derived from lanes, then derive it from compensated driving path with lanes as
     # provided by `lateralPlanner`.
