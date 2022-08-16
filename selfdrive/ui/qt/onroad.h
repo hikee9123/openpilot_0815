@@ -28,7 +28,7 @@ private:
 // container window for the NVG UI
 class NvgWindow : public CameraViewWidget {
   Q_OBJECT
-  Q_PROPERTY(QString speed MEMBER speed);
+  Q_PROPERTY(QString speedData MEMBER speedData);
   Q_PROPERTY(QString speedUnit MEMBER speedUnit);
   Q_PROPERTY(QString maxSpeed MEMBER maxSpeed);
   Q_PROPERTY(bool is_cruise_set MEMBER is_cruise_set);
