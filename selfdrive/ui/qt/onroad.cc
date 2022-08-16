@@ -419,7 +419,16 @@ void NvgWindow::drawHud(QPainter &p) {
   QString setSpeedStr = is_cruise_set ? QString::number(std::nearbyint(setSpeed)) : "–";
 
   // Draw outer box + border to contain set speed and speed limit
-  int has_eu_speed_limit = 1;  
+  int has_eu_speed_limit = 0;  
+  speedLimit = 10;
+  if( speedLimit > 1 )
+  {
+    speedLimitStr = QString::number(std::nearbyint(speedLimit));
+    has_eu_speed_limit = 1;
+  }
+
+
+
   int default_rect_width = 172;
   int rect_width = default_rect_width;
   if ( has_eu_speed_limit) rect_width = 200;
@@ -430,17 +439,7 @@ void NvgWindow::drawHud(QPainter &p) {
   int top_radius = 32;
   int bottom_radius = has_eu_speed_limit ? 100 : 32;
 
-  speedLimit = 10;
 
-  if( speedLimit > 1 )
-  {
-    speedLimitStr = QString::number(std::nearbyint(speedLimit));
-    has_eu_speed_limit = 1;
-  }
-  else
-  {
-    has_eu_speed_limit = 0;
-  }
 
 
   QRect set_speed_rect(bdr_s + default_rect_width / 2 - rect_width / 2, bdr_s, rect_width, rect_height);
