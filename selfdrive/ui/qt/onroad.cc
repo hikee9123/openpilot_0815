@@ -204,7 +204,7 @@ void NvgWindow::updateState(const UIState &s) {
 
   const auto osm = sm["liveMapData"].getLiveMapData();
    int  osm_alive = osm.getSpeedLimitValid();
-   float speed_limit = osm_alive ? osm.getSpeedLimit(); : 0.0;
+   float speed_limit = osm_alive ? osm.getSpeedLimit() : 0.0;
   speed_limit *= (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH);
 
   setProperty("speedLimit", speed_limit);
@@ -421,7 +421,7 @@ void NvgWindow::drawHud(QPainter &p) {
   // Draw outer box + border to contain set speed and speed limit
   int default_rect_width = 172;
   int rect_width = default_rect_width;
-  if (is_metric || has_eu_speed_limit) rect_width = 200;
+  //if (is_metric || has_eu_speed_limit) rect_width = 200;
 
   int rect_height = 204;
   int top_radius = 32;
