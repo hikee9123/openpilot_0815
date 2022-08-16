@@ -234,7 +234,7 @@ void NvgWindow::drawHud(QPainter &p) {
   float speedLimit = 100;
   float setSpeed = 110; 
   bool has_us_speed_limit = true;
-  bool has_eu_speed_limit = true;
+  bool has_eu_speed_limit = false;
   float speed = 60;
   bool is_metric = false;
   bool rightHandDM = false;
