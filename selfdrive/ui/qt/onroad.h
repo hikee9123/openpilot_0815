@@ -51,7 +51,7 @@ private:
   QPixmap dm_img;
   const int radius = 192;
   const int img_size = (radius / 2) * 1.5;
-  QString speed;
+  QString speedData;
   QString speedUnit;
   QString maxSpeed;
 

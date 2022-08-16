@@ -238,7 +238,7 @@ void NvgWindow::drawHud(QPainter &p) {
   float speed = 0;
   bool is_metric = false;
   bool rightHandDM = false;
-    
+
   // Header gradient
   QLinearGradient bg(0, header_h - (header_h / 2.5), 0, header_h);
   bg.setColorAt(0, QColor::fromRgbF(0, 0, 0, 0.45));
@@ -462,11 +462,11 @@ void NvgWindow::drawCurrentSpeed(QPainter &p, int x, int y)
 
   configFont(p, "Open Sans", 200, "Bold");
   QFontMetrics fm(p.font());
-  QRect init_rect = fm.boundingRect(speed);
-  QRect real_rect = fm.boundingRect(init_rect, 0, speed);
+  QRect init_rect = fm.boundingRect(speedData);
+  QRect real_rect = fm.boundingRect(init_rect, 0, speedData);
   real_rect.moveCenter({x, y - real_rect.height() / 2});
   p.setPen( val_color );
-  p.drawText(real_rect.x(), real_rect.bottom(), speed);
+  p.drawText(real_rect.x(), real_rect.bottom(), speedData);
 
 
   configFont(p, "Open Sans", 50, "Regular");
