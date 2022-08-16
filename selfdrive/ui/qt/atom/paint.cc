@@ -758,7 +758,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   const int bb_dmr_y = (0 + bdr_s) + 220;
 
   // 1. kegman ui
-  bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y+200, bb_dml_w);
+  bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y+190, bb_dml_w);
   bb_ui_draw_measures_right(p, bb_dmr_x, bb_dmr_y, bb_dmr_w);
 
   // 2. tpms
