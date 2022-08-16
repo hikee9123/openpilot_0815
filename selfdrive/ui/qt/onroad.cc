@@ -415,17 +415,22 @@ void NvgWindow::drawHud(QPainter &p) {
   bg.setColorAt(1, QColor::fromRgbF(0, 0, 0, 0));
   p.fillRect(0, 0, width(), header_h, bg);
 
- // QString speedLimitStr = (speedLimit > 1) ? QString::number(std::nearbyint(speedLimit)) : "–";
+  QString speedLimitStr = (speedLimit > 1) ? QString::number(std::nearbyint(speedLimit)) : "–";
   QString setSpeedStr = is_cruise_set ? QString::number(std::nearbyint(setSpeed)) : "–";
 
   // Draw outer box + border to contain set speed and speed limit
+  int has_eu_speed_limit = 1;  
   int default_rect_width = 172;
   int rect_width = default_rect_width;
-  //if (is_metric || has_eu_speed_limit) rect_width = 200;
+  if (is_metric || has_eu_speed_limit) rect_width = 200;
 
   int rect_height = 204;
+  if (has_eu_speed_limit) rect_height = 392;
+    
   int top_radius = 32;
-  int bottom_radius = 32;
+  int bottom_radius = has_eu_speed_limit ? 100 : 32;
+
+
 
   QRect set_speed_rect(bdr_s + default_rect_width / 2 - rect_width / 2, bdr_s, rect_width, rect_height);
   p.setPen(QPen(whiteColor(75), 6));
@@ -476,6 +481,31 @@ void NvgWindow::drawHud(QPainter &p) {
   speed_rect.moveCenter({set_speed_rect.center().x(), 0});
   speed_rect.moveTop(set_speed_rect.top() + 77);
   p.drawText(speed_rect, Qt::AlignCenter, setSpeedStr);
+
+  // EU (Vienna style) sign
+  if (true) {
+    int outer_radius = 176 / 2;
+    int inner_radius_1 = outer_radius - 6; // White outer border
+    int inner_radius_2 = inner_radius_1 - 20; // Red circle
+
+    // Draw white circle with red border
+    QPoint center(set_speed_rect.center().x() + 1, set_speed_rect.top() + 204 + outer_radius);
+    p.setPen(Qt::NoPen);
+    p.setBrush(whiteColor());
+    p.drawEllipse(center, outer_radius, outer_radius);
+    p.setBrush(QColor(255, 0, 0, 255));
+    p.drawEllipse(center, inner_radius_1, inner_radius_1);
+    p.setBrush(whiteColor());
+    p.drawEllipse(center, inner_radius_2, inner_radius_2);
+
+    // Speed limit value
+    int font_size = (speedLimitStr.size() >= 3) ? 60 : 70;
+    configFont(p, "Inter", font_size, "Bold");
+    QRect speed_limit_rect = getTextRect(p, Qt::AlignCenter, speedLimitStr);
+    speed_limit_rect.moveCenter(center);
+    p.setPen(blackColor());
+    p.drawText(speed_limit_rect, Qt::AlignCenter, speedLimitStr);
+  }
 
 /*
   // max speed

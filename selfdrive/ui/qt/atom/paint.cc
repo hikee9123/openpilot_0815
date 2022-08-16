@@ -508,7 +508,7 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
   }
 
   //add visual radar relative speed
-  if( true )
+  if( false )
   {
     QColor val_color = QColor(255, 255, 255, 200);
     if ( m_param.lead_radar.getStatus() ) {
@@ -567,7 +567,7 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
     bb_ry = bb_y + bb_h;
   }
 
-  //add  desired steering angle
+  // GPS
   if( false )
   {
    // float angleSteersDes = scene->controls_state.getSteeringAngleDesiredDegDEPRECATED();  
@@ -803,33 +803,30 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
 
     QPixmap  *traffic_sign = NULL;
 
-    if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  // 굽�???���?
-    else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;  // �?�? ?��?��. ( by opkr)
-    else if( nTrafficSign == TS_BUS_ONLY ) traffic_sign = &img_bus_only;  // 버스?��?��차로?��?��
-    else if( nTrafficSign == TS_BUMP_ROAD ) traffic_sign = &img_speed_bump;  // 과속방�???��
-    else if( nTrafficSign == TS_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;  // ?��?���?
-    else if( nTrafficSign == TS_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone;  // ?��?���?
-    else if( nTrafficSign == TS_CURVE_RIGHT ) traffic_sign = &img_curve_right;  // ?��른쪽 급커�?
-    else if( nTrafficSign == TS_CURVE_LEFT ) traffic_sign = &img_curve_left;  // ?���? 급커�?
-    else if( nTrafficSign == TS_NARROW_ROAD ) traffic_sign = &img_narrow_road; // 좁아�??�� ?���?
-    else if( nTrafficSign == TS_RAIL_ROAD ) traffic_sign = &img_rail_road;   // 철길건널�?
-    else if( nTrafficSign == TS_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;  // 주정차단?��
-    else if( nTrafficSign == TS_LANE_CHANGE1 ) traffic_sign = &img_img_space;  // 차선�?경금�??��?��
-    else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space;  // 차선�?경금�?종료
-    else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space;  // 과적?��?��
-    else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space;  // 교통?��보수�?
-    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  // 추월금�??구간
-    else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; // 갓길?��?��
-    else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space;  // ?��?��불량?��?��  
+    if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  
+    else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;
+    else if( nTrafficSign == TS_BUS_ONLY ) traffic_sign = &img_bus_only; 
+    else if( nTrafficSign == TS_BUMP_ROAD ) traffic_sign = &img_speed_bump; 
+    else if( nTrafficSign == TS_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;
+    else if( nTrafficSign == TS_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone; 
+    else if( nTrafficSign == TS_CURVE_RIGHT ) traffic_sign = &img_curve_right; 
+    else if( nTrafficSign == TS_CURVE_LEFT ) traffic_sign = &img_curve_left; 
+    else if( nTrafficSign == TS_NARROW_ROAD ) traffic_sign = &img_narrow_road; 
+    else if( nTrafficSign == TS_RAIL_ROAD ) traffic_sign = &img_rail_road;  
+    else if( nTrafficSign == TS_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;
+    else if( nTrafficSign == TS_LANE_CHANGE1 ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  
+    else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space; 
     
-    //else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// ?��?��카메?��(?��?��?��반카메라)  
-    else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; // 고정?��  - ?��?��
-    //else if( nTrafficSign == TS_CAMERA3 ) traffic_sign = &img_img_space; // 경찰�?(?��?��?��)  - ?��?��
-    //else if( nTrafficSign == TS_CAMERA4 ) traffic_sign = &img_img_space; // ?��?��구간(고정?�� ?��?��?��)
-    //else if( nTrafficSign == TS_CAMERA5  ) traffic_sign = &img_img_space;  // ?��?��(카메?��, ?��?��?���?)    
+
+    else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; 
     else if( speedLimit ) 
     {
-      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )   // 구간 ?��?��
+      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )  
       {
         traffic_sign = &img_section;
       }
@@ -1168,29 +1165,12 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   nYPos += nGap;
 
   float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
-  text4.sprintf("VLP(%d) = %.1f,  %.2f, %.0f", scene->longitudinalPlan.visionTurnControllerState, scene->longitudinalPlan.maxPredCurvature, scene->longitudinalPlan.maxPredLatAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  float latAcc = scene->longitudinalPlan.maxPredLatAcc;
+  float curvature = scene->longitudinalPlan.maxPredCurvature;
+  int state = scene->longitudinalPlan.visionTurnControllerState;
+  text4.sprintf("VLP(%d) = %.3f,  %.2f, %.0f", state, curvature, latAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
-
- 
-/*
-  int   lastGpsTimestamp  = osm.getLastGpsTimestamp();
-  double lastGpsLatitude  = osm.getLastGpsLatitude();
-  double lastGpsLongitude  = osm.getLastGpsLongitude();
-  float lastGpsSpeed  = osm.getLastGpsSpeed();
-  float lastGpsBearingDeg  = osm.getLastGpsBearingDeg();
-  float lastGpsAccuracy  = osm.getLastGpsAccuracy();
-  float lastGpsBearingAccuracyDeg  = osm.getLastGpsBearingAccuracyDeg();
-
-  m_osm.delta_gpstimestamp = lastGpsTimestamp - m_osm.lastGpsTimestamp;
-  m_osm.lastGpsTimestamp = lastGpsTimestamp;
-
-  int stamp = 0;
-  if(  m_osm.delta_gpstimestamp ) stamp = 1;
-  lastGpsSpeed *= 3.6;
-  nYPos += nGap;
-  text4.sprintf("GPS = %.5f, %.5f, %.0f, %.2f, %.1f,%.1f",  lastGpsLatitude, lastGpsLongitude, lastGpsSpeed,  lastGpsAccuracy, lastGpsBearingDeg, lastGpsBearingAccuracyDeg );  p.drawText( bb_x, nYPos+=nGap, text4 );
-*/
 }
 
 
