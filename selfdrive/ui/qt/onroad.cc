@@ -235,8 +235,10 @@ void NvgWindow::drawHud(QPainter &p) {
   float setSpeed = 0; 
   bool has_us_speed_limit = false;
   bool has_eu_speed_limit = false;
-
-
+  float speed = 0;
+  bool is_metric = false;
+  bool rightHandDM = false;
+    
   // Header gradient
   QLinearGradient bg(0, header_h - (header_h / 2.5), 0, header_h);
   bg.setColorAt(0, QColor::fromRgbF(0, 0, 0, 0.45));
