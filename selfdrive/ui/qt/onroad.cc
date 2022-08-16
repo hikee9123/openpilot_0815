@@ -548,7 +548,7 @@ void NvgWindow::drawHud(QPainter &p) {
 
   // dm icon
   if (!hideDM) {
-    drawIcon(p, radius / 2 + (bdr_s), rect().bottom() - footer_h / 1.5,
+    drawIcon(p, radius / 2 + (bdr_s), rect().bottom() - footer_h / 2,
              dm_img, QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
   p.restore();
