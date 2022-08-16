@@ -439,7 +439,7 @@ QColor OnPaint::angleSteersColor( int angleSteers )
 void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w ) 
 {
   int bb_rx = bb_x + (int)(bb_w/2);
-  int bb_ry = bb_y + 100;
+  int bb_ry = bb_y;
   int bb_h = 5;
   QColor lab_color = QColor(255, 255, 255, 200);
   QColor uom_color = QColor(255, 255, 255, 200);
@@ -758,7 +758,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   const int bb_dmr_y = (0 + bdr_s) + 220;
 
   // 1. kegman ui
-  bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y, bb_dml_w);
+  bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y+200, bb_dml_w);
   bb_ui_draw_measures_right(p, bb_dmr_x, bb_dmr_y, bb_dmr_w);
 
   // 2. tpms
