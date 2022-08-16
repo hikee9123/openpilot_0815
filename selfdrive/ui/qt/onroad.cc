@@ -231,10 +231,10 @@ void NvgWindow::updateState(const UIState &s) {
 void NvgWindow::drawHud(QPainter &p) {
   p.save();
 
-  float speedLimit = 0;
-  float setSpeed = 0; 
-  bool has_us_speed_limit = false;
-  bool has_eu_speed_limit = false;
+  float speedLimit = 100;
+  float setSpeed = 110; 
+  bool has_us_speed_limit = true;
+  bool has_eu_speed_limit = true;
   float speed = 0;
   bool is_metric = false;
   bool rightHandDM = false;
