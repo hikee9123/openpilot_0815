@@ -427,7 +427,7 @@ void NvgWindow::drawHud(QPainter &p) {
   int top_radius = 32;
   int bottom_radius = 32;
 
-  QRect set_speed_rect(60 + default_rect_width / 2 - rect_width / 2, 45, rect_width, rect_height);
+  QRect set_speed_rect(bdr_s + default_rect_width / 2 - rect_width / 2, bdr_s, rect_width, rect_height);
   p.setPen(QPen(whiteColor(75), 6));
   p.setBrush(blackColor(166));
   drawRoundedRect(p, set_speed_rect, top_radius, top_radius, bottom_radius, bottom_radius);
