@@ -420,7 +420,7 @@ void NvgWindow::drawHud(QPainter &p) {
 
   // Draw outer box + border to contain set speed and speed limit
   int has_eu_speed_limit = 0;  
-  speedLimit = 10;
+ // speedLimit = 10;
   if( speedLimit > 1 )
   {
     speedLimitStr = QString::number(std::nearbyint(speedLimit));
