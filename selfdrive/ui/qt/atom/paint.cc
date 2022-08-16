@@ -439,7 +439,7 @@ QColor OnPaint::angleSteersColor( int angleSteers )
 void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w ) 
 {
   int bb_rx = bb_x + (int)(bb_w/2);
-  int bb_ry = bb_y;
+  int bb_ry = bb_y + 50;
   int bb_h = 5;
   QColor lab_color = QColor(255, 255, 255, 200);
   QColor uom_color = QColor(255, 255, 255, 200);
