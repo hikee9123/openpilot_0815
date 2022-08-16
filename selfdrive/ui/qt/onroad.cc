@@ -210,7 +210,7 @@ void NvgWindow::updateState(const UIState &s) {
   setProperty("speedLimit", speed_limit);
 
   setProperty("is_cruise_set", cruise_set);
-  setProperty("speed", QString::number(std::nearbyint(cur_speed)));
+  setProperty("speedData", QString::number(std::nearbyint(cur_speed)));
   setProperty("setSpeed", maxspeed);
   setProperty("speedUnit", s.scene.is_metric ? "km/h" : "mph");
   setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE || !s.scene.scr.IsDrivermonitor );
