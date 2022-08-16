@@ -199,12 +199,19 @@ void NvgWindow::updateState(const UIState &s) {
   if (cruise_set && !s.scene.is_metric) {
     maxspeed *= KM_TO_MILE;
   }
-  QString maxspeed_str = cruise_set ? QString::number(std::nearbyint(maxspeed)) : "–";
+ // QString maxspeed_str = cruise_set ? QString::number(std::nearbyint(maxspeed)) : "–";
   float cur_speed = std::max(0.0, sm["carState"].getCarState().getVEgo() * (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH));
+
+  const auto osm = sm["liveMapData"].getLiveMapData();
+   int  osm_alive = osm.getSpeedLimitValid();
+   float speed_limit = osm_alive ? osm.getSpeedLimit(); : 0.0;
+  speed_limit *= (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH);
+
+  setProperty("speedLimit", speed_limit);
 
   setProperty("is_cruise_set", cruise_set);
   setProperty("speed", QString::number(std::nearbyint(cur_speed)));
-  setProperty("maxSpeed", maxspeed_str);
+  setProperty("setSpeed", maxspeed);
   setProperty("speedUnit", s.scene.is_metric ? "km/h" : "mph");
   setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE || !s.scene.scr.IsDrivermonitor );
   setProperty("status", s.status);
@@ -408,6 +415,69 @@ void NvgWindow::drawHud(QPainter &p) {
   bg.setColorAt(1, QColor::fromRgbF(0, 0, 0, 0));
   p.fillRect(0, 0, width(), header_h, bg);
 
+ // QString speedLimitStr = (speedLimit > 1) ? QString::number(std::nearbyint(speedLimit)) : "–";
+  QString setSpeedStr = is_cruise_set ? QString::number(std::nearbyint(setSpeed)) : "–";
+
+  // Draw outer box + border to contain set speed and speed limit
+  int default_rect_width = 172;
+  int rect_width = default_rect_width;
+  if (is_metric || has_eu_speed_limit) rect_width = 200;
+
+  int rect_height = 204;
+  int top_radius = 32;
+  int bottom_radius = 32;
+
+  QRect set_speed_rect(60 + default_rect_width / 2 - rect_width / 2, 45, rect_width, rect_height);
+  p.setPen(QPen(whiteColor(75), 6));
+  p.setBrush(blackColor(166));
+  drawRoundedRect(p, set_speed_rect, top_radius, top_radius, bottom_radius, bottom_radius);
+
+
+  // Draw MAX
+  if (is_cruise_set) {
+    if (status == STATUS_DISENGAGED) {
+      p.setPen(whiteColor());
+    } else if (status == STATUS_OVERRIDE) {
+      p.setPen(QColor(0x91, 0x9b, 0x95, 0xff));
+    } else if (speedLimit > 0) {
+      p.setPen(interpColor(
+        setSpeed,
+        {speedLimit + 5, speedLimit + 15, speedLimit + 25},
+        {QColor(0x80, 0xd8, 0xa6, 0xff), QColor(0xff, 0xe4, 0xbf, 0xff), QColor(0xff, 0xbf, 0xbf, 0xff)}
+      ));
+    } else {
+      p.setPen(QColor(0x80, 0xd8, 0xa6, 0xff));
+    }
+  } else {
+    p.setPen(QColor(0xa6, 0xa6, 0xa6, 0xff));
+  }
+  configFont(p, "Inter", 40, "SemiBold");
+  QRect max_rect = getTextRect(p, Qt::AlignCenter, tr("MAX"));
+  max_rect.moveCenter({set_speed_rect.center().x(), 0});
+  max_rect.moveTop(set_speed_rect.top() + 27);
+  p.drawText(max_rect, Qt::AlignCenter, tr("MAX"));
+
+  // Draw set speed
+  if (is_cruise_set) {
+    if (speedLimit > 0 && status != STATUS_DISENGAGED && status != STATUS_OVERRIDE) {
+      p.setPen(interpColor(
+        setSpeed,
+        {speedLimit + 5, speedLimit + 15, speedLimit + 25},
+        {whiteColor(), QColor(0xff, 0x95, 0x00, 0xff), QColor(0xff, 0x00, 0x00, 0xff)}
+      ));
+    } else {
+      p.setPen(whiteColor());
+    }
+  } else {
+    p.setPen(QColor(0x72, 0x72, 0x72, 0xff));
+  }
+  configFont(p, "Inter", 90, "Bold");
+  QRect speed_rect = getTextRect(p, Qt::AlignCenter, setSpeedStr);
+  speed_rect.moveCenter({set_speed_rect.center().x(), 0});
+  speed_rect.moveTop(set_speed_rect.top() + 77);
+  p.drawText(speed_rect, Qt::AlignCenter, setSpeedStr);
+
+/*
   // max speed
   QRect rc(bdr_s * 1, bdr_s * 1.0, 184, 202);
   p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 10));
@@ -419,11 +489,13 @@ void NvgWindow::drawHud(QPainter &p) {
   drawText(p, rc.center().x(), 85, tr("MAX"), is_cruise_set ? 200 : 100);
   if (is_cruise_set) {
     configFont(p, "Open Sans", 88, "Bold");
-    drawText(p, rc.center().x(), 205, maxSpeed, 255);
+    drawText(p, rc.center().x(), 205, setSpeedStr, 255);
   } else {
     configFont(p, "Open Sans", 80, "SemiBold");
-    drawText(p, rc.center().x(), 212, maxSpeed, 100);
+    drawText(p, rc.center().x(), 212, setSpeedStr, 100);
   }
+*/
+
 
   // current speed
   drawCurrentSpeed( p, rect().center().x(), 210 );
