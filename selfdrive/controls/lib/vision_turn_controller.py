@@ -249,7 +249,7 @@ class VisionTurnController():
 
 
   def update(self, enabled, v_ego, a_ego, v_cruise_setpoint, sm):
-    self._op_enabled = enabled
+    self._op_enabled = True   #enabled
     self._gas_pressed = sm['carState'].gasPressed
     self._v_ego = v_ego
     self._a_ego = a_ego
