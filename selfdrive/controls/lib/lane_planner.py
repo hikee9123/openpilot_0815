@@ -54,6 +54,8 @@ class LanePlanner:
     self.curvature = 0
     self.moveAvg = mvAvg.MoveAvg()
 
+    self.end_to_end = False
+
   def cal_model_speed(self, md, v_ego):
     if v_ego < 1.0:
       return  self.soft_model_speed
@@ -92,12 +94,16 @@ class LanePlanner:
 
   def car_params_update(self, sm):
     laneParam = sm['carParams'].laneParam
-    #carParams.laneParam.leftLaneOffset
-    #carParams.laneParam.rightLaneOffset
+    # laneParam.leftLaneOffset
+    # laneParam.rightLaneOffset
     self.path_offset = laneParam.pathOffsetAdj
 
-    if self.camera_offset != laneParam.cameraOffsetAdj:
-      self.camera_offset = laneParam.cameraOffsetAdj
+    camera_offset = laneParam.cameraOffsetAdj
+    if not self.end_to_end:
+      camera_offset = laneParam.leftLaneOffset
+
+    if self.camera_offset != camera_offset:
+      self.camera_offset = camera_offset
       print('camera_offset = {}'.format( self.camera_offset ) )
 
   def parse_model(self, md, sm):
