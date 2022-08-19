@@ -1181,6 +1181,8 @@ void OnPaint::ui_draw_grid( QPainter &p  )
   int y_center = state->fb_h/2;
   int nGap = 0;
 
+   p.setPen( QColor(200, 200, 200, 100) ); 
+
   for (int i = 0; i < 5; i++) {
     nGap = i * 200;
     p.drawLine( x_center + nGap, 0, x_center+ nGap , state->fb_h);  // line
