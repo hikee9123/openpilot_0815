@@ -986,6 +986,7 @@ class Controls:
       self.step()
       self.rk.monitor_time()
       self.prof.display()
+      self.update_osm()
 
 def main(sm=None, pm=None, logcan=None):
   controls = Controls(sm, pm, logcan)
