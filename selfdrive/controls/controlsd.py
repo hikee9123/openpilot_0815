@@ -113,7 +113,7 @@ class Controls:
         ignore += ['driverCameraState', 'managerState']
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState','liveNaviData','liveMapData'
+                                     'managerState', 'liveParameters', 'radarState','liveNaviData','liveMapData',
                                      'updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
                                      ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan', 'updateEvents'])
 
