@@ -185,7 +185,7 @@ void  CWidgetosmConfig::FrameOSM(QVBoxLayout *layout)
     "PRE_LANE_DISTANCE. Distance to pre-detect the position of the curve shown on the map.  def:100"
      );
 
-  pMenu7->SetControl( 100, 500, 10 );
+  pMenu7->SetControl( 0, 500, 10 );
   layout->addWidget( pMenu7 ); 
   
 }
