@@ -1167,9 +1167,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   
 
 
-  const int TS_Signs  = sm"controlsState"].getTurnSpeedLimitsAheadSigns();
-  const float TS_Speed  = sm"controlsState"].getTurnSpeedLimitsAhead();
-  const float TS_Distances  = sm"controlsState"].getTurnSpeedLimitsAheadDistances();
+  const int TS_Signs  = sm["controlsState"].getTurnSpeedLimitsAheadSigns();
+  const float TS_Speed  = sm["controlsState"].getTurnSpeedLimitsAhead();
+  const float TS_Distances  = sm["controlsState"].getTurnSpeedLimitsAheadDistances();
   text4.sprintf("TSLA(%d) = %.0f,  %.0f,  %d", TS_Signs, TS_Speed, TS_Distances, scene->scr.lane_line_cnt );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
