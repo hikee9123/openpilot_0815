@@ -155,7 +155,7 @@ class NaviControl():
     lanePos = model_v2.position
     distance = 0
     if len(lanePos.x) > 0:
-      distance = lanePos.x[32]
+      distance = lanePos.x[-1]
 
     return  distance
 
