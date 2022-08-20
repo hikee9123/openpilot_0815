@@ -750,15 +750,17 @@ p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEng
 void OnPaint::bb_ui_draw_UI(QPainter &p)
 {
   const int bb_dml_w = 180;
-  const int bb_dml_x = (0 + bdr_s);
+ // const int bb_dml_x = (0 + bdr_s);
   const int bb_dml_y = (0 + bdr_s) + 220;
 
   const int bb_dmr_w = 180;
   const int bb_dmr_x = 0 + state->fb_w - bb_dmr_w - bdr_s;
   const int bb_dmr_y = (0 + bdr_s) + 220;
 
+  const int bb_dml_x = bb_dmr_x - bb_dmr_w - 10;  
+
   // 1. kegman ui
-  bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y+190, bb_dml_w);
+  bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y, bb_dml_w);
   bb_ui_draw_measures_right(p, bb_dmr_x, bb_dmr_y, bb_dmr_w);
 
   // 2. tpms
