@@ -1162,6 +1162,14 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
+
+
+  const int TS_Signs  = sm"controlsState"].getTurnSpeedLimitsAheadSigns();
+  const float TS_Speed  = sm"controlsState"].getTurnSpeedLimitsAhead();
+  const float TS_Distances  = sm"controlsState"].getTurnSpeedLimitsAheadDistances();
+  text4.sprintf("TSLA(%d) = %.0f,  %.0f", TS_Signs, TS_Speed, TS_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
   nYPos += nGap;
 
   float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
