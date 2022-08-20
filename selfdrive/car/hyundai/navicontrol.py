@@ -152,9 +152,12 @@ class NaviControl():
 
   def get_auto_resume(self):
     model_v2 = self.sm['modelV2']
-    laneLines = model_v2.laneLines
-    line_cnt = len(laneLines.x)
-    return  line_cnt
+    lanePos = model_v2.position
+    distance = 0
+    if len(lanePos.x) > 0:
+      distance = lanePos.x[32]
+
+    return  distance
 
 
   def get_cut_in_car(self):
