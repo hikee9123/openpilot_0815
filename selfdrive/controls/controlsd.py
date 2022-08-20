@@ -866,9 +866,9 @@ class Controls:
 
 
     #osm
-    controlsState.turnSpeedLimitsAheadSigns = self.turnSpeedLimitsAheadSigns
-    controlsState.turnSpeedLimitsAhead = self.turnSpeedLimitsAhead
-    controlsState.turnSpeedLimitsAheadDistances = self.turnSpeedLimitsAheadDistances
+    controlsState.turnSpeedLimitsAheadSigns = int(self.turnSpeedLimitsAheadSigns)
+    controlsState.turnSpeedLimitsAhead = float(self.turnSpeedLimitsAhead)
+    controlsState.turnSpeedLimitsAheadDistances = float(self.turnSpeedLimitsAheadDistances)
 
 
     lat_tuning = self.CP.lateralTuning.which()
