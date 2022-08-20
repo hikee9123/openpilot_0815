@@ -229,9 +229,9 @@ class NaviControl():
 
     if CS.out.vEgo > 8.3:
       if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
-        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[0]
-        turnSpeedLimitsAheadSigns = liveMapData.turnSpeedLimitsAheadSigns[0]
-        turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[0]
+        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
+        turnSpeedLimitsAheadSigns = liveMapData.turnSpeedLimitsAheadSigns[-1]
+        turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
       else:
         turnSpeedLimitsAheadDistances = 0
         turnSpeedLimitsAheadSigns = 0
