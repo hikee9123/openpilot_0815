@@ -211,7 +211,7 @@ class CarController():
     elif CS.out.cruiseState.standstill:
       if not self.CP.opkrAutoResume:
         self.last_lead_distance = 0
-      elif CS.lead_distance < 4:
+      elif CS.lead_distance < 5:
         self.last_lead_distance = 0
       elif CS.out.gasPressed:
         self.last_lead_distance = 0
@@ -241,7 +241,6 @@ class CarController():
       else:
         self.debug_button = 0
         self.resume_cnt = 0
-
 
 
     return  can_sends
