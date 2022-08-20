@@ -1167,9 +1167,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   
 
 
-  const int TS_Signs  = scene->controls_state.getTurnSpeedLimitsAheadSigns();
-  const float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
-  const float TS_Distances  = scene->controls_state.getTurnSpeedLimitsAheadDistances();
+  int TS_Signs  = scene->controls_state.getTurnSpeedLimitsAheadSigns();
+  float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
+  float TS_Distances  = scene->controls_state.getTurnSpeedLimitsAheadDistances();
 
 
   TS_Speed *= 3.6;
