@@ -127,7 +127,7 @@ class LatControlMULTI(LatControl):
     self.LaPid.reset()
 
 
-  def update(self, active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk):
+  def update(self, active, CS, VM, params, last_actuators, steer_limited, desired_curvature, desired_curvature_rate, llk):
     atom_log = log.ControlsState.LateralATOMState.new_message()
 
 
@@ -140,9 +140,9 @@ class LatControlMULTI(LatControl):
         self.reset()
     else:
       output_torques = []
-      desired_angles = []      
+      desired_angles = [] 
       for funcs in self.lat_funs:
-        output_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
+        output_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, steer_limited, desired_curvature, desired_curvature_rate, llk )
         output_torques.append( output_torque )
         desired_angles.append( desired_angle )
 

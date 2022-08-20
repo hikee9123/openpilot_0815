@@ -25,7 +25,6 @@ class CarController():
 
     self.apply_steer_last = 0
     self.car_fingerprint = CP.carFingerprint
-    self.steer_rate_limited = False
     self.last_resume_frame = 0
     self.accel = 0
 
@@ -241,8 +240,8 @@ class CarController():
       else:
         self.debug_button = 0
         self.resume_cnt = 0
-    else:
-      self.NC.osm_turnLimit_alert( CS )
+
+
 
     return  can_sends
 
@@ -255,19 +254,14 @@ class CarController():
     right_lane = c.hudControl.rightLaneVisible 
     left_lane_warning = c.hudControl.leftLaneDepart 
     right_lane_warning = c.hudControl.rightLaneDepart
-    # pcm_cancel_cmd = c.cruiseControl.cancel    
-    # vFuture = c.hudControl.vFuture * 3.6
+
+
   
     # Steering Torque
     new_steer = int(round(actuators.steer * self.params.STEER_MAX))
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, self.params)
-    self.steer_rate_limited = new_steer != apply_steer
 
-    if not self.steer_rate_limited:
-      if CS.out.vEgo < 5:
-        self.steer_rate_limited = True
-      elif self.steer_timer_apply_torque < 1:
-        self.steer_rate_limited = True
+    self.NC.osm_turnLimit_alert( CS )
 
 
     if CS.engage_enable and not enabled:

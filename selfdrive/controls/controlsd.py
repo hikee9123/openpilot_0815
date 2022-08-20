@@ -190,6 +190,7 @@ class Controls:
     self.logged_comm_issue = False
     self.button_timers = {ButtonEvent.Type.decelCruise: 0, ButtonEvent.Type.accelCruise: 0}
     self.last_actuators = car.CarControl.Actuators.new_message()
+    self.steer_limited = False    
     self.desired_curvature = 0.0
     self.desired_curvature_rate = 0.0
 
@@ -675,7 +676,7 @@ class Controls:
                                                                                        lat_plan.curvatures,
                                                                                        lat_plan.curvatureRates)
       actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(CC.latActive, CS, self.VM, params,
-                                                                             self.last_actuators, self.desired_curvature,
+                                                                             self.last_actuators, self.steer_limited, self.desired_curvature,
                                                                              self.desired_curvature_rate, self.sm['liveLocationKalman'])
     else:
       lac_log = log.ControlsState.LateralDebugState.new_message()
@@ -814,6 +815,7 @@ class Controls:
       if self.openpilot_mode:
          self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
       CC.actuatorsOutput = self.last_actuators
+      self.steer_limited = abs(CC.actuators.steer - CC.actuatorsOutput.steer) > 1e-2      
 
     if self.drivermonitor:
       force_decel = (self.sm['driverMonitoringState'].awarenessStatus < 0.) or \

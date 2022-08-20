@@ -16,7 +16,7 @@ class LatControl(ABC):
     self.steer_max = 1.0
 
   @abstractmethod
-  def update(self, active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk):
+  def update(self, active, CS, VM, params, last_actuators, steer_limited,  desired_curvature, desired_curvature_rate, llk):
     pass
 
   def live_tune(self, CP):
@@ -25,8 +25,8 @@ class LatControl(ABC):
   def reset(self):
     self.sat_count = 0.
 
-  def _check_saturation(self, saturated, CS):
-    if saturated and CS.vEgo > 10. and not CS.steeringRateLimited and not CS.steeringPressed:
+  def _check_saturation(self, saturated, CS, steer_limited):
+    if saturated and CS.vEgo > 10. and not not steer_limited and not CS.steeringPressed:
       self.sat_count += self.sat_count_rate
     else:
       self.sat_count -= self.sat_count_rate
