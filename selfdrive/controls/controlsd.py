@@ -249,7 +249,7 @@ class Controls:
     return steerRatio, self.modelSpeed
 
 
-  def update_osm( self, CS):
+  def update_osm( self ):
     if self.sm.updated['liveMapData']:
       self.osm = self.sm['liveMapData']
       self.turnSpeedLimitsAheadSigns = len(self.osm.turnSpeedLimitsAheadSigns)
