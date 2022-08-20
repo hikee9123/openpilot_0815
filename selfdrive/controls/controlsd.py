@@ -252,11 +252,14 @@ class Controls:
   def update_osm( self ):
     if self.sm.updated['liveMapData']:
       self.osm = self.sm['liveMapData']
-      self.turnSpeedLimitsAheadSigns = len(self.osm.turnSpeedLimitsAheadSigns)
-      if self.turnSpeedLimitsAheadSigns > 0:
-          self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[0]
-          self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[0]
+      data_cnt = len(self.osm.turnSpeedLimitsAheadSigns)
+      
+      if data_cnt > 0:
+        self.turnSpeedLimitsAheadSigns = data_cnt  # self.osm.turnSpeedLimitsAheadSigns[0]
+        self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[0]
+        self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[0]
       else:
+        self.turnSpeedLimitsAheadSigns = 0
         self.turnSpeedLimitsAhead = 0
         self.turnSpeedLimitsAheadDistances = 0
 

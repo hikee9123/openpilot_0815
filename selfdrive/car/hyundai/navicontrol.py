@@ -41,6 +41,9 @@ class NaviControl():
 
     self.event_navi_alert = None
 
+    self.turnSpeedLimitsAheadSigns = 0
+    self.turnSpeedLimitsAhead = 0
+    self.turnSpeedLimitsAheadDistances = 0
 
 
   def update_lateralPlan( self ):
@@ -222,14 +225,31 @@ class NaviControl():
 
   def osm_turnLimit_alert( self, CS ):
     liveMapData = self.sm['liveMapData']
-    if liveMapData.turnSpeedLimitEndDistance > 30 and CS.out.vEgo > 8.3:
-      self.event_navi_alert = EventName.curvSpeedDown
+
+
+    if CS.out.vEgo > 8.3:
+      turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[0]
+      turnSpeedLimitsAheadSigns = liveMapData.turnSpeedLimitsAheadSigns[0]
+      turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[0]
+      
+      if turnSpeedLimitsAheadDistances > 0:
+        self.event_navi_alert = EventName.curvSpeedDown
+      elif liveMapData.turnSpeedLimitEndDistance > 0:
+        self.event_navi_alert = EventName.curvSpeedDown
+        turnSpeedLimitsAheadSigns = liveMapData.turnSpeedLimitSign
+        turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
+        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
+
+
+      self.turnSpeedLimitsAheadSigns = turnSpeedLimitsAheadSigns
+      self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
+      self.turnSpeedLimitsAheadDistances = turnSpeedLimitsAheadDistances
+
 
 
   def osm_speed_control( self, c, CS, ctrl_speed ):
-    liveMapData = self.sm['liveMapData']
-    if liveMapData.turnSpeedLimitEndDistance > 30 and CS.out.vEgo > 8.3:
-      turnSpeedLimit = liveMapData.turnSpeedLimit
+    if self.turnSpeedLimitsAheadDistances > 30 and CS.out.vEgo > 8.3:
+      turnSpeedLimit = self.turnSpeedLimitsAhead
       if ctrl_speed > turnSpeedLimit:  # osm speed control.
         self.event_navi_alert = EventName.curvSpeedDown
     else:
