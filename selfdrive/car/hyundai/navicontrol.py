@@ -150,6 +150,12 @@ class NaviControl():
       return dRel1, dRel2
 
 
+  def get_auto_resume(self):
+    model_v2 = self.sm['modelV2']
+    laneLines = model_v2.laneLines
+    line_cnt = len(laneLines.x)
+    return  line_cnt
+
 
   def get_cut_in_car(self):
       cut_in = 0
