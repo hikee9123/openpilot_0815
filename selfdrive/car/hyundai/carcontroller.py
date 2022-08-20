@@ -34,7 +34,6 @@ class CarController():
     self.scc12_cnt = 0
     
     self.NC = NaviControl(self.params, CP)
-    self.debug_button = 0
     self.cut_in_car_alert = False
     self.cut_in_car_time = 0
     
@@ -203,8 +202,8 @@ class CarController():
     self.accel = accel
     return can_sends    
 
-
-  def update_resume(self, can_sends,  c, CS, path_plan):
+  """
+  def update_ASCC(self, can_sends,  c, CS, path_plan):
     pcm_cancel_cmd = c.cruiseControl.cancel
     if pcm_cancel_cmd:
       can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL, self.CP.carFingerprint))
@@ -235,16 +234,30 @@ class CarController():
     elif CS.out.cruiseState.accActive:
       btn_signal = self.NC.update( c, CS, path_plan, self.frame )
       if btn_signal != None:
-        self.debug_button = btn_signal
         can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal, self.CP.carFingerprint ))
         self.resume_cnt += 1
       else:
-        self.debug_button = 0
         self.resume_cnt = 0
 
 
     return  can_sends
+  """
 
+  def update_ASCC(self, can_sends,  c, CS, path_plan):
+    pcm_cancel_cmd = c.cruiseControl.cancel
+    if pcm_cancel_cmd:
+      can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL, self.CP.carFingerprint))
+    elif CS.out.cruiseState.accActive:
+      if CS.out.cruiseState.standstill and not self.CP.opkrAutoResume:
+        btn_signal = None
+      else:
+        btn_signal = self.NC.update( c, CS, path_plan, self.frame )
+        if btn_signal != None:
+          can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal, self.CP.carFingerprint ))
+          self.resume_cnt += 1
+        else:
+          self.resume_cnt = 0
+    return  can_sends
 
   def update(self, c, CS ):
     enabled = c.enabled
@@ -316,7 +329,7 @@ class CarController():
     if  self.CP.openpilotLongitudinalControl:
       self.updateLongitudinal( can_sends, c, CS )
     else:
-      self.update_resume( can_sends, c, CS, path_plan )
+      self.update_ASCC( can_sends, c, CS, path_plan )
 
 
     if self.CP.atompilotLongitudinalControl:

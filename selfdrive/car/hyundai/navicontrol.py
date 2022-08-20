@@ -40,6 +40,8 @@ class NaviControl():
     self.frame_VSetDis = 30
 
     self.event_navi_alert = None
+    self.standstill = False
+    self.last_lead_distance = 0
 
     self.turnSpeedLimitsAheadSigns = 0
     self.turnSpeedLimitsAhead = 0
@@ -54,7 +56,7 @@ class NaviControl():
 
 
   def button_status(self, CS ): 
-    if not CS.acc_active or CS.cruise_buttons != Buttons.NONE: 
+    if not CS.acc_active or CS.cruise_buttons != Buttons.NONE or CS.out.brakePressed or CS.out.gasPressed: 
       self.wait_timer2 = 50 
     elif self.wait_timer2: 
       self.wait_timer2 -= 1
@@ -64,32 +66,32 @@ class NaviControl():
 
 
   # buttn acc,dec control
-  def switch(self, seq_cmd):
+  def switch(self, seq_cmd, CS ):
       self.case_name = "case_" + str(seq_cmd)
       self.case_func = getattr( self, self.case_name, lambda:"default")
-      return self.case_func()
-
-  def reset_btn(self):
-      if self.seq_command != 3:
-        self.seq_command = 0
+      return self.case_func( CS )
 
 
-  def case_default(self):
+
+  def case_default(self, CS):
       self.seq_command = 0
       return None
 
-  def case_0(self):
+  def case_0(self, CS):
       self.btn_cnt = 0
       self.target_speed = self.set_point
       delta_speed = self.target_speed - self.VSetDis
-      if delta_speed > 1:
+
+      if self.standstill:
+        self.last_lead_distance = 0
+        self.seq_command = 5
+      elif delta_speed > 1:
         self.seq_command = 1
       elif delta_speed < -1:
         self.seq_command = 2
       return None
 
-  def case_1(self):  # acc
-      btn_signal = Buttons.RES_ACCEL
+  def case_1(self, CS):  # acc
       self.btn_cnt += 1
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
@@ -97,11 +99,10 @@ class NaviControl():
       elif self.btn_cnt > 10:
         self.btn_cnt = 0
         self.seq_command = 3
-      return btn_signal
+      return Buttons.RES_ACCEL
 
 
-  def case_2(self):  # dec
-      btn_signal = Buttons.SET_DECEL
+  def case_2(self, CS):  # dec
       self.btn_cnt += 1
       if self.target_speed == self.VSetDis:
         self.btn_cnt = 0
@@ -109,24 +110,41 @@ class NaviControl():
       elif self.btn_cnt > 10:
         self.btn_cnt = 0
         self.seq_command = 3
-      return btn_signal
+      return Buttons.SET_DECEL
 
-  def case_3(self):  # None
-      btn_signal = None  # Buttons.NONE
-      
+  def case_3(self, CS):  # None
       self.btn_cnt += 1
-      #if self.btn_cnt <= 1:
-      # btn_signal = None  #Buttons.NONE
       if self.btn_cnt > 6: 
         self.seq_command = 0
-      return btn_signal
+      return None
+
+  def case_5(self, CS):  #  standstill
+      if CS.lead_distance < 5:
+        self.last_lead_distance = 0
+      elif self.last_lead_distance == 0:  
+        self.last_lead_distance = CS.lead_distance
+      elif CS.lead_distance != self.last_lead_distance:
+        self.seq_command = 6
+        self.btn_cnt = 0
+      return  None
+
+
+  def case_6(self, CS):  # resume
+      self.btn_cnt += 1
+      if self.btn_cnt > 5:
+        self.btn_cnt = 0
+        self.seq_command = 3
+      return Buttons.SET_DECEL
 
 
   def ascc_button_control( self, CS, set_speed ):
     self.set_point = max(30,set_speed)
     self.curr_speed = CS.out.vEgo * CV.MS_TO_KPH
     self.VSetDis   = CS.VSetDis
-    btn_signal = self.switch( self.seq_command )
+    self.standstill = CS.out.cruiseState.standstill
+
+
+    btn_signal = self.switch( self.seq_command, CS )
     return btn_signal
 
 
@@ -161,20 +179,20 @@ class NaviControl():
 
 
   def get_cut_in_car(self):
-      cut_in = 0
-      d_rel1 = 0
-      d_rel2 = 0
-      d_rel  = 150
-      model_v2 = self.sm['modelV2']
-      leads_v3 = model_v2.leadsV3
-      if len(leads_v3) > 1:
-        d_rel1 = leads_v3[0].x[0]
-        d_rel2 = leads_v3[1].x[0]
-        d_rel = min( d_rel1, d_rel2 )
-        if leads_v3[0].prob > 0.5 and leads_v3[1].prob > 0.5:
-          cut_in = d_rel1 - d_rel2  # > 3
+    cut_in = 0
+    d_rel1 = 0
+    d_rel2 = 0
+    d_rel  = 150
+    model_v2 = self.sm['modelV2']
+    leads_v3 = model_v2.leadsV3
+    if len(leads_v3) > 1:
+      d_rel1 = leads_v3[0].x[0]
+      d_rel2 = leads_v3[1].x[0]
+      d_rel = min( d_rel1, d_rel2 )
+      if leads_v3[0].prob > 0.5 and leads_v3[1].prob > 0.5:
+        cut_in = d_rel1 - d_rel2  # > 3
 
-      return cut_in, d_rel
+    return cut_in, d_rel
 
 
   def get_cut_in_radar(self):
