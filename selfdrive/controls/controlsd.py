@@ -256,8 +256,8 @@ class Controls:
       
       if data_cnt > 0:
         self.turnSpeedLimitsAheadSigns = data_cnt  # self.osm.turnSpeedLimitsAheadSigns[0]
-        self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[0]
-        self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[0]
+        self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[-1]
+        self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[-1]
       else:
         self.turnSpeedLimitsAheadSigns = 0
         self.turnSpeedLimitsAhead = 0

@@ -226,29 +226,23 @@ class NaviControl():
   def osm_turnLimit_alert( self, CS ):
     liveMapData = self.sm['liveMapData']
 
+    turnSpeedLimitsAheadDistances = 0
+    turnSpeedLimitsAhead = 0
 
-    if CS.out.vEgo > 8.3:
-      if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
-        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
-        turnSpeedLimitsAheadSigns = liveMapData.turnSpeedLimitsAheadSigns[-1]
-        turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
-      else:
-        turnSpeedLimitsAheadDistances = 0
-        turnSpeedLimitsAheadSigns = 0
-        turnSpeedLimitsAhead = 0
-      
-      if turnSpeedLimitsAheadDistances > 0:
-        self.event_navi_alert = EventName.curvSpeedDown
-      elif liveMapData.turnSpeedLimitEndDistance > 0:
-        self.event_navi_alert = EventName.curvSpeedDown
-        turnSpeedLimitsAheadSigns = liveMapData.turnSpeedLimitSign
-        turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
-        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
+    if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
+      turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
+      turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
+    
+    if turnSpeedLimitsAheadDistances > 0:
+      self.event_navi_alert = EventName.curvSpeedDown
+    elif liveMapData.turnSpeedLimitEndDistance > 0:
+      self.event_navi_alert = EventName.curvSpeedDown
+      turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
+      turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
 
 
-      self.turnSpeedLimitsAheadSigns = turnSpeedLimitsAheadSigns
-      self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
-      self.turnSpeedLimitsAheadDistances = turnSpeedLimitsAheadDistances
+    self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
+    self.turnSpeedLimitsAheadDistances = turnSpeedLimitsAheadDistances
 
 
 
