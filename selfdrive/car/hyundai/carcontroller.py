@@ -146,9 +146,9 @@ class CarController():
     str_log1 = 'MODE={:.0f} vF={:.1f}  DIST={:.2f}'.format( CS.cruise_set_mode, vFuture, CS.lead_distance )
     trace1.printf2( '{}'.format( str_log1 ) )
 
-    lane_cnt = self.NC.get_auto_resume()
+    distance = self.NC.get_auto_resume()
 
-    str_log1 = 'TG={:.1f}   aRV={:.2f} lane_cnt=%d'.format( apply_steer,  CS.aReqValue, lane_cnt  )
+    str_log1 = 'TG={:.1f}   aRV={:.2f} distance=%d'.format( apply_steer,  CS.aReqValue, distance  )
     trace1.printf3( '{}'.format( str_log1 ) )
   
 
