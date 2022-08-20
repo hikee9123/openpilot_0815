@@ -688,7 +688,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
     painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, std::clamp<float>(scene.lane_line_probs[i], 0.0, 0.7)));
     ui_draw_line( painter, scene.lane_line_vertices[i] );
 
-    lane_line_cnt = max( lane_line_cnt, scene.lane_line_vertices[i].cnt );
+    lane_line_cnt = std::max( lane_line_cnt, scene.lane_line_vertices[i].cnt );
    // painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
   }
 
