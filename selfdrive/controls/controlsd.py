@@ -257,8 +257,8 @@ class Controls:
           self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead
           self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances
       else:
-        self.osm.turnSpeedLimitsAhead = 0
-        self.osm.turnSpeedLimitsAheadDistances = 0
+        self.turnSpeedLimitsAhead = 0
+        self.turnSpeedLimitsAheadDistances = 0
 
 
 
