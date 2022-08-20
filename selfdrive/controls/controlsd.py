@@ -113,7 +113,7 @@ class Controls:
         ignore += ['driverCameraState', 'managerState']
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState','liveNaviData',
+                                     'managerState', 'liveParameters', 'radarState','liveNaviData','liveMapData'
                                      'updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
                                      ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan', 'updateEvents'])
 
@@ -229,6 +229,14 @@ class Controls:
     self.camera_offset = CAMERA_OFFSET
     self.modelSpeed = 0
 
+
+    #osm
+    self.turnSpeedLimitsAheadSigns = 0
+    self.turnSpeedLimitsAhead = 0
+    self.turnSpeedLimitsAheadDistances = 0
+
+
+
   def update_modelToSteerRatio(self, learnerSteerRatio ):
     steerRatio = learnerSteerRatio
     if self.sm.updated['lateralPlan']:
@@ -239,6 +247,20 @@ class Controls:
     steerRatio = clip( steerRatio, 13.5, 19.5 )
 
     return steerRatio, self.modelSpeed
+
+
+  def update_osm( self, CS):
+    if self.sm.updated['liveMapData']:
+      self.osm = self.sm['liveMapData']
+      self.turnSpeedLimitsAheadSigns = len(self.osm.turnSpeedLimitsAheadSigns)
+      if self.turnSpeedLimitsAheadSigns > 0:
+          self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead
+          self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances
+      else:
+        self.osm.turnSpeedLimitsAhead = 0
+        self.osm.turnSpeedLimitsAheadDistances = 0
+
+
 
 
   def update_events(self, CS):
@@ -604,9 +626,11 @@ class Controls:
     elif self.OpkrLiveSteerRatio == 1:  
       steerRatio, modelSpeed = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
-      str_log1 = '1.MS={:3.1f} sR={:.2f},{:.2f}'.format( modelSpeed, params.steerRatio, sr )
+      str_log1 = 'sR={:.2f},{:.2f}'.format( params.steerRatio, sr )
     else: 
       str_log1 = '0.sR={:.2f}'.format( sr )
+
+   
 
     trace1.printf1( '{}'.format( str_log1 ) )      
 
@@ -839,6 +863,13 @@ class Controls:
     controlsState.alertTextMsg1 = str(log_alertTextMsg1)
     controlsState.alertTextMsg2 = str(log_alertTextMsg2)
     controlsState.alertTextMsg3 = str(log_alertTextMsg3)
+
+
+    #osm
+    controlsState.turnSpeedLimitsAheadSigns = self.turnSpeedLimitsAheadSigns
+    controlsState.turnSpeedLimitsAhead = self.turnSpeedLimitsAhead
+    controlsState.turnSpeedLimitsAheadDistances = self.turnSpeedLimitsAheadDistances
+
 
     lat_tuning = self.CP.lateralTuning.which()
     if self.joystick_mode:
