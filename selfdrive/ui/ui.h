@@ -178,6 +178,8 @@ typedef struct UIScene {
      bool leftblindspot; 
 
      bool IsCalibraionGridViewToggle;
+
+     int  lane_line_cnt;
   } scr;
 
 

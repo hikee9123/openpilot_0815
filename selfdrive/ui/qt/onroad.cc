@@ -683,11 +683,16 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIState *s) {
 
 
   // lanelines
+  int  lane_line_cnt = 0;
   for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
     painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, std::clamp<float>(scene.lane_line_probs[i], 0.0, 0.7)));
     ui_draw_line( painter, scene.lane_line_vertices[i] );
+
+    lane_line_cnt = max( lane_line_cnt, scene.lane_line_vertices[i].cnt );
    // painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
   }
+
+   scene.scr.lane_line_cnt = lane_line_cnt;
 
   // road edges
   for (int i = 0; i < std::size(scene.road_edge_vertices); ++i) {
