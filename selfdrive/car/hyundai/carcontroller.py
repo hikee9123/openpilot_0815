@@ -148,7 +148,7 @@ class CarController():
 
     distance = self.NC.get_auto_resume()
 
-    str_log1 = 'TG={:.1f}   aRV={:.2f} distance={}'.format( apply_steer,  CS.aReqValue, distance  )
+    str_log1 = 'TG={:.1f}   aRV={:.2f} distance={:.1f}'.format( apply_steer,  CS.aReqValue, distance  )
     trace1.printf3( '{}'.format( str_log1 ) )
   
 
