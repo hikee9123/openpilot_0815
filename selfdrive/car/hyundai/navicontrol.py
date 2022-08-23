@@ -40,7 +40,6 @@ class NaviControl():
     self.frame_VSetDis = 30
 
     self.event_navi_alert = None
-    self.standstill = False
     self.last_lead_distance = 0
 
     self.turnSpeedLimitsAheadSigns = 0
@@ -82,7 +81,9 @@ class NaviControl():
       self.target_speed = self.set_point
       delta_speed = self.target_speed - self.VSetDis
 
-      if self.standstill:
+      standstill = CS.out.cruiseState.standstill
+
+      if standstill:
         self.last_lead_distance = 0
         self.seq_command = 5
       elif delta_speed > 1:
@@ -119,7 +120,10 @@ class NaviControl():
       return None
 
   def case_5(self, CS):  #  standstill
-      if CS.lead_distance < 5:
+      standstill = CS.out.cruiseState.standstill
+      if not standstill:
+        self.seq_command = 0
+      elif CS.lead_distance < 5:
         self.last_lead_distance = 0
       elif self.last_lead_distance == 0:  
         self.last_lead_distance = CS.lead_distance
@@ -141,7 +145,7 @@ class NaviControl():
     self.set_point = max(30,set_speed)
     self.curr_speed = CS.out.vEgo * CV.MS_TO_KPH
     self.VSetDis   = CS.VSetDis
-    self.standstill = CS.out.cruiseState.standstill
+
 
 
     btn_signal = self.switch( self.seq_command, CS )
@@ -274,6 +278,7 @@ class NaviControl():
   def osm_speed_control( self, c, CS, ctrl_speed ):
     if self.turnSpeedLimitsAheadDistances > 30 and CS.out.vEgo > 8.3:
       turnSpeedLimit = self.turnSpeedLimitsAhead
+      turnSpeedLimit = max( turnSpeedLimit, ctrl_speed - 10 )
       if ctrl_speed > turnSpeedLimit:  # osm speed control.
         self.event_navi_alert = EventName.curvSpeedDown
     else:
