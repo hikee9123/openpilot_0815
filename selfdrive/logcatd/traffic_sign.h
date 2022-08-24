@@ -57,3 +57,39 @@ typedef enum TrafficSign {
   TS_SHOULDER  = 250,  // 갓길단속
   TS_LOAD_POOR  = 251,  // 적재불량단속  
 } TrafficSign;
+
+
+// TMAP
+   //  opkrspdlimit,opkrspd2limit
+   //  opkrspddist,opkrspd2dist
+   //  opkrsigntype,opkrspdsign
+/*
+   opkrsigntype  값정리
+    1 과속 단속 카메라
+    2. 구간단속 시작
+    3  구간단속 종료
+    4. 구간간속 진향중
+    7. 이동식 카메라
+    8. Box형 카메라
+    13.
+    29. 사고다발  x
+    30. 급커브     x
+    46.
+    63  졸움쉼터  x
+*/
+
+ // 1. 안심모드
+    // - opkrspd2dist, opkrspdsign, opkrspdlimit,
+
+//  2. overlay mode
+    // - opkrspd2limit, opkrsigntype, opkrspddist
+
+typedef enum TrafficSign_TMAP {
+  TM_CAMERA1  = 1,  // 단속카메라(신호위반카메라)  
+  TM_INTERVAL  = 2,  // 구간단속 시작
+  TM_INTERVAL2  = 3,  // 구간단속 종료
+  TM_INTERVAL4  = 4,  // 구간간속 진향중
+  TM_CAMERA3  = 7,  // 7. 이동식 카메라
+  TM_CAMERA4  = 8,  // 8. Box형 카메라
+
+} TrafficSign_TMAP;

@@ -278,10 +278,8 @@ def map_exec():
 
 
 def map_hide():
-  #if map_select() == 0:
   os.system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity") 
-  #else:
-  #  os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
+
 
 
 def map_return():

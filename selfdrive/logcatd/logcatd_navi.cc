@@ -39,6 +39,15 @@ int traffic_camera( int nsignal_type, float fDistance )
 
     switch( nsignal_type )
     {
+      // tmap
+      case  TM_CAMERA1:
+      case  TM_INTERVAL:
+      case  TM_INTERVAL2:
+      case  TM_INTERVAL4:
+      case  TM_CAMERA3:
+      case  TM_CAMERA4:
+      
+      // mappy
       case  TS_CAMERA1:  // 단속(카메라, 신호위반) 
       case  TS_CAMERA2_BUS:
       case  TS_CAMERA3:
@@ -52,7 +61,7 @@ int traffic_camera( int nsignal_type, float fDistance )
         if(fDistance < 800)
             ret_code = 1;
         break;
-    } 
+    }
 
     return ret_code;
 }
