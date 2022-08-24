@@ -26,7 +26,7 @@ from selfdrive.version import is_dirty, get_commit, get_version, get_origin, get
 
 sys.path.append(os.path.join(BASEDIR, "pyextra"))
 
-navi_select = 0
+
 
 
 def manager_init() -> None:
@@ -260,22 +260,30 @@ def manager_thread() -> None:
     if shutdown:
       break
 
+def map_select():
+  param_navi_sel = Params().get("OpkrNaviSelect")
+  if param_navi_sel  is not None:
+    navi_select = int(param_navi_sel)
+  else:
+    navi_select = 0    
+  return  navi_select
+
 def map_exec():
-  if navi_select == 0:
+  if map_select() == 0:
     os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
   else:
     os.system("am start com.thinkware.inaviair/com.thinkware.inaviair.UIActivity") 
 
 
 def map_hide():
-  if navi_select == 0:
+  if map_select() == 0:
     os.system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity") 
   else:
     os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
 
 
 def map_return():
-  if navi_select == 0:
+  if map_select() == 0:
     os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
   else:
     os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
@@ -286,11 +294,6 @@ def main() -> None:
 
   param_navi = Params().get("OpkrRunNaviOnBoot")
 
-  param_navi_sel = Params().get("OpkrNaviSelect")
-  if param_navi_sel  is not None:
-    navi_select = int(param_navi_sel)
-  else:
-    navi_select = 0
 
   if param_navi is not None:
     navi_on_boot = int(param_navi)
