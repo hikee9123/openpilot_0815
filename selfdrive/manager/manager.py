@@ -265,7 +265,9 @@ def map_select():
   if param_navi_sel  is not None:
     navi_select = int(param_navi_sel)
   else:
-    navi_select = 0    
+    navi_select = 0
+
+  navi_select = 0
   return  navi_select
 
 def map_exec():
