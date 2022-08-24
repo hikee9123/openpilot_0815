@@ -156,7 +156,9 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   connect(tmapclose_exe, &ButtonControl::clicked, [=]() 
   { 
     Params param = Params();
-    int param_navi_sel = int( param.get("OpkrNaviSelect") );
+    auto str = QString::fromStdString(Params().get("OpkrNaviSelect"));
+    int param_navi_sel = str.toInt();    
+
 
     if( param_navi_sel == 0 )
       std::system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
