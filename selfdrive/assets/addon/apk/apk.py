@@ -79,7 +79,7 @@ def update_apks():
         system("pm uninstall %s" % app)
         success = install_apk(apk_path)
 
-      elif app == "com.thinkware.inaviair":
+      if app == "com.thinkware.inaviair":
         wanted_permissions = ["ACCESS_FINE_LOCATION", "READ_PHONE_STATE", "READ_EXTERNAL_STORAGE", "SYSTEM_ALERT_WINDOW"]
         for permission in wanted_permissions:
           pm_grant("com.thinkware.inaviair", "android.permission."+permission)
