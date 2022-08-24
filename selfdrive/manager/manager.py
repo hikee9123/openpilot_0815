@@ -26,6 +26,8 @@ from selfdrive.version import is_dirty, get_commit, get_version, get_origin, get
 
 sys.path.append(os.path.join(BASEDIR, "pyextra"))
 
+navi_select = 0
+
 
 def manager_init() -> None:
   # update system time from panda
@@ -259,13 +261,24 @@ def manager_thread() -> None:
       break
 
 def map_exec():
-  os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
+  if navi_select == 0:
+    os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
+  else:
+    os.system("am start com.thinkware.inaviair/com.thinkware.inaviair.UIActivity") 
+
 
 def map_hide():
-  os.system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity") 
+  if navi_select == 0:
+    os.system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity") 
+  else:
+    os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
 
+    
 def map_return():
-  os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
+  if navi_select == 0:
+    os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
+  else:
+    os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
 
 def main() -> None:
   spinner = Spinner()
