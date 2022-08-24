@@ -267,7 +267,7 @@ def map_select():
   else:
     navi_select = 0
 
-  navi_select = 0
+ # navi_select = 0
   return  navi_select
 
 def map_exec():
