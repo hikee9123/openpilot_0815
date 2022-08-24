@@ -155,8 +155,8 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   auto tmapclose_exe = new ButtonControl("NAVI Return", "Open","NAVI을 Return 합니다.");
   connect(tmapclose_exe, &ButtonControl::clicked, [=]() 
   { 
-    params = Params();
-    int param_navi_sel = params.get("OpkrNaviSelect");
+    param = Params();
+    int param_navi_sel = int( param.get("OpkrNaviSelect") );
 
     if( param_navi_sel == 0 )
       std::system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
