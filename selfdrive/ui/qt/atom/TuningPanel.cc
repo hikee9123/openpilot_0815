@@ -44,6 +44,8 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
   main_layout->addWidget(new CosmWidget(this));  
   main_layout->addWidget(new CWidgetosmConfig(this));
   main_layout->addWidget(new CWidgetosmNodesData(this));
+
+  main_layout->addWidget(new CNaviSelect(this));
 }
 
 

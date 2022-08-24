@@ -9,8 +9,6 @@
 #include <QTimer>
 #include <QWidget>
 
-//#include "selfdrive/ui/qt/widgets/controls.h"
-//#include "selfdrive/ui/ui.h"
 
 #include "selfdrive/ui/qt/atom/TuningPanel.h"
 #include "selfdrive/ui/qt/widgets/groupWidget.h"
@@ -37,10 +35,6 @@ public:
   Params params;
   
   void  FrameOSM(QVBoxLayout *parent=nullptr);
-//  void  FrameINDI(QVBoxLayout *parent=nullptr);
-//  void  FrameLQR(QVBoxLayout *parent=nullptr);
-//  void  FrameTORQUE(QVBoxLayout *parent=nullptr);
-//  void  FrameMULTI(QVBoxLayout *parent=nullptr);
 
   
 
@@ -100,6 +94,36 @@ public:
   
   void  FrameOSM(QVBoxLayout *parent=nullptr);
 
+  
+
+public slots:  
+  virtual void refresh(int nID = 0);  
+};
+
+
+
+
+class CNaviSelect : public CGroupWidget 
+{
+  Q_OBJECT
+
+public:
+  explicit CNaviSelect( TuningPanel *panel );
+
+  enum emType {
+    TP_MAPPY = 0,
+    TP_INAVI,
+    TP_ALL,
+  };  
+
+ private:
+  TuningPanel  *m_pPanel;
+  QPushButton  *method_label;
+  int    m_nMethod;
+  Params params;
+  
+  void  FrameMappy(QVBoxLayout *parent=nullptr);
+  void  FrameINavi(QVBoxLayout *parent=nullptr);
   
 
 public slots:  

@@ -271,82 +271,6 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   pMenu1->SetControl( 0, 1, 0.001 );
   layout->addWidget( pMenu1 );  
 
-
-/*
-  // 2.
-  MenuControl *pMenu2 = new MenuControl( 
-    "OpkrOSM_MAX_LAT_ACC",
-    "Max lat acc",
-    "_MAX_LAT_ACC Maximum lateral acceleration in turns. def:2.3"
-     );
-
-  pMenu2->SetControl( 1, 5, 0.1 );
-  layout->addWidget( pMenu2 );
-
-
-  // 3.
-  MenuControl *pMenu3 = new MenuControl( 
-    "OpkrOSM_SPLINE_EVAL_STEP",
-    "Spline eval step",
-    "_SPLINE_EVAL_STEP mts for spline evaluation for curvature calculation. def:5"
-     );
-
-  pMenu3->SetControl( 1, 10, 0.1 );
-  layout->addWidget( pMenu3 );
-  
-  // 4.
-  MenuControl *pMenu4 = new MenuControl( 
-    "OpkrOSM_MIN_SPEED_SECTION_LENGTH",
-    "Min speed section length",
-    "_MIN_SPEED_SECTION_LENGTH  Sections below this value will not be split in smaller sections. mts. def:100"
-     );
-
-  pMenu4->SetControl( 0, 200, 1 );
-  layout->addWidget( pMenu4 );
-
-   // 5.
-  MenuControl *pMenu5 = new MenuControl( 
-    "OpkrOSM_MAX_CURV_DEVIATION_FOR_SPLIT",
-    "Max curv deviation for split",
-    "_MAX_CURV_DEVIATION_FOR_SPLIT Split a speed section if the max curvature deviates from mean by this factor. def:2"
-     );
-
-  pMenu5->SetControl( 0, 5, 0.1 );
-  layout->addWidget( pMenu5 );
-
-   // 6.
-  MenuControl *pMenu6 = new MenuControl( 
-    "OpkrOSM_MAX_CURV_SPLIT_ARC_ANGLE",
-    "Max curv split arc angle",
-    "_MAX_CURV_SPLIT_ARC_ANGLE degrees. Arc section to split into new speed section around max curvature.. def:90"
-     );
-
-  pMenu6->SetControl( 50, 200, 1 );
-  layout->addWidget( pMenu6 ); 
-
-
-   // 7.
-  MenuControl *pMenu7 = new MenuControl( 
-    "OpkrOSM_MIN_NODE_DISTANCE",
-    "Min mode distance",
-    "_MIN_NODE_DISTANCE Minimum distance between nodes for spline evaluation. Data is enhanced if not met. mts.  def:50"
-     );
-
-  pMenu7->SetControl( 10, 100, 1 );
-  layout->addWidget( pMenu7 );          
-
-
-   // 8.
-  MenuControl *pMenu8 = new MenuControl( 
-    "OpkrOSM_ADDED_NODES_DIST",
-    "Added nodes dist",
-    "_ADDED_NODES_DIST Distance between added nodes when data is enhanced for spline evaluation. mts.  def:15"
-     );
-
-  pMenu8->SetControl( 0, 50, 1 );
-  layout->addWidget( pMenu8 );
-*/
-
    // 9.
   MenuControl *pMenu9 = new MenuControl( 
     "OpkrOSM_DIVERTION_SEARCH_RANGE1",
@@ -366,8 +290,6 @@ void  CWidgetosmNodesData::FrameOSM(QVBoxLayout *layout)
   pMenu10->SetControl( 40, 60, 1 );
   layout->addWidget( pMenu10 );                     
 
-
-
 }
 
 
@@ -385,6 +307,101 @@ void CWidgetosmNodesData::refresh( int nID )
   }
 
   if( m_nMethod == TP_NONE )
+    method_label->setStyleSheet("background-color: #393939;");
+  else
+    method_label->setStyleSheet("background-color: #E22C2C;");
+
+  method_label->setText( str ); 
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+//
+
+
+
+CNaviSelect::CNaviSelect( TuningPanel *panel ) : CGroupWidget( "Navi Select" ) 
+{
+  m_pPanel = panel;
+  QString str_param = "OpkrNaviSelect";
+  auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
+  int value = str.toInt();
+  m_nMethod = value;    
+
+  // label
+  method_label = new QPushButton("method"); // .setAlignment(Qt::AlignVCenter|Qt::AlignHCenter);
+  method_label->setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #00A12E;
+  )");
+  method_label->setFixedSize( 500, 100);
+  hlayout->addWidget(method_label);
+  
+  connect(method_label, &QPushButton::clicked, [=]() {
+    m_nMethod += 1;
+    if( m_nMethod >= TP_ALL )
+      m_nMethod = 0;
+
+    QString values = QString::number(m_nMethod);
+    params.put( str_param.toStdString(), values.toStdString());      
+    refresh();
+  });
+  main_layout->addLayout(hlayout);
+
+
+  FrameMappy( CreateBoxLayout(TP_MAPPY) );
+  FrameINavi( CreateBoxLayout(TP_INAVI) );
+  refresh();
+}  
+
+
+void  CNaviSelect::FrameMappy(QVBoxLayout *layout)
+{
+   // 1.
+  MenuControl *pMenu1 = new MenuControl( 
+    "OpkrNavi_Mappy",
+    "Mappy curvature threshold",
+    "_TURN_CURVATURE_THRESHOLD A curvature over this value will generate a speed limit section. 1/mts. def:0.002"
+     );
+
+  pMenu1->SetControl( 0, 1, 0.001 );
+  layout->addWidget( pMenu1 );  
+}
+
+
+void  CNaviSelect::FrameINavi(QVBoxLayout *layout)
+{
+   // 1.
+  MenuControl *pMenu1 = new MenuControl( 
+    "OpkrNavi_INavi",
+    "INavi curvature threshold",
+    "_TURN_CURVATURE_THRESHOLD A curvature over this value will generate a speed limit section. 1/mts. def:0.002"
+     );
+
+  pMenu1->SetControl( 0, 1, 0.001 );
+  layout->addWidget( pMenu1 );  
+
+}
+
+
+void CNaviSelect::refresh( int nID )
+{
+  CGroupWidget::refresh( m_nMethod );
+
+  QString  str;
+  switch( m_nMethod )
+  {
+    case TP_MAPPY :  str = "0.Mappy";    break;
+    case TP_INAVI :  str = "1.Inavi";      break;
+  }
+
+  if( m_nMethod == TP_MAPPY )
     method_label->setStyleSheet("background-color: #393939;");
   else
     method_label->setStyleSheet("background-color: #E22C2C;");
