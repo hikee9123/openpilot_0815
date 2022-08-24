@@ -273,7 +273,7 @@ def map_hide():
   else:
     os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
 
-    
+
 def map_return():
   if navi_select == 0:
     os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
@@ -282,8 +282,16 @@ def map_return():
 
 def main() -> None:
   spinner = Spinner()
-  spinner.update_progress(0, 100)  
+  spinner.update_progress(0, 100)
+
   param_navi = Params().get("OpkrRunNaviOnBoot")
+
+  param_navi_sel = Params().get("OpkrNaviSelect")
+  if param_navi_sel  is not None:
+    navi_select = int(param_navi_sel)
+  else:
+    navi_select = 0
+
   if param_navi is not None:
     navi_on_boot = int(param_navi)
   else:

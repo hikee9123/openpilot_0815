@@ -256,6 +256,10 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrOSM_TURN_CURVATURE_THRESHOLD", PERSISTENT},
     {"OpkrOSM_DIVERTION_SEARCH_RANGE1", PERSISTENT},
     {"OpkrOSM_DIVERTION_SEARCH_RANGE2", PERSISTENT},
+
+    // Navi
+    {"OpkrNaviSelect", PERSISTENT},
+    
 };
 
 } // namespace

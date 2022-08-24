@@ -112,7 +112,7 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
 
 
   QVBoxLayout *menu_layout = new QVBoxLayout(m_pChildFrame1);
- // menu_layout->setContentsMargins(32, 5, 32, 32);
+
 
 
   MenuControl *pMenu1 = new MenuControl( 
@@ -152,58 +152,6 @@ void CSteerWidget::FrameSmooth(QWidget *parent)
   pMenu4->SetString( 0, "Not");
   menu_layout->addWidget( pMenu4 ); 
 
-  // Update + Cancel buttons
-  /*
-  QHBoxLayout *btn_layout = new QHBoxLayout();
-  btn_layout->setSpacing(30);
-  menu_layout->addLayout(btn_layout);
-
-    QPushButton* confirm_btn = new QPushButton("confirm");
-   // confirm_btn->setFixedHeight(120);
-    confirm_btn->setStyleSheet(R"(
-      QPushButton {
-        height: 120px;
-        border-radius: 15px;
-        background-color: gray;
-      }
-      * {
-        font-size: 50px; 
-        font-weight: 400; 
-        text-align: left;
-      }
-    )");  
-    btn_layout->addWidget(confirm_btn);
-    QObject::connect(confirm_btn, &QPushButton::clicked, [=]() {
-     // pmyWidget->setVisible(false);
-     //m_pChildFrame1->hide();
-     m_bShow = 0;
-     refresh();
-    });    
-
-
-
-    QPushButton* cancel_btn = new QPushButton("cancel");
-   // cancel_btn->setFixedHeight(120);
-    cancel_btn->setStyleSheet(R"(
-      QPushButton {
-        height: 120px;
-        border-radius: 15px;
-        background-color: gray;
-      }
-      * {
-        font-size: 50px; 
-        font-weight: 400; 
-        text-align: left;
-      }
-    )");  
-    btn_layout->addWidget(cancel_btn);
-    QObject::connect(cancel_btn, &QPushButton::clicked, [=]() {
-     // pmyWidget->setVisible(false);
-     //m_pChildFrame1->hide();
-     m_bShow = 0;
-     refresh();
-    });
-    */
 }
 
 void CSteerWidget::FrameNormal(QWidget *parent) 
@@ -291,12 +239,6 @@ void CSteerWidget::refresh()
 
 
 
-/**
- * @brief   CLaneWidget
- * 
- */
-
-
 CLaneWidget::CLaneWidget( TuningPanel *panel, QWidget *parent) : QFrame(parent) 
 {
   m_pPanel = panel; 
@@ -352,8 +294,7 @@ CLaneWidget::CLaneWidget( TuningPanel *panel, QWidget *parent) : QFrame(parent)
     if( m_nSelect > 1 )
       m_nSelect = 0;
 
-    //QString values = QString::number(m_nSelect);
-   // params.put( str_param.toStdString(), values.toStdString());    
+
     refresh();
   });
 
