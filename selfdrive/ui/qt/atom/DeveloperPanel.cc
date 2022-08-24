@@ -155,7 +155,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   auto tmapclose_exe = new ButtonControl("NAVI Return", "Open","NAVI을 Return 합니다.");
   connect(tmapclose_exe, &ButtonControl::clicked, [=]() 
   { 
-    param = Params();
+    Params param = Params();
     int param_navi_sel = int( param.get("OpkrNaviSelect") );
 
     if( param_navi_sel == 0 )
