@@ -193,6 +193,14 @@ int main() {
         event.dEventSec = dCurrentSec;
         update_event( &event, dSpeed_ms );
       }
+      else if( strcmp( entry.tag, "opkrroadsigntype" ) == 0 )
+      {
+        event.safetySign = atoi( entry.message );
+        opkr = 6;
+        //if (res.safetySign == 107) {  // 과속 방지턱
+       //   sBump = true;
+       // }
+      }      
       else if( strcmp( entry.tag, "opkrturninfo" ) == 0 )
       {
         event.turnInfo = atoi( entry.message );
@@ -265,8 +273,8 @@ int main() {
 
       if( opkr )
       {
-       //printf("logcat ID(%d) - PID=%d tag=%d.[%s] \n", log_msg.id(),  entry.pid,  entry.tid, entry.tag);
-       //printf("entry.message=[%s]  \n", entry.message );
+        printf("logcat ID(%d) - PID=%d tag=%d.[%s] \n", log_msg.id(),  entry.pid,  entry.tid, entry.tag);
+         printf("entry.message=[%s]  \n", entry.message );
       }
 
       pm.send("liveNaviData", msg);
