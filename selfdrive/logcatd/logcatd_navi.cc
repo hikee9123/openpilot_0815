@@ -16,6 +16,7 @@ typedef struct LiveNaviDataResult {
       float speedLimitDistance;  // Float32;
       float remainTime;  // Float32;
       float safetySign;    // Float32;
+      float safetySign2;
       float roadCurvature;    // Float32;
       int   turnInfo;    // Int32;
       int   distanceToTurn;    // Int32;      
@@ -195,7 +196,7 @@ int main() {
       }
       else if( strcmp( entry.tag, "opkrroadsigntype" ) == 0 )
       {
-        event.safetySign = atoi( entry.message );
+        event.safetySign2 = atoi( entry.message );
         opkr = 6;
         //if (res.safetySign == 107) {  // 과속 방지턱
        //   sBump = true;
@@ -256,6 +257,7 @@ int main() {
       framed.setSpeedLimit( event.speedLimit );  // Float32;
       framed.setSpeedLimitDistance( event.speedLimitDistance );  // raw_target_speed_map_dist Float32;
       framed.setSafetySign( event.safetySign ); // map_sign Float32;
+      //safetySign2
       framed.setRoadCurvature( event.roadCurvature ); // road_curvature Float32;
       framed.setRemainTime( event.remainTime ); // road_curvature Float32;
 

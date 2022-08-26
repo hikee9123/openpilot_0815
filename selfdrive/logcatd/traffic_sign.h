@@ -136,8 +136,8 @@ typedef enum TrafficSign_TMAP {
   TM_CAMERA3  = 7,  // 7. 이동식 카메라
   TM_CAMERA4  = 8,  // 8. Box형 카메라
 
-  TS_SCHOOL_ZONE1 = 16,  // 스쿨존
-  TS_SCHOOL_ZONE2 = 18,  //실버존
+  TM_SCHOOL_ZONE1 = 16,  // 스쿨존
+  TM_SCHOOL_ZONE2 = 18,  //실버존
 
 
 } TrafficSign_TMAP;
