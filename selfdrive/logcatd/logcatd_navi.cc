@@ -165,7 +165,7 @@ int main() {
 
 
 
-  int mapType =  std::atoi(params.get("OpkrNaviSelect").c_str());   // 1. mappy  2.iNavi
+  int mapType =  std::atoi(Params().get("OpkrNaviSelect").c_str());   // 1. mappy  2.iNavi
 
 
   while (!do_exit) {
