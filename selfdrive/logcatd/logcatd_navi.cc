@@ -165,7 +165,7 @@ int main() {
 
 
 
-  int mapType =  std::atoi(Params().get("OpkrNaviSelect").c_str());   // 1. mappy  2.iNavi
+  event.mapType  =  std::atoi(Params().get("OpkrNaviSelect").c_str());   // 1. mappy  2.iNavi
 
 
   while (!do_exit) {
@@ -207,7 +207,7 @@ int main() {
         nLastTime = entry.tv_sec;
       }
       
-      event.mapType = mapType;
+
 
       // 2. MAP data Event.
       traffic_type = traffic_camera( &event );
