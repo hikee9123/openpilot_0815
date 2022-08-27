@@ -58,7 +58,7 @@ def manager_init() -> None:
     ("OpkrUIVolumeBoost", "0"),    
     ("OpkrPandaFirmwareCk", "1"),
     ("OpkrPowerShutdown", "0"),
-    ("OpkrRunNaviOnBoot", "0"),
+
     ("OpkrSSHLegacy", "0"),
     #("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
     ("OpkratomLongitudinal", "0"), 
@@ -265,15 +265,15 @@ def map_select():
   if param_navi_sel  is not None:
     navi_select = int(param_navi_sel)
   else:
-    navi_select = 0
+    navi_select = 1
 
  # navi_select = 0
   return  navi_select
 
-def map_exec():
-  if map_select() == 0:
+def map_exec( map_sel ):
+  if map_sel == 1:
     os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
-  else:
+  elif map_sel == 2:
     os.system("am start com.thinkware.inaviair/com.thinkware.inaviair.UIActivity") 
 
 
@@ -282,26 +282,24 @@ def map_hide():
 
 
 
-def map_return():
-  if map_select() == 0:
+def map_return( map_sel ):
+  if map_sel == 1:
     os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
-  else:
+  elif map_sel == 2:
     os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
 
 def main() -> None:
   spinner = Spinner()
   spinner.update_progress(0, 100)
 
-  param_navi = Params().get("OpkrRunNaviOnBoot")
+
+  map_sel = map_select()
 
 
-  if param_navi is not None:
-    navi_on_boot = int(param_navi)
-  else:
-    navi_on_boot = 0
+
   spinner.update_progress( 50, 100.)
-  if navi_on_boot:
-    map_exec()
+  if map_sel:
+    map_exec( map_sel )
 
   prepare_only = os.getenv("PREPAREONLY") is not None
 
@@ -313,7 +311,7 @@ def main() -> None:
     managed_processes['ui'].start()
 
   manager_prepare()
-  if navi_on_boot:
+  if map_sel:
     map_hide()
 
 

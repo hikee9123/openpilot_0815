@@ -799,7 +799,7 @@ this is navigation code by OPKR, and thank you to the OPKR developer.
 I love OPKR code.
 */
 
-void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimit,  float speedLimitAheadDistance ) 
+void OnPaint::ui_draw_traffic_sign( QPainter &p, int map_sign, float speedLimit,  float speedLimitAheadDistance ) 
 {
     int  nTrafficSign = int( map_sign );
 
@@ -841,11 +841,8 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
       {
         traffic_sign = &img_speed;
       }
-        
     }
 
-
-  
 
 
 
@@ -925,13 +922,14 @@ void OnPaint::ui_draw_navi( QPainter &p )
 {
   float speedLimit =  scene->liveNaviData.getSpeedLimit();  
   float speedLimitAheadDistance =  scene->liveNaviData.getArrivalDistance(); // getSpeedLimitDistance();  
-  float nTrafficSign =  scene->liveNaviData.getSafetySign();
+  int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
+ // int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
   int   mapValid =  scene->liveNaviData.getMapValid();
 
 
   if( mapValid )
   {
-    ui_draw_traffic_sign( p, nTrafficSign, speedLimit, speedLimitAheadDistance );
+    ui_draw_traffic_sign( p, nTrafficSign1, speedLimit, speedLimitAheadDistance );
   }
 }
 

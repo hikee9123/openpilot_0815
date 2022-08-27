@@ -160,9 +160,9 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     int param_navi_sel = str.toInt();    
 
 
-    if( param_navi_sel == 0 )
+    if( param_navi_sel == 1 )
       std::system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
-    else
+    else if( param_navi_sel == 2 )
       std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
   });
 

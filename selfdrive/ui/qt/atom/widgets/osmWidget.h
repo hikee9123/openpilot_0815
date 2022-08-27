@@ -111,7 +111,8 @@ public:
   explicit CNaviSelect( TuningPanel *panel );
 
   enum emType {
-    TP_MAPPY = 0,
+    TP_NONE = 0,
+    TP_MAPPY,
     TP_INAVI,
     TP_ALL,
   };  

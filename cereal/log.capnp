@@ -1752,9 +1752,14 @@ struct LiveNaviData {
   ts @1 :UInt64;  
   speedLimit @2 :Float32;
   speedLimitDistance @3 :Float32;
-  safetySign @4 :Float32;
+
+
   roadCurvature @5 :Float32;
   remainTime @6 :Float32;
+
+  safetySign1 @4 :Int32;
+  safetySign2 @14 :Int32;
+
   mapValid @7 :Bool;
   mapEnable @8 :Int32;
   trafficType @9 :Int32;

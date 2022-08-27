@@ -15,13 +15,16 @@ typedef struct LiveNaviDataResult {
       float speedLimit;  // Float32;
       float speedLimitDistance;  // Float32;
       float remainTime;  // Float32;
-      float safetySign;    // Float32;
-      float safetySign2;
       float roadCurvature;    // Float32;
+
+      int   safetySign1;    // Camera
+      int   safetySign2;    // Road
+
       int   turnInfo;    // Int32;
       int   distanceToTurn;    // Int32;      
       bool  mapValid;    // bool;
       int   mapEnable;    // bool;
+      int   mapType;
 
       double  dArrivalDistance;    // unit:  M
       double  dArrivalTimeSec;    // unit: sec
@@ -34,34 +37,70 @@ typedef struct LiveNaviDataResult {
 
 
 
-int traffic_camera( int nsignal_type, float fDistance )
+int traffic_camera( LiveNaviDataResult *pEvet )
 {
     int ret_code = 0;
 
-    switch( nsignal_type )
-    {
-      // tmap
-      case  TM_CAMERA1:
-      case  TM_INTERVAL:
-      case  TM_INTERVAL2:
-      case  TM_INTERVAL4:
-      case  TM_CAMERA3:
-      case  TM_CAMERA4:
-      
-      // mappy
-      case  TS_CAMERA1:  // 단속(카메라, 신호위반) 
-      case  TS_CAMERA2_BUS:
-      case  TS_CAMERA3:
-      case  TS_CAMERA4:  // 단속구간(고정형 이동식)
-      case  TS_CAMERA5:  // 단속(카메라, 신호위반)
-      case  TS_TRAFFIC_INFO:  // 교통정보수집
-        ret_code = 1;
-        break;
+    int mapType = pEvet->mapType;
+    int nSignal1 = pEvet->safetySign1;
+    int nSignal2 = pEvet->safetySign2;
+    float fDistance = pEvet->speedLimitDistance;
 
-      case  TS_INTERVAL:  // 구간단속
-        if(fDistance < 800)
-            ret_code = 1;
-        break;
+    if( mapType == MAP_MAPPY )
+    {
+      switch( nSignal1 )
+      {
+        // mappy
+        case  TS_CAMERA1:  // 단속(카메라, 신호위반) 
+        case  TS_CAMERA2_BUS:
+        case  TS_CAMERA3:
+        case  TS_CAMERA4:  // 단속구간(고정형 이동식)
+        case  TS_CAMERA5:  // 단속(카메라, 신호위반)
+        case  TS_TRAFFIC_INFO:  // 교통정보수집
+        case  TS_SCHOOL_ZONE1:
+        case  TS_SCHOOL_ZONE2:
+          ret_code = 1;
+          break;
+
+        case  TS_INTERVAL:  // 구간단속
+          if(fDistance < 800)
+              ret_code = 1;
+          break;
+      }
+    }
+    else if( mapType == MAP_iNAVI )
+    {
+      // iNavi Cam signtype
+      switch( nSignal1 )
+      {
+        case  TC_CAMERA1:  
+        case  TC_CAMERA2:
+        case  TC_CAMERA3:
+        case  TC_CAMERA6:  
+        case  TC_CAMERA7:  
+        case  TC_TRAFFIC_INFO: 
+        case  TC_SCHOOL_ZONE1:
+        case  TC_SCHOOL_ZONE2:
+          ret_code = 1;
+          break;
+
+        case  TC_INTERVAL1:  // 구간단속
+        case  TC_INTERVAL2:
+          if(fDistance < 800)
+              ret_code = 1;
+          break;
+      }
+
+      //  iNavi Road signtype
+      switch( nSignal2 )
+      {
+        case  TR_CAMERA6:
+        case  TR_SPEED_BUMP:
+        case  TR_EVENT:
+        case  TR_JOIN_ZONE:
+          ret_code = 1;
+          break;
+      }    
     }
 
     return ret_code;
@@ -86,7 +125,7 @@ void update_event(  LiveNaviDataResult *pEvet, float  dSpeed_ms )
     float  dArrivalSec;
 
     if( dEventDistance > 10 ) {}
-    else if(  pEvet->safetySign == TS_BUMP_ROAD ) // 과속방지턱
+    else if(  pEvet->safetySign1 == TS_BUMP_ROAD ) // 과속방지턱
     {
         dEventDistance = 200;
     }
@@ -123,6 +162,9 @@ int main() {
 
   log_time last_log_time = {};
   logger_list *logger_list = android_logger_list_alloc(ANDROID_LOG_RDONLY | ANDROID_LOG_NONBLOCK, 0, 0);
+
+
+  int mapType = int(Params().get("OpkrNaviSelect"));  // 1. mappy  2.iNavi
 
   while (!do_exit) {
     // setup android logging
@@ -161,12 +203,12 @@ int main() {
       if( nDelta2 >= 5 )
       {
         nLastTime = entry.tv_sec;
-       // event.mapEnable = Params().getInt("OpkrMapEnable");
       }
       
+      entry.mapType = mapType;
 
       // 2. MAP data Event.
-      traffic_type = traffic_camera( event.safetySign, event.speedLimitDistance );
+      traffic_type = traffic_camera( &event );
       if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
       {
         event.speedLimitDistance = atoi( entry.message );
@@ -189,26 +231,27 @@ int main() {
       }      
       else if( strcmp( entry.tag, "opkrsigntype" ) == 0 )  // 4.
       {
-        event.safetySign = atoi( entry.message );
-        opkr = 5;
+        event.safetySign1 = atoi( entry.message );
         event.dEventSec = dCurrentSec;
         update_event( &event, dSpeed_ms );
+        opkr = 5;        
       }
       else if( strcmp( entry.tag, "opkrroadsigntype" ) == 0 )
       {
         event.safetySign2 = atoi( entry.message );
+        event.dEventSec = dCurrentSec;
+        update_event( &event, dSpeed_ms );
         opkr = 6;
-        //if (res.safetySign == 107) {  // 과속 방지턱
-       //   sBump = true;
-       // }
-      }      
+       }      
       else if( strcmp( entry.tag, "opkrturninfo" ) == 0 )
       {
         event.turnInfo = atoi( entry.message );
+        opkr = 7;
       } 
       else if( strcmp( entry.tag, "opkrdistancetoturn" ) == 0 )
       {
         event.distanceToTurn = atoi( entry.message );
+        opkr = 8;
       }
 
 
@@ -219,14 +262,13 @@ int main() {
       {
         if( dSpeed_ms > 2.0 )
         {
-          //update_event( &event, dSpeed_ms );
           dEventLastSec = dCurrentSec - event.dEventSec;  // 마지막 Event Time
           event.dArrivalTimeSec = event.dHideTimeSec - dCurrentSec;
           event.dArrivalDistance =  event.dArrivalTimeSec * dSpeed_ms;
           dArrivalDistanceStop = event.dArrivalDistance;
 
 
-          if( event.safetySign == TS_BUMP_ROAD ) dEventHideSec = 10; // 과속방지턱
+          if( event.safetySign1 == TS_BUMP_ROAD ) dEventHideSec = 10; // 과속방지턱
           else if( dSpeed_ms < 10 )  dEventHideSec = 20;
           else if( dSpeed_ms < 20 )  dEventHideSec = 10;
           else dEventHideSec = 7;
@@ -256,8 +298,10 @@ int main() {
       framed.setTs( event.tv_sec );
       framed.setSpeedLimit( event.speedLimit );  // Float32;
       framed.setSpeedLimitDistance( event.speedLimitDistance );  // raw_target_speed_map_dist Float32;
-      framed.setSafetySign( event.safetySign ); // map_sign Float32;
-      //safetySign2
+
+      framed.setSafetySign1( event.safetySign1 ); // map_sign Float32;
+      framed.setSafetySign2( event.safetySign2 ); 
+
       framed.setRoadCurvature( event.roadCurvature ); // road_curvature Float32;
       framed.setRemainTime( event.remainTime ); // road_curvature Float32;
 
@@ -275,8 +319,7 @@ int main() {
 
       if( opkr )
       {
-        printf("logcat ID(%d) - PID=%d tag=%d.[%s] \n", log_msg.id(),  entry.pid,  entry.tid, entry.tag);
-         printf("entry.message=[%s]  \n", entry.message );
+         printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }
 
       pm.send("liveNaviData", msg);

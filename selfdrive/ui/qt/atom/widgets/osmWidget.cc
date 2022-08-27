@@ -397,14 +397,15 @@ void CNaviSelect::refresh( int nID )
   QString  str;
   switch( m_nMethod )
   {
-    case TP_MAPPY :  str = "0.Mappy";    break;
-    case TP_INAVI :  str = "1.Inavi";      break;
+    case TP_NONE  :  str = "0.None";    break;
+    case TP_MAPPY :  str = "1.Mappy";    break;
+    case TP_INAVI :  str = "2.Inavi";      break;
   }
 
-  if( m_nMethod == TP_MAPPY )
-    method_label->setStyleSheet("background-color: #393939;");
+  if( m_nMethod == TP_NONE )
+    method_label->setStyleSheet("background-color: #101010;");
   else
-    method_label->setStyleSheet("background-color: #E22C2C;");
+    method_label->setStyleSheet("background-color: #393939;");
 
   method_label->setText( str ); 
 }
