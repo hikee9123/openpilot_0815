@@ -165,7 +165,7 @@ int main() {
 
 
   std::string szNaviSelect = Params().get("OpkrNaviSelect");
-  int mapType =  atoi( szNaviSelect );  // 1. mappy  2.iNavi
+  int mapType =  std::atoi( szNaviSelect );  // 1. mappy  2.iNavi
 
   while (!do_exit) {
     // setup android logging
