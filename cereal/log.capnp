@@ -1760,10 +1760,12 @@ struct LiveNaviData {
   safetySign1 @4 :Int32;
   safetySign2 @14 :Int32;
 
+
   mapValid @7 :Bool;
   mapEnable @8 :Int32;
   trafficType @9 :Int32;
-
+  mapType @15 :Int32;
+  
   turnInfo @10 :Int32;
   distanceToTurn @11 :Int32;      
 

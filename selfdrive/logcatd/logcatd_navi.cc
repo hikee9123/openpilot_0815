@@ -164,7 +164,7 @@ int main() {
   logger_list *logger_list = android_logger_list_alloc(ANDROID_LOG_RDONLY | ANDROID_LOG_NONBLOCK, 0, 0);
 
 
-  const char *szNaviSelect = Params().get("OpkrNaviSelect")
+  const char *szNaviSelect = Params().get("OpkrNaviSelect");
   int mapType =  atoi( szNaviSelect );  // 1. mappy  2.iNavi
 
   while (!do_exit) {
@@ -206,7 +206,7 @@ int main() {
         nLastTime = entry.tv_sec;
       }
       
-      entry.mapType = mapType;
+      event.mapType = mapType;
 
       // 2. MAP data Event.
       traffic_type = traffic_camera( &event );
@@ -295,7 +295,11 @@ int main() {
 
       MessageBuilder msg;
       auto framed = msg.initEvent().initLiveNaviData();
+
+      
       framed.setId(log_msg.id());
+
+      framed.setMapType( event.mapType  );
       framed.setTs( event.tv_sec );
       framed.setSpeedLimit( event.speedLimit );  // Float32;
       framed.setSpeedLimitDistance( event.speedLimitDistance );  // raw_target_speed_map_dist Float32;

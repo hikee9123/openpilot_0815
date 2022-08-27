@@ -145,4 +145,4 @@ typedef enum MapType
   MAP_NONE = 0,
   MAP_MAPPY = 1,
   MAP_iNAVI = 2,
-} MapTypel
+} MapTypel;
