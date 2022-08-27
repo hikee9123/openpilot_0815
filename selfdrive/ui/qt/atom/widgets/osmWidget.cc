@@ -386,7 +386,6 @@ void  CNaviSelect::FrameINavi(QVBoxLayout *layout)
 
   pMenu1->SetControl( 0, 1, 0.001 );
   layout->addWidget( pMenu1 );  
-
 }
 
 
