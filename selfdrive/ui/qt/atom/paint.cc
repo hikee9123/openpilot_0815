@@ -1235,6 +1235,11 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("VLP(%d) = %.3f,  %.2f, %.0f", turnState, curvature, latAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
+
+  int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
+  int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
+  int nMapType =  scene->liveNaviData.getMapType();
+  text4.sprintf("MAP(%d) = %d,  %d ", nMapType, nTrafficSign1, nTrafficSign2  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 
