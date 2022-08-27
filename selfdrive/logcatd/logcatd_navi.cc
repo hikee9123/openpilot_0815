@@ -164,7 +164,8 @@ int main() {
   logger_list *logger_list = android_logger_list_alloc(ANDROID_LOG_RDONLY | ANDROID_LOG_NONBLOCK, 0, 0);
 
 
-  int mapType = int(Params().get("OpkrNaviSelect"));  // 1. mappy  2.iNavi
+  const char *szNaviSelect = Params().get("OpkrNaviSelect")
+  int mapType =  atoi( szNaviSelect );  // 1. mappy  2.iNavi
 
   while (!do_exit) {
     // setup android logging
