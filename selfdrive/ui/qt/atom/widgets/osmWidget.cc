@@ -398,7 +398,7 @@ void CNaviSelect::refresh( int nID )
   {
     case TP_NONE  :  str = "0.None";    break;
     case TP_MAPPY :  str = "1.Mappy";    break;
-    case TP_INAVI :  str = "2.Inavi";      break;
+    case TP_INAVI :  str = "2.iNavi";      break;
   }
 
   if( m_nMethod == TP_NONE )
