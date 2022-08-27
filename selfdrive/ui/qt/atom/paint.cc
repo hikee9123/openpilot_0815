@@ -787,7 +787,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
     bb_draw_rpm( p, rpm_x, rpm_y );
   }
 }
-//BB END: functions added for the display of various items
+//BB END: functions added for the display of various itemsapType
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -799,11 +799,23 @@ this is navigation code by OPKR, and thank you to the OPKR developer.
 I love OPKR code.
 */
 
-void OnPaint::ui_draw_traffic_sign( QPainter &p, int map_sign, float speedLimit,  float speedLimitAheadDistance ) 
+void OnPaint::ui_draw_traffic_sign( QPainter &p ) 
 {
-    int  nTrafficSign = int( map_sign );
+  float speedLimit =  scene->liveNaviData.getSpeedLimit();  
+  float speedLimitAheadDistance =  scene->liveNaviData.getArrivalDistance(); // getSpeedLimitDistance();  
+  int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
+  int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
 
-    QPixmap  *traffic_sign = NULL;
+  int nMapType =  scene->liveNaviData.getMapType();
+  
+
+
+  QPixmap  *traffic_sign = NULL;
+  int  nTrafficSign =  0;
+
+  if( nMapType == MAP_MAPPY )
+  {
+    nTrafficSign = int( nTrafficSign1 );
 
     if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  
     else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;
@@ -842,7 +854,49 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, int map_sign, float speedLimit,
         traffic_sign = &img_speed;
       }
     }
+  }
+  else if( nMapType == MAP_iNAVI )
+  {
+    nTrafficSign = int( nTrafficSign1 );
 
+
+    if( nTrafficSign == TC_BUS_ONLY1 ) traffic_sign = &img_bus_only; 
+    else if( nTrafficSign == TC_BUS_ONLY2 ) traffic_sign = &img_bus_only; 
+    else if( nTrafficSign == TR_SPEED_BUMP ) traffic_sign = &img_speed_bump; 
+
+    else if( nTrafficSign == TC_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;
+    else if( nTrafficSign == TC_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone; 
+    else if( nTrafficSign == TC_TRAFFIC_INFO ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TC_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;
+    else if( nTrafficSign == TC_NO_LANE_CHANGE ) traffic_sign = &img_img_space; 
+
+
+    else if( nTrafficSign2 == TR_RAIL_CROSS ) traffic_sign = &img_rail_road;  
+    else if( nTrafficSign2 == TR_SPEED_BUMP ) traffic_sign = &img_speed_bump; 
+    
+
+    else if( speedLimit ) 
+    {
+      if( nTrafficSign == TC_INTERVAL1 || nTrafficSign == TC_INTERVAL2 )  
+      {
+        traffic_sign = &img_section;
+      }
+      else if( nTrafficSign == TC_CAMERA2 || nTrafficSign == TC_CAMERA3  )
+      {
+        if( speedLimit == 30 ) traffic_sign = &img_school_zone;
+        else traffic_sign = &img_camera;
+      }
+      else
+      {
+        traffic_sign = &img_speed;
+      }
+    }
+
+  }
+  else
+  {
+    return;
+  }
 
 
 
@@ -920,16 +974,12 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, int map_sign, float speedLimit,
 
 void OnPaint::ui_draw_navi( QPainter &p ) 
 {
-  float speedLimit =  scene->liveNaviData.getSpeedLimit();  
-  float speedLimitAheadDistance =  scene->liveNaviData.getArrivalDistance(); // getSpeedLimitDistance();  
-  int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
- // int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
   int   mapValid =  scene->liveNaviData.getMapValid();
 
 
   if( mapValid )
   {
-    ui_draw_traffic_sign( p, nTrafficSign1, speedLimit, speedLimitAheadDistance );
+    ui_draw_traffic_sign( p );
   }
 }
 

@@ -120,7 +120,7 @@ private:
   void   ui_main_navi( QPainter &p );
   void   ui_draw_debug1( QPainter &p );
   void   ui_draw_navi( QPainter &p );
-  void   ui_draw_traffic_sign( QPainter &p, int map_sign, float speedLimit,  float speedLimitAheadDistance );
+  void   ui_draw_traffic_sign( QPainter &p );
   int    get_param( const std::string &key );
 // kegmen
 private:

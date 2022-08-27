@@ -99,7 +99,7 @@ typedef enum TrafficSign {
 */  
 
 typedef enum TrafficSign_TMAP {
-  // iNavi Cam signtype
+  // 1.iNavi Cam signtype
   TC_CAMERA1  = 1,  // 1 안전속도
   TC_CAMERA2  = 2,  // 신호및속도단속
   TC_CAMERA3  = 3,  // 신호위반단속
@@ -125,7 +125,7 @@ typedef enum TrafficSign_TMAP {
   TC_BEWARE_SLIPP =   204,  // 미끄럼주의  
 
 
-  //  iNavi Road signtype
+  //  2.iNavi Road signtype
   TR_CAMERA6 =   5, // 이동식
   TR_OVER_LOAD =   9, // 과적단속
   TR_JOIN_ZONE =   10, // 합류
