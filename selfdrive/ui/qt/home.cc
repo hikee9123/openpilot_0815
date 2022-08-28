@@ -87,8 +87,8 @@ int HomeWindow::mouseEventLatch(QMouseEvent* e) {
   scene.scr.sidebar = bSidebar;
 
   //printf("HomeWindow::mousePressEvent %d,%d  \n", e_x, e_y);
-
-  if( e_y > 700 ) return true;
+  if( scene.scr.IsViewNavi ) return true;
+  else if( e_y > 700 ) return true;
 
   return false;
 }
