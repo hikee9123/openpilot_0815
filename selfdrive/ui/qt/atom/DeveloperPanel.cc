@@ -144,10 +144,11 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     else if( param_navi_sel == 2 )
       std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
 
-      if (ConfirmationDialog::confirm("NAVI Program Running", this))
+      if( ConfirmationDialog::alert("NAVI Program Running", this) )
       {
-        
-      }      
+        std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+      }
+ 
   });
 
 
