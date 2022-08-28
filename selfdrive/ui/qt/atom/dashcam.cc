@@ -50,7 +50,7 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
 {
   int e_x = e->x();
   int e_y = e->y();
-  //int e_button= e->button();
+
 
    UIState *s = uiState();
   const int bb_dmr_w = 180;   
@@ -91,14 +91,6 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
         std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
       }
     }
-
-
-    
-    printf("OnDashCam::mousePressEvent %d,%d  IsViewNavi=%d\n", e_x, e_y,  scene.scr.IsViewNavi);
-
-
-    
-
   }
 
   QWidget::mousePressEvent(e);
@@ -360,7 +352,8 @@ void OnDashCam::screen_draw_button(QPainter &p)
  
    draw_button( p, "REC", btn_rec, fillColor, txtColor ); 
 
-
+  btn_rec = btn_navi_rec;
+  btn_rec.x -= s->fb_w;
    if( scene.scr.IsViewNavi )
    {
       fillColor =  QColor(255, 150, 150, 200);
@@ -370,7 +363,7 @@ void OnDashCam::screen_draw_button(QPainter &p)
       fillColor =  QColor(150, 150, 255, 200);
    }
 
-   draw_button( p, "NAVI", btn_navi_rec, fillColor,  txtColor ); 
+   draw_button( p, "NAVI", btn_rec, fillColor,  txtColor ); 
 
   if (captureState == CAPTURE_STATE_CAPTURING)
   {
