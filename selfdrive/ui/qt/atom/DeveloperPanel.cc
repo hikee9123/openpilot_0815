@@ -24,8 +24,9 @@
 
 DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 {
-  QWidget *w = new QWidget(parent);  
-  QVBoxLayout *main_layout = new QVBoxLayout(w);
+  QWidget *main_widget = new QWidget(parent);  
+
+  main_layout = new QVBoxLayout(main_widget);
   main_layout->setSpacing(10);
 
   // wifi + tethering buttons
@@ -180,9 +181,11 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 
 void DeveloperPanel::showEvent(QShowEvent *event) 
 {
+  
 //  Params params = Params();
+ int visiable = main_widget->isVisible();
 
-
+   printf("DeveloperPanel::showEvent %d,%d  \n", visiable );
 }
 
 

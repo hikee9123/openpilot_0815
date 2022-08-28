@@ -24,6 +24,10 @@ public:
   explicit DeveloperPanel(QWidget* parent = nullptr);
 
 private:
+  QWidget *main_widget;
+  QVBoxLayout *main_layout;
+
+private:
   void    mousePressEvent(QMouseEvent* e) override;
 
 protected:
