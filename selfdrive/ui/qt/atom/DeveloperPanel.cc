@@ -185,7 +185,7 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 //  Params params = Params();
  int visiable = main_widget->isVisible();
 
-   printf("DeveloperPanel::showEvent %d,%d  \n", visiable );
+   printf("DeveloperPanel::showEvent %d  \n", visiable );
 
    if( visiable == 0 )
       std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
