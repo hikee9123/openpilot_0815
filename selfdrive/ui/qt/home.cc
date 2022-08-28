@@ -86,7 +86,14 @@ int HomeWindow::mouseEventLatch(QMouseEvent* e) {
   UIScene  &scene =  uiState()->scene;//QUIState::ui_state.scene;
 
 
-  scene.scr.sidebar = bSidebar;
+  if( scene.scr.sidebar != bSidebar )
+  {
+     scene.scr.sidebar = bSidebar;
+
+     if( bSidebar && scene.scr.IsViewNavi )   
+       sidebar->setVisible( false );
+
+  }
 
   //printf("HomeWindow::mousePressEvent %d,%d  \n", e_x, e_y);
   if( scene.scr.IsViewNavi ) return true;
