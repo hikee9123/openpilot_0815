@@ -36,7 +36,7 @@ typedef struct LiveNaviDataResult {
 
 
 
-
+// return 값이 1일 경우만 속도 제어.
 int traffic_camera( LiveNaviDataResult *pEvet )
 {
     int ret_code = 0;
@@ -333,7 +333,7 @@ int main() {
       framed.setArrivalDistance(  event.dArrivalDistance );
 
 
-      if( opkr )
+      if( opkr && 0)
       {
          printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }

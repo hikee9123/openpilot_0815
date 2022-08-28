@@ -21,7 +21,7 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   m_param.bbh_left = 0;
   m_param.bbh_right = 0;
 
-  m_osm.fSpeedLimit = 0;
+
 
   m_nOldSec = 0;
 
@@ -98,9 +98,6 @@ void OnPaint::updateState(const UIState &s)
 {
   enginRpm = s.scene.scr.enginrpm; 
 
-  //enginRpm += 10;
-  //if( enginRpm > 4000 )
-  //   enginRpm = 0;
 
   setProperty("enginRpm", enginRpm );
 
@@ -187,20 +184,12 @@ void OnPaint::mousePressEvent(QMouseEvent* e)
 
   printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
 
- // cal_view = scene->scr.IsCalibraionGridViewToggle;
-  
- //  printf("OnPaint::mousePressEvent %d,%d  cal_view=%d \n", e_x, e_y, cal_view);
-
   QWidget::mousePressEvent(e);
 }
 
 void OnPaint::paintEvent(QPaintEvent *event) 
 {
   QPainter p(this);
-  //p.setRenderHint(QPainter::Antialiasing);
-
-//  printf( "OnPaint::paintEvent" );
-
 
 
   bb_ui_draw_UI( p );
@@ -211,7 +200,8 @@ void OnPaint::paintEvent(QPaintEvent *event)
     ui_draw_grid( p );
   }
 }
-// 
+
+
 void OnPaint::drawText(QPainter &p, int x, int y, const QString &text, QColor qColor, int nAlign ) 
 {
   QFontMetrics fm(p.font());
@@ -574,12 +564,9 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
     uom_color = QColor(255, 255, 255, 200);
     QColor val_color = QColor(255, 255, 255, 200);
 
-
-    //text3.sprintf("BF:%.1f   RL:%.1f°", , scene->scr.accel_prob[1] );
-
     val_str.sprintf("%.1f", scene->scr.accel_prob[0]);  // BF
     uom_str.sprintf("%.1f", scene->scr.accel_prob[1]);  // RL
-    //uom_str = "";
+
     bb_h +=bb_ui_draw_measure(p,  val_str, uom_str, "GRADIENT",
       bb_rx, bb_ry, bb_uom_dx,
       val_color, lab_color, uom_color,
@@ -646,8 +633,6 @@ QString OnPaint::get_tpms_text(float tpms)
 
 void OnPaint::bb_draw_tpms(QPainter &p, int viz_tpms_x, int viz_tpms_y )
 {
-    //const UIScene *scene = &s->scene;
-    //auto car_state = (*state->sm)["carState"].getCarState();
     auto tpms = m_param.car_state.getTpms();
 
     const float fl = tpms.getFl();
@@ -662,7 +647,6 @@ void OnPaint::bb_draw_tpms(QPainter &p, int viz_tpms_x, int viz_tpms_y )
 
     const int margin = 30;
 
-   // drawIcon(p, x, y, img_tire_pressure, QColor(0, 0, 0, 70), 1.0);
     p.drawPixmap(x+8 , y , img_tire_pressure);
 
     configFont( p, "Open Sans",  55, "SemiBold");
@@ -1134,8 +1118,17 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
  
 
-  if( nDelta > 1*60 ) return; // 1 �?.
+  if( nDelta > 30 )     // 30 sec
+  {
+      m_view_tunning_data = 0;
+      return;
+  }
+  else
+  {
+     m_view_tunning_data = 1;
+  }
 
+  
   int nVersion = scene->update_data.getVersion();
   if( nVersion <= 1 )
     ui_view_tunning( p );
@@ -1181,24 +1174,17 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
   
-  if( m_osm.fSpeedLimit <= 0 )
+  if( m_view_tunning_data )
   {
-     if( valid ) m_osm.fSpeedLimit = 1;
-     else if( speedLimitAheadValid ) m_osm.fSpeedLimit = 1;
-     else if (turnSpeedLimitValid) m_osm.fSpeedLimit = 1;
      return;
   }
-  
-  
+    
 
   speedLimitAhead *= 3.6;
   speedLimit *= 3.6;
   turnSpeedLimit *= 3.6;
 	
-  if( speedLimit >= 20 )
-  {
-      m_osm.fSpeedLimit = speedLimit;
-  }
+
   
 
   QString text4;
@@ -1207,8 +1193,8 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   int  nYPos = 300;
   int  nGap = 40;
 
-  text4 = "RN = " + strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("SL(%d) = %.0f", valid, m_osm.fSpeedLimit );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("SL(%d) = %.0f  [", valid, speedLimit );
+  text4 +=  strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
@@ -1239,7 +1225,19 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
   int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
   int nMapType =  scene->liveNaviData.getMapType();
-  text4.sprintf("MAP(%d) = %d,  %d ", nMapType, nTrafficSign1, nTrafficSign2  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+  float speedLimit = scene->liveNaviData.getSeedLimit();
+  float distance = scene->liveNaviData.getSpeedLimitDistance();
+
+  float roadCurvature = scene->liveNaviData.getRoadCurvature();
+  float remainTime = scene->liveNaviData.getRemainTime();
+ 
+  int turnInfo = scene->liveNaviData.getTurnInfo();
+  int rurnDistance = scene->liveNaviData.getDistanceToTurn();
+
+  text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %0.f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("RC = %.3f, %.3f", roadCurvaturem, remainTime   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("TI = %d, %d", turnInfo, rurnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 

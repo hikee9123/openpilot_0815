@@ -36,8 +36,8 @@ private:
   UIScene  *scene;
 
   int   enginRpm = 0;
+  int   m_view_tunning_data = 0;
 
- // int   cal_view = 0;
 
  
   struct _PARAM_
@@ -108,7 +108,6 @@ private:
   {
     int    lastGpsTimestamp;
     int    delta_gpstimestamp;
-    float  fSpeedLimit;
   } m_osm;
    
 
