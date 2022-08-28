@@ -88,7 +88,7 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
         std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
 
       scene.scr.IsViewNavi = 1;
-      emit  UIState::offroadTransition( false );      
+      emit  offroadTransition( false );      
     }
     else
     {
