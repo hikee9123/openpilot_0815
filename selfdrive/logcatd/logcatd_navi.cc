@@ -150,6 +150,7 @@ int main() {
   long     nLastTime = 0;
   int      traffic_type;
   int      opkr =0;
+  int      m_message = 0;
   double   dArrivalDistanceStop = 0;
 
   double  dEventLastSec, dEventHideSec;
@@ -208,10 +209,11 @@ int main() {
       }
       
 
-
+      m_message = atoi( entry.message );
       // 2. MAP data Event.
       traffic_type = traffic_camera( &event );
-      if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
+      if( m_message == 0 ) {}
+      else if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
       {
         event.speedLimitDistance = atoi( entry.message );
         opkr = 1;
