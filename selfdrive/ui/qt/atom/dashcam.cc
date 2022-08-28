@@ -98,6 +98,8 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
       }
     }
 
+
+    emit  UIState::offroadTransition( false );
  //   homeWindow->showSidebar(false);
     return;
   }
