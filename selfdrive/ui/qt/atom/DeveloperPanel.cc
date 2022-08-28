@@ -148,7 +148,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     UIScene  &scene =  uiState()->scene;
     scene.scr.IsViewNavi = 1;
 
-    DeveloperPanel::closeSettings();
+    SettingsWindow::closeSettings();
  
   });
 
