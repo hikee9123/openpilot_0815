@@ -17,6 +17,7 @@
 
 
 const Rect btn_dashcam_rec = {1440, 860, 140, 140};
+const Rect btn_navi_rec = {1000, 860, 500, 140};
 
 
 OnDashCam::OnDashCam(QWidget *parent) : QWidget(parent) 
@@ -66,9 +67,8 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
     update(); 
     return;
   }
-  else
+  else if( btn_navi_rec.ptInRect( e_x, ey ) )
   {
-
     UIScene *scene = &(s->scene);
     printf("OnDashCam::mousePressEvent %d,%d  IsViewNavi=%d\n", e_x, e_y,  scene->scr.IsViewNavi);
 
@@ -338,12 +338,8 @@ void OnDashCam::screen_draw_button(QPainter &p)
     }
  
    draw_button( p, "REC", btn_rec, fillColor, txtColor ); 
-  //if (  screen_button_clicked( btn_rec) )
-  //{
-  //  printf( "  captureState = %d \n", captureState );
-  //  screen_toggle_record_state();
-  //}  
 
+   draw_button( p, "NAVI", btn_navi_rec, QColor(150, 150, 255, 200),  QColor(255, 255, 255, 100) ); 
 
   if (captureState == CAPTURE_STATE_CAPTURING)
   {
