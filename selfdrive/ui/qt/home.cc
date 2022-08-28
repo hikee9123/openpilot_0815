@@ -84,6 +84,8 @@ int HomeWindow::mouseEventLatch(QMouseEvent* e) {
   bool bSidebar = sidebar->isVisible();
 
   UIScene  &scene =  uiState()->scene;//QUIState::ui_state.scene;
+
+
   scene.scr.sidebar = bSidebar;
 
   //printf("HomeWindow::mousePressEvent %d,%d  \n", e_x, e_y);

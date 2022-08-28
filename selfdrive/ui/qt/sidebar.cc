@@ -47,7 +47,8 @@ Sidebar::Sidebar(QWidget *parent) : QFrame(parent) {
 
 void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
 
-
+  UIScene  &scene =  uiState()->scene;
+  if( scene.scr.IsViewNavi ) return;
 
   if (settings_btn.contains(event->pos())) {
     emit openSettings();
