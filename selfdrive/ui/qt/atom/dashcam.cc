@@ -94,7 +94,7 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
 
 
     
-    printf("OnDashCam::mousePressEvent %d,%d  IsViewNavi=%d\n", e_x, e_y,  scene->scr.IsViewNavi);
+    printf("OnDashCam::mousePressEvent %d,%d  IsViewNavi=%d\n", e_x, e_y,  scene.scr.IsViewNavi);
 
 
     
@@ -334,6 +334,8 @@ void OnDashCam::draw_button( QPainter &p, const QString &string, Rect rect, QCol
 void OnDashCam::screen_draw_button(QPainter &p)
 {
    UIState *s = uiState(); 
+   UIScene  &scene =  s->scene;
+
   const int bb_dmr_w = 180;
   const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
 
@@ -358,7 +360,17 @@ void OnDashCam::screen_draw_button(QPainter &p)
  
    draw_button( p, "REC", btn_rec, fillColor, txtColor ); 
 
-   draw_button( p, "NAVI", btn_navi_rec, QColor(150, 150, 255, 200),  QColor(255, 255, 255, 100) ); 
+
+   if( scene.scr.IsViewNavi )
+   {
+      fillColor =  QColor(255, 150, 150, 200);
+   }
+   else
+   {
+      fillColor =  QColor(150, 150, 255, 200);
+   }
+
+   draw_button( p, "NAVI", btn_navi_rec, fillColor,  txtColor ); 
 
   if (captureState == CAPTURE_STATE_CAPTURING)
   {
