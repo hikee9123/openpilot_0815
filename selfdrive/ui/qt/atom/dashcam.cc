@@ -67,16 +67,35 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
     update(); 
     return;
   }
-  else if( btn_navi_rec.ptInRect( e_x, ey ) )
+  else if( btn_navi_rec.ptInRect( e_x, e_y ) )
   {
-    UIScene *scene = &(s->scene);
+    Params param = Params();
+    auto str = QString::fromStdString(param.get("OpkrNaviSelect"));
+
+    int param_navi_sel = str.toInt();    
+    UIScene  &scene =  s->scene;
+    if( scene.scr.IsViewNavi == 0 )
+    {
+      if( param_navi_sel == 1 )
+        std::system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
+      else if( param_navi_sel == 2 )
+        std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
+
+      scene.scr.IsViewNavi = 1;
+    }
+    else
+    {
+      if( scene.scr.IsViewNavi )
+      {
+        scene.scr.IsViewNavi = 0;
+        std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+      }
+    }
+
+
+    
     printf("OnDashCam::mousePressEvent %d,%d  IsViewNavi=%d\n", e_x, e_y,  scene->scr.IsViewNavi);
 
-    if( scene->scr.IsViewNavi )
-    {
-      scene->scr.IsViewNavi = 0;
-        std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
-    }
 
     
 
