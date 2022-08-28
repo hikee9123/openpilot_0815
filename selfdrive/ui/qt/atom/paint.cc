@@ -183,6 +183,7 @@ void OnPaint::mousePressEvent(QMouseEvent* e)
 
 
   printf("OnPaint::mousePressEvent %d,%d  \n", e_x, e_y);
+  std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
 
   QWidget::mousePressEvent(e);
 }

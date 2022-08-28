@@ -144,10 +144,7 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     else if( param_navi_sel == 2 )
       std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
 
-      if( ConfirmationDialog::alert("NAVI Program Running", this) )
-      {
-        std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
-      }
+      closeSettings();
  
   });
 
@@ -177,24 +174,10 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   }
 
   layout()->addWidget(horizontal_line());
-
-
-  //CarSelectCombo *pCarSelectmenu = new CarSelectCombo();
-  //layout()->addWidget( pCarSelectmenu );
-  //layout()->addWidget( new CarSelectBtn(pCarSelectmenu) );
-  
 }
 
 void DeveloperPanel::showEvent(QShowEvent *event) 
 {
-  
-//  Params params = Params();
- int visiable = main_widget->isVisible();
-
-   printf("DeveloperPanel::showEvent %d  \n", visiable );
-
-   if( visiable == 0 )
-      std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
 
 }
 
@@ -203,8 +186,6 @@ void DeveloperPanel::mousePressEvent(QMouseEvent* e)
 {
   int e_x = e->x();
   int e_y = e->y();
-
-
 
   printf("DeveloperPanel::mousePressEvent %d,%d  \n", e_x, e_y);
 
