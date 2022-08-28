@@ -17,7 +17,7 @@
 
 
 const Rect btn_dashcam_rec = {1440, 860, 140, 140};
-const Rect btn_navi_rec = {1200, 860, 200, 140};
+const Rect btn_navi_rec = {1300, 860, 200, 140};
 
 const int  disp_width = 1860;
 
