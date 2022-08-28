@@ -175,16 +175,7 @@ float OnPaint::interp( float xv, float xp[], float fp[], int N)
 }
 
 
-void OnPaint::mousePressEvent(QMouseEvent* e) 
-{
-  int e_x = e->x();
-  int e_y = e->y();
 
-
-
-
-  QWidget::mousePressEvent(e);
-}
 
 void OnPaint::paintEvent(QPaintEvent *event) 
 {
