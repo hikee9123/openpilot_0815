@@ -1193,8 +1193,6 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
-  
-
 
   int TS_Signs  = scene->controls_state.getTurnSpeedLimitsAheadSigns();
   float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
@@ -1217,7 +1215,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("VLP(%d) = %.3f,  %.2f, %.0f", turnState, curvature, latAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
-
+  // Navi Data
   int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
   int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
   int nMapType =  scene->liveNaviData.getMapType();
