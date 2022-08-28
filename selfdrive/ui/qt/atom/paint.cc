@@ -1153,11 +1153,20 @@ void OnPaint::ui_main_navi( QPainter &p )
 
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
+  if( m_view_tunning_data ) return;
+  
+
    SubMaster &sm = *(state->sm);
+
+  QString text4;
+
+  int  bb_x = 250;
+  int  nYPos = 300;
+  int  nGap = 40;
+    
 
   // osm
   const auto osm = sm["liveMapData"].getLiveMapData();
-
 
    int  valid = osm.getSpeedLimitValid();
    float speedLimit = osm.getSpeedLimit();
@@ -1173,25 +1182,11 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
-  
-  if( m_view_tunning_data )
-  {
-     return;
-  }
-    
 
   speedLimitAhead *= 3.6;
   speedLimit *= 3.6;
   turnSpeedLimit *= 3.6;
 	
-
-  
-
-  QString text4;
-
-  int  bb_x = 250;
-  int  nYPos = 300;
-  int  nGap = 40;
 
   text4.sprintf("SL(%d) = %.0f  [", valid, speedLimit );
   text4 +=  strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
@@ -1212,6 +1207,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("TSLA(%d) = %.0f,  %.0f,  %d", TS_Signs, TS_Speed, TS_Distances, lane_line_cnt );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
+  // Vision turn
   nYPos += nGap;
 
   float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
