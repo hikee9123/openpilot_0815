@@ -66,6 +66,21 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
     update(); 
     return;
   }
+  else
+  {
+
+    UIScene *scene = &(s->scene);
+    printf("OnDashCam::mousePressEvent %d,%d  IsViewNavi=%d\n", e_x, e_y,  scene->scr.IsViewNavi);
+
+    if( scene->scr.IsViewNavi )
+    {
+      scene->scr.IsViewNavi = 0;
+        std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+    }
+
+    
+
+  }
 
   QWidget::mousePressEvent(e);
 }
