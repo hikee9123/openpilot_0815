@@ -98,7 +98,7 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
       }
     }
 
-    homeWindow->showSidebar(false);
+ //   homeWindow->showSidebar(false);
     return;
   }
 
