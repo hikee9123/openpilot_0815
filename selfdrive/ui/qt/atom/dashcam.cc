@@ -60,6 +60,9 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
   Rect btn_rec = btn_dashcam_rec;
   btn_rec.x = bb_dmr_x;
 
+  Rect btn_rec2 = btn_navi_rec;
+  btn_rec2.x -= (1800 - s->fb_w);
+
   if( btn_rec.ptInRect( e_x, e_y ) ) 
   {
     printf( "  captureState = %d \n", captureState );
@@ -67,7 +70,7 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
     update(); 
     return;
   }
-  else if( btn_navi_rec.ptInRect( e_x, e_y ) )
+  else if( btn_rec2.ptInRect( e_x, e_y ) )
   {
     Params param = Params();
     auto str = QString::fromStdString(param.get("OpkrNaviSelect"));
@@ -353,7 +356,7 @@ void OnDashCam::screen_draw_button(QPainter &p)
    draw_button( p, "REC", btn_rec, fillColor, txtColor ); 
 
   btn_rec = btn_navi_rec;
-  btn_rec.x -= s->fb_w;
+  btn_rec.x -= (1800 - s->fb_w);
    if( scene.scr.IsViewNavi )
    {
       fillColor =  QColor(255, 150, 150, 200);
