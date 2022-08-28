@@ -144,7 +144,11 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
     else if( param_navi_sel == 2 )
       std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
 
-      closeSettings();
+
+    UIScene  &scene =  uiState()->scene;
+    scene.scr.IsViewNavi = 1;
+
+    DeveloperPanel::closeSettings();
  
   });
 
