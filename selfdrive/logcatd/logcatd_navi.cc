@@ -165,6 +165,7 @@ int main() {
   logger_list *logger_list = android_logger_list_alloc(ANDROID_LOG_RDONLY | ANDROID_LOG_NONBLOCK, 0, 0);
 
 
+  memset( &event, 0, sizeof(event) );
 
   event.mapType  =  std::atoi(Params().get("OpkrNaviSelect").c_str());   // 1. mappy  2.iNavi
 
