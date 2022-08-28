@@ -32,36 +32,14 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
   main_layout->addWidget(new GitHash());
 
 
-/*
-  auto exe_git_cancel = new ButtonControl("Git Pull 취소", "실행");
-  QObject::connect(exe_git_cancel, &ButtonControl::clicked, [=]() 
-  { 
-        if (ConfirmationDialog::confirm("GitPull 이전 상태로 되돌립니다. 진행하시겠습니까?", this))
-        {
-          const char* gitpull_cancel = "/data/openpilot/selfdrive/assets/addon/sh/gitpull_cancel.sh ''";
-          std::system(gitpull_cancel);
-        }
-  });  
-  main_layout->addWidget(exe_git_cancel);
-*/
 
 
   main_layout->setMargin(100);
   setLayout(main_layout);
 
 
-  //layout()->addWidget(new SshLegacyToggle());
-
   layout()->addWidget(horizontal_line());
 
-
-  //layout()->addWidget(new IsCalibraionGridViewToggle());
-  //layout()->addWidget(new IsOpenpilotViewEnabledToggle());
-
-
-  // layout()->addWidget(new CPrebuiltToggle());
-  
-  //layout()->addWidget(horizontal_line());
 
   layout()->addWidget(new CLiveSteerRatioToggle());
   layout()->addWidget(new BrightnessControl());
@@ -208,6 +186,17 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 }
 
 
+void DeveloperPanel::mousePressEvent(QMouseEvent* e) 
+{
+  int e_x = e->x();
+  int e_y = e->y();
+
+
+
+  printf("DeveloperPanel::mousePressEvent %d,%d  \n", e_x, e_y);
+
+  QFrame::mousePressEvent(e);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //

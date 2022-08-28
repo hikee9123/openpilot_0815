@@ -19,9 +19,12 @@
 class DeveloperPanel : public QFrame 
 {
   Q_OBJECT
+
 public:
   explicit DeveloperPanel(QWidget* parent = nullptr);
 
+private:
+  void    mousePressEvent(QMouseEvent* e) override;
 
 protected:
   void showEvent(QShowEvent *event) override;
