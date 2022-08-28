@@ -1218,7 +1218,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   int turnInfo = scene->liveNaviData.getTurnInfo();
   int rurnDistance = scene->liveNaviData.getDistanceToTurn();
 
-  text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %0.f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %.0f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("RC = %.3f, %.3f", roadCurvature, remainTime   );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TI = %d, %d", turnInfo, rurnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
