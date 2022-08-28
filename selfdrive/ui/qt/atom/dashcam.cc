@@ -100,6 +100,8 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
     return;
   }
 
+  if( scene.scr.IsViewNavi ) return;
+
   QWidget::mousePressEvent(e);
 }
 
