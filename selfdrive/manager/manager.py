@@ -274,7 +274,7 @@ def map_exec( map_sel ):
   if map_sel == 1:
     os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
   elif map_sel == 2:
-    os.system("am start com.thinkware.inaviair/com.thinkware.inaviair.UIActivity") 
+    os.system("am start com.thinkware.inaviair/com.thinkware.inaviair.UIActivity &") 
 
 
 def map_hide():
