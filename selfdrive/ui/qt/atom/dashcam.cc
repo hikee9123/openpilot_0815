@@ -19,6 +19,7 @@
 const Rect btn_dashcam_rec = {1440, 860, 140, 140};
 const Rect btn_navi_rec = {1000, 860, 500, 140};
 
+const int  disp_width = 1860;
 
 OnDashCam::OnDashCam(QWidget *parent) : QWidget(parent) 
 {
@@ -61,7 +62,7 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
   btn_rec.x = bb_dmr_x;
 
   Rect btn_rec2 = btn_navi_rec;
-  btn_rec2.x -= (1800 - s->fb_w);
+  btn_rec2.x -= (disp_width - s->fb_w);
 
   if( btn_rec.ptInRect( e_x, e_y ) ) 
   {
@@ -307,7 +308,8 @@ void OnDashCam::draw_button( QPainter &p, const QString &string, Rect rect, QCol
     QRect rc( btn_x, btn_y, btn_w, btn_h);
     p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 3)); 
     p.setBrush(fillColor);
-    p.drawEllipse(btn_x, btn_y, btn_w, btn_h);
+   // p.drawEllipse(btn_x, btn_y, btn_w, btn_h);
+    p.drawRoundedRect(rc, 20, 20); 
     p.setPen(Qt::NoPen);
 
 
@@ -356,7 +358,7 @@ void OnDashCam::screen_draw_button(QPainter &p)
    draw_button( p, "REC", btn_rec, fillColor, txtColor ); 
 
   btn_rec = btn_navi_rec;
-  btn_rec.x -= (1800 - s->fb_w);
+  btn_rec.x -= (disp_width - s->fb_w);
    if( scene.scr.IsViewNavi )
    {
       fillColor =  QColor(255, 150, 150, 200);
