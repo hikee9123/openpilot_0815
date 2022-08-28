@@ -24,7 +24,7 @@
 
 DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 {
-  QWidget *main_widget = new QWidget(parent);  
+  main_widget = new QWidget(parent);  
 
   main_layout = new QVBoxLayout(main_widget);
   main_layout->setSpacing(10);
@@ -186,6 +186,10 @@ void DeveloperPanel::showEvent(QShowEvent *event)
  int visiable = main_widget->isVisible();
 
    printf("DeveloperPanel::showEvent %d,%d  \n", visiable );
+
+   if( visiable == 0 )
+      std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+
 }
 
 
