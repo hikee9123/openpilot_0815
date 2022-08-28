@@ -333,9 +333,9 @@ int main() {
       framed.setArrivalDistance(  event.dArrivalDistance );
 
 
-      if( opkr && 0)
+      if( opkr )
       {
-         printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
+        // printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }
 
       pm.send("liveNaviData", msg);
