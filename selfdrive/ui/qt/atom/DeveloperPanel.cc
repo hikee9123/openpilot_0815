@@ -147,7 +147,10 @@ DeveloperPanel::DeveloperPanel(QWidget* parent) : QFrame(parent)
 
     UIScene  &scene =  uiState()->scene;
     scene.scr.IsViewNavi = 1;
-  
+    if ( ConfirmationDialog::alert("Navi program Running", this) )
+    {
+      std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+    }
   });
 
 
