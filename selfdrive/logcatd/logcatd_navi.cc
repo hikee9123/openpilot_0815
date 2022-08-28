@@ -216,6 +216,7 @@ int main() {
       {
           if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
           {
+             opkr = 0;
              event.speedLimitDistance = m_message;
           }
     
