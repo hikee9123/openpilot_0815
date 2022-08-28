@@ -95,6 +95,9 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
         std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
       }
     }
+
+    homeWindow->showSidebar(false);
+    return;
   }
 
   QWidget::mousePressEvent(e);

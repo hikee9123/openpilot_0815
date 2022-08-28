@@ -187,15 +187,6 @@ void DeveloperPanel::showEvent(QShowEvent *event)
 }
 
 
-void DeveloperPanel::mousePressEvent(QMouseEvent* e) 
-{
-  int e_x = e->x();
-  int e_y = e->y();
-
-  printf("DeveloperPanel::mousePressEvent %d,%d  \n", e_x, e_y);
-
-  QFrame::mousePressEvent(e);
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //

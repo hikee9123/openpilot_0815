@@ -27,8 +27,7 @@ private:
   QWidget *main_widget;
   QVBoxLayout *main_layout;
 
-private:
-  void    mousePressEvent(QMouseEvent* e) override;
+
 
 protected:
   void showEvent(QShowEvent *event) override;
