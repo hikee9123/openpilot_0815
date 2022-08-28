@@ -867,8 +867,7 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p )
       }
       else if( nTrafficSign == TC_CAMERA2 || nTrafficSign == TC_CAMERA3  )
       {
-        if( speedLimit == 30 ) traffic_sign = &img_school_zone;
-        else traffic_sign = &img_camera;
+        traffic_sign = &img_camera;
       }
       else
       {
