@@ -212,49 +212,57 @@ int main() {
       m_message = atoi( entry.message );
       // 2. MAP data Event.
       traffic_type = traffic_camera( &event );
-      if( m_message == 0 ) {}
+      if( m_message == 0 ) 
+      {
+          if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
+          {
+             event.speedLimitDistance = m_message;
+          }
+    
+          update_event( &event, dSpeed_ms );
+      }
       else if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
       {
-        event.speedLimitDistance = atoi( entry.message );
+        event.speedLimitDistance = m_message;
         opkr = 1;
       }      
       else if( strcmp( entry.tag, "opkrspdlimit" ) == 0 ) // 2
       {
-        event.speedLimit = atoi( entry.message );
+        event.speedLimit = m_message;
         opkr = 2;
       }
       else if( strcmp( entry.tag, "opkrcurvangle" ) == 0 )  // 3
       {
-        event.roadCurvature = atoi( entry.message );
+        event.roadCurvature = m_message;
         opkr = 3;
       }
       else if( strcmp( entry.tag, "opkrremaintime" ) == 0 )
       {
-        event.remainTime = atoi( entry.message );
+        event.remainTime = m_message;
         opkr = 4;
       }      
       else if( strcmp( entry.tag, "opkrsigntype" ) == 0 )  // 4.
       {
-        event.safetySign1 = atoi( entry.message );
+        event.safetySign1 = m_message;
         event.dEventSec = dCurrentSec;
         update_event( &event, dSpeed_ms );
         opkr = 5;        
       }
       else if( strcmp( entry.tag, "opkrroadsigntype" ) == 0 )
       {
-        event.safetySign2 = atoi( entry.message );
+        event.safetySign2 = m_message;
         event.dEventSec = dCurrentSec;
         update_event( &event, dSpeed_ms );
         opkr = 6;
        }      
       else if( strcmp( entry.tag, "opkrturninfo" ) == 0 )
       {
-        event.turnInfo = atoi( entry.message );
+        event.turnInfo = m_message;
         opkr = 7;
       } 
       else if( strcmp( entry.tag, "opkrdistancetoturn" ) == 0 )
       {
-        event.distanceToTurn = atoi( entry.message );
+        event.distanceToTurn = m_message;
         opkr = 8;
       }
 
