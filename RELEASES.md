@@ -1,4 +1,9 @@
-Version 0.8.16 (2022-08-XX)
+Version 0.8.17 (2022-XX-XX)
+========================
+* New driving model
+  * Internal feature space accuracy increased tenfold during training, this makes the model dramatically more accurate.
+
+Version 0.8.16 (2022-08-26)
 ========================
 * New driving model
   * fpdriving model
