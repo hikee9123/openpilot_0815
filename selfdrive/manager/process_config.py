@@ -2,8 +2,11 @@ import os
 
 from selfdrive.hardware import EON, TICI, PC
 from selfdrive.manager.process import PythonProcess, NativeProcess, DaemonProcess
+from common.params import Params
 
 WEBCAM = os.getenv("USE_WEBCAM") is not None
+ENABLE_OSM = Params().get_bool('OpkrOSMEnable')
+
 
 procs = [
   DaemonProcess("manage_athenad", "selfdrive.athena.manage_athenad", "AthenadPid"),
@@ -46,5 +49,11 @@ procs = [
   # Experimental
   PythonProcess("rawgpsd", "selfdrive.sensord.rawgps.rawgpsd", enabled=os.path.isfile("/persist/comma/use-quectel-rawgps")),
 ]
+
+
+if ENABLE_OSM:
+  procs += [
+    PythonProcess("mapd", "selfdrive.assets.addon.mapd.mapd", enabled=not PC, persistent=True),
+  ]
 
 managed_processes = {p.name: p for p in procs}

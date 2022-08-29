@@ -21,6 +21,8 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   m_param.bbh_left = 0;
   m_param.bbh_right = 0;
 
+
+
   m_nOldSec = 0;
 
   state = uiState();
@@ -96,9 +98,6 @@ void OnPaint::updateState(const UIState &s)
 {
   enginRpm = s.scene.scr.enginrpm; 
 
-  //enginRpm += 10;
-  //if( enginRpm > 4000 )
-  //   enginRpm = 0;
 
   setProperty("enginRpm", enginRpm );
 
@@ -133,11 +132,9 @@ void OnPaint::updateState(const UIState &s)
     auto radar_state = sm["radarState"].getRadarState();  // radar
     m_param.lead_radar = radar_state.getLeadOne();
 
-    //if( memcmp( &m_param, &m_old, sizeof(m_param)) )
-    //{
-    //   m_old = m_param;
-       update(); 
-    //}
+
+    update(); 
+
 
 
 }
@@ -178,46 +175,23 @@ float OnPaint::interp( float xv, float xp[], float fp[], int N)
 }
 
 
-void OnPaint::mousePressEvent(QMouseEvent* e) 
-{
 
-  /*
-  int e_x = e->x();
-  int e_y = e->y();
-  //int e_button= e->button();
-
-   UIState *s = uiState();
-  const int bb_dmr_w = 180;   
-  const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
- //  printf("OnDashCam::mousePressEvent %d,%d  \n", e_x, e_y);
-
-  Rect btn_rec = btn_dashcam_rec;
-  btn_rec.x = bb_dmr_x;
-
-  if( btn_rec.ptInRect( e_x, e_y ) ) 
-  {
-    printf( "  captureState = %d \n", captureState );
-    screen_toggle_record_state();
-    update(); 
-    return;
-  }
-*/
-  QWidget::mousePressEvent(e);
-}
 
 void OnPaint::paintEvent(QPaintEvent *event) 
 {
   QPainter p(this);
-  //p.setRenderHint(QPainter::Antialiasing);
-
-//  printf( "OnPaint::paintEvent" );
-
 
 
   bb_ui_draw_UI( p );
   ui_main_navi( p );
+
+  if( scene->scr.IsCalibraionGridViewToggle )
+  {
+    ui_draw_grid( p );
+  }
 }
-// 
+
+
 void OnPaint::drawText(QPainter &p, int x, int y, const QString &text, QColor qColor, int nAlign ) 
 {
   QFontMetrics fm(p.font());
@@ -332,7 +306,7 @@ void OnPaint::bb_ui_draw_measures_right( QPainter &p, int bb_x, int bb_y, int bb
   if( true ) 
   {
 
-    if( m_param.cpuTemp > 200 )  m_param.cpuTemp = 0;
+    if( m_param.cpuTemp > 100 )  m_param.cpuTemp = 0;
 
     QColor val_color = QColor(255, 255, 255, 200);
 
@@ -514,7 +488,7 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
   }
 
   //add visual radar relative speed
-  if( true )
+  if( false )
   {
     QColor val_color = QColor(255, 255, 255, 200);
     if ( m_param.lead_radar.getStatus() ) {
@@ -573,19 +547,16 @@ void OnPaint::bb_ui_draw_measures_left(QPainter &p, int bb_x, int bb_y, int bb_w
     bb_ry = bb_y + bb_h;
   }
 
-  //add  desired steering angle
+  // GPS
   if( false )
   {
    // float angleSteersDes = scene->controls_state.getSteeringAngleDesiredDegDEPRECATED();  
     uom_color = QColor(255, 255, 255, 200);
     QColor val_color = QColor(255, 255, 255, 200);
 
-
-    //text3.sprintf("BF:%.1f   RL:%.1f°", , scene->scr.accel_prob[1] );
-
     val_str.sprintf("%.1f", scene->scr.accel_prob[0]);  // BF
     uom_str.sprintf("%.1f", scene->scr.accel_prob[1]);  // RL
-    //uom_str = "";
+
     bb_h +=bb_ui_draw_measure(p,  val_str, uom_str, "GRADIENT",
       bb_rx, bb_ry, bb_uom_dx,
       val_color, lab_color, uom_color,
@@ -652,8 +623,6 @@ QString OnPaint::get_tpms_text(float tpms)
 
 void OnPaint::bb_draw_tpms(QPainter &p, int viz_tpms_x, int viz_tpms_y )
 {
-    //const UIScene *scene = &s->scene;
-    //auto car_state = (*state->sm)["carState"].getCarState();
     auto tpms = m_param.car_state.getTpms();
 
     const float fl = tpms.getFl();
@@ -668,7 +637,6 @@ void OnPaint::bb_draw_tpms(QPainter &p, int viz_tpms_x, int viz_tpms_y )
 
     const int margin = 30;
 
-   // drawIcon(p, x, y, img_tire_pressure, QColor(0, 0, 0, 70), 1.0);
     p.drawPixmap(x+8 , y , img_tire_pressure);
 
     configFont( p, "Open Sans",  55, "SemiBold");
@@ -756,12 +724,14 @@ p.drawArc(compass_x, compass_y, 500, 200, nStartDegree * 16, nStartDegree - fEng
 void OnPaint::bb_ui_draw_UI(QPainter &p)
 {
   const int bb_dml_w = 180;
-  const int bb_dml_x = (0 + bdr_s);
+ // const int bb_dml_x = (0 + bdr_s);
   const int bb_dml_y = (0 + bdr_s) + 220;
 
   const int bb_dmr_w = 180;
   const int bb_dmr_x = 0 + state->fb_w - bb_dmr_w - bdr_s;
   const int bb_dmr_y = (0 + bdr_s) + 220;
+
+  const int bb_dml_x = bb_dmr_x - bb_dmr_w - 10;  
 
   // 1. kegman ui
   bb_ui_draw_measures_left(p, bb_dml_x, bb_dml_y, bb_dml_w);
@@ -778,7 +748,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
   // 3. compass
   if( true )
   {
-    const int compass_x = state->fb_w / 2 - 100;
+    const int compass_x = state->fb_w / 2 - 150;
     const int compass_y = state->fb_h - 150;
     bb_draw_compass( p, compass_x, compass_y );
   }
@@ -791,7 +761,7 @@ void OnPaint::bb_ui_draw_UI(QPainter &p)
     bb_draw_rpm( p, rpm_x, rpm_y );
   }
 }
-//BB END: functions added for the display of various items
+//BB END: functions added for the display of various itemsapType
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -803,39 +773,48 @@ this is navigation code by OPKR, and thank you to the OPKR developer.
 I love OPKR code.
 */
 
-void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimit,  float speedLimitAheadDistance ) 
+void OnPaint::ui_draw_traffic_sign( QPainter &p ) 
 {
-    int  nTrafficSign = int( map_sign );
+  float speedLimit =  scene->liveNaviData.getSpeedLimit();  
+  float speedLimitAheadDistance =  scene->liveNaviData.getArrivalDistance(); // getSpeedLimitDistance();  
+  int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
+  int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
 
-    QPixmap  *traffic_sign = NULL;
+  int nMapType =  scene->liveNaviData.getMapType();
+  
 
-    if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  // 굽은도로
-    else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;  // 가변 단속. ( by opkr)
-    else if( nTrafficSign == TS_BUS_ONLY ) traffic_sign = &img_bus_only;  // 버스전용차로단속
-    else if( nTrafficSign == TS_BUMP_ROAD ) traffic_sign = &img_speed_bump;  // 과속방지턱
-    else if( nTrafficSign == TS_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;  // 스클존
-    else if( nTrafficSign == TS_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone;  // 스클존
-    else if( nTrafficSign == TS_CURVE_RIGHT ) traffic_sign = &img_curve_right;  // 오른쪽 급커브
-    else if( nTrafficSign == TS_CURVE_LEFT ) traffic_sign = &img_curve_left;  // 왼쪽 급커브
-    else if( nTrafficSign == TS_NARROW_ROAD ) traffic_sign = &img_narrow_road; // 좁아지는 도로
-    else if( nTrafficSign == TS_RAIL_ROAD ) traffic_sign = &img_rail_road;   // 철길건널목
-    else if( nTrafficSign == TS_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;  // 주정차단속
-    else if( nTrafficSign == TS_LANE_CHANGE1 ) traffic_sign = &img_img_space;  // 차선변경금지시작
-    else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space;  // 차선변경금지종료
-    else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space;  // 과적단속
-    else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space;  // 교통정보수집
-    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  // 추월금지구간
-    else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; // 갓길단속
-    else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space;  // 적재불량단속  
+
+  QPixmap  *traffic_sign = NULL;
+  int  nTrafficSign =  0;
+
+  if( nMapType == MAP_MAPPY )
+  {
+    nTrafficSign = int( nTrafficSign1 );
+
+    if( nTrafficSign == TS_BEND_ROAD ) traffic_sign = &img_traf_turn;  
+    else if( nTrafficSign == TS_VARIABLE ) traffic_sign = &img_speed_var;
+    else if( nTrafficSign == TS_BUS_ONLY ) traffic_sign = &img_bus_only; 
+    else if( nTrafficSign == TS_BUMP_ROAD ) traffic_sign = &img_speed_bump; 
+    else if( nTrafficSign == TS_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;
+    else if( nTrafficSign == TS_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone; 
+    else if( nTrafficSign == TS_CURVE_RIGHT ) traffic_sign = &img_curve_right; 
+    else if( nTrafficSign == TS_CURVE_LEFT ) traffic_sign = &img_curve_left; 
+    else if( nTrafficSign == TS_NARROW_ROAD ) traffic_sign = &img_narrow_road; 
+    else if( nTrafficSign == TS_RAIL_ROAD ) traffic_sign = &img_rail_road;  
+    else if( nTrafficSign == TS_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;
+    else if( nTrafficSign == TS_LANE_CHANGE1 ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  
+    else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space; 
     
-    //else if( nTrafficSign == TS_CAMERA1 ) traffic_sign = &img_school_zone;// 단속카메라(신호위반카메라)  
-    else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; // 고정식  - 호야
-    //else if( nTrafficSign == TS_CAMERA3 ) traffic_sign = &img_img_space; // 경찰차(이동식)  - 호야
-    //else if( nTrafficSign == TS_CAMERA4 ) traffic_sign = &img_img_space; // 단속구간(고정형 이동식)
-    //else if( nTrafficSign == TS_CAMERA5  ) traffic_sign = &img_img_space;  // 단속(카메라, 신호위반)    
+
+    else if( nTrafficSign == TS_CAMERA2_BUS ) traffic_sign = &img_bus_only; 
     else if( speedLimit ) 
     {
-      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )   // 구간 단속
+      if( nTrafficSign == TS_INTERVAL || nTrafficSign == TS_INTERVAL2 )  
       {
         traffic_sign = &img_section;
       }
@@ -848,11 +827,49 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
       {
         traffic_sign = &img_speed;
       }
-        
+    }
+  }
+  else if( nMapType == MAP_iNAVI )
+  {
+    nTrafficSign = int( nTrafficSign1 );
+
+
+    if( nTrafficSign == TC_BUS_ONLY1 ) traffic_sign = &img_bus_only; 
+    else if( nTrafficSign == TC_BUS_ONLY2 ) traffic_sign = &img_bus_only; 
+    else if( nTrafficSign == TR_SPEED_BUMP ) traffic_sign = &img_speed_bump; 
+
+    else if( nTrafficSign == TC_SCHOOL_ZONE1 ) traffic_sign = &img_school_zone;
+    else if( nTrafficSign == TC_SCHOOL_ZONE2 ) traffic_sign = &img_school_zone; 
+    else if( nTrafficSign == TC_TRAFFIC_INFO ) traffic_sign = &img_img_space; 
+    else if( nTrafficSign == TC_PARK_CRACKDOWN ) traffic_sign = &img_park_crackdown;
+    else if( nTrafficSign == TC_NO_LANE_CHANGE ) traffic_sign = &img_img_space; 
+
+
+    else if( nTrafficSign2 == TR_RAIL_CROSS ) traffic_sign = &img_rail_road;  
+    else if( nTrafficSign2 == TR_SPEED_BUMP ) traffic_sign = &img_speed_bump; 
+    
+
+    else if( speedLimit ) 
+    {
+      if( nTrafficSign == TC_INTERVAL1 || nTrafficSign == TC_INTERVAL2 )  
+      {
+        traffic_sign = &img_section;
+      }
+      else if( nTrafficSign == TC_CAMERA2 || nTrafficSign == TC_CAMERA3  )
+      {
+        traffic_sign = &img_camera;
+      }
+      else
+      {
+        traffic_sign = &img_speed;
+      }
     }
 
-
-  
+  }
+  else
+  {
+    return;
+  }
 
 
 
@@ -865,7 +882,7 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
     if( speedLimitAheadDistance >= 5 )
     {
       if( speedLimitAheadDistance >= 1000 )
-        szSLD.sprintf("%.1fkm", speedLimitAheadDistance * 0.001 );
+        szSLD.sprintf("%.1fk", speedLimitAheadDistance * 0.001 );
       else
         szSLD.sprintf("%.0f", speedLimitAheadDistance );
 
@@ -886,7 +903,7 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
 
       int txt_size = int(img_size1*0.8);
       int txt_xpos = img_xpos + 20;  
-      int txt_ypos = img_ypos + img_size1 - 15;
+      int txt_ypos = img_ypos + img_size1 - 5;
       QRect rect( txt_xpos, txt_ypos, txt_size, 60 );  
 
       p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 5));
@@ -930,15 +947,12 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimi
 
 void OnPaint::ui_draw_navi( QPainter &p ) 
 {
-  float speedLimit =  scene->liveNaviData.getSpeedLimit();  
-  float speedLimitAheadDistance =  scene->liveNaviData.getArrivalDistance(); // getSpeedLimitDistance();  
-  float nTrafficSign =  scene->liveNaviData.getSafetySign();
   int   mapValid =  scene->liveNaviData.getMapValid();
 
 
   if( mapValid )
   {
-    ui_draw_traffic_sign( p, nTrafficSign, speedLimit, speedLimitAheadDistance );
+    ui_draw_traffic_sign( p );
   }
 }
 
@@ -971,41 +985,20 @@ void OnPaint::ui_draw_debug1( QPainter &p )
  // p.drawText( QRect(bb_x, 900, bb_w, 42), text3, textOpt );
 }
 
-void OnPaint::ui_tunning_data( QPainter &p ) 
+void OnPaint::ui_view_tunning( QPainter &p ) 
 {
-  int nCmd = scene->update_data.getCommand();
+  p.save();
+
   int bb_x = 250;
   int bb_y = 300;
 
-  uint64_t nSec = get_time();
-  uint64_t nDelta = nSec - m_nOldSec;
 
-  if( m_nOldSec <= 0 )
-  {
-    m_nOldSec = nSec;
-    nDelta = 0;
-  }
-  else  if( m_nOldCmmand != nCmd ) 
-  {
-    m_nOldSec = nSec; 
-    m_nOldCmmand = nCmd;
-  }
-
-  //int nType = scene->update_data.getType();
-  //int nVersion = scene->update_data.getVersion();  
   QString text4;
-
-  //text4.sprintf("Cmd = %d , %d, %d", nCmd,  nType, nVersion);
-  //p.drawText( bb_x, bb_y+=50, text4 );  
-
-  if( nDelta > 5*60 ) return; // 5 분.
-
-
-
-  p.save();
-
   int  nYPos = bb_y;
   int  nGap = 80;
+
+
+
 
   auto car_params =  scene->car_params;
   auto lateralTuning = car_params.getLateralTuning();
@@ -1054,6 +1047,82 @@ void OnPaint::ui_tunning_data( QPainter &p )
 
 
   p.restore();  
+
+}
+
+
+void OnPaint::ui_view_normal( QPainter &p ) 
+{
+  p.save();
+
+  int bb_x = 250;
+  int bb_y = 300;
+
+
+  QString text4;
+  int  nYPos = bb_y;
+  int  nGap = 80;
+
+
+  auto car_params =  scene->car_params;
+  auto laneParam = car_params.getLaneParam();
+
+
+  auto cameraOffsetAdj = laneParam.getCameraOffsetAdj();    
+  auto pathOffsetAdj = laneParam.getPathOffsetAdj();    
+  auto leftLaneOffset = laneParam.getLeftLaneOffset();    
+  auto rightLaneOffset = laneParam.getRightLaneOffset();    
+
+  text4 = "Offset";                                    p.drawText( bb_x, nYPos+=nGap, text4 );
+
+  configFont( p, "Open Sans",  80, "Regular");    
+  text4.sprintf("Camera = %.1f", cameraOffsetAdj );    p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("Path = %.1f", pathOffsetAdj );        p.drawText( bb_x, nYPos+=nGap, text4 );
+
+  text4.sprintf("Left Lane = %.1f", leftLaneOffset );    p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("right Lane = %.1f", rightLaneOffset );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+  p.restore();  
+
+}
+
+void OnPaint::ui_tunning_data( QPainter &p ) 
+{
+  uint64_t nSec = get_time();
+  uint64_t nDelta = nSec - m_nOldSec;
+
+  int nCmd = scene->update_data.getCommand();
+
+  if( m_nOldSec <= 0 )
+  {
+    m_nOldSec = nSec;
+    nDelta = 0;
+  }
+  else  if( m_nOldCmmand != nCmd ) 
+  {
+    m_nOldSec = nSec; 
+    m_nOldCmmand = nCmd;
+  }
+
+ 
+
+  if( nDelta > 30 )     // 30 sec
+  {
+      m_view_tunning_data = 0;
+      return;
+  }
+  else
+  {
+     m_view_tunning_data = 1;
+  }
+
+  
+  int nVersion = scene->update_data.getVersion();
+  if( nVersion <= 1 )
+    ui_view_tunning( p );
+  else if( nVersion == 2 )
+    ui_view_normal( p );
 }
 
 
@@ -1061,9 +1130,124 @@ void OnPaint::ui_main_navi( QPainter &p )
 {
   ui_draw_navi( p );
 
+  if( scene->scr.IsCalibraionGridViewToggle )  return;
+
   ui_draw_debug1( p );
 
   ui_tunning_data( p );
 
+  ui_draw_stop_sign( p );
 }
 
+
+void OnPaint::ui_draw_stop_sign( QPainter &p ) 
+{
+  if( m_view_tunning_data ) return;
+  
+
+   SubMaster &sm = *(state->sm);
+
+  QString text4;
+
+  int  bb_x = 250;
+  int  nYPos = 300;
+  int  nGap = 40;
+    
+
+  // osm
+  const auto osm = sm["liveMapData"].getLiveMapData();
+
+   int  valid = osm.getSpeedLimitValid();
+   float speedLimit = osm.getSpeedLimit();
+
+  int   speedLimitAheadValid  = osm.getSpeedLimitAheadValid();
+  float speedLimitAhead  = osm.getSpeedLimitAhead();
+  float speedLimitAheadDistance   = osm.getSpeedLimitAheadDistance();
+
+  int   turnSpeedLimitValid  = osm.getTurnSpeedLimitValid();
+  float turnSpeedLimit  = osm.getTurnSpeedLimit();
+  float turnSpeedLimitEndDistance  = osm.getTurnSpeedLimitEndDistance();
+  int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
+
+
+  QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
+
+  speedLimitAhead *= 3.6;
+  speedLimit *= 3.6;
+  turnSpeedLimit *= 3.6;
+	
+
+  text4.sprintf("SL(%d) = %.0f  [", valid, speedLimit );
+  text4 +=  strRoadname;  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+  int TS_Signs  = scene->controls_state.getTurnSpeedLimitsAheadSigns();
+  float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
+  float TS_Distances  = scene->controls_state.getTurnSpeedLimitsAheadDistances();
+
+
+  TS_Speed *= 3.6;
+
+  int lane_line_cnt = scene->scr.lane_line_cnt;
+  text4.sprintf("TSLA(%d) = %.0f,  %.0f,  %d", TS_Signs, TS_Speed, TS_Distances, lane_line_cnt );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+  // Vision turn
+  nYPos += nGap;
+
+  float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
+  float latAcc = scene->longitudinalPlan.maxPredLatAcc;
+  float curvature = scene->longitudinalPlan.maxPredCurvature;
+  int turnState = scene->longitudinalPlan.visionTurnControllerState;
+  text4.sprintf("VLP(%d) = %.3f,  %.2f, %.0f", turnState, curvature, latAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
+  // Navi Data
+  int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
+  int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
+  int nMapType =  scene->liveNaviData.getMapType();
+
+  speedLimit = scene->liveNaviData.getSpeedLimit();
+  float distance = scene->liveNaviData.getSpeedLimitDistance();
+
+  float roadCurvature = scene->liveNaviData.getRoadCurvature();
+  float remainTime = scene->liveNaviData.getRemainTime();
+ 
+  int turnInfo = scene->liveNaviData.getTurnInfo();
+  int rurnDistance = scene->liveNaviData.getDistanceToTurn();
+
+  text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %.0f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("RC = %.3f, %.3f", roadCurvature, remainTime   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("TI = %d, %d", turnInfo, rurnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+}
+
+
+// grid line by opkr for mounting device appropriate position  BF:Back and Forth Angle, RL:Right and Left Angle
+void OnPaint::ui_draw_grid( QPainter &p  ) 
+{
+  int x_center = state->fb_w/2;
+  int y_center = state->fb_h/2;
+  int nGap = 0;
+
+   p.setPen( QColor(220, 220, 220, 100) ); 
+
+  for (int i = 0; i < 5; i++) {
+    nGap = i * 200;
+    p.drawLine( x_center + nGap, 0, x_center+ nGap , state->fb_h);  // line
+    p.drawLine( x_center - nGap, 0, x_center- nGap , state->fb_h); 
+  }
+
+  for (int i = 0; i < 5; i++) {
+    nGap = i * 200;
+    p.drawLine( 0, y_center + nGap, state->fb_w, y_center + nGap); 
+    p.drawLine( 0, y_center - nGap, state->fb_w, y_center - nGap); 
+  }
+
+
+  QString text4;
+  configFont( p, "Open Sans",  80, "SemiBold");
+  text4.sprintf("BF %.2f  RL %.2f", scene->scr.accel_prob[0], scene->scr.accel_prob[1] );
+  drawText( p, x_center, y_center, text4 ); 
+}

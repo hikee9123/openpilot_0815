@@ -113,6 +113,10 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     cutInCarDetect  @112;
     laneChangedisengaged @113;
 
+    # osm
+    curvSpeedDown @114;
+
+
     radarCanErrorDEPRECATED @15;
     communityFeatureDisallowedDEPRECATED @62;
     radarCommIssueDEPRECATED @67;
@@ -173,7 +177,6 @@ struct CarState {
   steeringTorque @8 :Float32;      # TODO: standardize units
   steeringTorqueEps @27 :Float32;  # TODO: standardize units
   steeringPressed @9 :Bool;        # if the user is using the steering wheel
-  steeringRateLimited @29 :Bool;   # if the torque is limited by the rate limiter
   steerFaultTemporary @35 :Bool;   # temporary EPS fault
   steerFaultPermanent @36 :Bool;   # permanent EPS fault
   stockAeb @30 :Bool;
@@ -274,6 +277,7 @@ struct CarState {
 
   errorsDEPRECATED @0 :List(CarEvent.EventName);
   brakeLightsDEPRECATED @19 :Bool;
+  steeringRateLimitedDEPRECATED @29 :Bool;   # if the torque is limited by the rate limiter  
 }
 
 # ******* radar state @ 20hz *******
@@ -496,8 +500,21 @@ struct CarParams {
 
   atompilotLongitudinalControl @70  :Bool;
   atomHybridSpeed @71  :Float32;
+
   opkrAutoResume @72 :Bool;
+
   smoothSteer @73 :SmoothSteerData;
+  laneParam @75 :LaneParamData;
+
+  opkrOsmCurvOption  @76 :Int16;
+
+  struct LaneParamData
+  {
+    cameraOffsetAdj @0 :Float32;
+    pathOffsetAdj @1 :Float32;
+    leftLaneOffset @2 :Float32;
+    rightLaneOffset @3 :Float32;
+  }
 
   struct SmoothSteerData
   {

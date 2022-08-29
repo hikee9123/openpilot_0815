@@ -20,17 +20,22 @@ public:
   void updateState(const UIState &s);
 
 private:
-  void    mousePressEvent(QMouseEvent* e) override;
   void    paintEvent(QPaintEvent *event) override;
   void    drawText(QPainter &p, int x, int y, const QString &text, QColor qColor = QColor(255,255,255,255), int nAlign = Qt::AlignCenter );
   QColor  get_color( int nVal, int nRed, int nYellow );
   int     get_time();
 
 private:
+  void  ui_tunning_data( QPainter &p );
+  void  ui_view_tunning( QPainter &p );
+  void  ui_view_normal( QPainter &p );
+
+private:
   UIState  *state;
   UIScene  *scene;
 
   int   enginRpm = 0;
+  int   m_view_tunning_data = 0;
 
 
  
@@ -96,16 +101,24 @@ private:
   QPixmap img_rpm2;
 
 
-
+// osm
+private:
+  struct _OSM__
+  {
+    int    lastGpsTimestamp;
+    int    delta_gpstimestamp;
+  } m_osm;
+   
 
 
 // navi
 private:
+  void   ui_draw_grid( QPainter &p  ) ;
   float  interp( float xv, float xp[], float fp[], int N);
   void   ui_main_navi( QPainter &p );
   void   ui_draw_debug1( QPainter &p );
   void   ui_draw_navi( QPainter &p );
-  void   ui_draw_traffic_sign( QPainter &p, float map_sign, float speedLimit,  float speedLimitAheadDistance );
+  void   ui_draw_traffic_sign( QPainter &p );
   int    get_param( const std::string &key );
 // kegmen
 private:
@@ -128,7 +141,10 @@ private:
   void  bb_draw_compass(QPainter &p, int compass_x, int compass_y );
   void  bb_draw_rpm(QPainter &p, int compass_x, int compass_y );
   void  bb_ui_draw_UI(QPainter &p);
-  void  ui_tunning_data( QPainter &p );
+
+
+private:
+  void  ui_draw_stop_sign( QPainter &p );
 
 signals:
   void valueChanged();  

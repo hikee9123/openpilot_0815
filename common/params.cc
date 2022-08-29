@@ -108,6 +108,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"ForcePowerDown", CLEAR_ON_MANAGER_START},
     {"GitBranch", PERSISTENT},
     {"GitCommit", PERSISTENT},
+    {"GitCommitRemote", PERSISTENT},
     {"GitDiff", PERSISTENT},
     {"GithubSshKeys", PERSISTENT},
     {"GithubUsername", PERSISTENT},
@@ -126,8 +127,10 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"IsOnroad", PERSISTENT},
     {"IsRHD", PERSISTENT},
     {"IsTakingSnapshot", CLEAR_ON_MANAGER_START},
+    {"IsTestedBranch", CLEAR_ON_MANAGER_START},
     {"IsUpdateAvailable", CLEAR_ON_MANAGER_START},
     {"JoystickDebugMode", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
+    {"LanguageSetting", PERSISTENT},
     {"LastAthenaPingTime", CLEAR_ON_MANAGER_START},
     {"LastGPSPosition", PERSISTENT},
     {"LastManagerExitReason", CLEAR_ON_MANAGER_START},
@@ -153,6 +156,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"SnoozeUpdate", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
     {"SshEnabled", PERSISTENT},
     {"SubscriberInfo", PERSISTENT},
+    {"SwitchToBranch", CLEAR_ON_MANAGER_START},
     {"TermsVersion", PERSISTENT},
     {"Timezone", PERSISTENT},
     {"TrainingVersion", PERSISTENT},
@@ -192,10 +196,9 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"OpkrSSHLegacy", PERSISTENT},
     {"OpkrAutoFocus", PERSISTENT},
 
-    {"OpkrRunNaviOnBoot", PERSISTENT},
-    {"OpkrMapEnable", PERSISTENT},
-    {"OpkrParameters", PERSISTENT},
-    //{"OpkrCarModel", PERSISTENT},
+
+
+
     {"OpkratomLongitudinal", PERSISTENT},
     
     {"OpkrPowerShutdown", PERSISTENT},
@@ -232,6 +235,30 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"PidKi", PERSISTENT},
     {"PidKf", PERSISTENT},
 
+    // lane
+    {"OpkrCameraOffsetAdj", PERSISTENT}, 
+    {"OpkrPathOffsetAdj", PERSISTENT}, 
+    {"OpkrLeftLaneOffset", PERSISTENT}, 
+    {"OpkrRightLaneOffset", PERSISTENT}, 
+
+    // osm
+    {"OpkrOSMEnable", PERSISTENT},
+    {"OpkrOSMCurvDecelOption", PERSISTENT},
+    {"OpkrOSMDebug", PERSISTENT},
+
+    // osm config
+    {"OpkrOSM_MIN_DISTANCE_FOR_NEW_QUERY", PERSISTENT},
+    {"OpkrOSM_FULL_STOP_MAX_SPEED", PERSISTENT},
+    {"OpkrOSM_LOOK_AHEAD_HORIZON_TIME", PERSISTENT},
+    {"OpkrOSM_PRE_LANE_DISTANCE", PERSISTENT},
+ 
+    {"OpkrOSM_TURN_CURVATURE_THRESHOLD", PERSISTENT},
+    {"OpkrOSM_DIVERTION_SEARCH_RANGE1", PERSISTENT},
+    {"OpkrOSM_DIVERTION_SEARCH_RANGE2", PERSISTENT},
+
+    // Navi
+    {"OpkrNaviSelect", PERSISTENT},
+    
 };
 
 } // namespace

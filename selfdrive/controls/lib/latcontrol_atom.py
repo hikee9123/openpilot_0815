@@ -142,7 +142,7 @@ class LatControlATOM(LatControl):
     self.LaLqr.reset()
     self.LaToq.reset()
 
-  def update(self, active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk):
+  def update(self, active, CS, VM, params, last_actuators, steer_limited, desired_curvature, desired_curvature_rate, llk):
     atom_log = log.ControlsState.LateralATOMState.new_message()
 
 
@@ -156,7 +156,7 @@ class LatControlATOM(LatControl):
     else:
       output_torques = []
       for funcs in self.lat_funs:
-        out_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, desired_curvature, desired_curvature_rate, llk )
+        out_torque, desired_angle, temp_log = funcs( active, CS, VM, params, last_actuators, steer_limited, desired_curvature, desired_curvature_rate, llk )
         output_torques.append( out_torque )
         if output_torque == None:
           output_torque = out_torque

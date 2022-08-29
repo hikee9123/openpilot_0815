@@ -84,11 +84,20 @@ int HomeWindow::mouseEventLatch(QMouseEvent* e) {
   bool bSidebar = sidebar->isVisible();
 
   UIScene  &scene =  uiState()->scene;//QUIState::ui_state.scene;
-  scene.scr.sidebar = bSidebar;
+
+
+  if( scene.scr.sidebar != bSidebar )
+  {
+     scene.scr.sidebar = bSidebar;
+
+     if( bSidebar && scene.scr.IsViewNavi )   
+       sidebar->setVisible( false );
+
+  }
 
   //printf("HomeWindow::mousePressEvent %d,%d  \n", e_x, e_y);
-
-  if( e_y > 700 ) return true;
+  if( scene.scr.IsViewNavi ) return true;
+  else if( e_y > 700 ) return true;
 
   return false;
 }
@@ -219,6 +228,6 @@ void OffroadHome::refresh() {
   update_notif->setVisible(updateAvailable);
   alert_notif->setVisible(alerts);
   if (alerts) {
-    alert_notif->setText(QString::number(alerts) + (alerts > 1 ? " ALERTS" : " ALERT"));
+    alert_notif->setText(QString::number(alerts) + (alerts > 1 ? tr(" ALERTS") : tr(" ALERT")));
   }
 }

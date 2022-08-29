@@ -8,6 +8,7 @@ from selfdrive.swaglog import cloudlog
 from selfdrive.modeld.constants import index_function
 from selfdrive.controls.lib.radar_helpers import _LEAD_ACCEL_TAU
 
+
 if __name__ == '__main__':  # generating code
   from pyextra.acados_template import AcadosModel, AcadosOcp, AcadosOcpSolver
 else:
@@ -196,6 +197,13 @@ class LongitudinalMpc:
     self.reset()
     self.source = SOURCES[2]
 
+    self.lead_0_obstacle = np.zeros(13, dtype=np.float64)
+    self.lead_1_obstacle = np.zeros(13, dtype=np.float64)
+    self.e2e_x = np.zeros(13, dtype=np.float64)
+    self.cruise_target = np.zeros(13, dtype=np.float64)
+    self.stopline = np.zeros(13, dtype=np.float64)
+    self.stop_prob = 0.0
+
   def reset(self):
     # self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
     self.solver.reset()
@@ -306,9 +314,22 @@ class LongitudinalMpc:
     self.cruise_min_a = min_a
     self.cruise_max_a = max_a
 
-  def update(self, carstate, radarstate, v_cruise):
+  def update(self, carstate, radarstate,  model, v_cruise, T_IDXS_MPC):
     v_ego = self.x0[1]
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
+
+    if (len(model.position.x) == 33 and
+        len(model.velocity.x) == 33 and
+        len(model.acceleration.x) == 33):
+      x = np.interp(T_IDXS_MPC, T_IDXS, model.position.x)
+      v = np.interp(T_IDXS_MPC, T_IDXS, model.velocity.x)
+      a = np.interp(T_IDXS_MPC, T_IDXS, model.acceleration.x)
+    else:
+      x = np.zeros(len(T_IDXS_MPC))
+      v = np.zeros(len(T_IDXS_MPC))
+      a = np.zeros(len(T_IDXS_MPC)) 
+
+    stopping = model.stopLine.prob > 0.5
 
     lead_xv_0 = self.process_lead(radarstate.leadOne)
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
@@ -332,10 +353,20 @@ class LongitudinalMpc:
                                v_upper)
     cruise_obstacle = np.cumsum(T_DIFFS * v_cruise_clipped) + get_safe_obstacle_distance(v_cruise_clipped)
 
+    stopline = (model.stopLine.x + 6.0) * np.ones(N+1) if stopping else 400 * np.ones(N+1)
+    x = (x[N] + 6.0) * np.ones(N+1)
+
     x_obstacles = np.column_stack([lead_0_obstacle, lead_1_obstacle, cruise_obstacle])
     self.source = SOURCES[np.argmin(x_obstacles[0])]
     self.params[:,2] = np.min(x_obstacles, axis=1)
     self.params[:,3] = np.copy(self.prev_a)
+
+    self.e2e_x = x[:]
+    self.lead_0_obstacle = lead_0_obstacle[:]
+    self.lead_1_obstacle = lead_1_obstacle[:]
+    self.cruise_target = cruise_obstacle[:]
+    self.stopline = stopline[:]
+    self.stop_prob = model.stopLine.prob
 
     self.run()
     if (np.any(lead_xv_0[:,0] - self.x_sol[:,0] < CRASH_DISTANCE) and

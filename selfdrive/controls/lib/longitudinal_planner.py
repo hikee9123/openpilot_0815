@@ -12,7 +12,10 @@ from selfdrive.controls.lib.longcontrol import LongCtrlState
 from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import LongitudinalMpc
 from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import T_IDXS as T_IDXS_MPC
 from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX, CONTROL_N
+from selfdrive.controls.lib.vision_turn_controller import VisionTurnController
 from selfdrive.swaglog import cloudlog
+
+
 
 LON_MPC_STEP = 0.2  # first step is 0.2s
 AWARENESS_DECEL = -0.2  # car smoothly decel at .2m/s^2 when user is distracted
@@ -59,6 +62,8 @@ class Planner:
     self.j_desired_trajectory = np.zeros(CONTROL_N)
     self.solverExecutionTime = 0.0
 
+    self.vision_turn_controller = VisionTurnController(CP)
+
   def update(self, sm):
     v_ego = sm['carState'].vEgo
 
@@ -82,6 +87,9 @@ class Planner:
     # Prevent divergence, smooth in current v_ego
     self.v_desired_filter.x = max(0.0, self.v_desired_filter.update(v_ego))
 
+    self.vision_turn_controller.update( not reset_state, self.v_desired_filter.x, self.a_desired, v_cruise, sm)    
+
+
     accel_limits = [A_CRUISE_MIN, get_max_accel(v_ego)]
     accel_limits_turns = limit_accel_in_turns(v_ego, sm['carState'].steeringAngleDeg, accel_limits, self.CP)
     if force_slow_decel:
@@ -95,7 +103,7 @@ class Planner:
     self.mpc.set_weights(prev_accel_constraint)
     self.mpc.set_accel_limits(accel_limits_turns[0], accel_limits_turns[1])
     self.mpc.set_cur_state(self.v_desired_filter.x, self.a_desired)
-    self.mpc.update(sm['carState'], sm['radarState'], v_cruise)
+    self.mpc.update(sm['carState'], sm['radarState'], sm['modelV2'], v_cruise, T_IDXS_MPC)
 
     self.v_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.v_solution)
     self.a_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.a_solution)
@@ -110,6 +118,7 @@ class Planner:
     a_prev = self.a_desired
     self.a_desired = float(interp(DT_MDL, T_IDXS[:CONTROL_N], self.a_desired_trajectory))
     self.v_desired_filter.x = self.v_desired_filter.x + DT_MDL * (self.a_desired + a_prev) / 2.0
+
 
   def publish(self, sm, pm):
     plan_send = messaging.new_message('longitudinalPlan')
@@ -129,5 +138,17 @@ class Planner:
     longitudinalPlan.fcw = self.fcw
 
     longitudinalPlan.solverExecutionTime = self.mpc.solve_time
+
+    longitudinalPlan.e2eX = self.mpc.e2e_x.tolist()
+    longitudinalPlan.lead0Obstacle = self.mpc.lead_0_obstacle.tolist()
+    longitudinalPlan.lead1Obstacle = self.mpc.lead_1_obstacle.tolist()
+    longitudinalPlan.cruiseTarget = self.mpc.cruise_target.tolist()
+    longitudinalPlan.stopLine = self.mpc.stopline.tolist()
+    longitudinalPlan.stoplineProb = self.mpc.stop_prob
+
+    longitudinalPlan.maxPredCurvature = float(self.vision_turn_controller._max_pred_curvature)
+    longitudinalPlan.maxPredLatAcc = float(self.vision_turn_controller._max_pred_lat_acc)
+    longitudinalPlan.visionTurnSpeed = float(self.vision_turn_controller.v_turn)    
+    longitudinalPlan.visionTurnControllerState = self.vision_turn_controller.state
 
     pm.send('longitudinalPlan', plan_send)

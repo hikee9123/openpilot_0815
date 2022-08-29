@@ -87,10 +87,13 @@ static void update_line_data(const UIState *s, const cereal::ModelDataV2::XYZTDa
 
 
 static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelDataV2::XYZTData::Reader &line,
-                             float y_off,  float z_off, line_vertices_data *pvd, int max_idx ) {
+                             float y_off,  line_vertices_data *pvd, int max_idx ) {
   float  y_off1, y_off2;
 
-  if( lr == 0 )  // left
+  float z_off_left = 0;  //def:0.0
+  float z_off_right = 0;
+
+  if( lr == 0 ) // left
   {
     y_off1 = y_off;
     y_off2 = 0;
@@ -105,48 +108,15 @@ static void update_blindspot_data(const UIState *s, int lr, const cereal::ModelD
   const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
   QPointF *v = &pvd->v[0]; // *v = &pvd->v[0];
   for (int i = 0; i <= max_idx; i++) {
-    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, v);
+    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off_left, v);
   }
   for (int i = max_idx; i >= 0; i--) {
-    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, v);
+    v += calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off_right, v);
   }
 
   pvd->cnt = v - pvd->v;
   assert(pvd->cnt <= std::size(pvd->v));
 
-/*
-  const auto line_x = line.getX(), line_y = line.getY(), line_z = line.getZ();
-  bool l, r;
-  QPointF left, right;
-  std::vector<QPointF> left_points, right_points;
-
-  for (int i = 0; i <= max_idx; i++) {
-    l = calib_frame_to_full_frame(s, line_x[i], line_y[i] - y_off1, line_z[i] + z_off, &left);
-    r = calib_frame_to_full_frame(s, line_x[i], line_y[i] + y_off2, line_z[i] + z_off, &right);
-    if (l && r) {
-      // For wider lines the drawn polygon will "invert" when going over a hill and cause artifacts
-      if ( left_points.size() && left.y() > left_points.back().y()) {
-        continue;
-      }
-      left_points.push_back(left);
-      right_points.push_back(right);
-    }
-  }
-  
-  int  left_Size = left_points.size();
-  int  right_Size = right_points.size();
-
-  pvd->cnt = 2 * left_Size;
-  assert(left_Size == right_Size);
-  assert(pvd->cnt <= std::size(pvd->v));
-
-
-  for (int left_idx = 0; left_idx < left_Size; left_idx++){
-    int right_idx = 2 * left_Size - left_idx - 1;
-    pvd->v[left_idx] = left_points[left_idx];
-    pvd->v[right_idx] = right_points[left_idx];
-  }
-*/
 }
 
 
@@ -172,17 +142,22 @@ static void update_model(UIState *s, const cereal::ModelDataV2::Reader &model) {
   const auto lane_lines = model.getLaneLines();
   const auto lane_line_probs = model.getLaneLineProbs();
   int max_idx = get_path_length_idx(lane_lines[0], max_distance);
+  int lane_line_cnt = 0;
   for (int i = 0; i < std::size(scene.lane_line_vertices); i++) {
     scene.lane_line_probs[i] = lane_line_probs[i];
     update_line_data(s, lane_lines[i], 0.025 * scene.lane_line_probs[i], 0, &scene.lane_line_vertices[i], max_idx);
+
+    lane_line_cnt = std::max( lane_line_cnt, scene.lane_line_vertices[i].cnt );    
   }
 
+  scene.scr.lane_line_cnt = lane_line_cnt;  
 
-  // update blindspot line
-  for (int i = 0; i < std::size(scene.lane_blindspot_vertices); i++) {
-    if( lane_line_probs[i+1] < 0.2 ) continue;
-    update_blindspot_data(s, i, lane_lines[i+1], 2.0, 0, &scene.lane_blindspot_vertices[i], max_idx);
-  }   
+
+  // lane barriers for blind spot
+  int max_distance_barrier =  40;
+  int max_idx_barrier = std::min(max_idx, get_path_length_idx(lane_lines[0], max_distance_barrier));
+  update_blindspot_data(s, 0, lane_lines[1], 2.5, &scene.lane_blindspot_vertices[0], max_idx_barrier);
+  update_blindspot_data(s, 1, lane_lines[2], 2.5, &scene.lane_blindspot_vertices[1], max_idx_barrier);
 
   // update road edges
   const auto road_edges = model.getRoadEdges();
@@ -287,7 +262,10 @@ static void update_state(UIState *s) {
           scene.accel_sensor = accel[2];
 
           gradient[0] = atan(accel[2]/accel[0]) * (180 / M_PI); // back and forth
-          gradient[1] = atan(accel[1]/accel[0]) * (180 / M_PI); // right and left          
+          gradient[1] = atan(accel[1]/accel[0]) * (180 / M_PI); // right and left 
+
+          scene.scr.accel_prob[0]  = gradient[0];
+          scene.scr.accel_prob[1]  = gradient[1];
         }
       } else if (sensor.which() == cereal::SensorEventData::GYRO_UNCALIBRATED) {
         auto gyro = sensor.getGyroUncalibrated().getV();
@@ -320,29 +298,27 @@ static void update_state(UIState *s) {
   }
   //scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
 
+
+
   if( scene.IsOpenpilotViewEnabled )
-    scene.started = sm["deviceState"].getDeviceState().getStarted();
-  else
-  scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
-
-
-
-
-  // atom 
-  float dG[2];
-  for( int i= 0; i<2; i++)
   {
-    dG[i] = gradient[i] - scene.scr.accel_prob[i];
-    
-    if( fabs( dG[i] ) < 1 ) 
-      scene.scr.accel_prob[i] += dG[i];
-    else
+    if ( scene.pandaType != cereal::PandaState::PandaType::UNKNOWN) 
     {
-      if( dG[i] > 0 ) scene.scr.accel_prob[i] += 0.005;
-      else scene.scr.accel_prob[i] -= 0.005;
+      scene.IsOpenpilotViewEnabled = false;
+      char value = '0';
+      Params().put("IsOpenpilotViewEnabled", &value, 1);
     }
       
+
+     scene.started = sm["deviceState"].getDeviceState().getStarted();
   }
+  else
+  {
+     scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
+  }
+    
+
+
   
    if (sm.updated("gpsLocationExternal")) {
     scene.gpsLocationExternal = sm["gpsLocationExternal"].getGpsLocationExternal();
@@ -395,6 +371,33 @@ static void update_state(UIState *s) {
     //printf("updateEvents cmd = %d", nCmd );
   }
 
+  if (sm.updated("longitudinalPlan")) {
+    auto lp_data = sm["longitudinalPlan"].getLongitudinalPlan();
+    for (int i = 0; i < std::size(scene.longitudinalPlan.e2ex); i++) {
+      scene.longitudinalPlan.e2ex[i] = lp_data.getE2eX()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.lead0); i++) {
+      scene.longitudinalPlan.lead0[i] = lp_data.getLead0Obstacle()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.lead1); i++) {
+      scene.longitudinalPlan.lead1[i] = lp_data.getLead1Obstacle()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.cruisetg); i++) {
+      scene.longitudinalPlan.cruisetg[i] = lp_data.getCruiseTarget()[i];
+    }
+    for (int i = 0; i < std::size(scene.longitudinalPlan.stopline); i++) {
+      scene.longitudinalPlan.stopline[i] = lp_data.getStopLine()[i];
+    }
+    scene.longitudinalPlan.stopprob = lp_data.getStoplineProb();
+
+
+    scene.longitudinalPlan.maxPredCurvature = lp_data.getMaxPredCurvature();
+    scene.longitudinalPlan.maxPredLatAcc  = lp_data.getMaxPredLatAcc();
+    scene.longitudinalPlan.maxPredLatAcc  = lp_data.getMaxPredLatAcc();
+    scene.longitudinalPlan.vtc_speed = lp_data.getVisionTurnSpeed();
+    scene.longitudinalPlan.visionTurnControllerState = (int)lp_data.getVisionTurnControllerState();
+  }
+
 }
 
 void ui_update_params(UIState *s) {
@@ -441,7 +444,8 @@ UIState::UIState(QObject *parent) : QObject(parent) {
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState", "roadCameraState",
     "pandaStates", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
     "wideRoadCameraState",
-    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters","updateEvents",
+    "liveNaviData", "gpsLocationExternal", "lateralPlan", "liveParameters","updateEvents","longitudinalPlan",
+    "liveMapData"
   });
 
   Params params;
@@ -460,7 +464,7 @@ void UIState::update() {
   updateStatus();
 
   if (sm->frame % UI_FREQ == 0) {
-    watchdog_kick();
+    watchdog_kick(nanos_since_boot());
   }
   emit uiUpdate(*this);
 }

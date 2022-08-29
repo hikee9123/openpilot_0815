@@ -3,7 +3,7 @@ from cereal import car
 from common.conversions import Conversions as CV
 from opendbc.can.parser import CANParser
 from opendbc.can.can_define import CANDefine
-from selfdrive.car.hyundai.values import DBC, STEER_THRESHOLD, FEATURES, EV_CAR, HYBRID_CAR, Buttons
+from selfdrive.car.hyundai.values import DBC, FEATURES, CAMERA_SCC_CAR, EV_CAR, HYBRID_CAR, Buttons, CarControllerParams
 from selfdrive.car.interfaces import CarStateBase
 
 
@@ -26,6 +26,10 @@ class CarState(CarStateBase):
     else:  # preferred and elect gear methods use same definition
       self.shifter_values = can_define.dv["LVR12"]["CF_Lvr_Gear"]
 
+    self.brake_error = False
+    self.buttons_counter = 0
+    self.params = CarControllerParams(CP)
+
     # atom
     self.cruise_buttons = 0
     self.cruise_buttons_time = 0
@@ -39,7 +43,7 @@ class CarState(CarStateBase):
     self.prev_acc_set_btn = False
     self.acc_active = 0
     self.cruise_set_speed_kph = 0
-    self.cruise_set_mode = 1     # 모드 설정.
+    self.cruise_set_mode = 0     # 모드 설정.
     self.gasPressed = False
     self.aReqValue = 0
 
@@ -188,6 +192,8 @@ class CarState(CarStateBase):
   def update(self, cp, cp_cam, c):
     ret = car.CarState.new_message()
 
+    cp_cruise = cp_cam if self.CP.carFingerprint in CAMERA_SCC_CAR else cp
+
     ret.doorOpen = any([cp.vl["CGW1"]["CF_Gway_DrvDrSw"], cp.vl["CGW1"]["CF_Gway_AstDrSw"],
                         cp.vl["CGW2"]["CF_Gway_RLDrSw"], cp.vl["CGW2"]["CF_Gway_RRDrSw"]])
 
@@ -211,7 +217,7 @@ class CarState(CarStateBase):
       50, cp.vl["CGW1"]["CF_Gway_TurnSigLh"], cp.vl["CGW1"]["CF_Gway_TurnSigRh"])
     ret.steeringTorque = cp.vl["MDPS12"]["CR_Mdps_StrColTq"]
     ret.steeringTorqueEps = cp.vl["MDPS12"]["CR_Mdps_OutTq"]
-    ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
+    ret.steeringPressed = abs(ret.steeringTorque) > self.params.STEER_THRESHOLD
     ret.steerFaultTemporary = cp.vl["MDPS12"]["CF_Mdps_ToiUnavail"] != 0 or cp.vl["MDPS12"]["CF_Mdps_ToiFlt"] != 0
 
     self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]  #kph  현재 차량의 속도.
@@ -224,21 +230,18 @@ class CarState(CarStateBase):
       ret.cruiseState.enabled = cp.vl["TCS13"]["ACC_REQ"] == 1
       ret.cruiseState.standstill = False
     else:
-      self.VSetDis = cp.vl["SCC11"]["VSetDis"]   # kph   크루즈 설정 속도.      
-      self.acc_active = (cp.vl["SCC12"]['ACCMode'] != 0)      
+      self.VSetDis = cp_cruise.vl["SCC11"]["VSetDis"]   # kph   크루즈 설정 속도.      
+      self.acc_active = (cp_cruise.vl["SCC12"]['ACCMode'] != 0)      
       ret.cruiseState.accActive = self.acc_active
       ret.cruiseState.gapSet = cp.vl["SCC11"]['TauGapSet']
       ret.cruiseState.cruiseSwState = self.cruise_buttons
       ret.cruiseState.modeSel = self.cruise_set_mode
 
 
-      self.cruise_available = cp.vl["SCC11"]["MainMode_ACC"] == 1
-      self.acc_mode = cp.vl["SCC12"]["ACCMode"] != 0
-      if self.cruise_set_mode == 4:
-        ret.cruiseState.available = False
-      else:
-        ret.cruiseState.available = self.cruise_available
-      ret.cruiseState.standstill = cp.vl["SCC11"]["SCCInfoDisplay"] == 4.
+      self.cruise_available = cp_cruise.vl["SCC11"]["MainMode_ACC"] == 1
+      self.acc_mode = cp_cruise.vl["SCC12"]["ACCMode"] != 0
+      ret.cruiseState.available = self.cruise_available
+      ret.cruiseState.standstill = cp_cruise.vl["SCC11"]["SCCInfoDisplay"] == 4.
 
 
       set_speed = self.cruise_speed_button()
@@ -285,11 +288,11 @@ class CarState(CarStateBase):
 
     if not self.CP.openpilotLongitudinalControl:
       if self.CP.carFingerprint in FEATURES["use_fca"]:
-        ret.stockAeb = cp.vl["FCA11"]["FCA_CmdAct"] != 0
-        ret.stockFcw = cp.vl["FCA11"]["CF_VSM_Warn"] == 2
+        ret.stockAeb = cp_cruise.vl["FCA11"]["FCA_CmdAct"] != 0
+        ret.stockFcw = cp_cruise.vl["FCA11"]["CF_VSM_Warn"] == 2
       else:
-        ret.stockAeb = cp.vl["SCC12"]["AEB_CmdAct"] != 0
-        ret.stockFcw = cp.vl["SCC12"]["CF_VSM_Warn"] == 2
+        ret.stockAeb = cp_cruise.vl["SCC12"]["AEB_CmdAct"] != 0
+        ret.stockFcw = cp_cruise.vl["SCC12"]["CF_VSM_Warn"] == 2
 
     if self.CP.enableBsm:
       ret.leftBlindspot = cp.vl["LCA11"]["CF_Lca_IndLeft"] != 0
@@ -345,7 +348,7 @@ class CarState(CarStateBase):
     ret.steeringAngleDeg = cp.vl["STEERING_SENSORS"]["STEERING_ANGLE"] * -1
     ret.steeringTorque = cp.vl["MDPS"]["STEERING_COL_TORQUE"]
     ret.steeringTorqueEps = cp.vl["MDPS"]["STEERING_OUT_TORQUE"]
-    ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD
+    ret.steeringPressed = abs(ret.steeringTorque) > self.params.STEER_THRESHOLD
 
     ret.leftBlinker, ret.rightBlinker = self.update_blinker_from_lamp(50, cp.vl["BLINKERS"]["LEFT_LAMP"],
                                                                       cp.vl["BLINKERS"]["RIGHT_LAMP"])
@@ -358,6 +361,7 @@ class CarState(CarStateBase):
     ret.cruiseState.speed = cp.vl["CRUISE_INFO"]["SET_SPEED"] * speed_factor
 
     self.buttons_counter = cp.vl["CRUISE_BUTTONS"]["_COUNTER"]
+
 
     return ret
 
@@ -454,7 +458,7 @@ class CarState(CarStateBase):
       ("TPMS11", 5),
     ]
 
-    if not CP.openpilotLongitudinalControl:
+    if not CP.openpilotLongitudinalControl and CP.carFingerprint not in CAMERA_SCC_CAR:
       signals += [
         ("MainMode_ACC", "SCC11"),
         ("VSetDis", "SCC11"),
@@ -602,6 +606,31 @@ class CarState(CarStateBase):
       ("LKAS11", 100),
       ("LFAHDA_MFC", 20),      
     ]
+
+    if not CP.openpilotLongitudinalControl and CP.carFingerprint in CAMERA_SCC_CAR:
+      signals += [
+        ("MainMode_ACC", "SCC11"),
+        ("VSetDis", "SCC11"),
+        ("SCCInfoDisplay", "SCC11"),
+        ("ACC_ObjDist", "SCC11"),
+        ("ACCMode", "SCC12"),
+      ]
+      checks += [
+        ("SCC11", 50),
+        ("SCC12", 50),
+      ]
+
+      if CP.carFingerprint in FEATURES["use_fca"]:
+        signals += [
+          ("FCA_CmdAct", "FCA11"),
+          ("CF_VSM_Warn", "FCA11"),
+        ]
+        checks.append(("FCA11", 50))
+      else:
+        signals += [
+          ("AEB_CmdAct", "SCC12"),
+          ("CF_VSM_Warn", "SCC12"),
+        ]
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2)
 

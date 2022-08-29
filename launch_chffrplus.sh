@@ -4,6 +4,10 @@ if [ -z "$BASEDIR" ]; then
   BASEDIR="/data/openpilot"
 fi
 
+if [ -z "$BASEDIR_ADDON" ]; then
+  BASEDIR_ADDON="$BASEDIR/selfdrive/assets/addon"
+fi
+
 source "$BASEDIR/launch_env.sh"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -121,6 +125,21 @@ function tici_init {
   fi
 }
 
+function osm_init {
+  if [ ! -f "/system/comma/usr/lib/libgfortran.so.5.0.0" ]; then
+    sleep 3
+    mount -o remount,rw /system
+    tar -zxvf $BASEDIR_ADDON/mapd/assets/libgfortran.tar.gz -C /system/comma/usr/lib/
+    mount -o remount,r /system
+  fi
+  if [ ! -d "/system/comma/usr/lib/python3.8/site-packages/opspline" ]; then
+    sleep 3
+    mount -o remount,rw /system
+    tar -zxvf $BASEDIR_ADDON/mapd/assets/opspline.tar.gz -C /system/comma/usr/lib/python3.8/site-packages/
+    mount -o remount,r /system
+  fi
+}
+
 function launch {
   # Remove orphaned git lock if it exists on boot
   [ -f "$DIR/.git/index.lock" ] && rm -f $DIR/.git/index.lock
@@ -178,8 +197,23 @@ function launch {
   tmux capture-pane -pq -S-1000 > /tmp/launch_log
 
   # start manager
-  cd selfdrive/manager
-  ./build.py && ./manager.py
+  cd selfdrive/manager  
+
+  if [ -f "$BASEDIR/prebuilt" ]; then
+    ./manager.py
+  else
+    if [ -f "/data/params/d/OpkrOSMEnable" ]; then
+      OSM_ENABLE=$(cat /data/params/d/OpkrOSMEnable)
+    fi
+    if [ "$OSM_ENABLE" == "1" ]; then
+      osm_init
+      ./custom_dep.py && ./build.py && ./manager.py
+    else
+      ./build.py && ./manager.py
+    fi
+  fi
+
+  
 
   # if broken, keep on screen error
   while true; do sleep 1; done

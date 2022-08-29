@@ -4,7 +4,7 @@ from panda import Panda
 from common.params import Params
 from common.conversions import Conversions as CV
 from selfdrive.car.hyundai.tunes import LatTunes, TunType, LongTunes, set_long_tune, set_lat_tune, update_lat_tune_patam
-from selfdrive.car.hyundai.values import CAR, DBC, EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
+from selfdrive.car.hyundai.values import CAR, DBC, CAMERA_SCC_CAR,  EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
 from selfdrive.car.hyundai.radar_interface import RADAR_START_ADDR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
 from selfdrive.car.interfaces import CarInterfaceBase
@@ -19,9 +19,17 @@ class CarInterface(CarInterfaceBase):
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
     return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
 
+  @staticmethod
+  def get_normal_params( version, CP ):
+    # version = 1. TURN,  2.lane control
+    CP.laneParam.cameraOffsetAdj = float( Params().get("OpkrCameraOffsetAdj", encoding="utf8") )
+    CP.laneParam.pathOffsetAdj = float( Params().get("OpkrPathOffsetAdj", encoding="utf8") )
+    CP.laneParam.leftLaneOffset = float( Params().get("OpkrLeftLaneOffset", encoding="utf8") )
+    CP.laneParam.rightLaneOffset = float( Params().get("OpkrRightLaneOffset", encoding="utf8") )
 
   @staticmethod
   def get_tunning_params( tune ):
+
     max_lat_accel = float( Params().get("TorqueMaxLatAccel", encoding="utf8") )
     hybridSpeed = float( Params().get("TorqueHybridSpeed", encoding="utf8") )
     tune.atomHybridSpeed = hybridSpeed * CV.KPH_TO_MS
@@ -36,7 +44,7 @@ class CarInterface(CarInterfaceBase):
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], disable_radar=False):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
 
-
+    Param = Params()
     ret.carName = "hyundai"
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundai, 0)]
     ret.radarOffCan = False  # RADAR_START_ADDR not in fingerprint[1] or DBC[ret.carFingerprint]["radar"] is None
@@ -44,31 +52,36 @@ class CarInterface(CarInterfaceBase):
 
 
     if (candidate in LEGACY_SAFETY_MODE_CAR):
-      ret.atompilotLongitudinalControl = Params().get_bool("OpkratomLongitudinal")
+      ret.atompilotLongitudinalControl = Param.get_bool("OpkratomLongitudinal")
     else:
       # WARNING: disabling radar also disables AEB (and we show the same warning on the instrument cluster as if you manually disabled AEB)
-      ret.openpilotLongitudinalControl = Params().get_bool("DisableRadar")
+      ret.openpilotLongitudinalControl = disable_radar and (candidate not in (LEGACY_SAFETY_MODE_CAR | CAMERA_SCC_CAR))
     
     ret.pcmCruise = not ret.openpilotLongitudinalControl
 
-    ret.opkrAutoResume = Params().get_bool("OpkrAutoResume")    
-
-    ret.maxSteeringAngleDeg = float( Params().get("OpkrMaxAngleLimit", encoding="utf8") )
-    ret.smoothSteer.method = int( Params().get("OpkrSteerMethod", encoding="utf8") )   # 1
-    ret.smoothSteer.maxSteeringAngle = float( Params().get("OpkrMaxSteeringAngle", encoding="utf8") )   # 90
-    ret.smoothSteer.maxDriverAngleWait = float( Params().get("OpkrMaxDriverAngleWait", encoding="utf8") )  # 0.002
-    ret.smoothSteer.maxSteerAngleWait = float( Params().get("OpkrMaxSteerAngleWait", encoding="utf8") )   # 0.001  # 10 sec
-    ret.smoothSteer.driverAngleWait = float( Params().get("OpkrDriverAngleWait", encoding="utf8") )  #0.001 
 
 
-  
+    ret.opkrAutoResume = Param.get_bool("OpkrAutoResume")
+    ret.opkrOsmCurvOption = int( Param.get( "OpkrOSMCurvDecelOption", encoding="utf8" ) )
+
+    ret.maxSteeringAngleDeg = float( Param.get("OpkrMaxAngleLimit", encoding="utf8") )
+    ret.smoothSteer.method = int( Param.get("OpkrSteerMethod", encoding="utf8") )   # 1
+    ret.smoothSteer.maxSteeringAngle = float( Param.get("OpkrMaxSteeringAngle", encoding="utf8") )   # 90
+    ret.smoothSteer.maxDriverAngleWait = float( Param.get("OpkrMaxDriverAngleWait", encoding="utf8") )  # 0.002
+    ret.smoothSteer.maxSteerAngleWait = float( Param.get("OpkrMaxSteerAngleWait", encoding="utf8") )   # 0.001  # 10 sec
+    ret.smoothSteer.driverAngleWait = float( Param.get("OpkrDriverAngleWait", encoding="utf8") )  #0.001 
+
+    ret.laneParam.cameraOffsetAdj = float( Param.get("OpkrCameraOffsetAdj", encoding="utf8") )
+    ret.laneParam.pathOffsetAdj = float( Param.get("OpkrPathOffsetAdj", encoding="utf8") )
+    ret.laneParam.leftLaneOffset = float( Param.get("OpkrLeftLaneOffset", encoding="utf8") )
+    ret.laneParam.rightLaneOffset = float( Param.get("OpkrRightLaneOffset", encoding="utf8") )
+
     # These cars have been put into dashcam only due to both a lack of users and test coverage.
     # These cars likely still work fine. Once a user confirms each car works and a test route is
     # added to selfdrive/car/tests/routes.py, we can remove it from this list.
     ret.dashcamOnly = candidate in {CAR.KIA_OPTIMA_H, CAR.ELANTRA_GT_I30}
 
     ret.steerActuatorDelay = 0.1  # Default delay
-    ret.steerRateCost = 0.5
     ret.steerLimitTimer = 0.4
     tire_stiffness_factor = 1.
 
@@ -80,19 +93,18 @@ class CarInterface(CarInterfaceBase):
     ret.stopAccel = 0.0
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
-
-
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
+
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
       ret.wheelbase = 2.845
-      ret.steerRatio = 16.0  #13.96   #12.5
-      ret.steerRateCost = 1 #0.6   # 0.6, 0.35
+      ret.steerRatio = 16.5  #13.96   #12.5
       ret.steerActuatorDelay = 0.05   # 0.1, 0.05
       ret.minSteerSpeed = 0.3 * CV.KPH_TO_MS
       tire_stiffness_factor = 0.9
       ret.maxLateralAccel = 3.0
+
 
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
@@ -101,7 +113,7 @@ class CarInterface(CarInterfaceBase):
       #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
       #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
       #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      CarInterface.get_tunning_params( ret )
+
       #method = update_lat_tune_patam( ret.lateralTuning )
       #if method == TunType.LAT_DEFAULT:
       #  set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)
@@ -223,9 +235,9 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.5
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-    elif candidate == CAR.TUCSON_DIESEL_2019:
+    elif candidate == CAR.TUCSON:
       ret.lateralTuning.pid.kf = 0.00005
-      ret.mass = 3633. * CV.LB_TO_KG
+      ret.mass = 3520. * CV.LB_TO_KG
       ret.wheelbase = 2.67
       ret.steerRatio = 14.00 * 1.15
       tire_stiffness_factor = 0.385
@@ -344,6 +356,9 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
 
+    CarInterface.get_tunning_params( ret )
+    CarInterface.get_normal_params( 0, ret )
+
     # these cars require a special panda safety mode due to missing counters and checksums in the messages
     if candidate in LEGACY_SAFETY_MODE_CAR:
       ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiLegacy)]
@@ -370,6 +385,9 @@ class CarInterface(CarInterfaceBase):
     if ret.openpilotLongitudinalControl or ret.atompilotLongitudinalControl:
       ret.safetyConfigs[0].safetyParam |= Panda.FLAG_HYUNDAI_LONG
 
+    if candidate in CAMERA_SCC_CAR:
+      ret.safetyConfigs[0].safetyParam |= Panda.FLAG_HYUNDAI_CAMERA_SCC
+    
     return ret
 
   @staticmethod
@@ -379,7 +397,7 @@ class CarInterface(CarInterfaceBase):
 
   def _update(self, c):
     ret = self.CS.update(self.cp, self.cp_cam, c)
-    ret.steeringRateLimited = self.CC.steer_rate_limited if self.CC is not None else False
+
 
     events = self.create_common_events(ret, pcm_enable=self.CS.CP.pcmCruise)
 
@@ -425,12 +443,14 @@ class CarInterface(CarInterfaceBase):
     if ret.vEgo > (self.CP.minSteerSpeed + 4.):
       self.low_speed_alert = False
     if self.low_speed_alert:
-      events.add(car.CarEvent.EventName.belowSteerSpeed)
-      #if self.sm['lateralPlan'].laneChangeState == LaneChangeState.laneChangeDisEngage:      
+      events.add(EventName.belowSteerSpeed)
     elif self.CC.cut_in_car_alert:
-      events.add(car.CarEvent.EventName.cutInCarDetect)
+      events.add(EventName.cutInCarDetect)
+    elif self.CC.NC.event_navi_alert != None:
+      events.add( self.CC.NC.event_navi_alert )
+      self.CC.NC.event_navi_alert = None
     #elif self.CS.lkas_button_on == 15:
-    #  events.add(car.CarEvent.EventName.invalidLkasSetting)
+    #  events.add(EventName.invalidLkasSetting)
     
 
     ret.events = events.to_msg()

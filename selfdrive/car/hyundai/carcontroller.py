@@ -1,3 +1,4 @@
+from pickle import TRUE
 from cereal import car, log
 from common.realtime import DT_CTRL
 from common.numpy_fast import clip, interp
@@ -24,19 +25,19 @@ class CarController():
 
     self.apply_steer_last = 0
     self.car_fingerprint = CP.carFingerprint
-    self.steer_rate_limited = False
     self.last_resume_frame = 0
     self.accel = 0
 
     self.resume_cnt = 0
-    self.last_lead_distance = 0
+
     self.lkas11_cnt = 0
     self.scc12_cnt = 0
-    self.NC = NaviControl(self.params)
-    self.debug_button = 0
+    
+    self.NC = NaviControl(self.params, CP)
     self.cut_in_car_alert = False
     self.cut_in_car_time = 0
     
+
 
     # hud
     self.hud_timer_alert = 0
@@ -45,6 +46,7 @@ class CarController():
     self.steer_timer_apply_torque = 1.0
     self.DT_STEER = 0.005             # 0.01 1sec, 0.005  2sec
     self.scc_live = not CP.radarOffCan
+
 
 
 
@@ -120,10 +122,16 @@ class CarController():
 
     return  int(round(float(apply_torque)))
 
-  def cutin_detect(self, CS):
-    cut_in, drel, d_rel1, d_rel2 = self.NC.get_cut_in_car()
-    if drel < 40 and abs(cut_in) >= 3:
-      self.cut_in_car_time = 100
+  def cutin_detect(self, CS, radar ):
+    cutin_dist = CS.clu_Vanz * 0.5
+    if radar:
+      cut_in, dRel = self.NC.get_cut_in_radar()
+      if dRel < cutin_dist and cut_in:
+        self.cut_in_car_time = 100      
+    else:
+      cut_in, dRel = self.NC.get_cut_in_car()
+      if dRel < cutin_dist and abs(cut_in) >= 3:
+        self.cut_in_car_time = 100
 
     if self.cut_in_car_time > 1:
       self.cut_in_car_time -= 1      
@@ -138,8 +146,9 @@ class CarController():
     str_log1 = 'MODE={:.0f} vF={:.1f}  DIST={:.2f}'.format( CS.cruise_set_mode, vFuture, CS.lead_distance )
     trace1.printf2( '{}'.format( str_log1 ) )
 
+    distance = self.NC.get_auto_resume()
 
-    str_log1 = 'TG={:.1f}   aRV={:.2f}'.format( apply_steer,  CS.aReqValue  )
+    str_log1 = 'TG={:.1f}   aRV={:.2f} distance={:.1f}'.format( apply_steer,  CS.aReqValue, distance  )
     trace1.printf3( '{}'.format( str_log1 ) )
   
 
@@ -194,46 +203,21 @@ class CarController():
     return can_sends    
 
 
-  def update_resume(self, can_sends,  c, CS, path_plan):
+  def update_ASCC(self, can_sends,  c, CS, path_plan):
     pcm_cancel_cmd = c.cruiseControl.cancel
     if pcm_cancel_cmd:
-      can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL))
-    elif CS.out.cruiseState.standstill:
-      if not self.CP.opkrAutoResume:
-        self.last_lead_distance = 0
-      elif CS.lead_distance < 4:
-        self.last_lead_distance = 0
-      elif CS.out.gasPressed:
-        self.last_lead_distance = 0
-      # run only first time when the car stopped
-      elif self.last_lead_distance == 0:  
-        # get the lead distance from the Radar
-        self.last_lead_distance = CS.lead_distance
-        self.resume_cnt = 0
-      # when lead car starts moving, create 6 RES msgs
-      elif CS.lead_distance != self.last_lead_distance and (self.frame - self.last_resume_frame) > 5:
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, Buttons.RES_ACCEL))
-        self.resume_cnt += 1
-        # interval after 6 msgs
-        if self.resume_cnt > 5:
-          self.last_resume_frame = self.frame
-          self.resume_cnt = 0
-    # reset lead distnce after the car starts moving          
-    elif self.last_lead_distance != 0:
-      self.last_lead_distance = 0
-
+      can_sends.append(create_clu11(self.packer, self.frame, CS.clu11, Buttons.CANCEL, self.CP.carFingerprint))
     elif CS.out.cruiseState.accActive:
-      btn_signal = self.NC.update( c, CS, path_plan )
-      if btn_signal != None:
-        self.debug_button = btn_signal
-        can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal ))
-        self.resume_cnt += 1
+      if CS.out.cruiseState.standstill and not self.CP.opkrAutoResume:
+        btn_signal = None
       else:
-        self.debug_button = 0
-        self.resume_cnt = 0
-
+        btn_signal = self.NC.update( c, CS, path_plan, self.frame )
+        if btn_signal != None:
+          can_sends.append(create_clu11(self.packer, self.resume_cnt, CS.clu11, btn_signal, self.CP.carFingerprint ))
+          self.resume_cnt += 1
+        else:
+          self.resume_cnt = 0
     return  can_sends
-
 
   def update(self, c, CS ):
     enabled = c.enabled
@@ -243,19 +227,14 @@ class CarController():
     right_lane = c.hudControl.rightLaneVisible 
     left_lane_warning = c.hudControl.leftLaneDepart 
     right_lane_warning = c.hudControl.rightLaneDepart
-    # pcm_cancel_cmd = c.cruiseControl.cancel    
-    # vFuture = c.hudControl.vFuture * 3.6
+
+
   
     # Steering Torque
     new_steer = int(round(actuators.steer * self.params.STEER_MAX))
     apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, self.params)
-    self.steer_rate_limited = new_steer != apply_steer
 
-    if not self.steer_rate_limited:
-      if CS.out.vEgo < 5:
-        self.steer_rate_limited = True
-      elif self.steer_timer_apply_torque < 1:
-        self.steer_rate_limited = True
+    self.NC.osm_turnLimit_alert( CS )
 
 
     if CS.engage_enable and not enabled:
@@ -269,7 +248,7 @@ class CarController():
       self.cut_in_car_time = 0
       self.cut_in_car_alert = False
     else:
-      self.cutin_detect( CS )
+      self.cutin_detect( CS, True )
 
     lkas_active = enabled and active and not CS.out.steerFaultTemporary and  CS.out.vEgo >= self.CP.minSteerSpeed and CS.out.cruiseState.enabled
 
@@ -310,7 +289,8 @@ class CarController():
     if  self.CP.openpilotLongitudinalControl:
       self.updateLongitudinal( can_sends, c, CS )
     else:
-      self.update_resume( can_sends, c, CS, path_plan )
+      self.update_ASCC( can_sends, c, CS, path_plan )
+
 
     if self.CP.atompilotLongitudinalControl:
       if (self.frame % 2 == 0) and CS.cruise_set_mode == 2:
