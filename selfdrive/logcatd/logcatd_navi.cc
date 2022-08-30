@@ -338,7 +338,7 @@ int main() {
 
       if( opkr )
       {
-        // printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
+         printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }
 
       pm.send("liveNaviData", msg);
