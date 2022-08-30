@@ -155,7 +155,7 @@ int main() {
 
   double  dEventLastSec, dEventHideSec;
   double  dCurrentSec;
-  long    nCurPID;
+  long    nCurPID = 0;
       
       
   ExitHandler do_exit;
