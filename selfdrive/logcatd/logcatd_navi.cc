@@ -155,7 +155,9 @@ int main() {
 
   double  dEventLastSec, dEventHideSec;
   double  dCurrentSec;
-
+  long    nCurPID;
+      
+      
   ExitHandler do_exit;
   PubMaster pm({"liveNaviData"});
   SubMaster sm({"carState"});
@@ -225,6 +227,7 @@ int main() {
       }
       else if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
       {
+        nCurPID = entry.tid;
         event.speedLimitDistance = m_message;
         opkr = 1;
       }      
@@ -336,7 +339,7 @@ int main() {
       framed.setArrivalDistance(  event.dArrivalDistance );
 
 
-      if( opkr )
+      if( opkr  &&  nCurPID == event.tid  )
       {
          printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }
