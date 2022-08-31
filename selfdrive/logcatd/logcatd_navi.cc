@@ -339,7 +339,7 @@ int main() {
       framed.setArrivalDistance(  event.dArrivalDistance );
 
 
-      if( opkr  &&  nCurPID == event.tid  )
+      if( opkr  &&  nCurPID == entry.tid  )
       {
          printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }
