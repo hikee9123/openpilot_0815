@@ -125,7 +125,7 @@ void update_event(  LiveNaviDataResult *pEvet, float  dSpeed_ms )
     float  dArrivalSec;
 
     if( dEventDistance > 10 ) {}
-    else if(  pEvet->safetySign1 == TS_BUMP_ROAD ) // 과속방지턱
+    else if(  pEvet->safetySign2 == TS_BUMP_ROAD ) // 과속방지턱
     {
         dEventDistance = 200;
     }
@@ -155,7 +155,9 @@ int main() {
 
   double  dEventLastSec, dEventHideSec;
   double  dCurrentSec;
-
+  long    nCurPID = 0;
+      
+      
   ExitHandler do_exit;
   PubMaster pm({"liveNaviData"});
   SubMaster sm({"carState"});
@@ -217,7 +219,7 @@ int main() {
       {
           if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
           {
-             opkr = 0;
+             // opkr = 0;
              event.speedLimitDistance = m_message;
           }
     
@@ -225,6 +227,7 @@ int main() {
       }
       else if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
       {
+        nCurPID = entry.tid;
         event.speedLimitDistance = m_message;
         opkr = 1;
       }      
@@ -282,7 +285,8 @@ int main() {
           dArrivalDistanceStop = event.dArrivalDistance;
 
 
-          if( event.safetySign1 == TS_BUMP_ROAD ) dEventHideSec = 10; // 과속방지턱
+          if( event.safetySign2 == TS_BUMP_ROAD ) dEventHideSec = 30; // 과속방지턱
+         //else if( event.speedLimitDistance <= 0 ) opkr = 0;
           else if( dSpeed_ms < 10 )  dEventHideSec = 20;
           else if( dSpeed_ms < 20 )  dEventHideSec = 10;
           else dEventHideSec = 7;
@@ -335,9 +339,9 @@ int main() {
       framed.setArrivalDistance(  event.dArrivalDistance );
 
 
-      if( opkr )
+      if( opkr  &&  nCurPID == entry.tid  )
       {
-        // printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
+         printf("logcat - tag=%d.[%s] message=[%s] \n",  entry.tid, entry.tag, entry.message );
       }
 
       pm.send("liveNaviData", msg);
