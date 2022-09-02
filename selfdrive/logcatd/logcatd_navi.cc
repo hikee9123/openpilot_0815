@@ -284,7 +284,7 @@ int main() {
           
           if( event.mapType == 2 )  // iNavi
           {
-              dEventHideSec = 7
+              dEventHideSec = 7;
           } 
           else
           {
