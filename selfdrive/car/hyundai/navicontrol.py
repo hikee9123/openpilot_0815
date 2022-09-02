@@ -264,8 +264,8 @@ class NaviControl():
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
       self.event_navi_alert = EventName.curvSpeedDown
-    elif liveMapData.turnSpeedLimitEndDistance > 10:
-      # self.event_navi_alert = EventName.curvSpeedDown
+    elif liveMapData.turnSpeedLimitEndDistance > 10 and self.event_navi_alert == EventName.curvSpeedDown:
+      self.event_navi_alert = EventName.curvSpeedDown
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
 
