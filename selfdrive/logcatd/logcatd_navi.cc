@@ -151,7 +151,7 @@ int main() {
   int      traffic_type;
   int      opkr =0;
   int      m_message = 0;
-  double   dArrivalDistanceStop = 0;
+
 
   double  dEventLastSec, dEventHideSec;
   double  dCurrentSec;
@@ -219,11 +219,9 @@ int main() {
       {
           if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
           {
-             // opkr = 0;
              event.speedLimitDistance = m_message;
           }
-    
-          update_event( &event, dSpeed_ms );
+         // update_event( &event, dSpeed_ms );
       }
       else if( strcmp( entry.tag, "opkrspddist" ) == 0 )  // 1
       {
@@ -282,14 +280,19 @@ int main() {
           dEventLastSec = dCurrentSec - event.dEventSec;  // 마지막 Event Time
           event.dArrivalTimeSec = event.dHideTimeSec - dCurrentSec;
           event.dArrivalDistance =  event.dArrivalTimeSec * dSpeed_ms;
-          dArrivalDistanceStop = event.dArrivalDistance;
 
-
-          if( event.safetySign2 == TS_BUMP_ROAD ) dEventHideSec = 30; // 과속방지턱
-         //else if( event.speedLimitDistance <= 0 ) opkr = 0;
-          else if( dSpeed_ms < 10 )  dEventHideSec = 20;
-          else if( dSpeed_ms < 20 )  dEventHideSec = 10;
-          else dEventHideSec = 7;
+          
+          if( event.mapType == 2 )  // iNavi
+          {
+              dEventHideSec = 7
+          } 
+          else
+          {
+            if( event.safetySign2 == TS_BUMP_ROAD ) dEventHideSec = 30; // 과속방지턱
+            else if( dSpeed_ms < 10 )  dEventHideSec = 20;
+            else if( dSpeed_ms < 20 )  dEventHideSec = 10;
+            else dEventHideSec = 7;
+          }
 
           if( dEventLastSec > dEventHideSec )   opkr = 0;          
           else if( event.dArrivalTimeSec < 1.5 )  opkr = 0;
@@ -302,6 +305,7 @@ int main() {
       }
       else
       {
+//        if( event.mapType == 1 )  // mappy
         event.dHideTimeSec = dCurrentSec + 5;
       }
 
