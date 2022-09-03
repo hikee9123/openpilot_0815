@@ -39,7 +39,7 @@ class NaviControl():
     self.VSetDis = 30
     self.frame_VSetDis = 30
 
-    self.event_navi_alert = None
+
     self.last_lead_distance = 0
 
     self.turnSpeedLimitsAheadSigns = 0
@@ -47,6 +47,8 @@ class NaviControl():
     self.turnSpeedLimitsAheadDistances = 0
 
     self.turn_time_alert = 0
+    self.event_navi_alert = None
+    self.turn_time_alert_buff = None
 
   def update_lateralPlan( self ):
     self.sm.update(0)
@@ -265,32 +267,33 @@ class NaviControl():
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
       self.turn_time_alert = 100
-      self.event_navi_alert = EventName.curvSpeedEntering
+      self.turn_time_alert_buff = EventName.curvSpeedEntering
     elif self.turn_time_alert:
       if liveMapData.turnSpeedLimitEndDistance > 10:
         turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
         turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
         self.turn_time_alert = 30
-        self.event_navi_alert = EventName.curvSpeedTurning
+        self.turn_time_alert_buff = EventName.curvSpeedTurning
       elif abs(CS.out.steeringAngleDeg) > 3:
         self.turn_time_alert = 10
-        self.event_navi_alert = EventName.curvSpeedLeaving
-
+        self.turn_time_alert_buff = EventName.curvSpeedLeaving
 
     if self.turn_time_alert > 0:
       self.turn_time_alert -= 1
+      #if CS.cruise_set_mode == 1:      
+      self.event_navi_alert = self.turn_time_alert_buff
 
     self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
     self.turnSpeedLimitsAheadDistances = turnSpeedLimitsAheadDistances
-
-
 
   def osm_speed_control( self, c, CS, ctrl_speed ):
     if self.turnSpeedLimitsAheadDistances > 30 and CS.out.vEgo > 8.3:
       turnSpeedLimit = self.turnSpeedLimitsAhead
       turnSpeedLimit = max( turnSpeedLimit, ctrl_speed - 10 )
+
       if ctrl_speed > turnSpeedLimit:  # osm speed control.
-        self.event_navi_alert = EventName.curvSpeedEntering
+        self.event_navi_alert = self.turn_time_alert_buff
+
     else:
       turnSpeedLimit = ctrl_speed
 
