@@ -280,7 +280,7 @@ class NaviControl():
 
     if self.turn_time_alert > 0:
       self.turn_time_alert -= 1
-      #if CS.cruise_set_mode == 1:      
+      #if CS.cruise_set_mode == 1:
       self.event_navi_alert = self.turn_time_alert_buff
 
     self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
