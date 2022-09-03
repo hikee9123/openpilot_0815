@@ -338,7 +338,7 @@ def osm_speed_alert(alert_text_2: str) -> AlertCallbackType:
       turnSpeed = liveMapData.turnSpeedLimitsAhead[-1]
 
       return Alert(
-        f"(OSM) Curve Preparation Distance:{turnSpeedDistances}  Speed Limit:{turnSpeed}",
+        f"(OSM) Curve Preparation Distance:{turnSpeedDistances:.0f}  Speed Limit:{turnSpeed:.0f}",
         f"{alert_text_2}",
         AlertStatus.normal, AlertSize.small,
         Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
@@ -347,13 +347,13 @@ def osm_speed_alert(alert_text_2: str) -> AlertCallbackType:
       turnSpeed = liveMapData.turnSpeedLimit
       if alert_text_2 == "Leaving":
         return Alert(
-          f"(OSM) Leave the curve steer:{CS.steeringAngleDeg}",
+          f"(OSM) Leave the curve steer:{CS.steeringAngleDeg:.0f}",
           "Leaving",
           AlertStatus.normal, AlertSize.small,
           Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
       else:
         return Alert(
-          f"(OSM) Curve  Distance:{turnSpeedDistances}  Speed Limit:{turnSpeed}",
+          f"(OSM) Curve  Distance:{turnSpeedDistances:.0f}  Speed Limit:{turnSpeed:.0f}",
           f"{alert_text_2}",
           AlertStatus.normal, AlertSize.small,
           Priority.LOW, VisualAlert.none, AudibleAlert.promptRepeat, 0.5)    
