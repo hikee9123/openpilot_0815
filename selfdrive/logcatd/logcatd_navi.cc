@@ -227,7 +227,8 @@ int main() {
       {
         nCurPID = entry.tid;
         event.speedLimitDistance = m_message;
-        opkr = 1;
+        if( m_message > 50 )
+           opkr = 1;
       }      
       else if( strcmp( entry.tag, "opkrspdlimit" ) == 0 ) // 2
       {
