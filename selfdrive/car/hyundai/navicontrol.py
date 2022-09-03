@@ -46,6 +46,7 @@ class NaviControl():
     self.turnSpeedLimitsAhead = 0
     self.turnSpeedLimitsAheadDistances = 0
 
+    self.turn_time_alert = 0
 
   def update_lateralPlan( self ):
     self.sm.update(0)
@@ -263,12 +264,21 @@ class NaviControl():
     if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
-      self.event_navi_alert = EventName.curvSpeedDown
-    elif liveMapData.turnSpeedLimitEndDistance > 10 and self.event_navi_alert == EventName.curvSpeedDown:
-      self.event_navi_alert = EventName.curvSpeedDown
-      turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
-      turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
+      self.turn_time_alert = 100
+      self.event_navi_alert = EventName.curvSpeedEntering
+    elif self.turn_time_alert:
+      if liveMapData.turnSpeedLimitEndDistance > 10:
+        turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
+        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
+        self.turn_time_alert = 30
+        self.event_navi_alert = EventName.curvSpeedTurning
+      elif abs(CS.out.steeringAngleDeg) > 3:
+        self.turn_time_alert = 10
+        self.event_navi_alert = EventName.curvSpeedLeaving
 
+
+    if self.turn_time_alert > 0:
+      self.turn_time_alert -= 1
 
     self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
     self.turnSpeedLimitsAheadDistances = turnSpeedLimitsAheadDistances
@@ -280,7 +290,7 @@ class NaviControl():
       turnSpeedLimit = self.turnSpeedLimitsAhead
       turnSpeedLimit = max( turnSpeedLimit, ctrl_speed - 10 )
       if ctrl_speed > turnSpeedLimit:  # osm speed control.
-        self.event_navi_alert = EventName.curvSpeedDown
+        self.event_navi_alert = EventName.curvSpeedEntering
     else:
       turnSpeedLimit = ctrl_speed
 

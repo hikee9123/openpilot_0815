@@ -330,6 +330,28 @@ def joystick_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster,
   return NormalPermanentAlert("Joystick Mode", vals)
 
 
+def osm_speed_alert(alert_text_2: str) -> AlertCallbackType:
+  def func(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
+    liveMapData = sm['liveMapData']
+    if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
+      turnSpeedDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
+      turnSpeed = liveMapData.turnSpeedLimitsAhead[-1]
+
+      return Alert(
+        f"(OSM) Curve Preparation Distance:{turnSpeedDistances}  Speed Limit:{turnSpeed}",
+        f"{alert_text_2}",
+        AlertStatus.normal, AlertSize.small,
+        Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
+    else:
+      turnSpeedDistances = liveMapData.turnSpeedLimitEndDistance
+      turnSpeed = liveMapData.turnSpeedLimit
+      return Alert(
+        f"(OSM) Curve  Distance:{turnSpeedDistances}  Speed Limit:{turnSpeed}",
+        f"{alert_text_2}",
+        AlertStatus.normal, AlertSize.small,
+        Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)    
+  return func
+
 
 EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   # ********** events with no alerts **********
@@ -947,11 +969,15 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, alert_rate=0.75),
   },
 
-  EventName.curvSpeedDown: {
-    ET.WARNING: Alert(
-      "Slowing Down On Curve(OSM)",
-      "",
-      AlertStatus.normal, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.none, .5),
-  },  
+  EventName.curvSpeedEntering: {
+    ET.WARNING: osm_speed_alert("Entering"),
+  },
+
+  EventName.curvSpeedTurning: {
+    ET.WARNING: osm_speed_alert("Turning"),
+  },
+
+  EventName.curvSpeedLeaving: {
+    ET.WARNING: osm_speed_alert("Leaving"),
+  },     
 }

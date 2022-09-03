@@ -114,7 +114,9 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     laneChangedisengaged @113;
 
     # osm
-    curvSpeedDown @114;
+    curvSpeedEntering @114;
+    curvSpeedTurning @115;
+    curvSpeedLeaving @116;
 
 
     radarCanErrorDEPRECATED @15;
