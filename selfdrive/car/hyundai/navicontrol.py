@@ -21,7 +21,7 @@ class NaviControl():
     self.p = p
     self.CP = CP
     
-    self.sm = messaging.SubMaster(['liveNaviData','lateralPlan','radarState','modelV2','liveMapData']) 
+    self.sm = messaging.SubMaster(['liveNaviData','lateralPlan','radarState','modelV2','liveMapData','longitudinalPlan']) 
 
     self.btn_cnt = 0
     self.seq_command = 0
@@ -259,6 +259,9 @@ class NaviControl():
 
   def osm_turnLimit_alert( self, CS ):
     liveMapData = self.sm['liveMapData']
+    longitudinalPlan = self.sm['longitudinalPlan']
+
+    latAcc = longitudinalPlan.maxPredLatAcc
 
     turnSpeedLimitsAheadDistances = 0
     turnSpeedLimitsAhead = 0
@@ -269,13 +272,13 @@ class NaviControl():
       self.turn_time_alert = 100
       self.turn_time_alert_buff = EventName.curvSpeedEntering
     elif self.turn_time_alert:
-      if liveMapData.turnSpeedLimitEndDistance > 10:
+      if latAcc > 0.3:
         turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
         turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
-        self.turn_time_alert = 30
+        self.turn_time_alert = 50
         self.turn_time_alert_buff = EventName.curvSpeedTurning
-      elif abs(CS.out.steeringAngleDeg) > 3:
-        self.turn_time_alert = 10
+      elif latAcc > 0.1 and self.turn_time_alert_buff == EventName.curvSpeedTurning:
+        self.turn_time_alert = 50
         self.turn_time_alert_buff = EventName.curvSpeedLeaving
 
     if self.turn_time_alert > 0:

@@ -335,28 +335,28 @@ def osm_speed_alert(alert_text_2: str) -> AlertCallbackType:
     liveMapData = sm['liveMapData']
     if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
       turnSpeedDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
-      turnSpeed = liveMapData.turnSpeedLimitsAhead[-1]
+      turnSpeed = liveMapData.turnSpeedLimitsAhead[-1] * CV.MS_TO_KPH
 
       return Alert(
-        f"(OSM) Curve Preparation D:{turnSpeedDistances:.0f}  S:{turnSpeed:.0f}",
-        f"{alert_text_2}",
-        AlertStatus.normal, AlertSize.small,
-        Priority.MID, VisualAlert.none, AudibleAlert.none, 0.5)
+        f"(Entering) Curve Preparation ",
+        f"D:{turnSpeedDistances:.0f}  S:{turnSpeed:.0f}",
+        AlertStatus.normal, AlertSize.mid,
+        Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
     else:
       turnSpeedDistances = liveMapData.turnSpeedLimitEndDistance
-      turnSpeed = liveMapData.turnSpeedLimit
+      turnSpeed = liveMapData.turnSpeedLimit  * CV.MS_TO_KPH
       if alert_text_2 == "Leaving":
         return Alert(
-          f"(OSM) Leave the curve steer:{CS.steeringAngleDeg:.0f}",
-          "Leaving",
-          AlertStatus.normal, AlertSize.small,
-          Priority.MID, VisualAlert.none, AudibleAlert.none, 0.5)
+          f"(Leaving) Leave the curve ",
+          f"steer:{CS.steeringAngleDeg:.0f}",
+          AlertStatus.normal, AlertSize.mid,
+          Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
       else:
         return Alert(
-          f"(OSM) Curve  D:{turnSpeedDistances:.0f}  S:{turnSpeed:.0f}",
-          f"{alert_text_2}",
-          AlertStatus.normal, AlertSize.small,
-          Priority.MID, VisualAlert.none, AudibleAlert.promptRepeat, 0.5)    
+          f"(Turning) Curve  ",
+          f"D:{turnSpeedDistances:.0f}  S:{turnSpeed:.0f}",
+          AlertStatus.normal, AlertSize.mid,
+          Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)    
   return func
 
 
