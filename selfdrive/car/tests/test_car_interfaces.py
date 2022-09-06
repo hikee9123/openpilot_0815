@@ -50,7 +50,6 @@ class TestCarInterfaces(unittest.TestCase):
     assert car_interface
 
     self.assertGreater(car_params.mass, 1)
-    self.assertGreater(car_params.steerRateCost, 1e-3)
 
     print( 'test car name = {}'.format( car_name ) )
     self.LaC = None

@@ -73,6 +73,9 @@ services = {
   "liveNaviData": (True, 0.),
   "updateEvents": (True, 0.),
 
+#osm
+  "liveMapData": (True, 0.),
+
   # debug
   "testJoystick": (True, 0.),
   "roadEncodeData": (False, 20.),

@@ -9,13 +9,14 @@
 
 #include "opkr.h"
 
-CTunWidget::CTunWidget(QWidget *parent) : QFrame(parent) 
+CTunWidget::CTunWidget( TuningPanel *panel, QWidget *parent) : QFrame(parent) 
 {
+  m_pPanel = panel;
+
   m_bShow = 0;
-  m_nCommand = 0;
   memset( m_pChildFrame, 0, sizeof(m_pChildFrame) );
 
-  pm = new PubMaster({"updateEvents"});
+
 
   QString str_param = "OpkrLateralControlMethod";
 
@@ -131,45 +132,6 @@ void CTunWidget::closeSettings()
 }
 
 
-void CTunWidget::ConfirmButton(QVBoxLayout *parent) 
-{
-  QPushButton* confirm_btn = new QPushButton("confirm");
-  confirm_btn->setFixedSize(386, 125);
-  confirm_btn->setStyleSheet(R"(
-    font-size: 48px;
-    border-radius: 10px;
-    color: #E4E4E4;
-    background-color: #444444;
-  )");
-
-  
-
-  parent->addWidget(confirm_btn, 0, Qt::AlignRight );
-
-  QObject::connect(confirm_btn, &QPushButton::clicked, [=]() 
-  {
-      m_nCommand++;
-      if( m_nCommand > 99 ) m_nCommand = 0;
-      
-      MessageBuilder msg;
-      auto update_events = msg.initEvent().initUpdateEvents();
-      update_events.setVersion(1);
-      update_events.setType( m_nMethod );    
-      update_events.setCommand( m_nCommand );
-
-      pm->send("updateEvents", msg);
-
-      QString  strBtn;
-      strBtn.sprintf("confirm(%d)", m_nCommand);
-      confirm_btn->setText( strBtn );
-
-      m_bShow = 0;
-      refresh();
-  });
-
- // QObject::connect(confirm_btn, &QPushButton::clicked, this, &CTunWidget::closeSettings);
-}
-
 
 void CTunWidget::FramePID(QVBoxLayout *parent) 
 {
@@ -182,7 +144,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
     "Kp",
     "Adjust Kp def:0.25"
     );
-  pKp->SetControl( 0.1, 1, 0.001 );
+  pKp->SetControl( 0.1, 1, 0.1 );
   box_layout->addWidget( pKp );          
 
   MenuControl *pKi = new MenuControl( 
@@ -190,7 +152,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
     "Ki",
     "Adjust Ki def:0.05"
     );
-  pKi->SetControl( 0.0, 0.1, 0.001 );
+  pKi->SetControl( 0.0, 0.1, 0.01 );
   box_layout->addWidget( pKi );
 
   MenuControl *pKf = new MenuControl( 
@@ -218,7 +180,7 @@ void CTunWidget::FramePID(QVBoxLayout *parent)
   box_layout->addWidget( pMenu2 ); 
 */
 
-  ConfirmButton( box_layout );
+  m_pPanel->ConfirmButton( box_layout );
 }
 
 void CTunWidget::FrameINDI(QVBoxLayout *parent) 
@@ -253,7 +215,7 @@ void  CTunWidget::FrameLQR(int nMode,QVBoxLayout *parent)
     "Ki",
     "Adjust Ki def:0.01"
     );
-  pKi->SetControl( 0.0, 1, 0.001 );
+  pKi->SetControl( 0.0, 1, 0.1 );
   box_layout->addWidget( pKi ); 
 
   MenuControl *pGain = new MenuControl( 
@@ -265,7 +227,7 @@ void  CTunWidget::FrameLQR(int nMode,QVBoxLayout *parent)
   box_layout->addWidget( pGain ); 
 
   if( nMode == 0 )
-    ConfirmButton( box_layout );
+    m_pPanel->ConfirmButton( box_layout );
 }
 
 
@@ -292,6 +254,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
    pTorqFriction->SetControl( 0, 0.2, 0.01 ); 
    box_layout->addWidget( pTorqFriction );
 
+/*
    MenuControl *pHybridSpeed = new MenuControl( 
     "TorqueHybridSpeed",
     "Hybrid Speed",
@@ -299,10 +262,10 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
     );
    pHybridSpeed->SetControl( 10, 80, 5 ); 
    box_layout->addWidget( pHybridSpeed );
-
+*/
    MenuControl *pDeadzone = new MenuControl( 
     "Torquedeadzone",
-    "steering angle deadzone",
+    "Steer deadzone",
     "Adjust steering angle deadzone deg def:0"
     );
    pDeadzone->SetControl( 0, 5, 0.1 ); 
@@ -341,7 +304,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
   box_layout->addWidget(new TorqueUseAngle());
 
   if( nMode == 0 )
-    ConfirmButton( box_layout );
+    m_pPanel->ConfirmButton( box_layout );
 }
 
 void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
@@ -355,7 +318,18 @@ void  CTunWidget::FrameHYBRID(QVBoxLayout *parent)
   FrameLQR( 1, box_layout );
 
   box_layout->addWidget(new AbstractControl("[3.TORQUE]","torque","../assets/offroad/icon_shell.png"));
-  FrameTOROUE( 0,  box_layout );
+  FrameTOROUE( 1,  box_layout );
+
+   MenuControl *pHybridSpeed = new MenuControl( 
+    "TorqueHybridSpeed",
+    "Hybrid Speed",
+    "Adjust Hybrid speed def:50"
+    );
+   pHybridSpeed->SetControl( 10, 80, 5 ); 
+   box_layout->addWidget( pHybridSpeed );  
+
+
+    m_pPanel->ConfirmButton( box_layout );   
 }
 
 

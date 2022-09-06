@@ -50,8 +50,10 @@ signals:
 protected:
   void hideEvent(QHideEvent *e) override;
 
+  QVBoxLayout *main_layout;
   QHBoxLayout *hlayout;
   QPushButton *title_label;
+
   QLabel *description = nullptr;
 };
 
@@ -68,12 +70,14 @@ private:
 private:
   QPushButton btnplus;
   QPushButton btnminus;
+  QPushButton btnsel;
   QLabel label;
   Params params;
 
   float  m_dValue;
   
  private:
+   float   m_defDelta;
    float   m_nDelta, m_nMax, m_nMin;
    QStringList  m_strList;
 
@@ -81,7 +85,7 @@ private:
    QString  m_strValue;
 
 public:
-   void SetControl( float nMin=0, float nMax=100, float nDelta = 1 )  { m_nDelta = nDelta; m_nMin = nMin;  m_nMax = nMax; }
+   void SetControl( float nMin=0, float nMax=100, float nDelta = 1 );
    void SetString( const QString strList );
    void SetString( float nValue, const QString str );
 };

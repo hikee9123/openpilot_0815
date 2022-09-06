@@ -16,8 +16,10 @@
 
 
 
-const Rect btn_dashcam_rec = {1745, 860, 140, 140};
+const Rect btn_dashcam_rec = {1440, 860, 140, 140};
+const Rect btn_navi_rec = {1350, 860, 200, 140};
 
+const int  disp_width = 1860;
 
 OnDashCam::OnDashCam(QWidget *parent) : QWidget(parent) 
 {
@@ -49,15 +51,20 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
 {
   int e_x = e->x();
   int e_y = e->y();
-  //int e_button= e->button();
 
-   UIState *s = uiState();
+
+  UIState *s = uiState();
+  UIScene  &scene =  s->scene;
+
   const int bb_dmr_w = 180;   
   const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
- //  printf("OnDashCam::mousePressEvent %d,%d  \n", e_x, e_y);
+   printf("OnDashCam::mousePressEvent %d,%d  \n", e_x, e_y);
 
   Rect btn_rec = btn_dashcam_rec;
   btn_rec.x = bb_dmr_x;
+
+  Rect btn_rec2 = btn_navi_rec;
+  btn_rec2.x -= (disp_width - s->fb_w);
 
   if( btn_rec.ptInRect( e_x, e_y ) ) 
   {
@@ -66,6 +73,38 @@ void OnDashCam::mousePressEvent(QMouseEvent* e)
     update(); 
     return;
   }
+  else if( btn_rec2.ptInRect( e_x, e_y ) )
+  {
+    Params param = Params();
+    auto str = QString::fromStdString(param.get("OpkrNaviSelect"));
+
+    int param_navi_sel = str.toInt();    
+
+    if( scene.scr.IsViewNavi == 0 )
+    {
+      if( param_navi_sel == 1 )
+        std::system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity");
+      else if( param_navi_sel == 2 )
+        std::system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity");
+
+      scene.scr.IsViewNavi = 1;
+      emit  offroadTransition( false );      
+    }
+    else
+    {
+      if( scene.scr.IsViewNavi )
+      {
+        scene.scr.IsViewNavi = 0;
+        std::system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity");
+      }
+    }
+
+
+ //   homeWindow->showSidebar(false);
+    return;
+  }
+
+  if( scene.scr.IsViewNavi ) return;
 
   QWidget::mousePressEvent(e);
 }
@@ -278,7 +317,8 @@ void OnDashCam::draw_button( QPainter &p, const QString &string, Rect rect, QCol
     QRect rc( btn_x, btn_y, btn_w, btn_h);
     p.setPen(QPen(QColor(0xff, 0xff, 0xff, 100), 3)); 
     p.setBrush(fillColor);
-    p.drawEllipse(btn_x, btn_y, btn_w, btn_h);
+   // p.drawEllipse(btn_x, btn_y, btn_w, btn_h);
+    p.drawRoundedRect(rc, 20, 20); 
     p.setPen(Qt::NoPen);
 
 
@@ -300,6 +340,8 @@ void OnDashCam::draw_button( QPainter &p, const QString &string, Rect rect, QCol
 void OnDashCam::screen_draw_button(QPainter &p)
 {
    UIState *s = uiState(); 
+   UIScene  &scene =  s->scene;
+
   const int bb_dmr_w = 180;
   const int bb_dmr_x = 0 + s->fb_w - bb_dmr_w - bdr_s/2;
 
@@ -323,12 +365,19 @@ void OnDashCam::screen_draw_button(QPainter &p)
     }
  
    draw_button( p, "REC", btn_rec, fillColor, txtColor ); 
-  //if (  screen_button_clicked( btn_rec) )
-  //{
-  //  printf( "  captureState = %d \n", captureState );
-  //  screen_toggle_record_state();
-  //}  
 
+  btn_rec = btn_navi_rec;
+  btn_rec.x -= (disp_width - s->fb_w);
+   if( scene.scr.IsViewNavi )
+   {
+      fillColor =  QColor(255, 150, 150, 200);
+   }
+   else
+   {
+      fillColor =  QColor(150, 150, 255, 200);
+   }
+
+   draw_button( p, "NAVI", btn_rec, fillColor,  txtColor ); 
 
   if (captureState == CAPTURE_STATE_CAPTURING)
   {

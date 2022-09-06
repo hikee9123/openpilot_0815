@@ -122,6 +122,7 @@ def set_params(new_version: bool, failed_count: int, exception: Optional[str]) -
   else:
     params.put("LastUpdateException", exception)
 
+  print('set_params = failed_count:{} last_update:{}'.format( failed_count, last_update ) )
   # Write out release notes for new versions
   if new_version:
     try:
@@ -344,20 +345,31 @@ def fetch_update(wait_helper: WaitTimeHelper) -> bool:
   cur_hash = run(["git", "rev-parse", "HEAD"], OVERLAY_MERGED).rstrip()
   upstream_hash = run(["git", "rev-parse", "@{u}"], OVERLAY_MERGED).rstrip()
   new_version = cur_hash != upstream_hash
+  print('fetch_update = git_fetch_output:{} cur_hash:{} upstream_hash:{}'.format(git_fetch_output, cur_hash, upstream_hash) )
+  if new_version:
+    Params().put("GitCommitRemote", str(upstream_hash))
+
   git_fetch_result = check_git_fetch_result(git_fetch_output)
+
+  new_branch = Params().get("SwitchToBranch", encoding='utf8')
+  if new_branch is not None:
+    new_version = True
 
   cloudlog.info(f"comparing {cur_hash} to {upstream_hash}")
   if new_version or git_fetch_result:
     cloudlog.info("Running update")
-
     if new_version:
       cloudlog.info("git reset in progress")
-      r = [
-        run(["git", "reset", "--hard", "@{u}"], OVERLAY_MERGED, low_priority=True),
-        run(["git", "clean", "-xdf"], OVERLAY_MERGED, low_priority=True ),
-        run(["git", "submodule", "init"], OVERLAY_MERGED, low_priority=True),
-        run(["git", "submodule", "update"], OVERLAY_MERGED, low_priority=True),
+      cmds = [
+        ["git", "reset", "--hard", "@{u}"],
+        ["git", "clean", "-xdf"],
+        ["git", "submodule", "init"],
+        ["git", "submodule", "update"],
       ]
+      if new_branch is not None:
+        cloudlog.info(f"switching to branch {repr(new_branch)}")
+        cmds.insert(0, ["git", "checkout", "-f", new_branch])
+      r = [run(cmd, OVERLAY_MERGED, low_priority=True) for cmd in cmds] 
       cloudlog.info("git reset success: %s", '\n'.join(r))
 
       if EON:
@@ -403,6 +415,7 @@ def main() -> None:
   overlay_init = Path(os.path.join(BASEDIR, ".overlay_init"))
   overlay_init.unlink(missing_ok=True)
 
+  print('updated  start {}'.format( overlay_init ) )
   first_run = True
   last_fetch_time = 0.0
   update_failed_count = 0
@@ -440,6 +453,7 @@ def main() -> None:
       if internet_ok and not update_available:
         update_failed_count = 0
 
+      print('updated = internet_ok:{} update_available:{} update_now:{}'.format( internet_ok, update_available, update_now) )
       # Fetch updates at most every 10 minutes
       if internet_ok and (update_now or time.monotonic() - last_fetch_time > 60*10):
         new_version = fetch_update(wait_helper)

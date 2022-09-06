@@ -131,7 +131,7 @@ class DesireHelper:
           else:
             self.lane_change_state = LaneChangeState.off
 
-    if self.lane_change_state in (LaneChangeState.off, LaneChangeState.preLaneChange,LaneChangeState.laneChangeDisEngage):
+    if self.lane_change_state in (LaneChangeState.off, LaneChangeState.preLaneChange ):
       self.lane_change_timer = 0.0
     else:
       self.lane_change_timer += DT_MDL

@@ -330,6 +330,35 @@ def joystick_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster,
   return NormalPermanentAlert("Joystick Mode", vals)
 
 
+def osm_speed_alert(alert_text_2: str) -> AlertCallbackType:
+  def func(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
+    liveMapData = sm['liveMapData']
+    if len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
+      turnSpeedDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
+      turnSpeed = liveMapData.turnSpeedLimitsAhead[-1] * CV.MS_TO_KPH
+
+      return Alert(
+        f"(Entering) Curve Preparation ",
+        f"D:{turnSpeedDistances:.0f}  S:{turnSpeed:.0f}",
+        AlertStatus.normal, AlertSize.mid,
+        Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
+    else:
+      turnSpeedDistances = liveMapData.turnSpeedLimitEndDistance
+      turnSpeed = liveMapData.turnSpeedLimit  * CV.MS_TO_KPH
+      if alert_text_2 == "Leaving":
+        return Alert(
+          f"(Leaving) Leave the curve ",
+          f"steer:{CS.steeringAngleDeg:.0f}",
+          AlertStatus.normal, AlertSize.mid,
+          Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)
+      else:
+        return Alert(
+          f"(Turning) Curve  ",
+          f"D:{turnSpeedDistances:.0f}  S:{turnSpeed:.0f}",
+          AlertStatus.normal, AlertSize.mid,
+          Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.5)    
+  return func
+
 
 EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
   # ********** events with no alerts **********
@@ -439,7 +468,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "Steering Temporarily Unavailable",
       "",
       AlertStatus.userPrompt, AlertSize.small,
-      Priority.LOW, VisualAlert.none, AudibleAlert.prompt, 1.),
+      Priority.LOW, VisualAlert.none, AudibleAlert.prompt, 1.8),
   },
 
   EventName.preDriverDistracted: {
@@ -945,5 +974,17 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "",
       AlertStatus.userPrompt, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.none, .1, alert_rate=0.75),
-  },  
+  },
+
+  EventName.curvSpeedEntering: {
+    ET.WARNING: osm_speed_alert("Entering"),
+  },
+
+  EventName.curvSpeedTurning: {
+    ET.WARNING: osm_speed_alert("Turning"),
+  },
+
+  EventName.curvSpeedLeaving: {
+    ET.WARNING: osm_speed_alert("Leaving"),
+  },     
 }

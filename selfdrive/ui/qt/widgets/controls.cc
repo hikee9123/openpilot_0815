@@ -20,7 +20,7 @@ QFrame *horizontal_line(QWidget *parent) {
 AbstractControl::AbstractControl(const QString &title, const QString &desc, const QString &icon, QWidget *parent) : QFrame(parent) {
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 
-  QVBoxLayout *main_layout = new QVBoxLayout(this);
+  main_layout = new QVBoxLayout(this);
   main_layout->setMargin(0);
 
   hlayout = new QHBoxLayout;
@@ -38,8 +38,8 @@ AbstractControl::AbstractControl(const QString &title, const QString &desc, cons
 
   // title
   title_label = new QPushButton(title);
-  title_label->setFixedHeight(120);
-  title_label->setStyleSheet("font-size: 50px; font-weight: 400; text-align: left");
+  title_label->setFixedHeight(100);
+  title_label->setStyleSheet("font-size: 50px; font-weight: 300; text-align: left");
   hlayout->addWidget(title_label);
 
   main_layout->addLayout(hlayout);
@@ -148,14 +148,84 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
   m_nMin = 0;
   m_nValue = 0;
 
+
+
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
-  label.setStyleSheet("color: #e0e879");
+  label.setStyleSheet( R"(
+    color: #e0e879;
+    font-size: 70px;
+    font-weight: 300;    
+    background-color: transparent;    
+  )");
+
   hlayout->addWidget(&label);
+
 
   auto str = QString::fromStdString( params.get( str_param.toStdString() ) );
   float value = str.toDouble();
   m_dValue = value;
 
+  // 1. selected
+  btnsel.setStyleSheet(R"(
+    padding: 0;
+    border-radius: 50px;
+    font-size: 35px;
+    font-weight: 500;
+    color: #E4E4E4;
+    background-color: #393939;
+  )");
+  btnsel.setFixedSize(150, 100);
+  //btnsel.setText( values );
+  hlayout->addWidget(&btnsel);
+
+  QObject::connect(&btnsel, &QPushButton::clicked, [=]() {
+
+    if( m_defDelta >= 10 )
+    {
+      if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
+      else if(  m_nDelta <= 10.05 )  m_nDelta = 100;
+      else if(  m_nDelta <= 100.05 )  m_nDelta = 1000;
+      else m_nDelta = 0.1;
+    }
+    else if( m_defDelta >= 1 )
+    {
+      if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
+      else if(  m_nDelta <= 10.05 )  m_nDelta = 100;      
+      else m_nDelta = 0.01;
+    }      
+    else if( m_defDelta >= 0.1 )
+    {
+      if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else if(  m_nDelta <= 1.05 )  m_nDelta = 10;
+      else m_nDelta = 0.001;
+    }    
+    else if( m_defDelta >= 0.01 )
+    {
+      if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
+      else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else if(  m_nDelta <= 0.105 )  m_nDelta = 1;
+      else m_nDelta = 0.0001;
+    }       
+    else 
+    {
+      if(  m_nDelta <= 0.000015 )  m_nDelta = 0.0001;
+      else if(  m_nDelta <= 0.00015 )  m_nDelta = 0.001;
+      else if(  m_nDelta <= 0.0015 )  m_nDelta = 0.01;
+      else if(  m_nDelta <= 0.015 )  m_nDelta = 0.1;
+      else m_nDelta = 0.00001;
+    }
+
+
+    refresh();
+  });
+
+  // 2. minus
   btnminus.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -180,7 +250,7 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
     refresh();
   });
 
-
+  // 3. plus
   btnplus.setStyleSheet(R"(
     padding: 0;
     border-radius: 50px;
@@ -202,6 +272,16 @@ MenuControl::MenuControl( const QString &str_param, const QString &title, const 
     params.put( str_param.toStdString(), values.toStdString());
     refresh();
   });
+
+  refresh();
+}
+
+void MenuControl::SetControl( float nMin, float nMax, float nDelta )  
+{ 
+  m_defDelta = nDelta;
+  m_nDelta = nDelta; 
+  m_nMin = nMin;  
+  m_nMax = nMax;
   refresh();
 }
 
@@ -222,9 +302,10 @@ void MenuControl::refresh()
     if( m_nValue == m_dValue  )
         values = m_strValue;
   }
-
-
   label.setText( values );
+
+  values = QString::number(m_nDelta);
+  btnsel.setText( values );  
 }
 
 void MenuControl::SetString( const QString strList )

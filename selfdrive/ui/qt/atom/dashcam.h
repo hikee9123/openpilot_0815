@@ -79,6 +79,7 @@ private:
 
 private:
 
-
+signals:
+  void offroadTransition(bool offroad);
 };
 

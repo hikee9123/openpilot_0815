@@ -123,8 +123,23 @@ typedef struct UIScene {
   uint64_t started_frame;
 
 
-  // atom
+  // opkr
   // stop line
+  struct _LongitudinalPlan
+  {
+    float e2ex[13] = {0};
+    float lead0[13] = {0};
+    float lead1[13] = {0};
+    float cruisetg[13] = {0};
+    float stopline[13] = {0};
+    float stopprob;
+
+    float maxPredCurvature;
+    float maxPredLatAcc;
+    float vtc_speed;
+    int   visionTurnControllerState;
+  } longitudinalPlan; 
+
   float stop_line_probs;
   line_vertices_data stop_line_vertices;
 
@@ -160,7 +175,13 @@ typedef struct UIScene {
      int  enginrpm;
 
      bool rightblindspot;
-     bool leftblindspot;     
+     bool leftblindspot; 
+
+     bool IsCalibraionGridViewToggle;
+
+     int  lane_line_cnt;
+
+     int  IsViewNavi;
   } scr;
 
 

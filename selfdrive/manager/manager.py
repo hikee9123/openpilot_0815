@@ -10,6 +10,7 @@ from typing import List, Tuple, Union
 import cereal.messaging as messaging
 import selfdrive.sentry as sentry
 from common.basedir import BASEDIR
+from common.spinner import Spinner
 from common.params import Params, ParamKeyType
 from common.text_window import TextWindow
 from selfdrive.boardd.set_time import set_time
@@ -20,10 +21,12 @@ from selfdrive.manager.process_config import managed_processes
 from selfdrive.athena.registration import register, UNREGISTERED_DONGLE_ID
 from selfdrive.swaglog import cloudlog, add_file_handler
 from selfdrive.version import is_dirty, get_commit, get_version, get_origin, get_short_branch, \
-                              terms_version, training_version
+                              terms_version, training_version, is_tested_branch
 
 
 sys.path.append(os.path.join(BASEDIR, "pyextra"))
+
+
 
 
 def manager_init() -> None:
@@ -45,7 +48,6 @@ def manager_init() -> None:
     ("HasAcceptedTerms", "0"),
     ("OpenpilotEnabledToggle", "1"),
 
-    ("IsOpenpilotViewEnabled", "0"),
     ("OpkrAutoResume", "0"),
     ("OpkrLiveSteerRatio", "0"),
     ("OpkrTurnSteeringDisable", "0"),
@@ -56,7 +58,7 @@ def manager_init() -> None:
     ("OpkrUIVolumeBoost", "0"),    
     ("OpkrPandaFirmwareCk", "1"),
     ("OpkrPowerShutdown", "0"),
-    ("OpkrRunNaviOnBoot", "0"),
+
     ("OpkrSSHLegacy", "0"),
     #("OpkrCarModel", "HYUNDAI GRANDEUR HYBRID 2019"), 
     ("OpkratomLongitudinal", "0"), 
@@ -96,6 +98,17 @@ def manager_init() -> None:
     ("TorqueFriction","0"),    
     ("TorqueUseAngle", "1"), 
 
+   # lane
+    ("OpkrCameraOffsetAdj", "0"), 
+    ("OpkrPathOffsetAdj", "0"), 
+    ("OpkrLeftLaneOffset", "0"), 
+    ("OpkrRightLaneOffset", "0"), 
+    
+    # osm
+    ("OpkrOSMEnable", "0"), 
+    ("OpkrOSMCurvDecelOption", "0"), 
+
+    
     
   ]
   if not PC:
@@ -137,10 +150,12 @@ def manager_init() -> None:
   params.put("Version", get_version())
   params.put("TermsVersion", terms_version)
   params.put("TrainingVersion", training_version)
-  params.put("GitCommit", get_commit(default=""))
+  params.put("GitCommit", get_commit(branch="HEAD",default=""))
+  #params.put("GitCommitRemote", get_commit(branch="@{u}",default=""))
   params.put("GitBranch", get_short_branch(default=""))
   params.put("GitRemote", get_origin(default=""))
-
+  params.put_bool("IsTestedBranch", is_tested_branch())
+  
   # set dongle id
   reg_res = register(show_spinner=True)
   if reg_res:
@@ -245,37 +260,60 @@ def manager_thread() -> None:
     if shutdown:
       break
 
-def map_exec():
-  os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
+def map_select():
+  param_navi_sel = Params().get("OpkrNaviSelect")
+  if param_navi_sel  is not None:
+    navi_select = int(param_navi_sel)
+  else:
+    navi_select = 1
+
+ # navi_select = 0
+  return  navi_select
+
+def map_exec( map_sel ):
+  if map_sel == 1:
+    os.system("am start com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity &") 
+  elif map_sel == 2:
+    os.system("am start com.thinkware.inaviair/com.thinkware.inaviair.UIActivity &") 
+
 
 def map_hide():
   os.system("am start --activity-task-on-home com.opkr.maphack/com.opkr.maphack.MainActivity") 
 
-def map_return():
-  os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
+
+
+def map_return( map_sel ):
+  if map_sel == 1:
+    os.system("am start --activity-task-on-home com.mnsoft.mappyobn/com.mnsoft.mappy.MainActivity")
+  elif map_sel == 2:
+    os.system("am start --activity-task-on-home com.thinkware.inaviair/com.thinkware.inaviair.UIActivity")
 
 def main() -> None:
-  param_navi = Params().get("OpkrRunNaviOnBoot")
-  if param_navi is not None:
-    navi_on_boot = int(param_navi)
-  else:
-    navi_on_boot = 0
+  spinner = Spinner()
+  spinner.update_progress(0, 100)
 
-  if navi_on_boot:
-    map_exec()
+
+  map_sel = map_select()
+
+
+
+  spinner.update_progress( 50, 100.)
+  if map_sel:
+    map_exec( map_sel )
 
   prepare_only = os.getenv("PREPAREONLY") is not None
 
   manager_init()
 
+  spinner.close()  
   # Start UI early so prepare can happen in the background
   if not prepare_only:
     managed_processes['ui'].start()
 
-  if navi_on_boot:
+  manager_prepare()
+  if map_sel:
     map_hide()
 
-  manager_prepare()
 
   if prepare_only:
     return
@@ -299,6 +337,16 @@ def main() -> None:
     cloudlog.warning("reboot")
     HARDWARE.reboot()
   elif params.get_bool("DoShutdown"):
+    updateAvailable = params.get_bool("UpdateAvailable");    
+    pre_built_on = params.get_bool("OpkrPrebuiltOn")
+    if updateAvailable:
+       os.system( "cd /data/openpilot; rm -f prebuilt" )
+    elif pre_built_on:
+      PREBUILT = os.path.exists(os.path.join(BASEDIR, 'prebuilt'))
+      cloudlog.warning("check PREBUILT")
+      if not PREBUILT:
+        os.system( "cd /data/openpilot; touch prebuilt" )
+
     cloudlog.warning("shutdown")
     HARDWARE.shutdown()
 

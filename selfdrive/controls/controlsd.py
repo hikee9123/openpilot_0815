@@ -108,10 +108,12 @@ class Controls:
 
     self.sm = sm
     if self.sm is None:
-      ignore = ['driverCameraState', 'managerState'] if SIMULATION else None
+      ignore = ['liveMapData']
+      if SIMULATION:
+        ignore += ['driverCameraState', 'managerState']
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState','liveNaviData',
+                                     'managerState', 'liveParameters', 'radarState','liveNaviData','liveMapData',
                                      'updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
                                      ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan', 'updateEvents'])
 
@@ -188,6 +190,7 @@ class Controls:
     self.logged_comm_issue = False
     self.button_timers = {ButtonEvent.Type.decelCruise: 0, ButtonEvent.Type.accelCruise: 0}
     self.last_actuators = car.CarControl.Actuators.new_message()
+    self.steer_limited = False    
     self.desired_curvature = 0.0
     self.desired_curvature_rate = 0.0
 
@@ -224,19 +227,44 @@ class Controls:
     else:
       self.OpkrLiveSteerRatio = 0    
 
+    self.camera_offset = CAMERA_OFFSET
+    self.modelSpeed = 0
+
+
+    #osm
+    self.turnSpeedLimitsAheadSigns = 0
+    self.turnSpeedLimitsAhead = 0
+    self.turnSpeedLimitsAheadDistances = 0
+
+
+
   def update_modelToSteerRatio(self, learnerSteerRatio ):
     steerRatio = learnerSteerRatio
     if self.sm.updated['lateralPlan']:
-      modelSpeed = self.sm['lateralPlan'].modelSpeed * CV.MS_TO_KPH
-      if modelSpeed:
-        dRate = interp( modelSpeed, [200,450], [ 1, 0.9 ] )
+      self.modelSpeed = self.sm['lateralPlan'].modelSpeed * CV.MS_TO_KPH
+      if self.modelSpeed:
+        dRate = interp( self.modelSpeed, [200,450], [ 1, 0.9 ] )
         steerRatio = learnerSteerRatio * dRate
-        str_log1 = '{:3.0f} sR={:.1f}'.format( modelSpeed, steerRatio )
-        #trace1.global_alertTextMsg1 = str_log1
-        trace1.printf1( '{}'.format( str_log1 ) )
     steerRatio = clip( steerRatio, 13.5, 19.5 )
 
-    return steerRatio
+    return steerRatio, self.modelSpeed
+
+
+  def update_osm( self ):
+    if self.sm.updated['liveMapData']:
+      self.osm = self.sm['liveMapData']
+      data_cnt = len(self.osm.turnSpeedLimitsAheadSigns)
+      
+      if data_cnt > 0:
+        self.turnSpeedLimitsAheadSigns = data_cnt  # self.osm.turnSpeedLimitsAheadSigns[0]
+        self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[-1]
+        self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[-1]
+      else:
+        self.turnSpeedLimitsAheadSigns = 0
+        self.turnSpeedLimitsAhead = 0
+        self.turnSpeedLimitsAheadDistances = 0
+
+
 
 
   def update_events(self, CS):
@@ -361,6 +389,12 @@ class Controls:
         not_freq_ok = [s for s, freq_ok in self.sm.freq_ok.items() if not freq_ok]
         cloudlog.event("commIssue", invalid=invalid, not_alive=not_alive, not_freq_ok=not_freq_ok, can_error=self.can_rcv_error, error=True)
         self.logged_comm_issue = True
+
+        service_list = self.sm.alive.keys()
+        for s in service_list:
+          if s not in self.sm.ignore_alive:
+            print('{} = alive={} freq_ok={} valid={}'.format( s, self.sm.alive[s], self.sm.freq_ok[s], self.sm.valid[s] ) )
+         
     else:
       self.logged_comm_issue = False
 
@@ -589,12 +623,20 @@ class Controls:
     sr = max(params.steerRatio, 0.1)
 
     
-     # atom
-    if self.OpkrLiveSteerRatio == 2:  # 수동(고정)
+    # atom
+    if self.OpkrLiveSteerRatio == 2:  # FIX
       sr = max(self.CP.steerRatio, 5.0)
-    elif self.OpkrLiveSteerRatio == 1:  # 반학습
-      steerRatio = self.update_modelToSteerRatio( params.steerRatio )
+      str_log1 = '2.Fix sR={:.2f}'.format( sr )
+    elif self.OpkrLiveSteerRatio == 1:  
+      steerRatio, modelSpeed = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
+      str_log1 = 'sR={:.2f},{:.2f}'.format( params.steerRatio, sr )
+    else: 
+      str_log1 = '0.sR={:.2f}'.format( sr )
+
+   
+
+    trace1.printf1( '{}'.format( str_log1 ) )      
 
 
     self.VM.update_params(x, sr)
@@ -634,7 +676,7 @@ class Controls:
                                                                                        lat_plan.curvatures,
                                                                                        lat_plan.curvatureRates)
       actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(CC.latActive, CS, self.VM, params,
-                                                                             self.last_actuators, self.desired_curvature,
+                                                                             self.last_actuators, self.steer_limited, self.desired_curvature,
                                                                              self.desired_curvature_rate, self.sm['liveLocationKalman'])
     else:
       lac_log = log.ControlsState.LateralDebugState.new_message()
@@ -653,7 +695,14 @@ class Controls:
         lac_log.saturated = abs(actuators.steer) >= 0.9
 
     # Send a "steering required alert" if saturation count has reached the limit
-    if lac_log.active and lac_log.saturated and not CS.steeringPressed:
+    if lac_log.active and not CS.steeringPressed and self.CP.lateralTuning.which() == 'torque':
+      undershooting = abs(lac_log.desiredLateralAccel) / abs(1e-3 + lac_log.actualLateralAccel) > 1.2
+      turning = abs(lac_log.desiredLateralAccel) > 1.0
+      good_speed = CS.vEgo > 5
+      max_torque = abs(self.last_actuators.steer) > 0.99
+      if undershooting and turning and good_speed and max_torque:
+        self.events.add(EventName.steerSaturated)    
+    elif lac_log.active and lac_log.saturated and not CS.steeringPressed:
       dpath_points = lat_plan.dPathPoints
       if len(dpath_points):
         # Check if we deviated from the path
@@ -719,6 +768,7 @@ class Controls:
     hudControl.leftLaneVisible = bool(left_lane_visible)
 
     # atom
+    self.camera_offset = self.CP.laneParam.cameraOffsetAdj
     speeds = self.sm['longitudinalPlan'].speeds
     if len(speeds) > 1:
       v_future = speeds[-1]
@@ -738,8 +788,8 @@ class Controls:
       r_lane_change_prob = desire_prediction[Desire.laneChangeRight - 1]
 
       lane_lines = model_v2.laneLines
-      l_lane_close = left_lane_visible and (lane_lines[1].y[0] > -(1.08 + CAMERA_OFFSET))
-      r_lane_close = right_lane_visible and (lane_lines[2].y[0] < (1.08 - CAMERA_OFFSET))
+      l_lane_close = left_lane_visible and (lane_lines[1].y[0] > -(1.08 + self.camera_offset))
+      r_lane_close = right_lane_visible and (lane_lines[2].y[0] < (1.08 - self.camera_offset))
 
       hudControl.leftLaneDepart = bool(l_lane_change_prob > LANE_DEPARTURE_THRESHOLD and l_lane_close)
       hudControl.rightLaneDepart = bool(r_lane_change_prob > LANE_DEPARTURE_THRESHOLD and r_lane_close)
@@ -765,6 +815,7 @@ class Controls:
       if self.openpilot_mode:
          self.pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
       CC.actuatorsOutput = self.last_actuators
+      self.steer_limited = abs(CC.actuators.steer - CC.actuatorsOutput.steer) > 1e-2      
 
     if self.drivermonitor:
       force_decel = (self.sm['driverMonitoringState'].awarenessStatus < 0.) or \
@@ -818,6 +869,13 @@ class Controls:
     controlsState.alertTextMsg2 = str(log_alertTextMsg2)
     controlsState.alertTextMsg3 = str(log_alertTextMsg3)
 
+
+    #osm
+    controlsState.turnSpeedLimitsAheadSigns = int(self.turnSpeedLimitsAheadSigns)
+    controlsState.turnSpeedLimitsAhead = float(self.turnSpeedLimitsAhead)
+    controlsState.turnSpeedLimitsAheadDistances = float(self.turnSpeedLimitsAheadDistances)
+
+
     lat_tuning = self.CP.lateralTuning.which()
     if self.joystick_mode:
       controlsState.lateralControlState.debugState = lac_log
@@ -856,14 +914,17 @@ class Controls:
     # updateEvents  carParams update
     updateEvents = self.sm['updateEvents']
     update_command = False
-    if updateEvents.version == 1:
-      #updateEvents.type
-      if updateEvents.command != self.update_command:
-        self.update_command = updateEvents.command
+    if updateEvents.command != self.update_command:
+      self.update_command = updateEvents.command
+      if updateEvents.version == 1:  # turn
         update_command = True
-        print( updateEvents )        
+        print( updateEvents )
         self.CI.get_tunning_params( self.CP )
         self.LaC.live_tune( self.CP )
+      else:
+        update_command = True
+        self.CI.get_normal_params( updateEvents.version, self.CP )
+        
 
      # carParams - logged every 50 seconds (> 1 per segment)
     if update_command or (self.sm.frame % int(50. / DT_CTRL) == 0):
@@ -930,6 +991,7 @@ class Controls:
       self.step()
       self.rk.monitor_time()
       self.prof.display()
+      self.update_osm()
 
 def main(sm=None, pm=None, logcan=None):
   controls = Controls(sm, pm, logcan)

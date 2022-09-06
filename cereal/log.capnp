@@ -335,6 +335,7 @@ struct DeviceState @0xa4d8b5af2aa492eb {
 
   # atom
   wifiIpAddress @42 :Text;
+  connectName @43 :Text;
 
   struct ThermalZone {
     name @0 :Text;
@@ -593,6 +594,11 @@ struct ControlsState @0x97ff69c53601abf1 {
   alertTextMsg1  @62 :Text;
   alertTextMsg2  @63 :Text;
   alertTextMsg3  @64 :Text;
+
+  # osm
+  turnSpeedLimitsAheadSigns @66 :Int32;
+  turnSpeedLimitsAhead @67 :Float32;
+  turnSpeedLimitsAheadDistances @68 :Float32;
 
 
   lateralControlState :union {
@@ -912,6 +918,22 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
 
   solverExecutionTime @35 :Float32;
 
+  # opkr
+  dynamicTRMode @36 :UInt8;
+  dynamicTRValue @37 :Float32;
+
+  e2eX @38 :List(Float64) = [0.];
+  lead0Obstacle @39 :List(Float64) = [0.];
+  lead1Obstacle @40 :List(Float64) = [0.];
+  cruiseTarget @41 :List(Float64) = [0.];
+  stopLine @42 :List(Float64) = [0.];
+  stoplineProb @43 :Float32;
+
+  maxPredCurvature @44 :Float32;
+  maxPredLatAcc @45 :Float32;
+  visionTurnSpeed @46 :Float32;
+  visionTurnControllerState @47 :VisionTurnControllerState;
+
   enum LongitudinalPlanSource {
     cruise @0;
     lead0 @1;
@@ -953,6 +975,15 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
     x @0 :List(Float32);
     y @1 :List(Float32);
   }
+
+
+
+  enum VisionTurnControllerState { 
+    disabled @0; # No predicted substancial turn on vision range or feature disabled.
+    entering @1; # A subsantial turn is predicted ahead, adapting speed to turn confort levels.
+    turning @2; # Actively turning. Managing acceleration to provide a roll on turn feeling.
+    leaving @3; # Road ahead straightens. Start to allow positive acceleration.
+  }  
 }
 
 struct LateralPlan @0xe1e9318e2ae8b51e {
@@ -1721,17 +1752,49 @@ struct LiveNaviData {
   ts @1 :UInt64;  
   speedLimit @2 :Float32;
   speedLimitDistance @3 :Float32;
-  safetySign @4 :Float32;
+
+
   roadCurvature @5 :Float32;
-  mapValid @6 :Bool;
-  mapEnable @7 :Int32;
-  trafficType @8 :Int32;
+  remainTime @6 :Float32;
 
-  turnInfo @9 :Int32;
-  distanceToTurn @10 :Int32;      
+  safetySign1 @4 :Int32;
+  safetySign2 @14 :Int32;
 
-   arrivalSec @11 :Float32;
-   arrivalDistance @12 :Float32;
+
+  mapValid @7 :Bool;
+  mapEnable @8 :Int32;
+  trafficType @9 :Int32;
+  mapType @15 :Int32;
+  
+  turnInfo @10 :Int32;
+  distanceToTurn @11 :Int32;      
+
+   arrivalSec @12 :Float32;
+   arrivalDistance @13 :Float32;
+}
+
+ # osm
+struct LiveMapData {
+  speedLimitValid @0 :Bool;
+  speedLimit @1 :Float32;
+  speedLimitAheadValid @2 :Bool;
+  speedLimitAhead @3 :Float32;
+  speedLimitAheadDistance @4 :Float32;
+  turnSpeedLimitValid @5 :Bool;
+  turnSpeedLimit @6 :Float32;
+  turnSpeedLimitEndDistance @7 :Float32;
+  turnSpeedLimitSign @8 :Int16;
+  turnSpeedLimitsAhead @9 :List(Float32);
+  turnSpeedLimitsAheadDistances @10 :List(Float32);
+  turnSpeedLimitsAheadSigns @11 :List(Int16);
+  lastGpsTimestamp @12 :Int64;  # Milliseconds since January 1, 1970.
+  currentRoadName @13 :Text;
+  lastGpsLatitude @14 :Float64;
+  lastGpsLongitude @15 :Float64;
+  lastGpsSpeed @16 :Float32;
+  lastGpsBearingDeg @17 :Float32;
+  lastGpsAccuracy @18 :Float32;
+  lastGpsBearingAccuracyDeg @19 :Float32;
 }
 
 
@@ -1913,6 +1976,8 @@ struct Event {
     liveNaviData @90 :LiveNaviData;
     updateEvents @91 :UpdateEventData;
 
+    # osm
+    liveMapData @92: LiveMapData;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;

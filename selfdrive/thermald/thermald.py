@@ -34,7 +34,7 @@ DISCONNECT_TIMEOUT = 5.  # wait 5 seconds before going offroad after disconnect 
 PANDA_STATES_TIMEOUT = int(1000 * 1.5 * DT_TRML)  # 1.5x the expected pandaState frequency
 
 ThermalBand = namedtuple("ThermalBand", ['min_temp', 'max_temp'])
-HardwareState = namedtuple("HardwareState", ['network_type', 'network_metered', 'network_strength', 'network_info', 'nvme_temps', 'modem_temps','wifiIpAddress'])
+HardwareState = namedtuple("HardwareState", ['network_type', 'network_metered', 'network_strength', 'network_info', 'nvme_temps', 'modem_temps','wifiIpAddress','connect_name'])
 
 # List of thermal bands. We will stay within this region as long as we are within the bounds.
 # When exiting the bounds, we'll jump to the lower or higher band. Bands are ordered in the dict.
@@ -111,6 +111,8 @@ def hw_state_thread(end_event, hw_queue):
       try:
         network_type = HARDWARE.get_network_type()
         modem_temps = HARDWARE.get_modem_temperatures()
+        network_strength = HARDWARE.get_network_strength(network_type)
+        connect_name = HARDWARE.get_connect_name(network_type)
         if len(modem_temps) == 0 and prev_hw_state is not None:
           modem_temps = prev_hw_state.modem_temps
 
@@ -130,6 +132,7 @@ def hw_state_thread(end_event, hw_queue):
           nvme_temps=HARDWARE.get_nvme_temperatures(),
           modem_temps=modem_temps,
           wifiIpAddress = HARDWARE.get_ip_address(),
+          connect_name = HARDWARE.get_connect_name(network_type),          
         )
 
         try:
@@ -187,6 +190,7 @@ def thermald_thread(end_event, hw_queue):
     nvme_temps=[],
     modem_temps=[],
     wifiIpAddress='N/A',
+    connect_name="---"
   )
 
   current_filter = FirstOrderFilter(0., CURRENT_TAU, DT_TRML)
@@ -256,6 +260,7 @@ def thermald_thread(end_event, hw_queue):
     msg.deviceState.networkType = last_hw_state.network_type
     msg.deviceState.networkMetered = last_hw_state.network_metered
     msg.deviceState.networkStrength = last_hw_state.network_strength
+    msg.deviceState.connectName = last_hw_state.connect_name    
     if last_hw_state.network_info is not None:
       msg.deviceState.networkInfo = last_hw_state.network_info
 

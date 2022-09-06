@@ -4,13 +4,13 @@
 
 #include "selfdrive/ui/qt/util.h"
 
-void Sidebar::drawMetric(QPainter &p, const QString &label, QColor c, int y) {
-  const QRect rect = {30, y, 240, label.contains("\n") ? 124 : 100};
+void Sidebar::drawMetric(QPainter &p, const QPair<QString, QString> &label, QColor c, int y) {
+  const QRect rect = {30, y, 240, 126};
 
   p.setPen(Qt::NoPen);
   p.setBrush(QBrush(c));
-  p.setClipRect(rect.x() + 6, rect.y(), 18, rect.height(), Qt::ClipOperation::ReplaceClip);
-  p.drawRoundedRect(QRect(rect.x() + 6, rect.y() + 6, 100, rect.height() - 12), 10, 10);
+  p.setClipRect(rect.x() + 4, rect.y(), 18, rect.height(), Qt::ClipOperation::ReplaceClip);
+  p.drawRoundedRect(QRect(rect.x() + 4, rect.y() + 4, 100, 118), 18, 18);
   p.setClipping(false);
 
   QPen pen = QPen(QColor(0xff, 0xff, 0xff, 0x55));
@@ -20,9 +20,16 @@ void Sidebar::drawMetric(QPainter &p, const QString &label, QColor c, int y) {
   p.drawRoundedRect(rect, 20, 20);
 
   p.setPen(QColor(0xff, 0xff, 0xff));
-  configFont(p, "Open Sans", 35, "Bold");
-  const QRect r = QRect(rect.x() + 35, rect.y(), rect.width() - 50, rect.height());
-  p.drawText(r, Qt::AlignCenter, label);
+  configFont(p, "Inter", 35, "SemiBold");
+
+  QRect label_rect = getTextRect(p, Qt::AlignCenter, label.first);
+  label_rect.setWidth(218);
+  label_rect.moveLeft(rect.left() + 22);
+  label_rect.moveTop(rect.top() + 19);
+  p.drawText(label_rect, Qt::AlignCenter, label.first);
+
+  label_rect.moveTop(rect.top() + 65);
+  p.drawText(label_rect, Qt::AlignCenter, label.second);
 }
 
 Sidebar::Sidebar(QWidget *parent) : QFrame(parent) {
@@ -39,6 +46,10 @@ Sidebar::Sidebar(QWidget *parent) : QFrame(parent) {
 }
 
 void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
+
+  UIScene  &scene =  uiState()->scene;
+  if( scene.scr.IsViewNavi ) return;
+
   if (settings_btn.contains(event->pos())) {
     emit openSettings();
   }
@@ -57,48 +68,48 @@ void Sidebar::updateState(const UIState &s) {
   ItemStatus connectStatus;
   auto last_ping = deviceState.getLastAthenaPingTime();
   if (last_ping == 0) {
-    connectStatus = params.getBool("PrimeRedirected") ? ItemStatus{"NO\nPRIME", danger_color} : ItemStatus{"CONNECT\nOFFLINE", warning_color};
+    connectStatus = ItemStatus{{tr("CONNECT"), tr("OFFLINE")}, warning_color};
   } else {
-    connectStatus = nanos_since_boot() - last_ping < 80e9 ? ItemStatus{"CONNECT\nONLINE", good_color} : ItemStatus{"CONNECT\nERROR", danger_color};
+    connectStatus = nanos_since_boot() - last_ping < 80e9 ? ItemStatus{{tr("CONNECT"), tr("ONLINE")}, good_color} : ItemStatus{{tr("CONNECT"), tr("ERROR")}, danger_color};
   }
   setProperty("connectStatus", QVariant::fromValue(connectStatus));
 
 
-  QString strTempC = "HIGH\n";
-  QColor  tempColor = danger_color;
+  QString  strTempC;
+  strTempC.append( QString("%1°C").arg((int)deviceState.getAmbientTempC()) );  
+  ItemStatus tempStatus = {{tr("HIGH"), strTempC}, danger_color};
   auto ts = deviceState.getThermalStatus();
   if (ts == cereal::DeviceState::ThermalStatus::GREEN) {
-    strTempC = "GOOD\n";    
-    tempColor = good_color;
+    tempStatus = {{tr("GOOD"), strTempC}, good_color};
   } else if (ts == cereal::DeviceState::ThermalStatus::YELLOW) {
-    strTempC = "OK\n";    
-    tempColor = warning_color;
+    tempStatus = {{tr("OK"), strTempC}, warning_color};
   }
-
-
-  //strTempC.append( QVariant::fromValue(ItemStatus{QString("%1°C").arg((int)deviceState.getAmbientTempC()), tempColor}) );
-  strTempC.append( QString("%1°C").arg((int)deviceState.getAmbientTempC()) );
-  ItemStatus tempStatus = { strTempC, tempColor};
   setProperty("tempStatus", QVariant::fromValue(tempStatus));
 
-  ItemStatus pandaStatus = {"VEHICLE\nONLINE", good_color};
+
+  ItemStatus pandaStatus = {{tr("VEHICLE"), tr("ONLINE")}, good_color};
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
-    pandaStatus = {"NO\nPANDA", danger_color};
+    pandaStatus = {{tr("NO"), tr("PANDA")}, danger_color};
   } else if (s.scene.pandaType == cereal::PandaState::PandaType::WHITE_PANDA) {
-    pandaStatus = {"WHITE\nPANDA", warning_color};
+    pandaStatus = {{tr("WHITE"), tr("PANDA")}, warning_color};
   } else if (s.scene.pandaType == cereal::PandaState::PandaType::GREY_PANDA) {
-    pandaStatus = {"GREY\nPANDA", warning_color};
+    pandaStatus = {{tr("GREY"),tr("PANDA")}, warning_color};
   } else if (s.scene.started && !sm["liveLocationKalman"].getLiveLocationKalman().getGpsOK()) {
-    pandaStatus = {"GPS\nSEARCH", warning_color};
+    pandaStatus = {{tr("GPS"), tr("SEARCH")}, warning_color};
   }
+
+
   setProperty("pandaStatus", QVariant::fromValue(pandaStatus));
 
 
+
+
   // atom
-  if (s.sm->updated("deviceState") || s.sm->updated("pandaStates")) {
+  if (sm.updated("deviceState") || sm.updated("pandaStates")) {
     m_battery_img = s.scene.deviceState.getBatteryStatusDEPRECATED() == "Charging" ? 1 : 0;
     m_batteryPercent = s.scene.deviceState.getBatteryPercent();
     m_strip = s.scene.deviceState.getWifiIpAddress();
+    m_strConnectName = s.scene.deviceState.getConnectName();
     repaint();
   }
 }
@@ -131,18 +142,26 @@ void Sidebar::paintEvent(QPaintEvent *event) {
   p.drawText(r, Qt::AlignCenter, net_type);
 
   // metrics
-  drawMetric(p, temp_status.first, temp_status.second, 340);
-  drawMetric(p, panda_status.first, panda_status.second, 518);
-  drawMetric(p, connect_status.first, connect_status.second, 676);
+  drawMetric(p, temp_status.first, temp_status.second, 400);
+  drawMetric(p, panda_status.first, panda_status.second, 558);
+  drawMetric(p, connect_status.first, connect_status.second, 716);
 
 
 
   // atom - ip
   if( m_batteryPercent <= 1) return;
   QString  strip = m_strip.c_str();
-  const QRect r2 = QRect(40, 295, 210, 50);
+  const QRect r2 = QRect(35, 295, 230, 50); // QRect(40, 295, 210, 50);
   configFont(p, "Open Sans", 28, "Regular");
-  p.drawText(r2, Qt::AlignLeft, strip);
+  p.setPen(Qt::yellow);
+  p.drawText(r2, Qt::AlignHCenter, strip);
+
+  // atom - ip (connect name)
+  QString  strConnectName = m_strConnectName.c_str();  
+  const QRect r3 = QRect(35, 335, 230, 45);
+  configFont(p, "Open Sans", 25, "Bold");
+  p.setPen(Qt::white);
+  p.drawText(r3, Qt::AlignHCenter, strConnectName);
 
   // atom - battery
   QRect  rect(160, 247, 76, 36);

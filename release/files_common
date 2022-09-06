@@ -63,6 +63,8 @@ common/api/__init__.py
 release/*
 
 tools/lib/*
+tools/replay/*.cc
+tools/replay/*.h
 
 installer/updater/updater
 
@@ -355,6 +357,7 @@ selfdrive/ui/soundd/*.cc
 selfdrive/ui/soundd/*.h
 selfdrive/ui/soundd/soundd
 selfdrive/ui/soundd/.gitignore
+selfdrive/ui/translations/*
 
 selfdrive/ui/qt/*.cc
 selfdrive/ui/qt/*.h
