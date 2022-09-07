@@ -280,7 +280,7 @@ class NaviControl():
         self.turn_time_alert = 200
         self.turn_time_alert_buff = EventName.curvSpeedEntering
     elif self.turn_time_alert:
-      if latAcc > 0.5:
+      if latAcc > 0.5  and self.turn_time_alert_buff == EventName.curvSpeedEntering:
         turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
         turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
         self.turn_time_alert = 500
