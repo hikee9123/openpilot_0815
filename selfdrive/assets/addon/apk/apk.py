@@ -12,7 +12,7 @@ from selfdrive.swaglog import cloudlog
 # OPKR 
 
 #android_packages = ("com.mixplorer", "com.opkr.maphack",  "com.gmd.hidesoftkeys", "com.google.android.inputmethod.korean", "com.skt.tmap.ku",)
-android_packages = ("com.mixplorer","com.gmd.hidesoftkeys", "com.opkr.maphack", "com.mnsoft.mappyobn", "com.thinkware.inaviair","com.phillit.akeyboard","com.goodappsoftware.laserlevel","net.androgames.level","com.moon.android.level", "com.google.android.inputmethod.korean" )   # "com.skt.tmap.ku",
+android_packages = ("com.mixplorer","com.gmd.hidesoftkeys", "com.opkr.maphack", "com.mnsoft.mappyobn", "com.thinkware.inaviair","com.phillit.akeyboard","com.goodappsoftware.laserlevel","net.androgames.level","com.moon.android.level" )   # "com.skt.tmap.ku",
 
 def get_installed_apks():
   dat = subprocess.check_output(["pm", "list", "packages", "-f"], encoding='utf8').strip().split("\n")
@@ -87,18 +87,7 @@ def update_apks():
         for permission in wanted_permissions:
           pm_grant("com.thinkware.inaviair", "android.permission."+permission)
 
-      if app == "com.google.android.inputmethod.korean":
-        pm_grant("com.google.android.inputmethod.korean", "android.permission.BIND_INPUT_METHOD")
-        system("am start com.google.android.inputmethod.korean/com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity")
-        time.sleep(3)
-        system("pkill com.google.android.inputmethod.korean")        
-        system("settings put secure enabled_input_methods com.google.android.inputmethod.korean/.KoreanIme")
-        system("settings put secure default_input_method com.google.android.inputmethod.korean/.KoreanIme")
-        system("cp -f /data/openpilot/selfdrive/assets/addon/param/com.google.android.inputmethod.korean*.xml /data/data/com.google.android.inputmethod.korean/shared_prefs/")
-        time.sleep(1)
-        system("am start com.google.android.inputmethod.korean/com.google.android.apps.inputmethod.libs.framework.core.LauncherActivity")
-        time.sleep(3)
-        system("reboot")
+
 
 
       assert success
