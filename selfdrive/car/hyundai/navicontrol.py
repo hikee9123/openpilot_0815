@@ -271,27 +271,25 @@ class NaviControl():
     elif len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
-      if turnSpeedLimitsAheadDistances > 500:
+      if turnSpeedLimitsAheadDistances > 500 or turnSpeedLimitsAhead > 120:
         pass
-      elif turnSpeedLimitsAheadDistances > 200:
-        self.turn_time_alert = 200
-        self.turn_time_alert_buff = EventName.curvSpeedEntering
+      elif turnSpeedLimitsAheadDistances > 300:
+        self.turn_time_alert = 500
       elif self.turn_time_alert:
-        self.turn_time_alert = 200
+        self.turn_time_alert = 500
         self.turn_time_alert_buff = EventName.curvSpeedEntering
     elif self.turn_time_alert:
-      if latAcc > 0.5:
+      if latAcc > 0.5 and (self.turn_time_alert_buff in (EventName.curvSpeedEntering, EventName.curvSpeedTurning)):
         turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
         turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
         self.turn_time_alert = 500
         self.turn_time_alert_buff = EventName.curvSpeedTurning
-      elif latAcc > 0.1 and self.turn_time_alert_buff == EventName.curvSpeedTurning:
-        self.turn_time_alert = 200
+      elif  self.turn_time_alert < 100 and self.turn_time_alert_buff in (EventName.curvSpeedTurning):
+        self.turn_time_alert = 300
         self.turn_time_alert_buff = EventName.curvSpeedLeaving
 
     if self.turn_time_alert > 0:
       self.turn_time_alert -= 1
-      #if CS.cruise_set_mode == 1:
       self.event_navi_alert = self.turn_time_alert_buff
 
     self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
