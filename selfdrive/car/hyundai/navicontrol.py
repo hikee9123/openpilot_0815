@@ -271,9 +271,9 @@ class NaviControl():
     elif len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
-      if turnSpeedLimitsAheadDistances > 500 or turnSpeedLimitsAhead > 120:
+      if turnSpeedLimitsAheadDistances > 500 or turnSpeedLimitsAhead > 150:
         pass
-      elif turnSpeedLimitsAheadDistances > 300:
+      elif turnSpeedLimitsAheadDistances > 150:
         self.turn_time_alert = 500
       elif self.turn_time_alert:
         self.turn_time_alert = 500
@@ -284,7 +284,7 @@ class NaviControl():
         turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
         self.turn_time_alert = 500
         self.turn_time_alert_buff = EventName.curvSpeedTurning
-      elif  self.turn_time_alert < 100 and self.turn_time_alert_buff in (EventName.curvSpeedTurning):
+      elif  self.turn_time_alert < 100 and (self.turn_time_alert_buff in (EventName.curvSpeedTurning)):
         self.turn_time_alert = 300
         self.turn_time_alert_buff = EventName.curvSpeedLeaving
 
