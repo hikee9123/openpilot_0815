@@ -284,7 +284,7 @@ class NaviControl():
         turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
         self.turn_time_alert = 500
         self.turn_time_alert_buff = EventName.curvSpeedTurning
-      elif  self.turn_time_alert < 100 and (self.turn_time_alert_buff in (EventName.curvSpeedTurning)):
+      elif  self.turn_time_alert < 100 and (self.turn_time_alert_buff == EventName.curvSpeedTurning):
         self.turn_time_alert = 300
         self.turn_time_alert_buff = EventName.curvSpeedLeaving
 
