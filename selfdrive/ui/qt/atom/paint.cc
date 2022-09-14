@@ -1198,10 +1198,12 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   nYPos += nGap;
 
   float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
-  float latAcc = scene->longitudinalPlan.maxPredLatAcc;
+  float maxPredLatAcc = scene->longitudinalPlan.maxPredLatAcc;
+  float currentLatAcc = scene->longitudinalPlan.currentLatAcc;  
   float curvature = scene->longitudinalPlan.maxPredCurvature;
   int turnState = scene->longitudinalPlan.visionTurnControllerState;
-  text4.sprintf("VLP(%d) = %.3f,  %.2f, %.0f", turnState, curvature, latAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+  text4.sprintf("VLP(%d) = C:%.3f,  MLA:%.2f,  CLA:%.2f  VTS:%.0f", turnState, curvature, maxPredLatAcc, currentLatAcc, vtc_speed  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
   // Navi Data

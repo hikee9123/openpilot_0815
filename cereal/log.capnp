@@ -929,10 +929,12 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   stopLine @42 :List(Float64) = [0.];
   stoplineProb @43 :Float32;
 
-  maxPredCurvature @44 :Float32;
-  maxPredLatAcc @45 :Float32;
-  visionTurnSpeed @46 :Float32;
-  visionTurnControllerState @47 :VisionTurnControllerState;
+  currentLatAcc  @44 :Float32;
+  maxPredCurvature @45 :Float32;
+  maxPredLatAcc @46 :Float32;
+  visionTurnSpeed @47 :Float32;
+
+  visionTurnControllerState @48 :VisionTurnControllerState;
 
   enum LongitudinalPlanSource {
     cruise @0;

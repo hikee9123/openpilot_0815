@@ -71,12 +71,12 @@ class Planner:
     v_cruise_kph = min(v_cruise_kph, V_CRUISE_MAX)
     v_cruise = v_cruise_kph * CV.KPH_TO_MS
 
-    long_control_state = sm['controlsState'].longControlState
+    #long_control_state = sm['controlsState'].longControlState
     force_slow_decel = sm['controlsState'].forceDecel
 
     # Reset current state when not engaged, or user is controlling the speed
-    reset_state = long_control_state == LongCtrlState.off
-
+    #reset_state = long_control_state == LongCtrlState.off
+    reset_state = sm['carState'].gasPressed
     # No change cost when user is controlling the speed, or when standstill
     prev_accel_constraint = not (reset_state or sm['carState'].standstill)
 
@@ -87,7 +87,7 @@ class Planner:
     # Prevent divergence, smooth in current v_ego
     self.v_desired_filter.x = max(0.0, self.v_desired_filter.update(v_ego))
 
-    self.vision_turn_controller.update( not reset_state, self.v_desired_filter.x, self.a_desired, v_cruise, sm)    
+    self.vision_turn_controller.update( self.v_desired_filter.x, self.a_desired, v_cruise, sm)    
 
 
     accel_limits = [A_CRUISE_MIN, get_max_accel(v_ego)]
@@ -146,6 +146,8 @@ class Planner:
     longitudinalPlan.stopLine = self.mpc.stopline.tolist()
     longitudinalPlan.stoplineProb = self.mpc.stop_prob
 
+
+    longitudinalPlan.currentLatAcc = float(self.vision_turn_controller._current_lat_acc)
     longitudinalPlan.maxPredCurvature = float(self.vision_turn_controller._max_pred_curvature)
     longitudinalPlan.maxPredLatAcc = float(self.vision_turn_controller._max_pred_lat_acc)
     longitudinalPlan.visionTurnSpeed = float(self.vision_turn_controller.v_turn)    

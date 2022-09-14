@@ -2,19 +2,25 @@ import math
 import numpy as np
 
 
-from cereal import car
+from cereal import car, log
 from common.conversions import Conversions as CV
 from selfdrive.car.hyundai.values import Buttons
 from common.numpy_fast import clip, interp
 import cereal.messaging as messaging
 
-import common.loger as trace1
-import common.MoveAvg as mvAvg
 
 
-
-
+VisionTurnControllerState = log.LongitudinalPlan.VisionTurnControllerState
 EventName = car.CarEvent.EventName
+
+
+_ENTERING_PRED_LAT_ACC_TH = 1.3  #  1.3 Predicted Lat Acc threshold to trigger entering turn state.
+_ABORT_ENTERING_PRED_LAT_ACC_TH = 1.1  # 1.1 Predicted Lat Acc threshold to abort entering state if speed drops.
+
+_TURNING_LAT_ACC_TH = 1.6  # 1.6 Lat Acc threshold to trigger turning turn state.
+
+_LEAVING_LAT_ACC_TH = 1.3  #  1.3Lat Acc threshold to trigger leaving turn state.
+_FINISH_LAT_ACC_TH = 1.1  # 1.1 Lat Acc threshold to trigger end of turn cycle.
 
 class NaviControl():
   def __init__(self, p , CP ):
@@ -30,7 +36,7 @@ class NaviControl():
     self.wait_timer2 = 0
     self.set_speed_kph = 0
  
-    self.moveAvg = mvAvg.MoveAvg()
+
 
     self.gasPressed_time = 0
 
@@ -42,13 +48,18 @@ class NaviControl():
 
     self.last_lead_distance = 0
 
-    self.turnSpeedLimitsAheadSigns = 0
+
     self.turnSpeedLimitsAhead = 0
     self.turnSpeedLimitsAheadDistances = 0
 
-    self.turn_time_alert = 0
+
     self.event_navi_alert = None
-    self.turn_time_alert_buff = None
+
+    self._visionTurnSpeed = 0
+    self._current_lat_acc = 0
+    self._max_pred_curvature = 0
+    self.state = VisionTurnControllerState.disabled
+
 
   def update_lateralPlan( self ):
     self.sm.update(0)
@@ -260,43 +271,82 @@ class NaviControl():
   def osm_turnLimit_alert( self, CS ):
     liveMapData = self.sm['liveMapData']
     longitudinalPlan = self.sm['longitudinalPlan']
-
-    latAcc = longitudinalPlan.maxPredLatAcc
-
+  
     turnSpeedLimitsAheadDistances = 0
     turnSpeedLimitsAhead = 0
 
-    if CS.out.vEgo < 10:
-      self.turn_time_alert_buff = None
-    elif len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
+    self._max_pred_curvature = longitudinalPlan.maxPredLatAcc
+    self._current_lat_acc = longitudinalPlan.currentLatAcc
+    self._visionTurnSpeed = longitudinalPlan.visionTurnSpeed
+
+    turnAheadLen = len(liveMapData.turnSpeedLimitsAheadDistances)
+    if turnAheadLen > 0:
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
-      if turnSpeedLimitsAheadDistances > 300:
-        pass
-      elif self.turn_time_alert:
-        self.turn_time_alert = 500
-        if self.turn_time_alert_buff is None:
-          self.turn_time_alert_buff = EventName.curvSpeedEntering
-        elif self.turn_time_alert_buff == EventName.curvSpeedLeaving:
-          self.turn_time_alert_buff = EventName.curvSpeedTurning
-      elif turnSpeedLimitsAheadDistances > 100:
-        self.turn_time_alert = 500
-
-    elif self.turn_time_alert:
-      if latAcc > 0.5 and (self.turn_time_alert_buff in (EventName.curvSpeedEntering, EventName.curvSpeedTurning)):
-        turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
-        turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance
-        self.turn_time_alert = 500
-        self.turn_time_alert_buff = EventName.curvSpeedTurning
-      elif  self.turn_time_alert < 100 and (self.turn_time_alert_buff == EventName.curvSpeedTurning):
-        self.turn_time_alert = 300
-        self.turn_time_alert_buff = EventName.curvSpeedLeaving
-
-    if self.turn_time_alert > 0:
-      self.turn_time_alert -= 1
-      self.event_navi_alert = self.turn_time_alert_buff
     else:
-      self.turn_time_alert_buff = None
+      turnSpeedLimitsAhead = liveMapData.turnSpeedLimit
+      turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitEndDistance     
+
+    # In any case, if system is disabled or the feature is disabeld or gas is pressed, disable.
+    if CS.out.vEgo < 1:
+      self.state = VisionTurnControllerState.disabled
+      return
+
+    # DISABLED
+    if self.state == VisionTurnControllerState.disabled:
+      # Do not enter a turn control cycle if speed is low.
+      if CS.out.vEgo < 10:
+        pass
+      # If substantial lateral acceleration is predicted ahead, then move to Entering turn state.
+      elif self._max_pred_lat_acc >= _ENTERING_PRED_LAT_ACC_TH:      
+        self.state = VisionTurnControllerState.entering
+      elif turnAheadLen > 0:
+        if turnSpeedLimitsAheadDistances > 300:
+          pass
+        else:
+          self.state = VisionTurnControllerState.entering
+
+    # ENTERING
+    elif self.state == VisionTurnControllerState.entering:
+      if turnAheadLen > 0:
+        pass
+
+      # Transition to Turning if current lateral acceleration is over the threshold.
+      elif self._current_lat_acc >= _TURNING_LAT_ACC_TH:
+        self.state = VisionTurnControllerState.turning
+      # Abort if the predicted lateral acceleration drops
+      elif self._max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
+        self.state = VisionTurnControllerState.disabled
+
+    # TURNING
+    elif self.state == VisionTurnControllerState.turning:
+      if turnAheadLen > 0:
+        pass
+
+      # Transition to Leaving if current lateral acceleration drops drops below threshold.
+      elif self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
+        self.state = VisionTurnControllerState.leaving
+
+    # LEAVING
+    elif self.state == VisionTurnControllerState.leaving:
+      # Transition back to Turning if current lateral acceleration goes back over the threshold.
+      if self._current_lat_acc >= _TURNING_LAT_ACC_TH:
+        self.state = VisionTurnControllerState.turning
+      # Finish if current lateral acceleration goes below threshold.
+      elif self._current_lat_acc < _FINISH_LAT_ACC_TH:
+        self.state = VisionTurnControllerState.disabled
+
+
+    if self.state == VisionTurnControllerState.disabled:
+      self.event_navi_alert = None
+    elif self.state == VisionTurnControllerState.entering:
+      self.event_navi_alert = EventName.curvSpeedEntering
+    elif self.state == VisionTurnControllerState.turning:
+      self.event_navi_alert = EventName.curvSpeedTurning
+    elif self.state == VisionTurnControllerState.leaving:
+      self.event_navi_alert = EventName.curvSpeedLeaving
+
+
 
 
     self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
@@ -306,9 +356,6 @@ class NaviControl():
     if self.turnSpeedLimitsAheadDistances > 30 and CS.out.vEgo > 8.3:
       turnSpeedLimit = self.turnSpeedLimitsAhead
       turnSpeedLimit = max( turnSpeedLimit, ctrl_speed - 10 )
-
-      if ctrl_speed > turnSpeedLimit:  # osm speed control.
-        self.event_navi_alert = self.turn_time_alert_buff
 
     else:
       turnSpeedLimit = ctrl_speed

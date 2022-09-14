@@ -11,10 +11,10 @@ from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX
 
 _MIN_V = 5.6  # Do not operate under 20km/h
 
-_ENTERING_PRED_LAT_ACC_TH = 1.3  # Predicted Lat Acc threshold to trigger entering turn state.
-_ABORT_ENTERING_PRED_LAT_ACC_TH = 1.1  # Predicted Lat Acc threshold to abort entering state if speed drops.
+_ENTERING_PRED_LAT_ACC_TH = 1.3  #  1.3 Predicted Lat Acc threshold to trigger entering turn state.
+_ABORT_ENTERING_PRED_LAT_ACC_TH = 1.1  # 1.1 Predicted Lat Acc threshold to abort entering state if speed drops.
 
-_TURNING_LAT_ACC_TH = 1.6  # Lat Acc threshold to trigger turning turn state.
+_TURNING_LAT_ACC_TH = 1.6  # 1.6 Lat Acc threshold to trigger turning turn state.
 
 _LEAVING_LAT_ACC_TH = 1.3  # Lat Acc threshold to trigger leaving turn state.
 _FINISH_LAT_ACC_TH = 1.1  # Lat Acc threshold to trigger end of turn cycle.
@@ -68,25 +68,15 @@ def eval_lat_acc(v_ego, x_curv):
   return np.vectorize(lat_acc)(x_curv)
 
 
-def _description_for_state(turn_controller_state):
-  if turn_controller_state == VisionTurnControllerState.disabled:
-    return 'DISABLED'
-  if turn_controller_state == VisionTurnControllerState.entering:
-    return 'ENTERING'
-  if turn_controller_state == VisionTurnControllerState.turning:
-    return 'TURNING'
-  if turn_controller_state == VisionTurnControllerState.leaving:
-    return 'LEAVING'
-
 
 class VisionTurnController():
   def __init__(self, CP):
     self._params = Params()
     self._CP = CP
-    self._op_enabled = False
+
     self._gas_pressed = False
     self._is_enabled = True # self._params.get_bool("TurnVisionControl")
-    self._last_params_update = 0.
+
     self._v_cruise_setpoint = 0.
     self._v_ego = 0.
     self._a_ego = 0.
@@ -94,6 +84,7 @@ class VisionTurnController():
     self._v_overshoot = 0.
     self._state = VisionTurnControllerState.disabled
     self._max_pred_curvature = 0.
+    self._current_lat_acc = 0.
 
     self._reset()
 
@@ -104,7 +95,6 @@ class VisionTurnController():
   @state.setter
   def state(self, value):
     if value != self._state:
-      _debug(f'TVC: TurnVisionController state: {_description_for_state(value)}')
       if value == VisionTurnControllerState.disabled:
         self._reset()
     self._state = value
@@ -126,16 +116,11 @@ class VisionTurnController():
 
   def _reset(self):
     self._current_lat_acc = 0.
+    self._max_pred_lat_acc = 0.    
     self._max_v_for_current_curvature = 0.
-    self._max_pred_lat_acc = 0.
     self._v_overshoot_distance = 200.
     self._lat_acc_overshoot_ahead = False
 
-  def _update_params(self):
-    time = sec_since_boot()
-    if time > self._last_params_update + 5.0:
-      #self._is_enabled = self._params.get_bool("TurnVisionControl")
-      self._last_params_update = time
 
   def _update_calculations(self, sm):
     # Get path polynomial aproximation for curvature estimation from model data.
@@ -145,7 +130,7 @@ class VisionTurnController():
 
     # 1. When the probability of lanes is good enough, compute polynomial from lanes as they are way more stable
     # on current mode than drving path.
-    if model_data is not None and len(model_data.laneLines) > 2 and len(model_data.laneLines[0].t) == TRAJECTORY_SIZE:
+    if model_data is not None and len(model_data.laneLines) > 2:
       ll_x = model_data.laneLines[1].x  # left and right ll x is the same
       lll_y = np.array(model_data.laneLines[1].y)
       rll_y = np.array(model_data.laneLines[2].y)
@@ -212,7 +197,7 @@ class VisionTurnController():
 
   def _state_transition(self):
     # In any case, if system is disabled or the feature is disabeld or gas is pressed, disable.
-    if not self._op_enabled or not self._is_enabled or self._gas_pressed:
+    if not self._is_enabled or self._gas_pressed:
       self.state = VisionTurnControllerState.disabled
       return
 
@@ -248,15 +233,12 @@ class VisionTurnController():
 
 
 
-  def update(self, enabled, v_ego, a_ego, v_cruise_setpoint, sm):
-    self._op_enabled = True   #enabled
+  def update(self, v_ego, a_ego, v_cruise_setpoint, sm):
     self._gas_pressed = sm['carState'].gasPressed
     self._v_ego = v_ego
     self._a_ego = a_ego
     self._v_cruise_setpoint = v_cruise_setpoint
 
-    #self._update_params()
     self._update_calculations(sm)
     self._state_transition()
 
-    return  self._max_pred_curvature, self._max_pred_lat_acc

@@ -134,6 +134,7 @@ typedef struct UIScene {
     float stopline[13] = {0};
     float stopprob;
 
+    float currentLatAcc;
     float maxPredCurvature;
     float maxPredLatAcc;
     float vtc_speed;
