@@ -28,7 +28,7 @@ _A_LAT_REG_MAX = 2.  # Maximum lateral acceleration
 
 _NO_OVERSHOOT_TIME_HORIZON = 4.  # s. Time to use for velocity desired based on a_target when not overshooting.
 
-_MIN_LANE_PROB = 0.6  # Minimum lanes probability to allow curvature prediction based on lanes.
+_MIN_LANE_PROB = 0.5  # Minimum lanes probability to allow curvature prediction based on lanes.
 
 _DEBUG = Params().get_bool("OpkrOSMDebug") # False
 
