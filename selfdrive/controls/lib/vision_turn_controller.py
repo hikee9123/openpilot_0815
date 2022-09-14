@@ -145,7 +145,7 @@ class VisionTurnController():
 
     # 1. When the probability of lanes is good enough, compute polynomial from lanes as they are way more stable
     # on current mode than drving path.
-    if model_data is not None and len(model_data.laneLines) == 4 and len(model_data.laneLines[0].t) == TRAJECTORY_SIZE:
+    if model_data is not None and len(model_data.laneLines) > 2 and len(model_data.laneLines[0].t) == TRAJECTORY_SIZE:
       ll_x = model_data.laneLines[1].x  # left and right ll x is the same
       lll_y = np.array(model_data.laneLines[1].y)
       rll_y = np.array(model_data.laneLines[2].y)
