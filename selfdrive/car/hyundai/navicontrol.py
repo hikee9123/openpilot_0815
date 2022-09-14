@@ -267,11 +267,11 @@ class NaviControl():
     turnSpeedLimitsAhead = 0
 
     if CS.out.vEgo < 10:
-      pass
+      self.turn_time_alert_buff = None
     elif len(liveMapData.turnSpeedLimitsAheadDistances) > 0:
       turnSpeedLimitsAheadDistances = liveMapData.turnSpeedLimitsAheadDistances[-1]
       turnSpeedLimitsAhead = liveMapData.turnSpeedLimitsAhead[-1]
-      if turnSpeedLimitsAheadDistances > 500 or turnSpeedLimitsAhead > 150:
+      if turnSpeedLimitsAheadDistances > 300:
         pass
       elif turnSpeedLimitsAheadDistances > 150:
         self.turn_time_alert = 500
