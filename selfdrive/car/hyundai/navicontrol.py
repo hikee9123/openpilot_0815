@@ -57,7 +57,7 @@ class NaviControl():
 
     self._visionTurnSpeed = 0
     self._current_lat_acc = 0
-    self._max_pred_curvature = 0
+    self._max_pred_lat_acc = 0
     self.state = VisionTurnControllerState.disabled
 
 
@@ -275,7 +275,7 @@ class NaviControl():
     turnSpeedLimitsAheadDistances = 0
     turnSpeedLimitsAhead = 0
 
-    self._max_pred_curvature = longitudinalPlan.maxPredLatAcc
+    self._max_pred_lat_acc = longitudinalPlan.maxPredLatAcc
     self._current_lat_acc = longitudinalPlan.currentLatAcc
     self._visionTurnSpeed = longitudinalPlan.visionTurnSpeed
 
