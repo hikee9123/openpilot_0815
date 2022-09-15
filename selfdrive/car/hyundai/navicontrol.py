@@ -14,13 +14,13 @@ VisionTurnControllerState = log.LongitudinalPlan.VisionTurnControllerState
 EventName = car.CarEvent.EventName
 
 
-_ENTERING_PRED_LAT_ACC_TH = 1.3  #  1.3 Predicted Lat Acc threshold to trigger entering turn state.
-_ABORT_ENTERING_PRED_LAT_ACC_TH = 1.1  # 1.1 Predicted Lat Acc threshold to abort entering state if speed drops.
+_ENTERING_PRED_LAT_ACC_TH = 0.3  #  1.3 Predicted Lat Acc threshold to trigger entering turn state.
+_ABORT_ENTERING_PRED_LAT_ACC_TH = 0.1  # 1.1 Predicted Lat Acc threshold to abort entering state if speed drops.
 
-_TURNING_LAT_ACC_TH = 1.6  # 1.6 Lat Acc threshold to trigger turning turn state.
+_TURNING_LAT_ACC_TH = 0.6  # 1.6 Lat Acc threshold to trigger turning turn state.
 
-_LEAVING_LAT_ACC_TH = 1.3  #  1.3Lat Acc threshold to trigger leaving turn state.
-_FINISH_LAT_ACC_TH = 1.1  # 1.1 Lat Acc threshold to trigger end of turn cycle.
+_LEAVING_LAT_ACC_TH = 0.3  #  1.3Lat Acc threshold to trigger leaving turn state.
+_FINISH_LAT_ACC_TH = 0.1  # 1.1 Lat Acc threshold to trigger end of turn cycle.
 
 class NaviControl():
   def __init__(self, p , CP ):
