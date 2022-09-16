@@ -75,7 +75,7 @@ class VisionTurnController():
     self._CP = CP
 
     self._gas_pressed = False
-    self._is_enabled = True # self._params.get_bool("TurnVisionControl")
+
 
     self._v_cruise_setpoint = 0.
     self._v_ego = 0.
@@ -132,12 +132,15 @@ class VisionTurnController():
     # on current mode than drving path.
     if model_data is not None and len(model_data.laneLines) > 2:
       ll_x = model_data.laneLines[1].x  # left and right ll x is the same
+      rl_x = model_data.laneLines[2].x  # left and right ll x is the same
       lll_y = np.array(model_data.laneLines[1].y)
       rll_y = np.array(model_data.laneLines[2].y)
       l_prob = model_data.laneLineProbs[1]
       r_prob = model_data.laneLineProbs[2]
       lll_std = model_data.laneLineStds[1]
       rll_std = model_data.laneLineStds[2]
+
+
 
       # Reduce reliance on lanelines that are too far apart or will be in a few seconds
       width_pts = rll_y - lll_y
@@ -156,9 +159,13 @@ class VisionTurnController():
       r_prob *= r_std_mod
 
       # Find path from lanes as the average center lane only if min probability on both lanes is above threshold.
-      if l_prob > _MIN_LANE_PROB and r_prob > _MIN_LANE_PROB:
-        c_y = width_pts / 2 + lll_y
-        path_poly = np.polyfit(ll_x, c_y, 3)
+      if l_prob > _MIN_LANE_PROB or r_prob > _MIN_LANE_PROB:
+        if l_prob > _MIN_LANE_PROB or l_prob > r_prob:
+          c_y = width_pts / 2 + lll_y
+          path_poly = np.polyfit(ll_x, c_y, 3)
+        else:
+          c_y = width_pts / 2 + rll_y
+          path_poly = np.polyfit(rl_x, c_y, 3)
 
         pred_curvatures = eval_curvature(path_poly, _EVAL_RANGE)
         max_pred_curvature = np.amax(pred_curvatures)
@@ -197,7 +204,7 @@ class VisionTurnController():
 
   def _state_transition(self):
     # In any case, if system is disabled or the feature is disabeld or gas is pressed, disable.
-    if not self._is_enabled or self._gas_pressed:
+    if self._gas_pressed:
       self.state = VisionTurnControllerState.disabled
       return
 
