@@ -55,6 +55,7 @@ class NaviControl():
 
     self.event_navi_alert = None
 
+    self._frame_cnt = 0
     self._visionTurnSpeed = 0
     self._current_lat_acc = 0
     self._max_pred_lat_acc = 0
@@ -306,6 +307,7 @@ class NaviControl():
         else:
           self.state = VisionTurnControllerState.entering
 
+      self._frame_cnt = 200
     # ENTERING
     elif self.state == VisionTurnControllerState.entering:
 
@@ -313,7 +315,7 @@ class NaviControl():
       if self._current_lat_acc >= _TURNING_LAT_ACC_TH:
         self.state = VisionTurnControllerState.turning
       # Abort if the predicted lateral acceleration drops
-      elif self._max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
+      elif self._frame_cnt <= 0 and self._max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
         self.state = VisionTurnControllerState.disabled
 
     # TURNING
@@ -324,6 +326,7 @@ class NaviControl():
       # Transition to Leaving if current lateral acceleration drops drops below threshold.
       elif self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
         self.state = VisionTurnControllerState.leaving
+        self._frame_cnt = 200
 
     # LEAVING
     elif self.state == VisionTurnControllerState.leaving:
@@ -331,9 +334,13 @@ class NaviControl():
       if self._current_lat_acc >= _TURNING_LAT_ACC_TH:
         self.state = VisionTurnControllerState.turning
       # Finish if current lateral acceleration goes below threshold.
-      elif self._current_lat_acc < _FINISH_LAT_ACC_TH:
+      elif self._frame_cnt <= 0 and self._current_lat_acc < _FINISH_LAT_ACC_TH:
         self.state = VisionTurnControllerState.disabled
 
+
+    
+    if self._frame_cnt > 0:
+      self._frame_cnt -= 1
 
     if self.state == VisionTurnControllerState.disabled:
       self.event_navi_alert = None
@@ -374,7 +381,7 @@ class NaviControl():
     elif CS.cruise_set_mode == 2:  # comma long control speed.
       vFuture = c.hudControl.vFuture * CV.MS_TO_KPH
       ctrl_speed = min( vFuture, ctrl_speed )
-    elif CS.cruise_set_mode == 3:  # visionì˜ ëª¨ë¸ speedë¥¼ ì´ìš©í•œ ê°ì†.
+    elif CS.cruise_set_mode == 3:  # vision?˜ ëª¨ë¸ speedë¥? ?´?š©?•œ ê°ì†.
       modelSpeed = path_plan.modelSpeed * CV.MS_TO_KPH
       vision_speed = interp( modelSpeed, [80, 250], [ 60, 120 ] )
       ctrl_speed = min( vision_speed, ctrl_speed )
