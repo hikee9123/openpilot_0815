@@ -1190,8 +1190,8 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float TS1_Speed = 0;
   float TS1_Distances = 0;
 
-  int   rurnSpeedLimitAheadCnt = osm.getTurnSpeedLimitsAheadCnt();
-  if( rurnSpeedLimitAheadCnt > 0 )
+  int   turnSpeedLimitAheadCnt = osm.getTurnSpeedLimitsAheadCnt();
+  if( turnSpeedLimitAheadCnt > 0 )
   {
      TS1_Signs = osm.getTurnSpeedLimitsAheadSigns()[0];
      TS1_Speed = osm.getTurnSpeedLimitsAhead()[0];
@@ -1206,10 +1206,10 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
   float TS_Distances  = scene->controls_state.getTurnSpeedLimitsAheadDistances();
  
-  if( rurnSpeedLimitAheadCnt > 1 )
+  if( turnSpeedLimitAheadCnt > 1 )
   {
     TS_Speed *= 3.6;
-    text4.sprintf("TSLA(%d) = %d, S:%.0f,  D:%.0f", rurnSpeedLimitAheadCnt, TS_Signs, TS_Speed, TS_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
+    text4.sprintf("TSLA(%d) = %d, S:%.0f,  D:%.0f", turnSpeedLimitAheadCnt, TS_Signs, TS_Speed, TS_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
   }
 
 
