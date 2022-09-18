@@ -11,17 +11,17 @@ from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX
 
 _MIN_V = 5.6  # Do not operate under 20km/h
 
-_ENTERING_PRED_LAT_ACC_TH = 1.3  #  1.3 Predicted Lat Acc threshold to trigger entering turn state.
-_ABORT_ENTERING_PRED_LAT_ACC_TH = 1.1  # 1.1 Predicted Lat Acc threshold to abort entering state if speed drops.
+_ENTERING_PRED_LAT_ACC_TH = 0.3  #  1.3 Predicted Lat Acc threshold to trigger entering turn state.
+_ABORT_ENTERING_PRED_LAT_ACC_TH = 0.1  # 1.1 Predicted Lat Acc threshold to abort entering state if speed drops.
 
-_TURNING_LAT_ACC_TH = 1.6  # 1.6 Lat Acc threshold to trigger turning turn state.
+_TURNING_LAT_ACC_TH = 0.6  # 1.6 Lat Acc threshold to trigger turning turn state.
 
-_LEAVING_LAT_ACC_TH = 1.3  # Lat Acc threshold to trigger leaving turn state.
-_FINISH_LAT_ACC_TH = 1.1  # Lat Acc threshold to trigger end of turn cycle.
+_LEAVING_LAT_ACC_TH = 0.3  # Lat Acc threshold to trigger leaving turn state.
+_FINISH_LAT_ACC_TH = 0.1  # Lat Acc threshold to trigger end of turn cycle.
 
 _EVAL_STEP = 5.  # mts. Resolution of the curvature evaluation.
 _EVAL_START = 20.  # mts. Distance ahead where to start evaluating vision curvature.
-_EVAL_LENGHT = 150.  # mts. Distance ahead where to stop evaluating vision curvature.
+_EVAL_LENGHT = 200.  # mts. Distance ahead where to stop evaluating vision curvature.
 _EVAL_RANGE = np.arange(_EVAL_START, _EVAL_LENGHT, _EVAL_STEP)
 
 _A_LAT_REG_MAX = 2.  # Maximum lateral acceleration
