@@ -337,7 +337,7 @@ class NaviControl():
         self._frame_cnt = 200
 
       # Transition to Leaving if current lateral acceleration drops drops below threshold.
-      elif self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
+      elif self._max_pred_lat_acc <= _LEAVING_LAT_ACC_TH:
         if self._frame_cnt < 1:
           self.state = VisionTurnControllerState.leaving
           self._frame_cnt = 200
