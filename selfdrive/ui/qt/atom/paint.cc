@@ -1198,7 +1198,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
      TS1_Distances = osm.getTurnSpeedLimitsAheadDistances()[0];
     TS1_Speed *= 3.6;
   }
-  text4.sprintf("TSLA(0) = %d, S:%.0f,  D:%.0f", TS1_Signs, TS1_Speed, TS1_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("TSLA = %d, S:%.0f,  D:%.0f", TS1_Signs, TS1_Speed, TS1_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
 
