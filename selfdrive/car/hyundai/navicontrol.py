@@ -319,7 +319,7 @@ class NaviControl():
     elif self.state == VisionTurnControllerState.entering:
 
       # Transition to Turning if current lateral acceleration is over the threshold.
-      if self._current_lat_acc >= _TURNING_LAT_ACC_TH:
+      if self._max_pred_lat_acc >= _TURNING_LAT_ACC_TH:
         self._frame_cnt = 500
         self.state = VisionTurnControllerState.turning
       # Abort if the predicted lateral acceleration drops
