@@ -307,7 +307,7 @@ class NaviControl():
         self._frame_inc = 100
         self._frame_dec = 500
       elif turnAheadLen > 0:
-        if turnSpeedLimitsAheadDistances > 300 or turnSpeedLimitsAhead > 130:
+        if turnSpeedLimitsAheadDistances > 300 and turnSpeedLimitsAhead < 130:
           self.turnSpeedLimitsAheadDistancesOld = turnSpeedLimitsAheadDistances
         elif self.turnSpeedLimitsAheadDistancesOld == 0:
           pass
