@@ -300,9 +300,9 @@ class NaviControl():
         pass
       # If substantial lateral acceleration is predicted ahead, then move to Entering turn state.
       elif self._max_pred_lat_acc >= _ENTERING_PRED_LAT_ACC_TH:
-        if self._frame_cnt <= 1:    
-          self.state = VisionTurnControllerState.entering
-          self._frame_cnt = 500
+        #if self._frame_cnt <= 1:    
+        self.state = VisionTurnControllerState.entering
+        self._frame_cnt = 500
       elif turnAheadLen > 0:
         if turnSpeedLimitsAheadDistances > 300 or turnSpeedLimitsAhead > 130:
           self.turnSpeedLimitsAheadDistancesOld = turnSpeedLimitsAheadDistances
@@ -320,21 +320,28 @@ class NaviControl():
 
       # Transition to Turning if current lateral acceleration is over the threshold.
       if self._current_lat_acc >= _TURNING_LAT_ACC_TH:
-        self._frame_cnt = 200
+        self._frame_cnt = 500
         self.state = VisionTurnControllerState.turning
       # Abort if the predicted lateral acceleration drops
-      elif self._frame_cnt <= 0 and self._max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
-        self.state = VisionTurnControllerState.disabled
+      elif self._max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
+        if self._frame_cnt < 1:
+          self.state = VisionTurnControllerState.disabled
+      else:
+        self._frame_cnt = 500
 
     # TURNING
     elif self.state == VisionTurnControllerState.turning:
-      if turnAheadLen > 0:
-        pass
+      #if turnAheadLen > 0:
+      #  pass
 
       # Transition to Leaving if current lateral acceleration drops drops below threshold.
-      elif self._frame_cnt <= 0 and self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
-        self.state = VisionTurnControllerState.leaving
+      if self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
+        if self._frame_cnt < 1:
+          self.state = VisionTurnControllerState.leaving
+          self._frame_cnt = 200
+      else:
         self._frame_cnt = 200
+  
 
     # LEAVING
     elif self.state == VisionTurnControllerState.leaving:
