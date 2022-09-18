@@ -235,6 +235,7 @@ class Controls:
     self.turnSpeedLimitsAheadSigns = 0
     self.turnSpeedLimitsAhead = 0
     self.turnSpeedLimitsAheadDistances = 0
+    self.turnSpeedLimitsAheadCnt = 0
 
 
 
@@ -256,10 +257,12 @@ class Controls:
       data_cnt = len(self.osm.turnSpeedLimitsAheadSigns)
       
       if data_cnt > 0:
-        self.turnSpeedLimitsAheadSigns = data_cnt  # self.osm.turnSpeedLimitsAheadSigns[0]
+        self.turnSpeedLimitsAheadCnt = data_cnt
+        self.turnSpeedLimitsAheadSigns = self.osm.turnSpeedLimitsAheadSigns[-1]
         self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[-1]
         self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[-1]
       else:
+        self.turnSpeedLimitsAheadCnt = 0
         self.turnSpeedLimitsAheadSigns = 0
         self.turnSpeedLimitsAhead = 0
         self.turnSpeedLimitsAheadDistances = 0
@@ -871,6 +874,7 @@ class Controls:
 
 
     #osm
+    controlsState.turnSpeedLimitsAheadCnt = int(self.turnSpeedLimitsAheadCnt)
     controlsState.turnSpeedLimitsAheadSigns = int(self.turnSpeedLimitsAheadSigns)
     controlsState.turnSpeedLimitsAhead = float(self.turnSpeedLimitsAhead)
     controlsState.turnSpeedLimitsAheadDistances = float(self.turnSpeedLimitsAheadDistances)

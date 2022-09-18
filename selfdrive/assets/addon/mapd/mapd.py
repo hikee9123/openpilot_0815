@@ -272,11 +272,15 @@ class MapD():
                                                       if turn_speed_limit_section is not None else 0)
     map_data_msg.liveMapData.turnSpeedLimitEndDistance = float(turn_speed_limit_section.end
                                                                if turn_speed_limit_section is not None else 0.0)
+                                                               
     map_data_msg.liveMapData.turnSpeedLimitsAhead = [float(s.value) for s in next_turn_speed_limit_sections]
     map_data_msg.liveMapData.turnSpeedLimitsAheadDistances = [float(s.start) for s in next_turn_speed_limit_sections]
     map_data_msg.liveMapData.turnSpeedLimitsAheadSigns = [float(s.curv_sign) for s in next_turn_speed_limit_sections]
+    map_data_msg.liveMapData.turnSpeedLimitsAheadCnt = len(map_data_msg.liveMapData.turnSpeedLimitsAheadSigns)
 
     map_data_msg.liveMapData.currentRoadName = str(current_road_name if current_road_name is not None else "")
+
+
 
     pm.send('liveMapData', map_data_msg)
     _debug(f'Mapd *****: Publish: \n{map_data_msg}\n********')

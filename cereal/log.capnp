@@ -599,6 +599,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   turnSpeedLimitsAheadSigns @66 :Int32;
   turnSpeedLimitsAhead @67 :Float32;
   turnSpeedLimitsAheadDistances @68 :Float32;
+  turnSpeedLimitsAheadCnt @69 :Int32;
 
 
   lateralControlState :union {
@@ -1789,6 +1790,7 @@ struct LiveMapData {
   turnSpeedLimitsAhead @9 :List(Float32);
   turnSpeedLimitsAheadDistances @10 :List(Float32);
   turnSpeedLimitsAheadSigns @11 :List(Int16);
+  turnSpeedLimitsAheadCnt @20 :Int64;
   lastGpsTimestamp @12 :Int64;  # Milliseconds since January 1, 1970.
   currentRoadName @13 :Text;
   lastGpsLatitude @14 :Float64;
@@ -1797,6 +1799,7 @@ struct LiveMapData {
   lastGpsBearingDeg @17 :Float32;
   lastGpsAccuracy @18 :Float32;
   lastGpsBearingAccuracyDeg @19 :Float32;
+
 }
 
 

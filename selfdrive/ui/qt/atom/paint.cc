@@ -1170,6 +1170,9 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
 
 
+  
+
+
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
 
   speedLimitAhead *= 3.6;
@@ -1182,16 +1185,33 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   text4.sprintf("SLA(%d) = %.0f,  %.0f", speedLimitAheadValid, speedLimitAhead, speedLimitAheadDistance );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("TSL(%d) = %.0f,  %.0f, %d", turnSpeedLimitValid, turnSpeedLimit, turnSpeedLimitEndDistance, turnSpeedLimitSign );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
+  
+  int TS1_Signs = 0;
+  float TS1_Speed = 0;
+  float TS1_Distances = 0;
+
+  int   rurnSpeedLimitAheadCnt = osm.getTurnSpeedLimitsAheadCnt();
+  if( rurnSpeedLimitAheadCnt > 0 )
+  {
+     TS1_Signs = osm.getTurnSpeedLimitsAheadSigns()[0];
+     TS1_Speed = osm.getTurnSpeedLimitsAhead()[0];
+     TS1_Distances = osm.getTurnSpeedLimitsAheadDistances()[0];
+  }
+  text4.sprintf("TSLA0(%d) = %.0f,  %.0f", TS1_Signs, TS1_Speed, TS1_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
+
+
 
   int TS_Signs  = scene->controls_state.getTurnSpeedLimitsAheadSigns();
   float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
   float TS_Distances  = scene->controls_state.getTurnSpeedLimitsAheadDistances();
+ 
+  if( rurnSpeedLimitAheadCnt > 1 )
+  {
+    TS_Speed *= 3.6;
+    text4.sprintf("TSLA1(%d) = %.0f,  %.0f", TS_Signs, TS_Speed, TS_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  }
 
 
-  TS_Speed *= 3.6;
-
-  int lane_line_cnt = scene->scr.lane_line_cnt;
-  text4.sprintf("TSLA(%d) = %.0f,  %.0f,  %d", TS_Signs, TS_Speed, TS_Distances, lane_line_cnt );  p.drawText( bb_x, nYPos+=nGap, text4 );
 
 
   // Vision turn
@@ -1207,6 +1227,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
 
   // Navi Data
+  nYPos += nGap;
   int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
   int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
   int nMapType =  scene->liveNaviData.getMapType();
@@ -1218,11 +1239,11 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float remainTime = scene->liveNaviData.getRemainTime();
  
   int turnInfo = scene->liveNaviData.getTurnInfo();
-  int rurnDistance = scene->liveNaviData.getDistanceToTurn();
-
-  text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %.0f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  int turnDistance = scene->liveNaviData.getDistanceToTurn();
+  
   text4.sprintf("RC = %.3f, %.3f", roadCurvature, remainTime   );  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("TI = %d, %d", turnInfo, rurnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("TI = %d, %d", turnInfo, turnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %.0f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
 }
 
 

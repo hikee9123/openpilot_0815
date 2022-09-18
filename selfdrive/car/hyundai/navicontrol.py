@@ -299,20 +299,25 @@ class NaviControl():
       if CS.out.vEgo < 10:
         pass
       # If substantial lateral acceleration is predicted ahead, then move to Entering turn state.
-      elif self._max_pred_lat_acc >= _ENTERING_PRED_LAT_ACC_TH:      
-        self.state = VisionTurnControllerState.entering
+      elif self._max_pred_lat_acc >= _ENTERING_PRED_LAT_ACC_TH:
+        if self._frame_cnt <= 1:    
+          self.state = VisionTurnControllerState.entering
+        self._frame_cnt = 500
       elif turnAheadLen > 0:
-        if turnSpeedLimitsAheadDistances > 300:
+        if turnSpeedLimitsAheadDistances > 300 or turnSpeedLimitsAhead > 130:
           pass
         else:
           self.state = VisionTurnControllerState.entering
+          self._frame_cnt = 500
+      else:
+        self._frame_cnt = 50
 
-      self._frame_cnt = 200
     # ENTERING
     elif self.state == VisionTurnControllerState.entering:
 
       # Transition to Turning if current lateral acceleration is over the threshold.
       if self._current_lat_acc >= _TURNING_LAT_ACC_TH:
+        self._frame_cnt = 200
         self.state = VisionTurnControllerState.turning
       # Abort if the predicted lateral acceleration drops
       elif self._frame_cnt <= 0 and self._max_pred_lat_acc < _ABORT_ENTERING_PRED_LAT_ACC_TH:
@@ -324,7 +329,7 @@ class NaviControl():
         pass
 
       # Transition to Leaving if current lateral acceleration drops drops below threshold.
-      elif self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
+      elif self._frame_cnt <= 0 and self._current_lat_acc <= _LEAVING_LAT_ACC_TH:
         self.state = VisionTurnControllerState.leaving
         self._frame_cnt = 200
 
@@ -381,7 +386,7 @@ class NaviControl():
     elif CS.cruise_set_mode == 2:  # comma long control speed.
       vFuture = c.hudControl.vFuture * CV.MS_TO_KPH
       ctrl_speed = min( vFuture, ctrl_speed )
-    elif CS.cruise_set_mode == 3:  # vision?˜ ëª¨ë¸ speedë¥? ?´?š©?•œ ê°ì†.
+    elif CS.cruise_set_mode == 3:  # vision?ï¿½ï¿½ ëª¨ë¸ speedï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ê°ì†.
       modelSpeed = path_plan.modelSpeed * CV.MS_TO_KPH
       vision_speed = interp( modelSpeed, [80, 250], [ 60, 120 ] )
       ctrl_speed = min( vision_speed, ctrl_speed )
