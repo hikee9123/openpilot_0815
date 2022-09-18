@@ -51,7 +51,7 @@ class NaviControl():
 
     self.turnSpeedLimitsAhead = 0
     self.turnSpeedLimitsAheadDistances = 0
-
+    self.turnSpeedLimitsAheadDistancesOld = 0
 
     self.event_navi_alert = None
 
@@ -302,15 +302,18 @@ class NaviControl():
       elif self._max_pred_lat_acc >= _ENTERING_PRED_LAT_ACC_TH:
         if self._frame_cnt <= 1:    
           self.state = VisionTurnControllerState.entering
-        self._frame_cnt = 500
+          self._frame_cnt = 500
       elif turnAheadLen > 0:
         if turnSpeedLimitsAheadDistances > 300 or turnSpeedLimitsAhead > 130:
+          self.turnSpeedLimitsAheadDistancesOld = turnSpeedLimitsAheadDistances
+        elif self.turnSpeedLimitsAheadDistancesOld == 0:
           pass
-        else:
+        elif self.turnSpeedLimitsAheadDistancesOld != turnSpeedLimitsAheadDistances:
           self.state = VisionTurnControllerState.entering
           self._frame_cnt = 500
       else:
-        self._frame_cnt = 50
+        self.turnSpeedLimitsAheadDistancesOld = 0
+        self._frame_cnt = 10
 
     # ENTERING
     elif self.state == VisionTurnControllerState.entering:
