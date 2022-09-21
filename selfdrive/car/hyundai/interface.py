@@ -110,13 +110,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]
 
-      #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
-      #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-
-      #method = update_lat_tune_patam( ret.lateralTuning )
-      #if method == TunType.LAT_DEFAULT:
-      #  set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)
+      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
 
     elif candidate in (CAR.SANTA_FE, CAR.SANTA_FE_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022):
       ret.lateralTuning.pid.kf = 0.00005
@@ -356,8 +350,8 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
 
-    CarInterface.get_tunning_params( ret )
-    CarInterface.get_normal_params( 0, ret )
+    #CarInterface.get_tunning_params( ret )
+    #CarInterface.get_normal_params( 0, ret )
 
     # these cars require a special panda safety mode due to missing counters and checksums in the messages
     if candidate in LEGACY_SAFETY_MODE_CAR:

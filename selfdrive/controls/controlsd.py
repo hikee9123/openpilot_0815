@@ -113,8 +113,8 @@ class Controls:
         ignore += ['driverCameraState', 'managerState']
       self.sm = messaging.SubMaster(['deviceState', 'pandaStates', 'peripheralState', 'modelV2', 'liveCalibration',
                                      'longitudinalPlan', 'lateralPlan', 'liveLocationKalman',
-                                     'managerState', 'liveParameters', 'radarState','liveNaviData','liveMapData',
-                                     'updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
+                                     'managerState', 'liveParameters', 'radarState', 'liveTorqueParameters',
+                                     'liveNaviData','liveMapData','updateEvents'] + self.camera_packets + joystick_packet + drivermonitor_packet,
                                      ignore_alive=ignore, ignore_avg_freq=['radarState', 'longitudinalPlan', 'updateEvents'])
 
     # set alternative experiences from parameters
@@ -638,11 +638,17 @@ class Controls:
       str_log1 = '0.sR={:.2f}'.format( sr )
 
    
-
     trace1.printf1( '{}'.format( str_log1 ) )      
 
 
     self.VM.update_params(x, sr)
+
+    # Update Torque Params
+    if self.CP.lateralTuning.which() == 'torque':
+      torque_params = self.sm['liveTorqueParameters']
+      if self.sm.all_checks(['liveTorqueParameters']) and torque_params.useParams:
+        self.LaC.update_live_torque_params(torque_params.latAccelFactorFiltered, torque_params.latAccelOffsetFiltered, torque_params.frictionCoefficientFiltered)
+
 
     lat_plan = self.sm['lateralPlan']
     long_plan = self.sm['longitudinalPlan']

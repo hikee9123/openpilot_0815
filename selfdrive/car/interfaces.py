@@ -1,25 +1,58 @@
+import yaml
 import os
 import time
 from abc import abstractmethod, ABC
-from typing import Any, Dict, Tuple, List
+from typing import Any, Dict, Optional, Tuple, List, Callable
 
 from cereal import car
 from common.basedir import BASEDIR
 from common.conversions import Conversions as CV
 from common.kalman.simple_kalman import KF1D
+from common.numpy_fast import interp
 from common.realtime import DT_CTRL
 from selfdrive.car import gen_empty_fingerprint
-from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX
+from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX, apply_deadzone
 from selfdrive.controls.lib.events import Events
 from selfdrive.controls.lib.vehicle_model import VehicleModel
 
 GearShifter = car.CarState.GearShifter
 EventName = car.CarEvent.EventName
+TorqueFromLateralAccelCallbackType = Callable[[float, car.CarParams.LateralTorqueTuning, float, float, bool], float]
 
 MAX_CTRL_SPEED = (V_CRUISE_MAX + 4) * CV.KPH_TO_MS
 ACCEL_MAX = 2.0
 ACCEL_MIN = -3.5
+FRICTION_THRESHOLD = 0.2
 
+
+TORQUE_PARAMS_PATH = os.path.join(BASEDIR, 'selfdrive/car/torque_data/params.yaml')
+TORQUE_OVERRIDE_PATH = os.path.join(BASEDIR, 'selfdrive/car/torque_data/override.yaml')
+TORQUE_SUBSTITUTE_PATH = os.path.join(BASEDIR, 'selfdrive/car/torque_data/substitute.yaml')
+
+
+
+def get_torque_params(candidate):
+  with open(TORQUE_SUBSTITUTE_PATH) as f:
+    sub = yaml.load(f, Loader=yaml.CSafeLoader)
+  if candidate in sub:
+    candidate = sub[candidate]
+
+  with open(TORQUE_PARAMS_PATH) as f:
+    params = yaml.load(f, Loader=yaml.CSafeLoader)
+  with open(TORQUE_OVERRIDE_PATH) as f:
+    override = yaml.load(f, Loader=yaml.CSafeLoader)
+
+  # Ensure no overlap
+  if sum([candidate in x for x in [sub, params, override]]) > 1:
+    raise RuntimeError(f'{candidate} is defined twice in torque config')
+
+  if candidate in override:
+    out = override[candidate]
+  elif candidate in params:
+    out = params[candidate]
+  else:
+    raise NotImplementedError(f"Did not find torque params for {candidate}")
+  return {key: out[i] for i, key in enumerate(params['legend'])}
 
 # generic car and radar interfaces
 
@@ -58,6 +91,7 @@ class CarInterfaceBase(ABC):
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None, disable_radar=False):
     pass
 
+
   @staticmethod
   def get_tunning_params( tune ):
     pass
@@ -79,11 +113,30 @@ class CarInterfaceBase(ABC):
   def get_steer_feedforward_function(self):
     return self.get_steer_feedforward_default
 
+
+  @staticmethod
+  def torque_from_lateral_accel_linear(lateral_accel_value, torque_params, lateral_accel_error, lateral_accel_deadzone, friction_compensation):
+    # The default is a linear relationship between torque and lateral acceleration (accounting for road roll and steering friction)
+    friction_interp = interp(
+      apply_deadzone(lateral_accel_error, lateral_accel_deadzone),
+      [-FRICTION_THRESHOLD, FRICTION_THRESHOLD],
+      [-torque_params.friction, torque_params.friction]
+    )
+    friction = friction_interp if friction_compensation else 0.0
+    return (lateral_accel_value / torque_params.latAccelFactor) + friction
+
+  def torque_from_lateral_accel(self) -> TorqueFromLateralAccelCallbackType:
+    return self.torque_from_lateral_accel_linear
+
   # returns a set of default params to avoid repetition in car specific params
   @staticmethod
   def get_std_params(candidate, fingerprint):
     ret = car.CarParams.new_message()
     ret.carFingerprint = candidate
+
+   # Car docs fields
+    ret.maxLateralAccel = get_torque_params(candidate)['MAX_LAT_ACCEL_MEASURED']
+    ret.autoResumeSng = True  # describes whether car can resume from a stop automatically
 
     # standard ALC params
     ret.steerControlType = car.CarParams.SteerControlType.torque
@@ -112,6 +165,20 @@ class CarInterfaceBase(ABC):
     ret.longitudinalActuatorDelayUpperBound = 0.15
     ret.steerLimitTimer = 1.0
     return ret
+
+  @staticmethod
+  def configure_torque_tune(candidate, tune, steering_angle_deadzone_deg=0.0, use_steering_angle=True):
+    params = get_torque_params(candidate)
+
+    tune.init('torque')
+    tune.torque.useSteeringAngle = use_steering_angle
+    tune.torque.kp = 1.0
+    tune.torque.kf = 1.0
+    tune.torque.ki = 0.1
+    tune.torque.friction = params['FRICTION']
+    tune.torque.latAccelFactor = params['LAT_ACCEL_FACTOR']
+    tune.torque.latAccelOffset = 0.0
+    tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
 
   @abstractmethod
   def _update(self, c: car.CarControl) -> car.CarState:
@@ -168,6 +235,10 @@ class CarInterfaceBase(ABC):
       events.add(EventName.brakeHold)
     if cs_out.parkingBrake:
       events.add(EventName.parkBrake)
+    if cs_out.accFaulted:
+      events.add(EventName.accFaulted)
+    if cs_out.steeringPressed:
+      events.add(EventName.steerOverride)      
 
     # Handle permanent and temporary steering faults
     self.steering_unpressed = 0 if cs_out.steeringPressed else self.steering_unpressed + 1
