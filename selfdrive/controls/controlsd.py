@@ -248,7 +248,7 @@ class Controls:
         steerRatio = learnerSteerRatio * dRate
     steerRatio = clip( steerRatio, 13.5, 19.5 )
 
-    return steerRatio, self.modelSpeed
+    return steerRatio  #, self.modelSpeed
 
 
   def update_osm( self ):
@@ -625,20 +625,17 @@ class Controls:
     x = max(params.stiffnessFactor, 0.1)
     sr = max(params.steerRatio, 0.1)
 
-    
     # atom
     if self.OpkrLiveSteerRatio == 2:  # FIX
       sr = max(self.CP.steerRatio, 5.0)
-      str_log1 = '2.Fix sR={:.2f}'.format( sr )
+      #str_log1 = '2.Fix sR={:.2f}'.format( sr )
     elif self.OpkrLiveSteerRatio == 1:  
-      steerRatio, modelSpeed = self.update_modelToSteerRatio( params.steerRatio )
+      steerRatio = self.update_modelToSteerRatio( params.steerRatio )
       sr = max(steerRatio, 5.0)
-      str_log1 = 'sR={:.2f},{:.2f}'.format( params.steerRatio, sr )
-    else: 
-      str_log1 = '0.sR={:.2f}'.format( sr )
-
-   
-    trace1.printf1( '{}'.format( str_log1 ) )      
+      #str_log1 = 'sR={:.2f},{:.2f}'.format( params.steerRatio, sr )
+    #else: 
+      #str_log1 = '0.sR={:.2f}'.format( sr )
+    #trace1.printf1( '{}'.format( str_log1 ) )      
 
 
     self.VM.update_params(x, sr)
@@ -648,7 +645,8 @@ class Controls:
       torque_params = self.sm['liveTorqueParameters']
       if self.sm.all_checks(['liveTorqueParameters']) and torque_params.useParams:
         self.LaC.update_live_torque_params(torque_params.latAccelFactorFiltered, torque_params.latAccelOffsetFiltered, torque_params.frictionCoefficientFiltered)
-
+        str_log1 = 'LAF={:.2f} LAO={:.3f} FC={:.3f}'.format( torque_params.latAccelFactorFiltered, torque_params.latAccelOffsetFiltered, torque_params.frictionCoefficientFiltered )
+        trace1.printf1( '{}'.format( str_log1 ) )
 
     lat_plan = self.sm['lateralPlan']
     long_plan = self.sm['longitudinalPlan']
