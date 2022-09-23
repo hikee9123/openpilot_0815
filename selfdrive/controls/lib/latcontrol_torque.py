@@ -18,10 +18,6 @@ from selfdrive.controls.lib.vehicle_model import ACCELERATION_DUE_TO_GRAVITY
 # move it at all, this is compensated for too.
 
 
-FRICTION_THRESHOLD = 0.2
-
-
-
 
 class LatControlTorque(LatControl):
   def __init__(self, CP, CI):
@@ -34,20 +30,17 @@ class LatControlTorque(LatControl):
     self.use_steering_angle = self.torque_params.useSteeringAngle
     self.steering_angle_deadzone_deg = self.torque_params.steeringAngleDeadzoneDeg
 
+
+  def reset(self):
+    super().reset()
+    self.pid.reset()
+
   def live_tune(self, CP):
     self.torque_params = CP.lateralTuning.torque
     self.pid = PIDController(self.torque_params.kp, self.torque_params.ki,
                              k_f=self.torque_params.kf, pos_limit=self.steer_max, neg_limit=-self.steer_max)
     self.steering_angle_deadzone_deg = self.torque_params.steeringAngleDeadzoneDeg
     self.use_steering_angle = self.torque_params.useSteeringAngle 
-    self.friction = self.torque_params.friction 
-    self.kf = self.torque_params.kf 
-    #self.steering_angle_deadzone_deg = CP.lateralTuning.torque.steeringAngleDeadzoneDeg 
-
-
-  def reset(self):
-    super().reset()
-    self.pid.reset()
 
 
   def update_live_torque_params(self, latAccelFactor, latAccelOffset, friction):
