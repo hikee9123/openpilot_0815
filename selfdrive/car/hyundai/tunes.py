@@ -117,11 +117,14 @@ def update_lat_tune_patam(tune, MAX_LAT_ACCEL=2.5, steering_angle_deadzone_deg=0
 
       tune.init('torque')
       tune.torque.useSteeringAngle = UseAngle  #  False
-      tune.torque.kp = Kp / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
-      tune.torque.kf = Kf / MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
-      tune.torque.ki = Ki / MAX_LAT_ACCEL        # 0.1 / 2.5 = 0.04
+      tune.torque.kp = Kp #/ MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
+      tune.torque.kf = Kf #/ MAX_LAT_ACCEL        # 1.0 / 2.5 = 0.4
+      tune.torque.ki = Ki #/ MAX_LAT_ACCEL        # 0.1 / 2.5 = 0.04
       tune.torque.friction = FRICTION
+      tune.torque.latAccelFactor = MAX_LAT_ACCEL      
+      tune.torque.latAccelOffset = 0.0      
       tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
+
 
   elif method ==  TunType.LAT_HYBRID:
       tune.init('atom')
