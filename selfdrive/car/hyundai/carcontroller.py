@@ -311,6 +311,7 @@ class CarController():
     new_actuators = actuators.copy()
     new_actuators.steer = apply_steer / self.params.STEER_MAX
     new_actuators.accel = self.accel
+    new_actuators.gas = self.gas
 
     self.lkas11_cnt += 1
     self.frame += 1
