@@ -205,6 +205,10 @@ class TorqueEstimator:
         lateral_acc = (vego * yaw_rate) - (np.sin(roll) * ACCELERATION_DUE_TO_GRAVITY)
         if all(active) and (not any(steer_override)) and (vego > MIN_VEL) and (abs(steer) > STEER_MIN_THRESHOLD) and (abs(lateral_acc) <= LAT_ACC_THRESHOLD):
           self.filtered_points.add_point(float(steer), float(lateral_acc))
+          print( 'live torq filtered_points={} '.format( self.filtered_points ) )
+
+        print( 'live torq active={} {} {} {} {}'.format( active, steer_override, vego, steer, lateral_acc ) )
+        
 
   def get_msg(self, valid=True, with_points=False):
     msg = messaging.new_message('liveTorqueParameters')
@@ -243,7 +247,7 @@ class TorqueEstimator:
     liveTorqueParameters.totalBucketPoints = len(self.filtered_points)
     liveTorqueParameters.decay = self.decay
     liveTorqueParameters.maxResets = self.resets
-    print( 'live torq {}'.format( msg ) )
+    #print( 'live torq {}'.format( msg ) )
     return msg
 
 
