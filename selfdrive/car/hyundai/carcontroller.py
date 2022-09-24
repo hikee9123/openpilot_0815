@@ -36,6 +36,7 @@ class CarController():
     self.NC = NaviControl(self.params, CP)
     self.cut_in_car_alert = False
     self.cut_in_car_time = 0
+    self.gas = 0
     
 
 
@@ -227,7 +228,8 @@ class CarController():
     right_lane = c.hudControl.rightLaneVisible 
     left_lane_warning = c.hudControl.leftLaneDepart 
     right_lane_warning = c.hudControl.rightLaneDepart
-
+    
+    self.gas = 0
 
   
     # Steering Torque
