@@ -229,7 +229,7 @@ class CarController():
     left_lane_warning = c.hudControl.leftLaneDepart 
     right_lane_warning = c.hudControl.rightLaneDepart
     
-    self.gas = 0
+    self.gas = CS.out.gas
 
   
     # Steering Torque
