@@ -68,6 +68,7 @@ services = {
   "navInstruction": (True, 0., 10),
   "navRoute": (True, 0.),
   "navThumbnail": (True, 0.),
+  "liveTorqueParameters": (True,20.,5),
 
 # atom
   "liveNaviData": (True, 0.),
