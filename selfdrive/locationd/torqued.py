@@ -243,7 +243,7 @@ class TorqueEstimator:
     liveTorqueParameters.totalBucketPoints = len(self.filtered_points)
     liveTorqueParameters.decay = self.decay
     liveTorqueParameters.maxResets = self.resets
-    print( 'live torq {}'.format(liveTorqueParameters) )
+    print( 'live torq {}'.format( msg ) )
     return msg
 
 
