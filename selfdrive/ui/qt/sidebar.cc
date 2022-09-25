@@ -79,6 +79,7 @@ void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
 
 void Sidebar::offroadTransition(bool offroad) {
   onroad = !offroad;
+  printf("Sidebar::offroadTransition = %d\n", offroad);  
   update();
 }
 
