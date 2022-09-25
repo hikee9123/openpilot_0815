@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <csignal>
 #include <random>
+#include <string>
 
 #include <poll.h>
 #include <sys/ioctl.h>
