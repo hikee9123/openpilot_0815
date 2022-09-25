@@ -45,7 +45,7 @@ Sidebar::Sidebar(QWidget *parent) : QFrame(parent), onroad(false), flag_pressed(
 
   QObject::connect(uiState(), &UIState::uiUpdate, this, &Sidebar::updateState);
 
-  pm = std::make_unique<PubMaster, const std::initializer_list<const char *>>({"userFlag"});  
+  pm = NULL; // std::make_unique<PubMaster, const std::initializer_list<const char *>>({"userFlag"});  
 }
 
 void Sidebar::mousePressEvent(QMouseEvent *event) {
@@ -66,7 +66,9 @@ void Sidebar::mouseReleaseEvent(QMouseEvent *event) {
   if (home_btn.contains(event->pos())) {
     MessageBuilder msg;
     msg.initEvent().initUserFlag();
-    pm->send("userFlag", msg);
+
+    if( pm )
+      pm->send("userFlag", msg);
   }
   else if (settings_btn.contains(event->pos())) {
     UIScene  &scene =  uiState()->scene;
