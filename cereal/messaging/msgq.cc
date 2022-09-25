@@ -86,10 +86,13 @@ int msgq_new_queue(msgq_queue_t * q, const char * path, size_t size){
   assert(size < 0xFFFFFFFF); // Buffer must be smaller than 2^32 bytes
   std::signal(SIGUSR2, sigusr2_handler);
 
-  const char * prefix = "/dev/shm/";
-  char * full_path = new char[strlen(path) + strlen(prefix) + 1];
-  strcpy(full_path, prefix);
-  strcat(full_path, path);
+  //const char * prefix = "/dev/shm/";
+  std::string full_path = "/dev/shm/";  
+  const char* prefix = std::getenv("OPENPILOT_PREFIX");  
+  if (prefix) {
+    full_path += std::string(prefix) + "/";
+  }
+  full_path += path;
 
   auto fd = open(full_path, O_RDWR | O_CREAT, 0664);
   if (fd < 0) {
