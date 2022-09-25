@@ -15,6 +15,13 @@ from selfdrive.car.toyota.values import CAR as TOYOTA
 from selfdrive.swaglog import cloudlog
 
 Ecu = car.CarParams.Ecu
+ESSENTIAL_ECUS = [Ecu.engine, Ecu.eps, Ecu.abs, Ecu.fwdRadar, Ecu.fwdCamera, Ecu.vsa]
+
+FW_QUERY_CONFIGS = get_interface_attr('FW_QUERY_CONFIG', ignore_none=True)
+VERSIONS = get_interface_attr('FW_VERSIONS', ignore_none=True)
+
+MODEL_TO_BRAND = {c: b for b, e in VERSIONS.items() for c in e}
+REQUESTS = [(brand, r) for brand, config in FW_QUERY_CONFIGS.items() for r in config.requests]
 
 
 def p16(val):
