@@ -138,7 +138,7 @@ void SoftwarePanel::updateLabels() {
         lastUpdate = timeAgo(QDateTime::fromString(QString::fromStdString(tm + "Z"), Qt::ISODate));
       }
       downloadBtn->setText("CHECK");
-      downloadBtn->setValue("date, last checked " + lastUpdate);
+      downloadBtn->setValue("last checked " + lastUpdate);
     }
     downloadBtn->setEnabled(true);
   }
