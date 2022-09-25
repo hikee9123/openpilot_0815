@@ -7,11 +7,12 @@ from common.basedir import BASEDIR
 from selfdrive.version import is_comma_remote, is_tested_branch
 from selfdrive.car.interfaces import get_interface_attr
 from selfdrive.car.fingerprints import eliminate_incompatible_cars, all_legacy_fingerprint_cars
-from selfdrive.car.vin import get_vin, VIN_UNKNOWN
-from selfdrive.car.fw_versions import get_fw_versions, match_fw_to_car
+from selfdrive.car.vin import get_vin, is_valid_vin, VIN_UNKNOWN
+from selfdrive.car.fw_versions import get_fw_versions_ordered, match_fw_to_car, get_present_ecus
 from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.car import gen_empty_fingerprint
+
 from selfdrive.car.hyundai.values import CAR
 
 EventName = car.CarEvent.EventName
@@ -80,9 +81,10 @@ interfaces = load_interfaces(interface_names)
 def fingerprint(logcan, sendcan):
   fixed_fingerprint = os.environ.get('FINGERPRINT', "")
   skip_fw_query = os.environ.get('SKIP_FW_QUERY', False)
+  ecu_rx_addrs = set()
 
   if not fixed_fingerprint and not skip_fw_query:
-    # Vin query only reliably works thorugh OBDII
+    # Vin query only reliably works through OBDII
     bus = 1
 
     cached_params = Params().get("CarParamsCache")
@@ -93,19 +95,20 @@ def fingerprint(logcan, sendcan):
 
     if cached_params is not None and len(cached_params.carFw) > 0 and cached_params.carVin is not VIN_UNKNOWN:
       cloudlog.warning("Using cached CarParams")
-      vin = cached_params.carVin
+      vin, vin_rx_addr = cached_params.carVin, 0
       car_fw = list(cached_params.carFw)
     else:
       cloudlog.warning("Getting VIN & FW versions")
-      _, vin = get_vin(logcan, sendcan, bus)
-      car_fw = get_fw_versions(logcan, sendcan)
+      _, vin_rx_addr, vin = get_vin(logcan, sendcan, bus)
+      ecu_rx_addrs = get_present_ecus(logcan, sendcan)
+      car_fw = get_fw_versions_ordered(logcan, sendcan, ecu_rx_addrs)
 
     exact_fw_match, fw_candidates = match_fw_to_car(car_fw)
   else:
-    vin = VIN_UNKNOWN
+    vin, vin_rx_addr = VIN_UNKNOWN, 0
     exact_fw_match, fw_candidates, car_fw = True, set(), []
 
-  if len(vin) != 17:
+  if not is_valid_vin(vin):
     cloudlog.event("Malformed VIN", vin=vin, error=True)
     vin = VIN_UNKNOWN
   cloudlog.warning("VIN %s", vin)
@@ -114,9 +117,12 @@ def fingerprint(logcan, sendcan):
   finger = gen_empty_fingerprint()
   candidate_cars = {i: all_legacy_fingerprint_cars() for i in [0, 1]}  # attempt fingerprint on both bus 0 and 1
   frame = 0
-  frame_fingerprint = 10  # 0.1s
+  frame_fingerprint = 100  # 1s
   car_fingerprint = None
   done = False
+
+  # drain CAN socket so we always get the latest messages
+  messaging.drain_sock_raw(logcan)
 
   while not done:
     a = get_one_can(logcan)
@@ -161,8 +167,8 @@ def fingerprint(logcan, sendcan):
     car_fingerprint = fixed_fingerprint
     source = car.CarParams.FingerprintSource.fixed
 
-  cloudlog.event("fingerprinted", car_fingerprint=car_fingerprint,
-                 source=source, fuzzy=not exact_match, fw_count=len(car_fw))
+  cloudlog.event("fingerprinted", car_fingerprint=car_fingerprint, source=source, fuzzy=not exact_match,
+                 fw_count=len(car_fw), ecu_responses=list(ecu_rx_addrs), vin_rx_addr=vin_rx_addr, error=True)
   return car_fingerprint, finger, vin, car_fw, source, exact_match
 
 
@@ -174,10 +180,10 @@ def get_car(logcan, sendcan):
     candidate = "mock"
     candidate = CAR.GRANDEUR_HEV_19
 
-  disable_radar = Params().get_bool("DisableRadar")
+  experimental_long = Params().get_bool("ExperimentalLongitudinalEnabled")
 
   CarInterface, CarController, CarState = interfaces[candidate]
-  CP = CarInterface.get_params(candidate, fingerprints, car_fw, disable_radar)
+  CP = CarInterface.get_params(candidate, fingerprints, car_fw, experimental_long)
   CP.carVin = vin
   CP.carFw = car_fw
   CP.fingerprintSource = source
