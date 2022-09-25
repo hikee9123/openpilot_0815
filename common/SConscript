@@ -1,4 +1,4 @@
-Import('env','envCython', 'common', 'arch', 'SHARED')
+Import('env','envCython', 'arch', 'SHARED')
 
 if SHARED:
   fxn = env.SharedLibrary
