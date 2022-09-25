@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <sys/file.h>
 
+#include <algorithm>
 #include <csignal>
 #include <unordered_map>
 

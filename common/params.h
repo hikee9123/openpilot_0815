@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 enum ParamKeyType {
   PERSISTENT = 0x02,
