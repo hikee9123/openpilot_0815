@@ -671,7 +671,7 @@ struct CarParams {
 
   enum Ecu {
     eps @0;
-    esp @1;
+    abs @1;
     fwdRadar @2;
     fwdCamera @3;
     engine @4;
@@ -691,6 +691,9 @@ struct CarParams {
     programmedFuelInjection @14;
     electricBrakeBooster @15;
     shiftByWire @16;
+
+    # Chrysler only
+    hcp @18;  # Hybrid Control Processor
 
     debug @17;
   }
