@@ -73,6 +73,9 @@ public:
 private:
   void showEvent(QShowEvent *event) override;
   void updateLabels();
+  void checkForUpdates();  
+
+  ButtonControl *installBtn; 
 
   LabelControl *gitRemoteLbl;
   LabelControl *gitBranchLbl;
