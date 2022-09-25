@@ -73,18 +73,15 @@ public:
 private:
   void showEvent(QShowEvent *event) override;
   void updateLabels();
-  void checkForUpdates();  
+  void checkForUpdates();
 
-  ButtonControl *installBtn; 
+  bool is_onroad = false;
 
-  LabelControl *gitRemoteLbl;
-  LabelControl *gitBranchLbl;
-  LabelControl *gitCommitLbl;
-  LabelControl *osVersionLbl;
+  QLabel *onroadLbl;
   LabelControl *versionLbl;
-  LabelControl *lastUpdateLbl;
-  ButtonControl *updateBtn;
-  ButtonControl *branchSwitcherBtn;
+  ButtonControl *installBtn;
+  ButtonControl *downloadBtn;
+  ButtonControl *targetBranchBtn;
 
   Params params;
   QFileSystemWatcher *fs_watch;
