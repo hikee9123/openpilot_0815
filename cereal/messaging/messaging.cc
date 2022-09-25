@@ -1,3 +1,6 @@
+#include <cassert>
+#include <iostream>
+
 #include "messaging.h"
 #include "impl_zmq.h"
 #include "impl_msgq.h"
