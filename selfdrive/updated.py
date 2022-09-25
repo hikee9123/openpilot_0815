@@ -35,14 +35,14 @@ import threading
 from collections import defaultdict
 from pathlib import Path
 from typing import List, Union, Optional
-from markdown_it import MarkdownIt
+from common.markdown import parse_markdown
 
 from common.basedir import BASEDIR
 from common.params import Params
-from system.hardware import AGNOS, HARDWARE
-from system.swaglog import cloudlog
+from selfdrive.hardware import  EON, TICI, HARDWARE
+from selfdrive.swaglog import cloudlog
 from selfdrive.controls.lib.alertmanager import set_offroad_alert
-from system.version import is_tested_branch
+from selfdrive.version import is_tested_branch
 
 LOCK_FILE = os.getenv("UPDATER_LOCK_FILE", "/tmp/safe_staging_overlay.lock")
 STAGING_ROOT = os.getenv("UPDATER_STAGING_ROOT", "/data/safe_staging")
@@ -94,7 +94,7 @@ def parse_release_notes(basedir: str) -> bytes:
     with open(os.path.join(basedir, "RELEASES.md"), "rb") as f:
       r = f.read().split(b'\n\n', 1)[0]  # Slice latest release notes
     try:
-      return bytes(MarkdownIt().render(r.decode("utf-8")), encoding="utf-8")
+      return bytes( parse_markdown(r.decode("utf-8")), encoding="utf-8")
     except Exception:
       return r + b"\n"
   except FileNotFoundError:
@@ -213,8 +213,8 @@ def finalize_update() -> None:
   cloudlog.info("done finalizing overlay")
 
 
-def handle_agnos_update() -> None:
-  from system.hardware.tici.agnos import flash_agnos_update, get_target_slot_number
+def handle_agnos_update(wait_helper: WaitTimeHelper) -> None:
+  from selfdrive.hardware.tici.agnos import flash_agnos_update, get_target_slot_number
 
   cur_version = HARDWARE.get_os_version()
   updated_version = run(["bash", "-c", r"unset AGNOS_VERSION && source launch_env.sh && \
@@ -235,7 +235,40 @@ def handle_agnos_update() -> None:
   flash_agnos_update(manifest_path, target_slot_number, cloudlog)
   set_offroad_alert("Offroad_NeosUpdate", False)
 
+def handle_neos_update(wait_helper: WaitTimeHelper) -> None:
+  from selfdrive.hardware.eon.neos import download_neos_update
 
+  cur_neos = HARDWARE.get_os_version()
+  updated_neos = run(["bash", "-c", r"unset REQUIRED_NEOS_VERSION && source launch_env.sh && \
+                       echo -n $REQUIRED_NEOS_VERSION"], OVERLAY_MERGED).strip()
+
+  cloudlog.info(f"NEOS version check: {cur_neos} vs {updated_neos}")
+  if cur_neos == updated_neos:
+    return
+
+  cloudlog.info(f"Beginning background download for NEOS {updated_neos}")
+  set_offroad_alert("Offroad_NeosUpdate", True)
+
+  update_manifest = os.path.join(OVERLAY_MERGED, "selfdrive/hardware/eon/neos.json")
+
+  neos_downloaded = False
+  start_time = time.monotonic()
+  # Try to download for one day
+  while not neos_downloaded and not wait_helper.shutdown and \
+        (time.monotonic() - start_time < 60*60*24):
+    wait_helper.ready_event.clear()
+    try:
+      download_neos_update(update_manifest, cloudlog)
+      neos_downloaded = True
+    except Exception:
+      cloudlog.info("NEOS background download failed, retrying")
+      wait_helper.sleep(120)
+
+  # If the download failed, we'll show the alert again when we retry
+  set_offroad_alert("Offroad_NeosUpdate", False)
+  if not neos_downloaded:
+    raise Exception("Failed to download NEOS update")
+  cloudlog.info(f"NEOS background download successful, took {time.monotonic() - start_time} seconds")
 
 class Updater:
   def __init__(self):
@@ -357,7 +390,7 @@ class Updater:
     else:
       cloudlog.info(f"up to date on {cur_branch} ({cur_commit[:7]})")
 
-  def fetch_update(self) -> None:
+  def fetch_update(self,wait_helper: WaitTimeHelper) -> None:
     cloudlog.info("attempting git fetch inside staging overlay")
 
     self.params.put("UpdaterState", "downloading...")
@@ -384,8 +417,10 @@ class Updater:
     cloudlog.info("git reset success: %s", '\n'.join(r))
 
     # TODO: show agnos download progress
-    if AGNOS:
-      handle_agnos_update()
+    if EON:
+        handle_neos_update(wait_helper)    
+    elif TICI:
+      handle_agnos_update(wait_helper)
 
     # Create the finalized, ready-to-swap update
     self.params.put("UpdaterState", "finalizing update...")
@@ -451,7 +486,7 @@ def main() -> None:
       if wait_helper.only_check_for_update:
         cloudlog.info("skipping fetch this cycle")
       else:
-        updater.fetch_update()
+        updater.fetch_update(wait_helper)
       update_failed_count = 0
     except subprocess.CalledProcessError as e:
       cloudlog.event(
