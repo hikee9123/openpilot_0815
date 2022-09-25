@@ -76,7 +76,9 @@ class WaitTimeHelper:
     self.ready_event.wait(timeout=t)
 
 
-def run(cmd: List[str], cwd: Optional[str] = None) -> str:
+def run(cmd: List[str], cwd: Optional[str] = None, low_priority: bool = False) -> str:
+  if low_priority:
+    cmd = ["nice", "-n", "19"] + cmd  
   return subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8')
 
 
@@ -152,7 +154,9 @@ def init_overlay() -> None:
   params.put_bool("UpdateAvailable", False)
   set_consistent_flag(False)
   dismount_overlay()
-  run(["sudo", "rm", "-rf", STAGING_ROOT])
+  if TICI:
+    run(["sudo", "rm", "-rf", STAGING_ROOT])
+  
   if os.path.isdir(STAGING_ROOT):
     shutil.rmtree(STAGING_ROOT)
 
@@ -176,10 +180,13 @@ def init_overlay() -> None:
   overlay_opts = f"lowerdir={BASEDIR},upperdir={OVERLAY_UPPER},workdir={OVERLAY_METADATA}"
 
   mount_cmd = ["mount", "-t", "overlay", "-o", overlay_opts, "none", OVERLAY_MERGED]
-  run(["sudo"] + mount_cmd)
-  run(["sudo", "chmod", "755", os.path.join(OVERLAY_METADATA, "work")])
+  if TICI:
+    run(["sudo"] + mount_cmd)
+    run(["sudo", "chmod", "755", os.path.join(OVERLAY_METADATA, "work")])
+  else:
+    run(mount_cmd)
 
-  git_diff = run(["git", "diff"], OVERLAY_MERGED)
+  git_diff = run(["git", "diff"], OVERLAY_MERGED, low_priority=True)
   params.put("GitDiff", git_diff)
   cloudlog.info(f"git diff output:\n{git_diff}")
 
@@ -372,7 +379,7 @@ class Updater:
     excluded_branches = ('release2', 'release2-staging', 'dashcam', 'dashcam-staging')
 
     setup_git_options(OVERLAY_MERGED)
-    output = run(["git", "ls-remote", "--heads"], OVERLAY_MERGED)
+    output = run(["git", "ls-remote", "--heads"], OVERLAY_MERGED, low_priority=True)
 
     self.branches = defaultdict(lambda: None)
     for line in output.split('\n'):
@@ -402,7 +409,7 @@ class Updater:
     setup_git_options(OVERLAY_MERGED)
 
     branch = self.target_branch
-    git_fetch_output = run(["git", "fetch", "origin", branch], OVERLAY_MERGED)
+    git_fetch_output = run(["git", "fetch", "origin", branch], OVERLAY_MERGED, low_priority=True)
     cloudlog.info("git fetch success: %s", git_fetch_output)
 
     cloudlog.info("git reset in progress")
@@ -413,7 +420,7 @@ class Updater:
       ["git", "submodule", "init"],
       ["git", "submodule", "update"],
     ]
-    r = [run(cmd, OVERLAY_MERGED) for cmd in cmds]
+    r = [run(cmd, OVERLAY_MERGED, low_priority=True) for cmd in cmds]
     cloudlog.info("git reset success: %s", '\n'.join(r))
 
     # TODO: show agnos download progress
