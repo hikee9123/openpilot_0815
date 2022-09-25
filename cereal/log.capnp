@@ -1928,6 +1928,9 @@ struct EncodeData {
   flags @4 :UInt32;
 }
 
+struct UserFlag {
+}
+
 struct Event {
   logMonoTime @0 :UInt64;  # nanoseconds
   valid @67 :Bool = true;
@@ -1999,6 +2002,11 @@ struct Event {
 
     # osm
     liveMapData @92: LiveMapData;
+
+
+
+    # user flags
+    userFlag @94 :UserFlag;
 
     # *********** debug ***********
     testJoystick @52 :Joystick;
