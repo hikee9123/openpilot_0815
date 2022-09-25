@@ -88,13 +88,13 @@ class Footnote(Enum):
   DSU = CarFootnote(
     "When disconnecting the Driver Support Unit (DSU), openpilot Adaptive Cruise Control (ACC) will replace stock " +
     "Adaptive Cruise Control (ACC). <b><i> NOTE: disconnecting the DSU disables Automatic Emergency Braking (AEB).</i></b>",
-    Column.LONGITUDINAL, star=Star.HALF)
+    Column.LONGITUDINAL)
   CAMRY = CarFootnote(
     "28mph for Camry 4CYL L, 4CYL LE and 4CYL SE which don't have Full-Speed Range Dynamic Radar Cruise Control.",
     Column.FSR_LONGITUDINAL)
   ANGLE_SENSOR = CarFootnote(
     "An inaccurate steering wheel angle sensor makes precise control difficult.",
-    Column.STEERING_TORQUE, star=Star.HALF)
+    Column.STEERING_TORQUE)
 
 
 @dataclass
