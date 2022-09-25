@@ -45,7 +45,7 @@ Sidebar::Sidebar(QWidget *parent) : QFrame(parent), onroad(false), flag_pressed(
 
   QObject::connect(uiState(), &UIState::uiUpdate, this, &Sidebar::updateState);
 
-  pm = NULL; // std::make_unique<PubMaster, const std::initializer_list<const char *>>({"userFlag"});  
+  pm = std::make_unique<PubMaster, const std::initializer_list<const char *>>({"userFlag"});  
 }
 
 void Sidebar::mousePressEvent(QMouseEvent *event) {

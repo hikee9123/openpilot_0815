@@ -69,7 +69,7 @@ services = {
   "navInstruction": (True, 0., 10),
   "navRoute": (True, 0.),
   "navThumbnail": (True, 0.),
- 
+  "userFlag": (True, 0., 1),
 
 # atom
   "liveNaviData": (True, 0.),
