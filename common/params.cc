@@ -322,7 +322,8 @@ int Params::put(const char* key, const char* value, size_t value_size) {
   return result;
 }
 
-int Params::remove(const std::string &key) {
+int Params::remove(const std::string &key)
+{
   FileLock file_lock(params_path + "/.lock");
   int result = unlink(getParamPath(key).c_str());
   if (result != 0) {
