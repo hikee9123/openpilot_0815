@@ -694,7 +694,7 @@ struct CarParams {
     gateway @10; # can gateway
     hud @11; # heads up display
     combinationMeter @12; # instrument cluster
-    electricBrakeBooster @15;
+    # electricBrakeBooster @15;
     adas @19;
 
     # Toyota only
