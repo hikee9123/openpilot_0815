@@ -114,6 +114,8 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     canBusMissing @111;
     cutInCarDetect  @112;
     laneChangedisengaged @113;
+    controlsdLagging @118;
+    resumeBlocked @119;
 
     # osm
     curvSpeedEntering @114;

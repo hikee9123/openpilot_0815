@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 from enum import Enum
 
-
 class LongTunes(Enum):
-  PEDAL = 0
-  TSS2 = 1
-  TSS = 2
+  TSS2 = 0
+  TSS = 1
 
 class LatTunes(Enum):
   INDI_PRIUS = 0
@@ -24,13 +22,12 @@ class LatTunes(Enum):
   PID_L = 13
   PID_M = 14
   PID_N = 15
-  TORQUE = 16
 
 
 ###### LONG ######
 def set_long_tune(tune, name):
   # Improved longitudinal tune
-  if name == LongTunes.TSS2 or name == LongTunes.PEDAL:
+  if name == LongTunes.TSS2:
     tune.deadzoneBP = [0., 8.05]
     tune.deadzoneV = [.0, .14]
     tune.kpBP = [0., 5., 20.]
@@ -40,7 +37,7 @@ def set_long_tune(tune, name):
   # Default longitudinal tune
   elif name == LongTunes.TSS:
     tune.deadzoneBP = [0., 9.]
-    tune.deadzoneV = [0., .15]
+    tune.deadzoneV = [.0, .15]
     tune.kpBP = [0., 5., 35.]
     tune.kiBP = [0., 35.]
     tune.kpV = [3.6, 2.4, 1.5]
@@ -49,20 +46,9 @@ def set_long_tune(tune, name):
     raise NotImplementedError('This longitudinal tune does not exist')
 
 
-def set_torque_tune(tune, MAX_LAT_ACCEL=2.5, FRICTION=0.01, steering_angle_deadzone_deg=0.0):
-  tune.init('torque')
-  tune.torque.useSteeringAngle = True
-  tune.torque.kp = 1.0 / MAX_LAT_ACCEL
-  tune.torque.kf = 1.0 / MAX_LAT_ACCEL
-  tune.torque.ki = 0.1 / MAX_LAT_ACCEL
-  tune.torque.friction = FRICTION
-  tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
-
 ###### LAT ######
-def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01, use_steering_angle=True):
-  if name == LatTunes.TORQUE:
-    set_torque_tune(tune, MAX_LAT_ACCEL, FRICTION)
-  elif 'PID' in str(name):
+def set_lat_tune(tune, name, MAX_LAT_ACCEL=2.5, FRICTION=0.01, steering_angle_deadzone_deg=0.0, use_steering_angle=True):
+  if 'PID' in str(name):
     tune.init('pid')
     tune.pid.kiBP = [0.0]
     tune.pid.kpBP = [0.0]

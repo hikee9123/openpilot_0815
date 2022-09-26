@@ -223,7 +223,7 @@ def user_soft_disable_alert(alert_text_2: str) -> AlertCallbackType:
   return func
 
 def startup_master_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int) -> Alert:
-  branch = get_short_branch("")
+  branch = get_short_branch("")  # Ensure get_short_branch is cached to avoid lags on startup
   if "REPLAY" in os.environ:
     branch = "replay"
 
@@ -673,6 +673,10 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.NO_ENTRY: wrong_car_mode_alert,
   },
 
+  EventName.resumeBlocked: {
+    ET.NO_ENTRY: NoEntryAlert("Press Set to Engage"),
+  },
+
   EventName.wrongCruiseMode: {
     ET.USER_DISABLE: EngagementAlert(AudibleAlert.disengage),
     ET.NO_ENTRY: NoEntryAlert("Adaptive Cruise Disabled"),
@@ -694,11 +698,12 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
 
   EventName.sensorDataInvalid: {
     ET.PERMANENT: Alert(
-      "No Data from Device Sensors",
-      "Reboot your Device",
+      "Sensor Data Invalid",
+      "Ensure device is mounted securely",
       AlertStatus.normal, AlertSize.mid,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none, .2, creation_delay=1.),
-    ET.NO_ENTRY: NoEntryAlert("No Data from Device Sensors"),
+    ET.NO_ENTRY: NoEntryAlert("Sensor Data Invalid"),
+    ET.SOFT_DISABLE: soft_disable_alert("Sensor Data Invalid"),
   },
 
   EventName.noGps: {
@@ -775,6 +780,10 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
     ET.NO_ENTRY: NoEntryAlert("Low Communication Rate between Processes"),
   },
 
+  EventName.controlsdLagging: {
+    ET.SOFT_DISABLE: soft_disable_alert("Controls Lagging"),
+    ET.NO_ENTRY: NoEntryAlert("Controls Process Lagging: Reboot Your Device"),
+  },
 
   # Thrown when manager detects a service exited unexpectedly while driving
   EventName.processNotRunning: {

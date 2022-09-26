@@ -58,7 +58,7 @@ class CarInterfaceBase(ABC):
 
   @staticmethod
   @abstractmethod
-  def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None, disable_radar=False):
+  def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None, experimental_long=False):
     pass
 
 
@@ -82,7 +82,6 @@ class CarInterfaceBase(ABC):
 
   def get_steer_feedforward_function(self):
     return self.get_steer_feedforward_default
-
 
   @staticmethod
   def torque_from_lateral_accel_linear(lateral_accel_value, torque_params, lateral_accel_error, lateral_accel_deadzone, friction_compensation):
@@ -250,12 +249,12 @@ class CarStateBase(ABC):
     self.left_blinker_prev = False
     self.right_blinker_prev = False
 
-    # Q = np.matrix([[10.0, 0.0], [0.0, 100.0]])
-    # R = 1e3
+    # Q = np.matrix([[0.0, 0.0], [0.0, 100.0]])
+    # R = 0.3
     self.v_ego_kf = KF1D(x0=[[0.0], [0.0]],
                          A=[[1.0, DT_CTRL], [0.0, 1.0]],
                          C=[1.0, 0.0],
-                         K=[[0.12287673], [0.29666309]])
+                         K=[[0.17406039], [1.65925647]])
 
   def update_speed_kf(self, v_ego_raw):
     if abs(v_ego_raw - self.v_ego_kf.x[0][0]) > 2.0:  # Prevent large accelerations when car starts at non zero speed
@@ -306,13 +305,22 @@ class CarStateBase(ABC):
     return bool(left_blinker_stalk or self.left_blinker_cnt > 0), bool(right_blinker_stalk or self.right_blinker_cnt > 0)
 
   @staticmethod
-  def parse_gear_shifter(gear: str) -> car.CarState.GearShifter:
+  def parse_gear_shifter(gear: Optional[str]) -> car.CarState.GearShifter:
+    if gear is None:
+      return GearShifter.unknown
+
     d: Dict[str, car.CarState.GearShifter] = {
-        'P': GearShifter.park, 'R': GearShifter.reverse, 'N': GearShifter.neutral,
-        'E': GearShifter.eco, 'T': GearShifter.manumatic, 'D': GearShifter.drive,
-        'S': GearShifter.sport, 'L': GearShifter.low, 'B': GearShifter.brake
+        'P': GearShifter.park, 'PARK': GearShifter.park,
+        'R': GearShifter.reverse, 'REVERSE': GearShifter.reverse,
+        'N': GearShifter.neutral, 'NEUTRAL': GearShifter.neutral,
+        'E': GearShifter.eco, 'ECO': GearShifter.eco,
+        'T': GearShifter.manumatic, 'MANUAL': GearShifter.manumatic,
+        'D': GearShifter.drive, 'DRIVE': GearShifter.drive,
+        'S': GearShifter.sport, 'SPORT': GearShifter.sport,
+        'L': GearShifter.low, 'LOW': GearShifter.low,
+        'B': GearShifter.brake, 'BRAKE': GearShifter.brake,
     }
-    return d.get(gear, GearShifter.unknown)
+    return d.get(gear.upper(), GearShifter.unknown)
 
   @staticmethod
   def get_cam_can_parser(CP):
