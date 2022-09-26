@@ -162,6 +162,9 @@ struct CarState {
   vEgo @1 :Float32;         # best estimate of speed
   aEgo @16 :Float32;        # best estimate of acceleration
   vEgoRaw @17 :Float32;     # unfiltered speed from CAN sensors
+  vEgoCluster @47 :Float32;  # best estimate of speed shown on car's instrument cluster, used for UI
+
+
   yawRate @22 :Float32;     # best estimate of yaw rate
   standstill @18 :Bool;
   wheelSpeeds @2 :WheelSpeeds;
@@ -235,6 +238,7 @@ struct CarState {
   struct CruiseState {
     enabled @0 :Bool;
     speed @1 :Float32;
+    speedCluster @10 :Float32;  # Set speed as shown on instrument cluster    
     available @2 :Bool;
     speedOffset @3 :Float32;
     standstill @4 :Bool;
@@ -445,7 +449,10 @@ struct CarParams {
   maxSteeringAngleDeg @54 :Float32;
   safetyConfigs @62 :List(SafetyConfig);
   alternativeExperience @65 :Int16;      # panda flag for features like no disengage on gas
+
+  # Car docs fields
   maxLateralAccel @74 :Float32;
+  autoResumeSng @77 :Bool;               # describes whether car can resume from a stop automatically
 
   steerMaxBPDEPRECATED @11 :List(Float32);
   steerMaxVDEPRECATED @12 :List(Float32);
@@ -669,6 +676,10 @@ struct CarParams {
     fwVersion @1 :Data;
     address @2: UInt32;
     subAddress @3: UInt8;
+    responseAddress @4 :UInt32;
+    request @5 :List(Data);
+    brand @6 :Text;
+    bus @7 :UInt8;
   }
 
   enum Ecu {
@@ -683,6 +694,8 @@ struct CarParams {
     gateway @10; # can gateway
     hud @11; # heads up display
     combinationMeter @12; # instrument cluster
+    electricBrakeBooster @15;
+    adas @19;
 
     # Toyota only
     dsu @6;
