@@ -24,8 +24,7 @@ MethodModel = car.CarParams.MethodModel
 
 class TestCarInterfaces(unittest.TestCase):
 
-  #@parameterized.expand([(car,) for car in all_known_cars()])
-  @parameterized.expand([(CAR.GRANDEUR_HEV_19,) ])
+  @parameterized.expand([(car,) for car in all_known_cars()])
   def test_car_interfaces(self, car_name):
     if car_name in FINGERPRINTS:
       fingerprint = FINGERPRINTS[car_name][0]

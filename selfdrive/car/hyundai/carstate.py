@@ -284,7 +284,7 @@ class CarState(CarStateBase):
     else:
       gear = cp.vl["LVR12"]["CF_Lvr_Gear"]
 
-    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(gear),None)
+    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(gear))
 
     if not self.CP.openpilotLongitudinalControl:
       if self.CP.carFingerprint in FEATURES["use_fca"]:
@@ -331,7 +331,7 @@ class CarState(CarStateBase):
     ret.seatbeltUnlatched = cp.vl["DOORS_SEATBELTS"]["DRIVER_SEATBELT_LATCHED"] == 0
 
     gear = cp.vl["ACCELERATOR"]["GEAR"]
-    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(gear),None)
+    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(gear))
 
     # TODO: figure out positions
     ret.wheelSpeeds = self.get_wheel_speeds(
