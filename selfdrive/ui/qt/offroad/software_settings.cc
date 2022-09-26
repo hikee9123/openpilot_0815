@@ -26,7 +26,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   addItem(onroadLbl);
 
   // current version
-  versionLbl = new LabelControl(tr("Current Version"), "","Version");
+  versionLbl = new LabelControl(tr("Current Version"), "", "Version");
   addItem(versionLbl);
 
   // download update btn
@@ -42,7 +42,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   addItem(downloadBtn);
 
   // install update btn
-  installBtn = new ButtonControl(tr("Install Update"), tr("INSTALL"));
+  installBtn = new ButtonControl(tr("Install Update"), tr("INSTALL"), "Install");
   connect(installBtn, &ButtonControl::clicked, [=]() {
     installBtn->setEnabled(false);
     params.putBool("DoReboot", true);
