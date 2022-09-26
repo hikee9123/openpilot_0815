@@ -26,7 +26,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   addItem(onroadLbl);
 
   // current version
-  versionLbl = new LabelControl(tr("Current Version"), "");
+  versionLbl = new LabelControl(tr("Current Version"), "","Version");
   addItem(versionLbl);
 
   // download update btn
