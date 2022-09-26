@@ -452,7 +452,7 @@ struct CarParams {
 
   # Car docs fields
   maxLateralAccel @74 :Float32;
-  autoResumeSng @77 :Bool;               # describes whether car can resume from a stop automatically
+  autoResumeSng @78 :Bool;               # describes whether car can resume from a stop automatically
 
   steerMaxBPDEPRECATED @11 :List(Float32);
   steerMaxVDEPRECATED @12 :List(Float32);
