@@ -135,7 +135,18 @@ class CarInterfaceBase(ABC):
     ret.steerLimitTimer = 1.0
     return ret
 
+  @staticmethod
+  def configure_torque_tune(candidate, tune, steering_angle_deadzone_deg=0.0, use_steering_angle=True):
 
+    tune.init('torque')
+    tune.torque.useSteeringAngle = use_steering_angle
+    tune.torque.kp = 1.0
+    tune.torque.kf = 1.0
+    tune.torque.ki = 0.1
+    tune.torque.friction = 2.9
+    tune.torque.latAccelFactor = 0
+    tune.torque.latAccelOffset = 0.0
+    tune.torque.steeringAngleDeadzoneDeg = steering_angle_deadzone_deg
 
   @abstractmethod
   def _update(self, c: car.CarControl) -> car.CarState:
