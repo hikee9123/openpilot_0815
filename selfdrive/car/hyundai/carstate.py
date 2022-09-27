@@ -402,6 +402,8 @@ class CarState(CarStateBase):
       ("CF_Clu_AmpInfo", "CLU11"),
       ("CF_Clu_AliveCnt1", "CLU11"),
 
+      ("CF_Clu_VehicleSpeed", "CLU15"),
+
       ("ACCEnable", "TCS13"),
       ("ACC_REQ", "TCS13"),
       ("DriverBraking", "TCS13"),
@@ -448,6 +450,7 @@ class CarState(CarStateBase):
       ("TCS13", 50),
       ("TCS15", 10),
       ("CLU11", 50),
+      ("CLU15", 5),
       ("ESP12", 100),
       ("CGW1", 10),
       ("CGW2", 5),
@@ -633,50 +636,3 @@ class CarState(CarStateBase):
         ]
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2)
-
-  @staticmethod
-  def get_can_parser_hda2(CP):
-    signals = [
-      ("WHEEL_SPEED_1", "WHEEL_SPEEDS"),
-      ("WHEEL_SPEED_2", "WHEEL_SPEEDS"),
-      ("WHEEL_SPEED_3", "WHEEL_SPEEDS"),
-      ("WHEEL_SPEED_4", "WHEEL_SPEEDS"),
-
-      ("ACCELERATOR_PEDAL", "ACCELERATOR"),
-      ("GEAR", "ACCELERATOR"),
-      ("BRAKE_PRESSED", "BRAKE"),
-
-      ("STEERING_RATE", "STEERING_SENSORS"),
-      ("STEERING_ANGLE", "STEERING_SENSORS"),
-      ("STEERING_COL_TORQUE", "MDPS"),
-      ("STEERING_OUT_TORQUE", "MDPS"),
-
-      ("CRUISE_ACTIVE", "SCC1"),
-      ("SET_SPEED", "CRUISE_INFO"),
-      ("CRUISE_STANDSTILL", "CRUISE_INFO"),
-      ("_COUNTER", "CRUISE_BUTTONS"),
-
-      ("DISTANCE_UNIT", "CLUSTER_INFO"),
-
-      ("LEFT_LAMP", "BLINKERS"),
-      ("RIGHT_LAMP", "BLINKERS"),
-
-      ("DRIVER_DOOR_OPEN", "DOORS_SEATBELTS"),
-      ("DRIVER_SEATBELT_LATCHED", "DOORS_SEATBELTS"),
-    ]
-
-    checks = [
-      ("WHEEL_SPEEDS", 100),
-      ("ACCELERATOR", 100),
-      ("BRAKE", 100),
-      ("STEERING_SENSORS", 100),
-      ("MDPS", 100),
-      ("SCC1", 50),
-      ("CRUISE_INFO", 50),
-      ("CRUISE_BUTTONS", 50),
-      ("CLUSTER_INFO", 4),
-      ("BLINKERS", 4),
-      ("DOORS_SEATBELTS", 4),
-    ]
-
-    return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 5)
