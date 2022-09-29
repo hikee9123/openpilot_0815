@@ -64,7 +64,6 @@ class PointBuckets:
     self.buckets = {bounds: npqueue(maxlen=POINTS_PER_BUCKET, rowsize=3) for bounds in x_bounds}
     self.buckets_min_points = {bounds: min_point for bounds, min_point in zip(x_bounds, min_points)}
 
-    self.time_cnt = 0
 
   def bucket_lengths(self):
     return [len(v) for v in self.buckets.values()]
@@ -101,6 +100,8 @@ class TorqueEstimator:
     self.offline_latAccelFactor = 0.0
     self.resets = 0.0
     self.use_params = True #CP.carFingerprint in ALLOWED_FINGERPRINTS
+
+    self.time_cnt = 0
 
     if CP.lateralTuning.which() == 'torque':
       self.offline_friction = CP.lateralTuning.torque.friction
