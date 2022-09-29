@@ -64,6 +64,8 @@ class PointBuckets:
     self.buckets = {bounds: npqueue(maxlen=POINTS_PER_BUCKET, rowsize=3) for bounds in x_bounds}
     self.buckets_min_points = {bounds: min_point for bounds, min_point in zip(x_bounds, min_points)}
 
+    self.time_cnt = 0
+
   def bucket_lengths(self):
     return [len(v) for v in self.buckets.values()]
 
@@ -195,6 +197,7 @@ class TorqueEstimator:
       self.raw_points["vego"].append(msg.vEgo)
       self.raw_points["steer_override"].append(msg.steeringPressed)
     elif which == "liveLocationKalman":
+      self.time_cnt += 1
       if len(self.raw_points['steer_torque']) == self.hist_len:
         yaw_rate = msg.angularVelocityCalibrated.value[2]
         roll = msg.orientationNED.value[0]
@@ -208,6 +211,10 @@ class TorqueEstimator:
           #print( 'live torq filtered_points={} '.format( self.filtered_points ) )
 
         #print( 'live torq active={} {} {} {} {}'.format( active, steer_override, vego, steer, lateral_acc ) )
+        if self.time_cnt > 100:
+          self.time_cnt = 0
+          print( 'live torq active={} = carState_t={} vego={} '.format( vego, self.raw_points['carState_t'], self.raw_points['vego'] ) )
+
         
 
   def get_msg(self, valid=True, with_points=False):
