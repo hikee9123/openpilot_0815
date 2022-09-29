@@ -214,7 +214,7 @@ class TorqueEstimator:
         #print( 'live torq active={} {} {} {} {}'.format( active, steer_override, vego, steer, lateral_acc ) )
         if self.time_cnt > 100:
           self.time_cnt = 0
-          print( 'live torq active={} = carState_t={} vego={} '.format( vego, self.raw_points['carState_t'], self.raw_points['vego'] ) )
+          #print( 'live torq active={} = carState_t={} vego={} '.format( vego, self.raw_points['carState_t'], self.raw_points['vego'] ) )
 
         
 
@@ -255,7 +255,7 @@ class TorqueEstimator:
     liveTorqueParameters.totalBucketPoints = len(self.filtered_points)
     liveTorqueParameters.decay = self.decay
     liveTorqueParameters.maxResets = self.resets
-    #print( 'live torq {}'.format( msg ) )
+    print( 'live torq {}'.format( msg ) )
     return msg
 
 
