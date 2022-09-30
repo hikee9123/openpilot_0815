@@ -3,7 +3,7 @@ from cereal import car
 from panda import Panda
 from common.params import Params
 from common.conversions import Conversions as CV
-from selfdrive.car.hyundai.tunes import LatTunes, TunType, LongTunes, set_long_tune, set_lat_tune, update_lat_tune_patam
+from selfdrive.car.hyundai.tunes import LatTunes, TunType, LongTunes, set_long_tune, update_lat_tune_patam
 from selfdrive.car.hyundai.values import CAR, DBC, CAMERA_SCC_CAR,  EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
 from selfdrive.car.hyundai.radar_interface import RADAR_START_ADDR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
@@ -34,9 +34,7 @@ class CarInterface(CarInterfaceBase):
     hybridSpeed = float( Params().get("TorqueHybridSpeed", encoding="utf8") )
     tune.atomHybridSpeed = hybridSpeed * CV.KPH_TO_MS
     tune.maxLateralAccel = max_lat_accel
-    method = update_lat_tune_patam( tune.lateralTuning, MAX_LAT_ACCEL=tune.maxLateralAccel )
-    if method == TunType.LAT_DEFAULT:
-      set_lat_tune(tune.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=tune.maxLateralAccel, FRICTION=0.01)
+    update_lat_tune_patam( tune.lateralTuning, MAX_LAT_ACCEL=tune.maxLateralAccel )
 
 
 
