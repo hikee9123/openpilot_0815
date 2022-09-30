@@ -256,9 +256,9 @@ class TorqueEstimator:
     liveTorqueParameters.decay = self.decay
     liveTorqueParameters.maxResets = self.resets
 
-    if self.time_cnt > 100:
-       self.time_cnt = 0
-       print( 'live torq {}'.format( msg ) )
+    #if self.time_cnt > 100:
+    #   self.time_cnt = 0
+    #   print( 'live torq {}'.format( msg ) )
 
     return msg
 
