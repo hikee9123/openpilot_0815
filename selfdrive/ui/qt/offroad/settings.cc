@@ -81,7 +81,7 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
     },
     {
       "EndToEndLong",
-      tr("🌮 End-to-end longitudinal (extremely alpha) 🌮"),
+    tr("🌮 End-to-end longitudinal (extremely alpha) 🌮"),
       "",
       "../assets/offroad/icon_road.png",
     },    
@@ -94,7 +94,7 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
 #ifdef ENABLE_MAPS
     {
       "NavSettingTime24h",
-      tr("Show ETA in 24h format"),
+      tr("Show ETA in 24h Format"),
       tr("Use 24h format instead of am/pm"),
       "../assets/offroad/icon_metric.png",
     },
@@ -164,12 +164,12 @@ void TogglesPanel::updateToggles() {
 DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
   setSpacing(50);
   addItem(new LabelControl(tr("Dongle ID"), getDongleId().value_or(tr("N/A"))));
-  addItem(new LabelControl("Serial", params.get("HardwareSerial").c_str()));
+  addItem(new LabelControl(tr("Serial"), params.get("HardwareSerial").c_str()));
 
   // offroad-only buttons
 
   auto dcamBtn = new ButtonControl(tr("Driver Camera"), tr("PREVIEW"),
-                                   tr("Preview the driver facing camera to help optimize device mounting position for best driver monitoring experience. (vehicle must be off)"));
+                                   tr("Preview the driver facing camera to ensure that driver monitoring has good visibility. (vehicle must be off)"));
   connect(dcamBtn, &ButtonControl::clicked, [=]() { emit showDriverView(); });
   addItem(dcamBtn);
 
@@ -206,8 +206,7 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
   auto translateBtn = new ButtonControl(tr("Change Language"), tr("CHANGE"), "");
   connect(translateBtn, &ButtonControl::clicked, [=]() {
     QMap<QString, QString> langs = getSupportedLanguages();
-    QString currentLang = QString::fromStdString(Params().get("LanguageSetting"));
-    QString selection = MultiOptionDialog::getSelection(tr("Select a language"), langs.keys(), langs.key(currentLang), this);
+    QString selection = MultiOptionDialog::getSelection(tr("Select a language"), langs.keys(), langs.key(uiState()->language), this);
     if (!selection.isEmpty()) {
       // put language setting, exit Qt UI, and trigger fast restart
       Params().put("LanguageSetting", langs[selection].toStdString());

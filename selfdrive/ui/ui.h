@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QColor>
 #include <QFuture>
+#include <QPolygonF>
 #include <QTransform>
 
 #include "cereal/messaging/messaging.h"
@@ -221,6 +222,7 @@ public:
 
   bool awake;
   int prime_type = 0;
+  QString language;
 
   QTransform car_space_transform;
   bool wide_camera;

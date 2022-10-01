@@ -42,7 +42,7 @@ def slope2rot(slope):
   return np.array([[cos, -sin], [sin, cos]])
 
 
-class npqueue:
+class NPQueue:
   def __init__(self, maxlen, rowsize):
     self.maxlen = maxlen
     self.arr = np.empty((0, rowsize))
@@ -61,9 +61,8 @@ class npqueue:
 class PointBuckets:
   def __init__(self, x_bounds, min_points):
     self.x_bounds = x_bounds
-    self.buckets = {bounds: npqueue(maxlen=POINTS_PER_BUCKET, rowsize=3) for bounds in x_bounds}
+    self.buckets = {bounds: NPQueue(maxlen=POINTS_PER_BUCKET, rowsize=3) for bounds in x_bounds}
     self.buckets_min_points = {bounds: min_point for bounds, min_point in zip(x_bounds, min_points)}
-
 
   def bucket_lengths(self):
     return [len(v) for v in self.buckets.values()]
@@ -81,7 +80,7 @@ class PointBuckets:
         break
 
   def get_points(self, num_points=None):
-    points = np.concatenate([x.arr for x in self.buckets.values() if len(x) > 0])
+    points = np.vstack([x.arr for x in self.buckets.values()])
     if num_points is None:
       return points
     return points[np.random.choice(np.arange(len(points)), min(len(points), num_points), replace=False)]
@@ -100,8 +99,6 @@ class TorqueEstimator:
     self.offline_latAccelFactor = 0.0
     self.resets = 0.0
     self.use_params = True #CP.carFingerprint in ALLOWED_FINGERPRINTS
-
-    self.time_cnt = 0
 
     if CP.lateralTuning.which() == 'torque':
       self.offline_friction = CP.lateralTuning.torque.friction
@@ -130,12 +127,13 @@ class TorqueEstimator:
         cache_ltp = log.Event.from_bytes(torque_cache).liveTorqueParameters
         cache_CP = car.CarParams.from_bytes(params_cache)
         if self.get_restore_key(cache_CP, cache_ltp.version) == self.get_restore_key(CP, VERSION):
+          if cache_ltp.liveValid:
           initial_params = {
             'latAccelFactor': cache_ltp.latAccelFactorFiltered,
             'latAccelOffset': cache_ltp.latAccelOffsetFiltered,
-            'frictionCoefficient': cache_ltp.frictionCoefficientFiltered,
-            'points': cache_ltp.points
+              'frictionCoefficient': cache_ltp.frictionCoefficientFiltered
           }
+          initial_params['points'] = cache_ltp.points
           self.decay = cache_ltp.decay
           self.filtered_points.load_points(initial_params['points'])
           cloudlog.info("restored torque params from cache")
@@ -198,7 +196,6 @@ class TorqueEstimator:
       self.raw_points["vego"].append(msg.vEgo)
       self.raw_points["steer_override"].append(msg.steeringPressed)
     elif which == "liveLocationKalman":
-      self.time_cnt += 1
       if len(self.raw_points['steer_torque']) == self.hist_len:
         yaw_rate = msg.angularVelocityCalibrated.value[2]
         roll = msg.orientationNED.value[0]
@@ -209,14 +206,6 @@ class TorqueEstimator:
         lateral_acc = (vego * yaw_rate) - (np.sin(roll) * ACCELERATION_DUE_TO_GRAVITY)
         if all(active) and (not any(steer_override)) and (vego > MIN_VEL) and (abs(steer) > STEER_MIN_THRESHOLD) and (abs(lateral_acc) <= LAT_ACC_THRESHOLD):
           self.filtered_points.add_point(float(steer), float(lateral_acc))
-          #print( 'live torq filtered_points={} '.format( self.filtered_points ) )
-
-        #print( 'live torq active={} {} {} {} {}'.format( active, steer_override, vego, steer, lateral_acc ) )
-        #if self.time_cnt > 100:
-        #  self.time_cnt = 0
-        #print( 'live torq active={} = carState_t={} vego={} '.format( vego, self.raw_points['carState_t'], self.raw_points['vego'] ) )
-
-        
 
   def get_msg(self, valid=True, with_points=False):
     msg = messaging.new_message('liveTorqueParameters')
@@ -236,7 +225,7 @@ class TorqueEstimator:
         self.update_params({'latAccelFactor': latAccelFactor, 'latAccelOffset': latAccelOffset, 'frictionCoefficient': friction_coeff})
         self.invalid_values_tracker = max(0.0, self.invalid_values_tracker - 0.5)
       else:
-        cloudlog.exception("live torque params are numerically unstable")
+        cloudlog.exception("Live torque parameters are outside acceptable bounds.")
         liveTorqueParameters.liveValid = False
         self.invalid_values_tracker += 1.0
         # Reset when ~10 invalid over 5 secs
@@ -255,11 +244,6 @@ class TorqueEstimator:
     liveTorqueParameters.totalBucketPoints = len(self.filtered_points)
     liveTorqueParameters.decay = self.decay
     liveTorqueParameters.maxResets = self.resets
-
-    #if self.time_cnt > 100:
-    #   self.time_cnt = 0
-    #   print( 'live torq {}'.format( msg ) )
-
     return msg
 
 
