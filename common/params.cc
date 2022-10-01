@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <sys/file.h>
 
+#include <algorithm>
 #include <csignal>
 #include <unordered_map>
 
@@ -59,10 +60,9 @@ bool create_params_path(const std::string &param_path, const std::string &key_pa
 
   return true;
 }
-
-std::string ensure_params_path(const std::string &path = {}) {
+std::string ensure_params_path(const std::string &prefix, const std::string &path = {}) {
   std::string params_path = path.empty() ? Path::params() : path;
-  if (!create_params_path(params_path, params_path + "/d")) {
+  if (!create_params_path(params_path, params_path + prefix)) {
     throw std::runtime_error(util::string_format("Failed to ensure params path, errno=%d", errno));
   }
   return params_path;
@@ -90,13 +90,14 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"CarBatteryCapacity", PERSISTENT},
     {"CarParams", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_ON},
     {"CarParamsCache", CLEAR_ON_MANAGER_START},
+    {"CarParamsPersistent", PERSISTENT},    
     {"CarVin", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_ON},
     {"CompletedTrainingVersion", PERSISTENT},
     {"ControlsReady", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_ON},
     {"CurrentRoute", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_ON},
     {"DisablePowerDown", PERSISTENT},
-    {"DisableRadar_Allow", PERSISTENT},
-    {"DisableRadar", PERSISTENT}, // WARNING: THIS DISABLES AEB
+    {"EndToEndLong", PERSISTENT},    
+    {"ExperimentalLongitudinalEnabled", PERSISTENT}, // WARNING: THIS MAY DISABLE AEB
     {"DisableUpdates", PERSISTENT},
     {"DisengageOnAccelerator", PERSISTENT},
     {"DongleId", PERSISTENT},
@@ -137,9 +138,11 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"LastPeripheralPandaType", PERSISTENT},
     {"LastPowerDropDetected", CLEAR_ON_MANAGER_START},
     {"LastSystemShutdown", CLEAR_ON_MANAGER_START},
-    {"LastUpdateException", PERSISTENT},
+    {"LastUpdateException", CLEAR_ON_MANAGER_START},
     {"LastUpdateTime", PERSISTENT},
     {"LiveParameters", PERSISTENT},
+    {"LiveTorqueCarParams", PERSISTENT},
+    {"LiveTorqueParameters", PERSISTENT | DONT_LOG},    
     {"NavDestination", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
     {"NavSettingTime24h", PERSISTENT},
     {"NavdRender", PERSISTENT},
@@ -151,7 +154,6 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"PrimeType", PERSISTENT},
     {"RecordFront", PERSISTENT},
     {"RecordFrontLock", PERSISTENT},  // for the internal fleet
-    {"ReleaseNotes", PERSISTENT},
     {"ShouldDoUpdate", CLEAR_ON_MANAGER_START},
     {"SnoozeUpdate", CLEAR_ON_MANAGER_START | CLEAR_ON_IGNITION_OFF},
     {"SshEnabled", PERSISTENT},
@@ -162,6 +164,14 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"TrainingVersion", PERSISTENT},
     {"UpdateAvailable", CLEAR_ON_MANAGER_START},
     {"UpdateFailedCount", CLEAR_ON_MANAGER_START},
+    {"UpdaterState", CLEAR_ON_MANAGER_START},
+    {"UpdaterTargetBranch", CLEAR_ON_MANAGER_START}, 
+    {"UpdaterAvailableBranches", CLEAR_ON_MANAGER_START},
+    {"UpdaterFetchAvailable", CLEAR_ON_MANAGER_START},    
+    {"UpdaterCurrentDescription", CLEAR_ON_MANAGER_START},    
+    {"UpdaterCurrentReleaseNotes", CLEAR_ON_MANAGER_START},    
+    {"UpdaterNewDescription", CLEAR_ON_MANAGER_START},
+    {"UpdaterNewReleaseNotes", CLEAR_ON_MANAGER_START},    
     {"Version", PERSISTENT},
     {"VisionRadarToggle", PERSISTENT},
     {"ApiCache_Device", PERSISTENT},
@@ -264,8 +274,16 @@ std::unordered_map<std::string, uint32_t> keys = {
 } // namespace
 
 Params::Params(const std::string &path) {
-  static std::string default_param_path = ensure_params_path();
-  params_path = path.empty() ? default_param_path : ensure_params_path(path);
+  prefix = "/" + util::getenv("OPENPILOT_PREFIX", "d");
+  params_path = ensure_params_path(prefix, path);
+}
+
+std::vector<std::string> Params::allKeys() const {
+  std::vector<std::string> ret;
+  for (auto &p : keys) {
+    ret.push_back(p.first);
+  }
+  return ret;
 }
 
 bool Params::checkKey(const std::string &key) {
@@ -313,7 +331,8 @@ int Params::put(const char* key, const char* value, size_t value_size) {
   return result;
 }
 
-int Params::remove(const std::string &key) {
+int Params::remove(const std::string &key)
+{
   FileLock file_lock(params_path + "/.lock");
   int result = unlink(getParamPath(key).c_str());
   if (result != 0) {

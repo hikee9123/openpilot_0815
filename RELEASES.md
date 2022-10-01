@@ -2,7 +2,14 @@ Version 0.8.17 (2022-XX-XX)
 ========================
 * New driving model
   * Internal feature space accuracy increased tenfold during training, this makes the model dramatically more accurate.
-
+* torqued
+  * Learn torque parameters live for each car as opposed to using platform average values, which improves lateral control
+* Self-tuning torque lateral controller parameters
+  * Parameters are learned live for each car
+* UI updates
+  * Improved update experience
+  * Added button to flag events that are shown in connect
+  * Border turns grey while overriding steering
 
 Version 0.8.16 (2022-08-26)
 ========================

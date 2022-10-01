@@ -1,4 +1,4 @@
-Import('env','envCython',  'arch', 'SHARED')
+Import('env','envCython', 'arch', 'SHARED')
 
 if SHARED:
   fxn = env.SharedLibrary
@@ -32,9 +32,6 @@ else:
 _gpucommon = fxn('gpucommon', files, LIBS=_gpu_libs)
 Export('_common', '_gpucommon', '_gpu_libs')
 
-if GetOption('test'):
-  env.Program('tests/test_util', ['tests/test_util.cc'], LIBS=[_common])
-  env.Program('tests/test_swaglog', ['tests/test_swaglog.cc'], LIBS=[_common, 'json11', 'zmq', 'pthread'])
 
 
 # Cython

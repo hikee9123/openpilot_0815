@@ -3,7 +3,7 @@ from cereal import car
 from panda import Panda
 from common.params import Params
 from common.conversions import Conversions as CV
-from selfdrive.car.hyundai.tunes import LatTunes, TunType, LongTunes, set_long_tune, set_lat_tune, update_lat_tune_patam
+from selfdrive.car.hyundai.tunes import LatTunes, TunType, LongTunes, set_long_tune, update_lat_tune_patam
 from selfdrive.car.hyundai.values import CAR, DBC, CAMERA_SCC_CAR,  EV_CAR, HYBRID_CAR, LEGACY_SAFETY_MODE_CAR, Buttons, CarControllerParams
 from selfdrive.car.hyundai.radar_interface import RADAR_START_ADDR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
@@ -34,14 +34,12 @@ class CarInterface(CarInterfaceBase):
     hybridSpeed = float( Params().get("TorqueHybridSpeed", encoding="utf8") )
     tune.atomHybridSpeed = hybridSpeed * CV.KPH_TO_MS
     tune.maxLateralAccel = max_lat_accel
-    method = update_lat_tune_patam( tune.lateralTuning, MAX_LAT_ACCEL=tune.maxLateralAccel )
-    if method == TunType.LAT_DEFAULT:
-      set_lat_tune(tune.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=tune.maxLateralAccel, FRICTION=0.01)
+    update_lat_tune_patam( tune.lateralTuning, MAX_LAT_ACCEL=tune.maxLateralAccel )
 
 
 
   @staticmethod
-  def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], disable_radar=False):  # pylint: disable=dangerous-default-value
+  def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[], experimental_long=False):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
 
     Param = Params()
@@ -55,7 +53,8 @@ class CarInterface(CarInterfaceBase):
       ret.atompilotLongitudinalControl = Param.get_bool("OpkratomLongitudinal")
     else:
       # WARNING: disabling radar also disables AEB (and we show the same warning on the instrument cluster as if you manually disabled AEB)
-      ret.openpilotLongitudinalControl = disable_radar and (candidate not in (LEGACY_SAFETY_MODE_CAR | CAMERA_SCC_CAR))
+      ret.experimentalLongitudinalAvailable = candidate not in (LEGACY_SAFETY_MODE_CAR | CAMERA_SCC_CAR)
+      ret.openpilotLongitudinalControl = experimental_long and (candidate not in (LEGACY_SAFETY_MODE_CAR | CAMERA_SCC_CAR))
     
     ret.pcmCruise = not ret.openpilotLongitudinalControl
 
@@ -109,14 +108,6 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kf = 0.000005
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kpV = [[0.], [0.25]]
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kiV = [[0.], [0.05]]
-
-      #set_lat_tune(ret.lateralTuning, LatTunes.LQR_GRANDEUR)
-      #set_lat_tune(ret.lateralTuning, LatTunes.MULTI, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-      #set_lat_tune(ret.lateralTuning, LatTunes.HYBRID, MAX_LAT_ACCEL=2.1, FRICTION=0.01)
-
-      #method = update_lat_tune_patam( ret.lateralTuning )
-      #if method == TunType.LAT_DEFAULT:
-      #  set_lat_tune(ret.lateralTuning, LatTunes.TORQUE, MAX_LAT_ACCEL=ret.maxLateralAccel, FRICTION=0.01)
 
     elif candidate in (CAR.SANTA_FE, CAR.SANTA_FE_2022, CAR.SANTA_FE_HEV_2022, CAR.SANTA_FE_PHEV_2022):
       ret.lateralTuning.pid.kf = 0.00005

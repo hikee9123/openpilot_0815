@@ -38,6 +38,7 @@ services = {
   "logMessage": (True, 0.),
   "errorLogMessage": (True, 0., 1),
   "liveCalibration": (True, 4., 4),
+  "liveTorqueParameters": (True, 4., 1),
   "androidLog": (True, 0.),
   "carState": (True, 100., 10),
   "carControl": (True, 100., 10),
@@ -68,6 +69,7 @@ services = {
   "navInstruction": (True, 0., 10),
   "navRoute": (True, 0.),
   "navThumbnail": (True, 0.),
+  "userFlag": (True, 0., 1),
 
 # atom
   "liveNaviData": (True, 0.),

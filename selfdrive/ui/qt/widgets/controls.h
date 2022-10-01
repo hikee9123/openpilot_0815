@@ -44,8 +44,17 @@ public:
     title_label->setText(title);
   }
 
+  void setValue(const QString &val) {
+    value->setText(val);
+  }
+
+public slots:
+  void showDescription() {
+    description->setVisible(true);
+  };
+
 signals:
-  void showDescription();
+  void showDescriptionEvent();
 
 protected:
   void hideEvent(QHideEvent *e) override;
@@ -53,7 +62,8 @@ protected:
   QVBoxLayout *main_layout;
   QHBoxLayout *hlayout;
   QPushButton *title_label;
-
+  
+  QLabel *value;
   QLabel *description = nullptr;
 };
 
@@ -159,10 +169,14 @@ public:
     });
   }
 
-  void showEvent(QShowEvent *event) override {
+  void refresh() {
     if (params.getBool(key) != toggle.on) {
       toggle.togglePosition();
     }
+  };
+
+  void showEvent(QShowEvent *event) override {
+    refresh();
   };
 
 private:

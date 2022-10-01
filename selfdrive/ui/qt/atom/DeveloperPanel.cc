@@ -285,7 +285,7 @@ GitHash::GitHash() : AbstractControl("Check for Update")
         win_widget->show();        
       }
 
-      emit showDescription();
+      emit showDescriptionEvent();
       description->setVisible( true );
       refresh();
   });
@@ -315,7 +315,7 @@ void GitHash::information()
         std::system(cmd2.c_str());
 
         win_widget->show();
-        emit showDescription();
+        emit showDescriptionEvent();
       } else  {
         win_widget->hide();
       }

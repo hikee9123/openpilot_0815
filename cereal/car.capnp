@@ -17,7 +17,8 @@ struct CarEvent @0x9b1657f34caf3ad3 {
   immediateDisable @6 :Bool;
   preEnable @7 :Bool;
   permanent @8 :Bool; # alerts presented regardless of openpilot state
-  override @9 :Bool;
+  overrideLateral @10 :Bool;
+  overrideLongitudinal @9 :Bool;  
 
   enum EventName @0xbaa8c5d505f727de {
     canError @0;
@@ -35,6 +36,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     pedalPressed @13;  # exits active state
     pedalPressedPreEnable @73;  # added during pre-enable state for either pedal
     gasPressedOverride @108;  # added when user is pressing gas with no disengage on gas
+    steerOverride @117;
     cruiseDisabled @14;
     speedTooLow @17;
     outOfSpace @18;
@@ -112,6 +114,8 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     canBusMissing @111;
     cutInCarDetect  @112;
     laneChangedisengaged @113;
+    controlsdLagging @118;
+    resumeBlocked @119;
 
     # osm
     curvSpeedEntering @114;
@@ -158,6 +162,9 @@ struct CarState {
   vEgo @1 :Float32;         # best estimate of speed
   aEgo @16 :Float32;        # best estimate of acceleration
   vEgoRaw @17 :Float32;     # unfiltered speed from CAN sensors
+  vEgoCluster @47 :Float32;  # best estimate of speed shown on car's instrument cluster, used for UI
+
+
   yawRate @22 :Float32;     # best estimate of yaw rate
   standstill @18 :Bool;
   wheelSpeeds @2 :WheelSpeeds;
@@ -231,6 +238,7 @@ struct CarState {
   struct CruiseState {
     enabled @0 :Bool;
     speed @1 :Float32;
+    speedCluster @10 :Float32;  # Set speed as shown on instrument cluster    
     available @2 :Bool;
     speedOffset @3 :Float32;
     standstill @4 :Bool;
@@ -434,13 +442,17 @@ struct CarParams {
   enableApgs @6 :Bool;       # advanced parking guidance system
   enableBsm @56 :Bool;       # blind spot monitoring
   flags @64 :UInt32;         # flags for car specific quirks
+  experimentalLongitudinalAvailable @77 :Bool;
 
   minEnableSpeed @7 :Float32;
   minSteerSpeed @8 :Float32;
   maxSteeringAngleDeg @54 :Float32;
   safetyConfigs @62 :List(SafetyConfig);
   alternativeExperience @65 :Int16;      # panda flag for features like no disengage on gas
+
+  # Car docs fields
   maxLateralAccel @74 :Float32;
+  autoResumeSng @78 :Bool;               # describes whether car can resume from a stop automatically
 
   steerMaxBPDEPRECATED @11 :List(Float32);
   steerMaxVDEPRECATED @12 :List(Float32);
@@ -565,6 +577,8 @@ struct CarParams {
     friction @3 :Float32;
     kf @4 :Float32;
     steeringAngleDeadzoneDeg @5 :Float32;
+    latAccelFactor @6 :Float32;
+    latAccelOffset @7 :Float32;    
   }
 
   struct LongitudinalPIDTuning {
@@ -662,11 +676,15 @@ struct CarParams {
     fwVersion @1 :Data;
     address @2: UInt32;
     subAddress @3: UInt8;
+    responseAddress @4 :UInt32;
+    request @5 :List(Data);
+    brand @6 :Text;
+    bus @7 :UInt8;
   }
 
   enum Ecu {
     eps @0;
-    esp @1;
+    abs @1;
     fwdRadar @2;
     fwdCamera @3;
     engine @4;
@@ -676,6 +694,8 @@ struct CarParams {
     gateway @10; # can gateway
     hud @11; # heads up display
     combinationMeter @12; # instrument cluster
+    # electricBrakeBooster @15;
+    adas @19;
 
     # Toyota only
     dsu @6;
@@ -686,6 +706,9 @@ struct CarParams {
     programmedFuelInjection @14;
     electricBrakeBooster @15;
     shiftByWire @16;
+
+    # Chrysler only
+    hcp @18;  # Hybrid Control Processor
 
     debug @17;
   }
