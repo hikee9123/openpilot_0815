@@ -13,7 +13,6 @@ from selfdrive.car.fw_versions import match_fw_to_car_exact, match_fw_to_car_fuz
 from selfdrive.car.toyota.values import FW_VERSIONS as TOYOTA_FW_VERSIONS
 from selfdrive.car.honda.values import FW_VERSIONS as HONDA_FW_VERSIONS
 from selfdrive.car.hyundai.values import FW_VERSIONS as HYUNDAI_FW_VERSIONS
-from selfdrive.car.volkswagen.values import FW_VERSIONS as VW_FW_VERSIONS
 from selfdrive.car.mazda.values import FW_VERSIONS as MAZDA_FW_VERSIONS
 from selfdrive.car.subaru.values import FW_VERSIONS as SUBARU_FW_VERSIONS
 
@@ -22,7 +21,6 @@ NO_API = "NO_API" in os.environ
 SUPPORTED_CARS = set(interface_names['toyota'])
 SUPPORTED_CARS |= set(interface_names['honda'])
 SUPPORTED_CARS |= set(interface_names['hyundai'])
-SUPPORTED_CARS |= set(interface_names['volkswagen'])
 SUPPORTED_CARS |= set(interface_names['mazda'])
 SUPPORTED_CARS |= set(interface_names['subaru'])
 SUPPORTED_CARS |= set(interface_names['nissan'])

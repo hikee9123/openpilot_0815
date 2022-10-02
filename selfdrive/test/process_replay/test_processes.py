@@ -29,12 +29,10 @@ source_segments = [
   ("SUBARU", "341dccd5359e3c97|2022-09-12--10-35-33--3"),      # SUBARU.OUTBACK
   ("GM", "0c58b6a25109da2b|2021-02-23--16-35-50--11"),         # GM.VOLT
   ("NISSAN", "35336926920f3571|2021-02-12--18-38-48--46"),     # NISSAN.XTRAIL
-  ("VOLKSWAGEN", "de9592456ad7d144|2021-06-29--11-00-15--6"),  # VOLKSWAGEN.GOLF
   ("MAZDA", "bd6a637565e91581|2021-10-30--15-14-53--4"),       # MAZDA.CX9_2021
 
   # Enable when port is tested and dashcamOnly is no longer set
   #("TESLA", "bb50caf5f0945ab1|2021-06-19--17-20-18--3"),      # TESLA.AP2_MODELS
-  #("VOLKSWAGEN2", "3cfdec54aa035f3f|2022-07-19--23-45-10--2"),  # VOLKSWAGEN.PASSAT_NMS
 ]
 
 segments = [
@@ -51,7 +49,6 @@ segments = [
   ("SUBARU", "regen8A363AF7E14|2022-09-13--17-20-39--0"),
   ("GM", "regen31EA3F9A37C|2022-09-09--21-06-36--0"),
   ("NISSAN", "regenAA21ADE5921|2022-09-09--19-44-37--0"),
-  ("VOLKSWAGEN", "regenA1BF4D17761|2022-09-09--19-46-24--0"),
   ("MAZDA", "regen1994C97E977|2022-09-13--16-34-44--0"),
 ]
 
