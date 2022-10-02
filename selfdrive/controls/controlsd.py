@@ -919,8 +919,8 @@ class Controls:
       cp_send = messaging.new_message('carParams')
       cp_send.carParams = self.CP
       self.pm.send('carParams', cp_send)
-      if update_command:
-        print( cp_send )
+      #if update_command:
+      #  print( cp_send )
 
     # carControl
     cc_send = messaging.new_message('carControl')
