@@ -98,7 +98,7 @@ class TorqueEstimator:
     self.offline_friction = 0.0
     self.offline_latAccelFactor = 0.0
     self.resets = 0.0
-    self.use_params = True #CP.carFingerprint in ALLOWED_FINGERPRINTS
+
 
     if CP.lateralTuning.which() == 'torque':
       self.offline_friction = CP.lateralTuning.torque.friction
@@ -120,6 +120,8 @@ class TorqueEstimator:
 
     # try to restore cached params
     params = Params()
+    
+    self.use_params = params.get("Torquedeadzone")   #CP.carFingerprint in ALLOWED_FINGERPRINTS
     params_cache = params.get("LiveTorqueCarParams")
     torque_cache = params.get("LiveTorqueParameters")
     if params_cache is not None and torque_cache is not None:
