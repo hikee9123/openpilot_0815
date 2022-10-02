@@ -36,6 +36,7 @@ class CarInterfaceBase(ABC):
     self.low_speed_alert = False
     self.silent_steer_warning = True
 
+
     self.CS = None
     self.can_parsers = []
     if CarState is not None:
@@ -133,6 +134,7 @@ class CarInterfaceBase(ABC):
     ret.longitudinalActuatorDelayLowerBound = 0.15
     ret.longitudinalActuatorDelayUpperBound = 0.15
     ret.steerLimitTimer = 1.0
+    ret.maxLateralAccel = 3.0    
     return ret
 
   @staticmethod

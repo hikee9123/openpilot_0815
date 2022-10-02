@@ -91,7 +91,7 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.kiV = [0.0]
     ret.stopAccel = 0.0
     ret.wheelbase = 2.845
-    ret.maxLateralAccel = 3.0
+
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
