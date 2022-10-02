@@ -234,6 +234,8 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"TorqueKf", PERSISTENT},
     {"TorqueKi", PERSISTENT},
     {"TorqueUseAngle", PERSISTENT},
+    {"TorqueLiveTuning", PERSISTENT},
+    
 
     // LQR
     {"LqrScale", PERSISTENT},

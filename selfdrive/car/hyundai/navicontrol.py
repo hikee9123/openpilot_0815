@@ -1,11 +1,8 @@
-import math
-import numpy as np
-
 
 from cereal import car, log
 from common.conversions import Conversions as CV
 from selfdrive.car.hyundai.values import Buttons
-from common.numpy_fast import clip, interp
+from common.numpy_fast import interp
 import cereal.messaging as messaging
 
 
@@ -383,8 +380,6 @@ class NaviControl():
       self.event_navi_alert = EventName.curvSpeedLeaving
 
 
-
-
     self.turnSpeedLimitsAhead = turnSpeedLimitsAhead * CV.MS_TO_KPH
     self.turnSpeedLimitsAheadDistances = turnSpeedLimitsAheadDistances
 
@@ -412,7 +407,7 @@ class NaviControl():
     elif CS.cruise_set_mode == 2:  # comma long control speed.
       vFuture = c.hudControl.vFuture * CV.MS_TO_KPH
       ctrl_speed = min( vFuture, ctrl_speed )
-    elif CS.cruise_set_mode == 3:  # vision?�� 모델 speed�? ?��?��?�� 감속.
+    elif CS.cruise_set_mode == 3:  # vision + model speed  감속.
       modelSpeed = path_plan.modelSpeed * CV.MS_TO_KPH
       vision_speed = interp( modelSpeed, [80, 250], [ 60, 120 ] )
       ctrl_speed = min( vision_speed, ctrl_speed )

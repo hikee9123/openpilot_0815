@@ -202,7 +202,7 @@ void NvgWindow::updateState(const UIState &s) {
  // QString maxspeed_str = cruise_set ? QString::number(std::nearbyint(maxspeed)) : "–";
   float cur_speed = std::max(0.0, sm["carState"].getCarState().getVEgo() * (s.scene.is_metric ? MS_TO_KPH : MS_TO_MPH));
 
-  speed_limit = s.scene.liveNaviData.getSpeedLimit();
+  float speed_limit = s.scene.liveNaviData.getSpeedLimit();
   //float distance = s.scene.liveNaviData.getSpeedLimitDistance();
 
 

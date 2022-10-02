@@ -254,15 +254,7 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
    pTorqFriction->SetControl( 0, 0.2, 0.01 ); 
    box_layout->addWidget( pTorqFriction );
 
-/*
-   MenuControl *pHybridSpeed = new MenuControl( 
-    "TorqueHybridSpeed",
-    "Hybrid Speed",
-    "Adjust Hybrid speed def:50"
-    );
-   pHybridSpeed->SetControl( 10, 80, 5 ); 
-   box_layout->addWidget( pHybridSpeed );
-*/
+
    MenuControl *pDeadzone = new MenuControl( 
     "Torquedeadzone",
     "Steer deadzone",
@@ -271,7 +263,13 @@ void  CTunWidget::FrameTOROUE(int nMode, QVBoxLayout *parent)
    pDeadzone->SetControl( 0, 5, 0.1 ); 
    box_layout->addWidget( pDeadzone );
 
-
+   MenuControl *pLiveTuning = new MenuControl( 
+    "TorqueLiveTuning",
+    "Live Tuning",
+    "Tune while driving. def:1"
+    );
+   pLiveTuning->SetControl( 0, 1, 1 ); 
+   box_layout->addWidget( pLiveTuning );
 
   box_layout->addWidget(horizontal_line());
 

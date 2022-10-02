@@ -97,6 +97,8 @@ def manager_init() -> None:
     ("TorqueKi", "0.1"),
     ("TorqueFriction","0"),    
     ("TorqueUseAngle", "1"), 
+    ("TorqueLiveTuning", "1"), 
+    
 
    # lane
     ("OpkrCameraOffsetAdj", "0"), 
