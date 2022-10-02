@@ -49,6 +49,7 @@ class TestCarInterfaces(unittest.TestCase):
     assert car_interface
 
     self.assertGreater(car_params.mass, 1)
+    self.assertGreater(car_params.maxLateralAccel, 0)
 
     print( 'test car name = {}'.format( car_name ) )
     self.LaC = None
