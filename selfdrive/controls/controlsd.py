@@ -906,7 +906,7 @@ class Controls:
       self.update_command = updateEvents.command
       if updateEvents.version == 1:  # turn
         update_command = True
-        print( updateEvents )
+        #print( updateEvents )
         self.CI.get_tunning_params( self.CP )
         self.LaC.live_tune( self.CP )
       else:
