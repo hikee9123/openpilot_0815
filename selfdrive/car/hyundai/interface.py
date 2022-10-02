@@ -90,10 +90,11 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.kpV = [0.1]
     ret.longitudinalTuning.kiV = [0.0]
     ret.stopAccel = 0.0
+    ret.wheelbase = 2.845
 
     ret.longitudinalActuatorDelayUpperBound = 1.0 # s
     ret.atomHybridSpeed = 50 * CV.KPH_TO_MS
-
+    
 
     if candidate in (CAR.GRANDEUR_HEV_19):
       ret.mass = 1675. + STD_CARGO_KG
