@@ -1143,9 +1143,7 @@ void OnPaint::ui_main_navi( QPainter &p )
 void OnPaint::ui_draw_stop_sign( QPainter &p ) 
 {
   if( m_view_tunning_data ) return;
-  
 
-   SubMaster &sm = *(state->sm);
 
   QString text4;
 
@@ -1153,7 +1151,8 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   int  nYPos = 300;
   int  nGap = 40;
     
-
+/*
+   SubMaster &sm = *(state->sm);
   // osm
   const auto osm = sm["liveMapData"].getLiveMapData();
 
@@ -1168,10 +1167,6 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   float turnSpeedLimit  = osm.getTurnSpeedLimit();
   float turnSpeedLimitEndDistance  = osm.getTurnSpeedLimitEndDistance();
   int   turnSpeedLimitSign  = osm.getTurnSpeedLimitSign();
-
-
-  
-
 
   QString strRoadname = QString::fromStdString( osm.getCurrentRoadName() );
 
@@ -1199,25 +1194,12 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
     TS1_Speed *= 3.6;
   }
   text4.sprintf("TSLA = %d, S:%.0f,  D:%.0f", TS1_Signs, TS1_Speed, TS1_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
-
-
-
-  int TS_Signs  = scene->controls_state.getTurnSpeedLimitsAheadSigns();
-  float TS_Speed  = scene->controls_state.getTurnSpeedLimitsAhead();
-  float TS_Distances  = scene->controls_state.getTurnSpeedLimitsAheadDistances();
- 
-  if( turnSpeedLimitAheadCnt > 1 )
-  {
-    TS_Speed *= 3.6;
-    text4.sprintf("TSLA(%d) = %d, S:%.0f,  D:%.0f", turnSpeedLimitAheadCnt, TS_Signs, TS_Speed, TS_Distances );  p.drawText( bb_x, nYPos+=nGap, text4 );
-  }
-
+*/
 
 
 
   // Vision turn
   nYPos += nGap;
-
   float vtc_speed = scene->longitudinalPlan.vtc_speed  * 3.6;
   float maxPredLatAcc = scene->longitudinalPlan.maxPredLatAcc;
   float currentLatAcc = scene->longitudinalPlan.currentLatAcc;  
@@ -1228,6 +1210,7 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
 
 
   // Navi Data
+  /*
   nYPos += nGap;
   int nTrafficSign1 =  scene->liveNaviData.getSafetySign1();
   int nTrafficSign2 =  scene->liveNaviData.getSafetySign2();
@@ -1236,15 +1219,16 @@ void OnPaint::ui_draw_stop_sign( QPainter &p )
   speedLimit = scene->liveNaviData.getSpeedLimit();
   float distance = scene->liveNaviData.getSpeedLimitDistance();
 
-  float roadCurvature = scene->liveNaviData.getRoadCurvature();
-  float remainTime = scene->liveNaviData.getRemainTime();
+ // float roadCurvature = scene->liveNaviData.getRoadCurvature();
+  //float remainTime = scene->liveNaviData.getRemainTime();
  
-  int turnInfo = scene->liveNaviData.getTurnInfo();
-  int turnDistance = scene->liveNaviData.getDistanceToTurn();
+ // int turnInfo = scene->liveNaviData.getTurnInfo();
+ // int turnDistance = scene->liveNaviData.getDistanceToTurn();
   
-  text4.sprintf("RC = %.3f, %.3f", roadCurvature, remainTime   );  p.drawText( bb_x, nYPos+=nGap, text4 );
-  text4.sprintf("TI = %d, %d", turnInfo, turnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  //text4.sprintf("RC = %.3f, %.3f", roadCurvature, remainTime   );  p.drawText( bb_x, nYPos+=nGap, text4 );
+//  text4.sprintf("TI = %d, %d", turnInfo, turnDistance   );  p.drawText( bb_x, nYPos+=nGap, text4 );
   text4.sprintf("MAP(%d) = %d,  %d,  %.0f, %.0f", nMapType, nTrafficSign1, nTrafficSign2, speedLimit, distance  );  p.drawText( bb_x, nYPos+=nGap, text4 );
+  */
 }
 
 

@@ -239,12 +239,6 @@ class Controls:
     self.modelSpeed = 0
 
 
-    #osm
-    self.turnSpeedLimitsAheadSigns = 0
-    self.turnSpeedLimitsAhead = 0
-    self.turnSpeedLimitsAheadDistances = 0
-    self.turnSpeedLimitsAheadCnt = 0
-
 
 
   def update_modelToSteerRatio(self, learnerSteerRatio ):
@@ -258,22 +252,6 @@ class Controls:
 
     return steerRatio  #, self.modelSpeed
 
-
-  def update_osm( self ):
-    if self.sm.updated['liveMapData']:
-      self.osm = self.sm['liveMapData']
-      data_cnt = len(self.osm.turnSpeedLimitsAheadSigns)
-      
-      if data_cnt > 0:
-        self.turnSpeedLimitsAheadCnt = data_cnt
-        self.turnSpeedLimitsAheadSigns = self.osm.turnSpeedLimitsAheadSigns[-1]
-        self.turnSpeedLimitsAhead = self.osm.turnSpeedLimitsAhead[-1]
-        self.turnSpeedLimitsAheadDistances = self.osm.turnSpeedLimitsAheadDistances[-1]
-      else:
-        self.turnSpeedLimitsAheadCnt = 0
-        self.turnSpeedLimitsAheadSigns = 0
-        self.turnSpeedLimitsAhead = 0
-        self.turnSpeedLimitsAheadDistances = 0
 
 
 
@@ -885,12 +863,6 @@ class Controls:
     controlsState.alertTextMsg3 = str(log_alertTextMsg3)
 
 
-    #osm
-    controlsState.turnSpeedLimitsAheadCnt = int(self.turnSpeedLimitsAheadCnt)
-    controlsState.turnSpeedLimitsAheadSigns = int(self.turnSpeedLimitsAheadSigns)
-    controlsState.turnSpeedLimitsAhead = float(self.turnSpeedLimitsAhead)
-    controlsState.turnSpeedLimitsAheadDistances = float(self.turnSpeedLimitsAheadDistances)
-
 
     lat_tuning = self.CP.lateralTuning.which()
     if self.joystick_mode:
@@ -1007,7 +979,7 @@ class Controls:
       self.step()
       self.rk.monitor_time()
       self.prof.display()
-      self.update_osm()
+
 
 def main(sm=None, pm=None, logcan=None):
   controls = Controls(sm, pm, logcan)

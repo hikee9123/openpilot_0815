@@ -595,11 +595,6 @@ struct ControlsState @0x97ff69c53601abf1 {
   alertTextMsg2  @63 :Text;
   alertTextMsg3  @64 :Text;
 
-  # osm
-  turnSpeedLimitsAheadSigns @66 :Int32;
-  turnSpeedLimitsAhead @67 :Float32;
-  turnSpeedLimitsAheadDistances @68 :Float32;
-  turnSpeedLimitsAheadCnt @69 :Int32;
 
 
   lateralControlState :union {
