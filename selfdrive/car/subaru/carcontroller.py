@@ -75,9 +75,9 @@ class CarController:
         can_sends.append(subarucan.create_es_distance(self.packer, CS.es_distance_msg, bus, pcm_cancel_cmd))
         self.last_cancel_frame = self.frame
 
-      if self.es_dashstatus_cnt != CS.es_dashstatus_msg["Counter"]:
-        can_sends.append(subarucan.create_es_dashstatus(self.packer, CS.es_dashstatus_msg))
-        self.es_dashstatus_cnt = CS.es_dashstatus_msg["Counter"]
+      #if self.es_dashstatus_cnt != CS.es_dashstatus_msg["Counter"]:
+      #  can_sends.append(subarucan.create_es_dashstatus(self.packer, CS.es_dashstatus_msg))
+      #  self.es_dashstatus_cnt = CS.es_dashstatus_msg["Counter"]
 
       if self.es_lkas_cnt != CS.es_lkas_msg["COUNTER"]:
         can_sends.append(subarucan.create_es_lkas(self.packer, CS.es_lkas_msg, CC.enabled, hud_control.visualAlert,
