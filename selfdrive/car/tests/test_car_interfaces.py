@@ -79,7 +79,7 @@ class TestCarInterfaces(unittest.TestCase):
 
     cp_send = messaging.new_message('carParams')
     cp_send.carParams = car_params
-    print(  cp_send )
+    #print(  cp_send )
     self.pm.send('carParams', cp_send)
 
     # Run car interface
