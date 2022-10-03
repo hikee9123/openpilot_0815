@@ -121,7 +121,7 @@ class TorqueEstimator:
     # try to restore cached params
     params = Params()
     
-    self.use_params = params.get("TorqueLiveTuning")   #CP.carFingerprint in ALLOWED_FINGERPRINTS
+    self.use_params = True # params.get("TorqueLiveTuning")   #CP.carFingerprint in ALLOWED_FINGERPRINTS
     params_cache = params.get("LiveTorqueCarParams")
     torque_cache = params.get("LiveTorqueParameters")
     if params_cache is not None and torque_cache is not None:
