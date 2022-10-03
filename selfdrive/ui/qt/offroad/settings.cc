@@ -81,7 +81,7 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
     },
     {
       "EndToEndLong",
-    tr("🌮 End-to-end longitudinal (extremely alpha) 🌮"),
+    tr("🌮 End-to-end longitudinal (alpha) 🌮"),
       "",
       "../assets/offroad/icon_road.png",
     },    
