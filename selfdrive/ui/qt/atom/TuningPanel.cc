@@ -33,17 +33,25 @@ TuningPanel::TuningPanel(QWidget *parent) : QFrame(parent)
 
 
   QVBoxLayout *main_layout = new QVBoxLayout(this);
- // main_layout->setContentsMargins(50, 0, 50, 0);
- // main_layout->setSpacing(30);
+
+
+  Params param = Params();
+  int osm_enable = param.getBool("OpkrOSMEnable");
+
+
 
   // OPKR
-  main_layout->addWidget(new CTunWidget(this));    
+  main_layout->addWidget(new CTunWidget(this));
   main_layout->addWidget(new CSteerWidget(this));  
   main_layout->addWidget(new CLaneWidget(this));  
   
-  main_layout->addWidget(new CosmWidget(this));  
-  main_layout->addWidget(new CWidgetosmConfig(this));
-  main_layout->addWidget(new CWidgetosmNodesData(this));
+  main_layout->addWidget(new CosmWidget(this)); 
+
+  if( osm_enable )
+  {
+    main_layout->addWidget(new CWidgetosmConfig(this));
+    main_layout->addWidget(new CWidgetosmNodesData(this));
+  }
 
   main_layout->addWidget(new CNaviSelect(this));
 }
