@@ -13,6 +13,7 @@ from selfdrive.car.hyundai.navicontrol  import NaviControl
 VisualAlert = car.CarControl.HUDControl.VisualAlert
 LongCtrlState = car.CarControl.Actuators.LongControlState
 LaneChangeState = log.LateralPlan.LaneChangeState
+EventName = car.CarEvent.EventName
 
 import common.loger as trace1
 
@@ -29,6 +30,9 @@ class CarController():
     self.accel = 0
 
     self.resume_cnt = 0
+
+    self.old_distance = 0
+    self.event_control_alert = None
 
     self.lkas11_cnt = 0
     self.scc12_cnt = 0
@@ -148,6 +152,12 @@ class CarController():
     trace1.printf2( '{}'.format( str_log1 ) )
 
     distance = self.NC.get_auto_resume()
+
+    if self.old_distance != distance:
+      if self.old_distance == 0:
+        self.event_control_alert = EventName.manualRestart
+
+      self.old_distance = distance
 
     str_log1 = 'TG={:.1f}   aRV={:.2f} distance={:.1f}'.format( apply_steer,  CS.aReqValue, distance  )
     trace1.printf3( '{}'.format( str_log1 ) )

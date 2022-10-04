@@ -442,8 +442,9 @@ class CarInterface(CarInterfaceBase):
     elif self.CC.NC.event_navi_alert != None:
       events.add( self.CC.NC.event_navi_alert )
       self.CC.NC.event_navi_alert = None
-    #elif self.CS.lkas_button_on == 15:
-    #  events.add(EventName.invalidLkasSetting)
+    elif self.CS.event_control_alert != None:
+      events.add( self.CS.event_control_alert )  #EventName.EventName.manualRestart)
+      self.CS.event_control_alert = None
     
 
     ret.events = events.to_msg()
