@@ -59,6 +59,8 @@ class NaviControl():
     self._max_pred_lat_acc = 0
     self.state = VisionTurnControllerState.disabled
 
+    self.auto_resume_time = 0
+
 
   def update_lateralPlan( self ):
     self.sm.update(0)
@@ -191,6 +193,14 @@ class NaviControl():
     distance = 0
     if len(lanePos.x) > 0:
       distance = lanePos.x[-1]
+
+    if distance < 10:
+      self.auto_resume_time = 100
+    elif  self.auto_resume_time > 0:
+      self.auto_resume_time -= 1
+
+    if self.auto_resume_time > 0:
+      distance = 0
 
     return  distance
 
