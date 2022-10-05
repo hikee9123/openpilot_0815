@@ -60,6 +60,7 @@ class NaviControl():
     self.state = VisionTurnControllerState.disabled
 
     self.auto_resume_time = 0
+    self.old_distance = 0
 
 
   def update_lateralPlan( self ):
@@ -187,20 +188,26 @@ class NaviControl():
       return dRel1, dRel2
 
 
-  def get_auto_resume(self):
+  def get_auto_resume(self, CS):
+    v_ego_kph = CS.out.vEgo * CV.MS_TO_KPH 
     model_v2 = self.sm['modelV2']
     lanePos = model_v2.position
     distance = 0
     if len(lanePos.x) > 0:
       distance = lanePos.x[-1]
 
-    if distance < 10:
-      self.auto_resume_time = 100
+    if distance < 1:
+      self.auto_resume_time = 10
     elif  self.auto_resume_time > 0:
       self.auto_resume_time -= 1
 
-    if self.auto_resume_time > 0:
-      distance = 0
+
+    if self.old_distance != distance:
+      if self.auto_resume_time <= 1 and v_ego_kph < 1:
+        self.event_navi_alert = EventName.manualRestart
+
+      self.old_distance = distance
+
 
     return  distance
 
