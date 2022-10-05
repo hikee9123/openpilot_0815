@@ -12,7 +12,7 @@ from common.realtime import config_realtime_process, DT_MDL
 from common.filter_simple import FirstOrderFilter
 from selfdrive.swaglog import cloudlog
 from selfdrive.controls.lib.vehicle_model import ACCELERATION_DUE_TO_GRAVITY
-from selfdrive.car.hyundai.values import CAR as HYUNDAI
+
 
 HISTORY = 5  # secs
 POINTS_PER_BUCKET = 1500
@@ -33,7 +33,7 @@ MAX_INVALID_THRESHOLD = 10
 MIN_ENGAGE_BUFFER = 2  # secs
 
 VERSION = 1  # bump this to invalidate old parameter caches
-
+ALLOWED_CARS = ['toyota', 'hyundai']
 
 
 def slope2rot(slope):
@@ -98,7 +98,9 @@ class TorqueEstimator:
     self.offline_friction = 0.0
     self.offline_latAccelFactor = 0.0
     self.resets = 0.0
+    self.use_params = CP.carName in ALLOWED_CARS
 
+    #self.use_params = True # params.get("TorqueLiveTuning")   #CP.carFingerprint in ALLOWED_FINGERPRINTS 
 
     if CP.lateralTuning.which() == 'torque':
       self.offline_friction = CP.lateralTuning.torque.friction
@@ -120,8 +122,6 @@ class TorqueEstimator:
 
     # try to restore cached params
     params = Params()
-    
-    self.use_params = True # params.get("TorqueLiveTuning")   #CP.carFingerprint in ALLOWED_FINGERPRINTS
     params_cache = params.get("LiveTorqueCarParams")
     torque_cache = params.get("LiveTorqueParameters")
     if params_cache is not None and torque_cache is not None:
