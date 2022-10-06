@@ -203,10 +203,9 @@ class NaviControl():
 
 
     if self.auto_resume_time <= 1 and v_ego_kph < 0.1:
-      dRel1 = self.get_dRel()
+      dRel1 = CS.lead_distance
       if dRel1 > 5 or dRel1 == 0:
         self.event_navi_alert = EventName.manualRestart
-
 
 
     return  distance
