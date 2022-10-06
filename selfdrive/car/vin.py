@@ -5,7 +5,7 @@ import traceback
 import cereal.messaging as messaging
 from selfdrive.car.isotp_parallel_query import IsoTpParallelQuery
 from selfdrive.car.fw_query_definitions import StdQueries
-from selfdrive.swaglog import cloudlog
+from system.swaglog import cloudlog
 
 VIN_UNKNOWN = "0" * 17
 VIN_RE = "[A-HJ-NPR-Z0-9]{17}"

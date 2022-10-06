@@ -13,7 +13,7 @@ from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import LongitudinalMpc
 from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import T_IDXS as T_IDXS_MPC
 from selfdrive.controls.lib.drive_helpers import V_CRUISE_MAX, CONTROL_N
 from selfdrive.controls.lib.vision_turn_controller import VisionTurnController
-from selfdrive.swaglog import cloudlog
+from system.swaglog import cloudlog
 
 
 
