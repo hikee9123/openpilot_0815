@@ -19,6 +19,11 @@ public:
   static std::string get_os_version() {
     return "NEOS " + util::read_file("/VERSION");
   };
+  static std::string get_name() { return "eon"; };
+  static cereal::InitData::DeviceType get_device_type() { return cereal::InitData::DeviceType::NEO; };
+  static int get_voltage() { return 0; };
+  static int get_current() { return 0; };
+
 
   static void reboot() { std::system("reboot"); };
   static void poweroff() { std::system("LD_LIBRARY_PATH= svc power shutdown"); };
