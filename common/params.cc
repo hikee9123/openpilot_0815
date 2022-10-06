@@ -9,7 +9,7 @@
 
 #include "common/swaglog.h"
 #include "common/util.h"
-#include "selfdrive/hardware/hw.h"
+#include "system/hardware/hw.h"
 
 namespace {
 

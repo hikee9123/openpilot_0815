@@ -14,7 +14,7 @@
 
 #include "common/util.h"
 #include "common/version.h"
-#include "selfdrive/hardware/hw.h"
+#include "system/hardware/hw.h"
 
 class SwaglogState : public LogState {
  public:

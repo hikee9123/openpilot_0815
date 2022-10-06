@@ -10,7 +10,7 @@ from system.hardware import PC, TICI
 from common.basedir import BASEDIR
 from selfdrive.test.openpilotci import BASE_URL, get_url
 from selfdrive.version import get_commit
-from selfdrive.camerad.snapshot.snapshot import yuv_to_rgb
+from system.camerad.snapshot.snapshot import yuv_to_rgb
 from tools.lib.logreader import LogReader
 from tools.lib.filereader import FileReader
 

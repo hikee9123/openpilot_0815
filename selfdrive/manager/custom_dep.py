@@ -12,7 +12,7 @@ import importlib.util
 # NOTE: Do NOT import anything here that needs be built (e.g. params)
 from common.basedir import BASEDIR
 from common.spinner import Spinner
-from selfdrive.hardware import TICI
+from system.hardware import TICI
 
 
 OPSPLINE_SPEC = importlib.util.find_spec('opspline') or importlib.util.find_spec('scipy')

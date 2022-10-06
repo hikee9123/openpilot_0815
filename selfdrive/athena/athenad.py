@@ -31,7 +31,7 @@ from common.basedir import PERSIST
 from common.file_helpers import CallbackReader
 from common.params import Params
 from common.realtime import sec_since_boot
-from selfdrive.hardware import HARDWARE, PC, TICI
+from system.hardware import HARDWARE, PC, TICI
 from selfdrive.loggerd.config import ROOT
 from selfdrive.loggerd.xattr_cache import getxattr, setxattr
 from selfdrive.statsd import STATS_DIR
@@ -469,7 +469,7 @@ def getNetworks():
 
 @dispatcher.add_method
 def takeSnapshot():
-  from selfdrive.camerad.snapshot.snapshot import jpeg_write, snapshot
+  from system.camerad.snapshot.snapshot import jpeg_write, snapshot
   ret = snapshot()
   if ret is not None:
     def b64jpeg(x):

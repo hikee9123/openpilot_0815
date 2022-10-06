@@ -3,7 +3,7 @@ from enum import Enum
 from common.params import Params
 from selfdrive.assets.addon.mapd.lib.geo import DIRECTION, R, vectors
 
-from selfdrive.hardware import EON
+from system.hardware import EON
 
 if EON:
   from opspline import splev, splprep  # pylint: disable=E0401
