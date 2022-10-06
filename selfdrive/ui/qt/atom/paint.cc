@@ -42,8 +42,8 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
 
   //printf( "1.OnPaint icon start\n" );
   //img_overtrack = QPixmap("../assets/addon/navigation/overtrak.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-  printf( "2.OnPaint icon start\n" );  
-  //img_park_crackdown = QPixmap("../assets/addon/navigation/park_crackdown.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  //printf( "2.OnPaint icon start\n" );  
+  img_park_crackdown = QPixmap("../assets/addon/navigation/park_crackdown.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 
   //printf( "3.OnPaint icon start\n" );
