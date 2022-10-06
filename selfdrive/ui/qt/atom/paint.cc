@@ -27,7 +27,7 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
 
   state = uiState();
   scene = &(state->scene);
-  printf( "OnPaint icon start" );
+
   img_compass= QPixmap("../assets/addon/Image/img_compass.png").scaled(img_size_compass, img_size_compass, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_direction= QPixmap("../assets/addon/Image/img_direction.png").scaled(img_size_compass, img_size_compass, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_tire_pressure= QPixmap("../assets/addon/Image/img_tire_pressure.png").scaled(90, 90, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -56,7 +56,7 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   img_narrow_road= QPixmap("../assets/addon/navigation/img_narrow_road.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_rail_road= QPixmap("../assets/addon/navigation/img_rail_road.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-   printf( "OnPaint icon end" );
+
 
 
   connect(this, &OnPaint::valueChanged, [=] { update(); });
