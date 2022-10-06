@@ -10,7 +10,7 @@ from pathlib import Path
 from common.basedir import BASEDIR
 from common.spinner import Spinner
 from common.text_window import TextWindow
-from system.hardwareport TICI
+from system.hardware import TICI
 from system.swaglog import cloudlog, add_file_handler
 from system.version import is_dirty
 
