@@ -40,13 +40,13 @@ OnPaint::OnPaint(QWidget *parent) : QWidget(parent)
   img_section = QPixmap("../assets/addon/navigation/img_section.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_camera = QPixmap("../assets/addon/navigation/img_camera.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-  printf( "1.OnPaint icon start\n" );
-  img_overtrack = QPixmap("../assets/addon/navigation/overtrak.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  //printf( "1.OnPaint icon start\n" );
+  //img_overtrack = QPixmap("../assets/addon/navigation/overtrak.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   printf( "2.OnPaint icon start\n" );  
-  img_park_crackdown = QPixmap("../assets/addon/navigation/park_crackdown.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  //img_park_crackdown = QPixmap("../assets/addon/navigation/park_crackdown.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 
-  printf( "3.OnPaint icon start\n" );
+  //printf( "3.OnPaint icon start\n" );
   img_speed_var= QPixmap("../assets/addon/navigation/img_var_speedahead.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_img_space= QPixmap("../assets/addon/navigation/img_space.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
   img_car_left= QPixmap("../assets/addon/navigation/img_car_left.png").scaled(img_size, img_size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -812,7 +812,7 @@ void OnPaint::ui_draw_traffic_sign( QPainter &p )
     else if( nTrafficSign == TS_ANE_CHANGE2 ) traffic_sign = &img_img_space; 
     else if( nTrafficSign == TS_LOAD_OVER ) traffic_sign = &img_img_space; 
     else if( nTrafficSign == TS_TRAFFIC_INFO ) traffic_sign = &img_img_space; 
-    else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  
+    //else if( nTrafficSign == TS_OVERTRAK ) traffic_sign = &img_overtrack;  
     else if( nTrafficSign == TS_SHOULDER  ) traffic_sign = &img_img_space; 
     else if( nTrafficSign == TS_LOAD_POOR  ) traffic_sign = &img_img_space; 
     
