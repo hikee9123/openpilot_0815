@@ -68,12 +68,15 @@ tools/replay/*.h
 
 installer/updater/updater
 
-system/version.py
 
 selfdrive/__init__.py
 selfdrive/sentry.py
+
+
 system/swaglog.py
 system/logmessaged.py
+system/version.py
+
 selfdrive/tombstoned.py
 selfdrive/updated.py
 selfdrive/rtshield.py
