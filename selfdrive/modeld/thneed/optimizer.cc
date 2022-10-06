@@ -9,7 +9,7 @@
 
 extern map<cl_program, string> g_program_source;
 
-// model
+// debug_model
 /*
 static int is_same_size_image(cl_mem a, cl_mem b) {
   size_t a_width, a_height, a_depth, a_array_size, a_row_pitch, a_slice_pitch;
@@ -141,6 +141,7 @@ int Thneed::optimize() {
 
       // delete useless copy layers
       // saves ~0.7 ms
+      // debug_model
       /*if (kq[i]->name == "concatenation" || kq[i]->name == "flatten") {
         string in = kq[i]->args[kq[i]->get_arg_num("input")];
         string out = kq[i]->args[kq[i]->get_arg_num("output")];

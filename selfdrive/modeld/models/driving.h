@@ -247,7 +247,7 @@ struct ModelOutput {
 
 constexpr int OUTPUT_SIZE = sizeof(ModelOutput) / sizeof(float);
 #ifdef TEMPORAL
-  constexpr int TEMPORAL_SIZE = 512+256;    // model    512+256;
+  constexpr int TEMPORAL_SIZE = 512+256;    // debug_model    512+256;
 #else
   constexpr int TEMPORAL_SIZE = 0;
 #endif
