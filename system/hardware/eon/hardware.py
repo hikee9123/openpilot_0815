@@ -6,7 +6,7 @@ import serial
 import struct
 import subprocess
 from typing import List, Union
-
+from statistics import mean
 from cereal import log
 from system.hardware.base import HardwareBase, ThermalConfig
 
@@ -390,6 +390,10 @@ class Android(HardwareBase):
     else:
       # We don't have a good direct way to measure this if it's not "discharging"
       return None
+
+  def get_som_power_draw(self):
+    return (self.read_param_file("/sys/class/power_supply/bms/voltage_now", int) * self.read_param_file("/sys/class/power_supply/bms/current_now", int) / 1e12)
+
 
   def shutdown(self):
     os.system('LD_LIBRARY_PATH="" svc power shutdown')
