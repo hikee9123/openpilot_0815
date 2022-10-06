@@ -202,8 +202,10 @@ class NaviControl():
       self.auto_resume_time -= 1
 
 
-    if self.auto_resume_time <= 1 and v_ego_kph < 1:
-      self.event_navi_alert = EventName.manualRestart
+    if self.auto_resume_time <= 1 and v_ego_kph < 0.1:
+      dRel1 = self.get_dRel()
+      if dRel1 > 5 or dRel1 == 0:
+        self.event_navi_alert = EventName.manualRestart
 
 
 

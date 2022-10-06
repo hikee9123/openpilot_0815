@@ -525,7 +525,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, AlertCallbackType]]] = {
       "TAKE CONTROL",
       "Resume Driving Manually",
       AlertStatus.userPrompt, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.prompt, .5),
+      Priority.LOW, VisualAlert.none, AudibleAlert.prompt, 1.5),
   },
 
   EventName.resumeRequired: {
