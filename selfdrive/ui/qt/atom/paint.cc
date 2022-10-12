@@ -107,15 +107,11 @@ void OnPaint::updateState(const UIState &s)
 
   setProperty("enginRpm", enginRpm );
 
+	
+	
+	
   SubMaster &sm = *(s.sm);
-  if (sm.frame % (UI_FREQ / 2) != 0) return;
-
-    auto gps_ext = s.scene.gpsLocationExternal;
-    m_param.gpsAccuracyUblox = gps_ext.getAccuracy();
-    m_param.altitudeUblox = gps_ext.getAltitude(); 
-    m_param.bearingUblox = gps_ext.getBearingDeg();
-
-
+	
    if (sm.updated("deviceState")) 
    {
       auto deviceState = sm["deviceState"].getDeviceState();
@@ -128,7 +124,18 @@ void OnPaint::updateState(const UIState &s)
 
      auto  maxCpuTemp = deviceState.getCpuTempC();
      m_param.cpuTemp = maxCpuTemp[0];      
-   }
+   }	
+	
+	
+  if (sm.frame % (UI_FREQ / 2) != 0) return;
+
+    auto gps_ext = s.scene.gpsLocationExternal;
+    m_param.gpsAccuracyUblox = gps_ext.getAccuracy();
+    m_param.altitudeUblox = gps_ext.getAltitude(); 
+    m_param.bearingUblox = gps_ext.getBearingDeg();
+
+
+
 
     m_param.angleSteers = s.scene.car_state.getSteeringAngleDeg();
     m_param.angleSteersDes = s.scene.controls_state.getSteeringAngleDesiredDegDEPRECATED();
